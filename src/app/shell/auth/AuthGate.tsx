@@ -1,12 +1,13 @@
 /**
  * AuthGate ensures user is authenticated before showing content.
- * Während Session-Check: animiertes SagaDrive-Logo statt generischem Spinner.
+ * Während Session-Check: animiertes SagaTree-Logo statt generischem Spinner.
  * Location: src/app/shell/auth/AuthGate.tsx
  */
 import { useEffect, type ReactNode } from 'react';
 import { useAuth } from '../../../lib/auth-context';
 import { LoginScreen } from './LoginScreen';
-import { SagaDriveLogo } from '../SagaDriveLogo';
+import { SagaTreeLogo } from '../SagaTreeLogo';
+
 import { setInviteReturnPath } from '../../../domains/session/contracts/session-invite';
 
 interface AuthGateProps {
@@ -28,10 +29,11 @@ export function AuthGate({ children }: AuthGateProps) {
       <div className="flex h-screen items-center justify-center bg-background" role="status" aria-live="polite" aria-busy="true">
         <div className="space-y-4 text-center">
           <div className="flex justify-center">
-            <SagaDriveLogo className="h-28 w-28 md:h-32 md:w-32" />
+            <SagaTreeLogo className="h-28 w-28 md:h-32 md:w-32" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold tracking-tight">SagaDrive</h2>
+            <h2 className="text-xl font-semibold tracking-tight">SagaTree</h2>
+
             <p className="mt-2 text-sm text-muted-foreground">Lädt...</p>
           </div>
         </div>
