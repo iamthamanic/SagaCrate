@@ -23,6 +23,19 @@ Charaktere · Sessions · Welten — für Spielleitung und Spieler
   <a href="src/ARCHITECTURE.md">Architektur</a>
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/carousel.gif" alt="SagaTree Screens: Login, Dashboard, Bibliothek, Charakter-Editor, Marktplatz, Session" width="720" />
+</p>
+
+<p align="center">
+  <a href="docs/screenshots/01-login.png">Login</a> ·
+  <a href="docs/screenshots/02-dashboard.png">Dashboard</a> ·
+  <a href="docs/screenshots/03-bibliothek.png">Bibliothek</a> ·
+  <a href="docs/screenshots/04-character-editor.png">Charakter-Editor</a> ·
+  <a href="docs/screenshots/05-marktplatz.png">Marktplatz</a> ·
+  <a href="docs/screenshots/06-session-join.png">Session</a>
+</p>
+
 ---
 
 ## Überblick
