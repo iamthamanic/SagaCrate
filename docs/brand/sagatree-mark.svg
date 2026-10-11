@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SagaTree">
+  <!-- SagaTree mark — teal #0891B2, gold #E8A641 (same brand roles as product UI) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(32 34) scale(1.08) translate(-32 -34)">
+    <!-- Outer canopy -->
+    <path
+      d="M32 10 L50 30 H41 L52 44 H12 L23 30 H14 Z"
+      stroke="#0891B2"
+      stroke-width="3.2"
+    />
+    <!-- Inner canopy -->
+    <path
+      d="M32 16 L43 30 H38 L45 40 H19 L26 30 H21 Z"
+      stroke="#E8A641"
+      stroke-width="2.5"
+    />
+    <!-- Trunk -->
+    <path d="M32 44 V54" stroke="#0891B2" stroke-width="3" />
+    <!-- Roots -->
+    <path d="M32 54 L23 58.5" stroke="#0891B2" stroke-width="2.4" />
+    <path d="M32 54 L41 58.5" stroke="#0891B2" stroke-width="2.4" />
+    <!-- Center node -->
+    <circle cx="32" cy="27" r="4" stroke="#E8A641" stroke-width="2.2" />
+  </g>
+</svg>
