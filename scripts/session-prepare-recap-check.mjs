@@ -123,11 +123,21 @@ section('4 · domain behaviour');
 
   const lines = mod.buildRecapHighlightLines({
     consequences: [
-      { id: '1', kind: 'reveal', summary: 'Tor geöffnet' },
-      { id: '2', kind: 'flag', summary: 'Alarm' },
+      { id: '1', kind: 'reveal', summary: 'Tor geöffnet', createdAt: '2026-01-01T10:00:00.000Z' },
+      { id: '2', kind: 'flag', summary: 'Alarm', createdAt: '2026-01-01T12:00:00.000Z' },
     ],
   });
-  check(lines.length === 2 && lines[0].summary === 'Tor geöffnet', 'highlight map');
+  check(lines.length === 2 && lines[0].summary === 'Alarm', 'highlight newest-first (#572)');
+
+  const scoped = mod.buildRecapHighlightLines({
+    consequences: [
+      { id: 'old', kind: 'reveal', summary: 'Alt', createdAt: '2026-01-01T08:00:00.000Z' },
+      { id: 'in', kind: 'reveal', summary: 'In Session', createdAt: '2026-01-01T11:00:00.000Z' },
+    ],
+    sessionStartedAtIso: '2026-01-01T10:00:00.000Z',
+    sessionEndedAtIso: '2026-01-01T13:00:00.000Z',
+  });
+  check(scoped.length === 1 && scoped[0].summary === 'In Session', 'session-scoped highlights');
 
   check(
     mod.nextSessionDefaultName('Nachtwache', 3) === 'Nachtwache · Folge 4',

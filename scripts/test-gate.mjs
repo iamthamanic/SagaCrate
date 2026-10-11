@@ -208,6 +208,14 @@ function checkSagaOverviewHubUi() {
   });
 }
 
+function checkSessionRecapPersistHandover() {
+  console.log('Session recap persist + handover (#572): table, hydrate, domain, hook...');
+  execFileSync(process.execPath, ['scripts/session-recap-persist-handover-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1882,6 +1890,7 @@ checkProjectMembershipSecurity();
 checkSagaStateColumnPrivileges();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
+checkSessionRecapPersistHandover();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();

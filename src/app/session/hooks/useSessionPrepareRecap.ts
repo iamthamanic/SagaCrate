@@ -1,14 +1,15 @@
 /**
- * useSessionPrepareRecap — Load Prepare/Recap lifecycle product data (#492).
+ * useSessionPrepareRecap — Load Prepare/Recap lifecycle product data (#492 / #572).
  * Location: src/app/session/hooks/useSessionPrepareRecap.ts
  *
  * Session + membership + audience-projected adventure consequences.
- * Next-session create stays same-saga via projectService.
+ * Completed sessions prefer persisted session_recaps; next session hydrate is server-side.
  */
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/auth-context';
 import { projectService } from '../../../infrastructure/project/project-service';
 import { sessionService } from '../../../infrastructure/session/session-service';
+import { sessionRecapService } from '../../../infrastructure/session/session-recap-service';
 import { characterService } from '../../../infrastructure/character/character-service';
 import type { SessionRole } from '../../../domains/session/contracts/live-session-access';
 import {
@@ -44,6 +45,9 @@ export type PrepareRecapViewModel = {
   readonly prepareCta: { readonly kind: 'lobby' | 'invite' | 'live-resume' | 'back'; readonly labelDe: string };
   readonly recapCta: { readonly kind: 'next-session' | 'saga' | 'home'; readonly labelDe: string };
   readonly highlights: readonly RecapHighlightLine[];
+  /** Manual summary from session_recaps when present (#572). */
+  readonly summaryText: string | null;
+  readonly highlightsSource: 'persisted' | 'runtime';
   readonly flagCount: number;
   readonly definitionRef: string | null;
 };
@@ -82,6 +86,10 @@ export function useSessionPrepareRecap(
     summary: SessionLifecycleSummary;
     roster: PrepareRecapRosterMember[];
   } | null>(null);
+  const [persistedHighlights, setPersistedHighlights] = useState<readonly RecapHighlightLine[] | null>(
+    null,
+  );
+  const [persistedSummaryText, setPersistedSummaryText] = useState<string | null>(null);
 
   const runtime = useSessionRuntime(sessionId);
 
@@ -166,10 +174,32 @@ export function useSessionPrepareRecap(
         summary,
         roster,
       });
+
+      if (session.status === 'completed' || session.status === 'cancelled') {
+        try {
+          const recap = await sessionRecapService.getBySessionId(session.id);
+          if (recap) {
+            setPersistedHighlights(recap.highlights);
+            setPersistedSummaryText(recap.summaryText);
+          } else {
+            setPersistedHighlights(null);
+            setPersistedSummaryText(null);
+          }
+        } catch {
+          setPersistedHighlights(null);
+          setPersistedSummaryText(null);
+        }
+      } else {
+        setPersistedHighlights(null);
+        setPersistedSummaryText(null);
+      }
+
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Prepare/Recap konnte nicht geladen werden');
       setBaseMeta(null);
+      setPersistedHighlights(null);
+      setPersistedSummaryText(null);
     } finally {
       setIsLoading(false);
     }
@@ -195,13 +225,22 @@ export function useSessionPrepareRecap(
       readAdventureRuntime(shared),
       audience,
     );
-    const highlights = buildRecapHighlightLines({
-      consequences: projected.consequences.map((c) => ({
-        id: c.id,
-        kind: c.kind,
-        summary: c.summary,
-      })),
-    });
+    const usePersisted =
+      (baseMeta.status === 'completed' || baseMeta.status === 'cancelled')
+      && persistedHighlights != null;
+    const highlights = usePersisted
+      ? persistedHighlights
+      : buildRecapHighlightLines({
+          consequences: projected.consequences.map((c) => ({
+            id: c.id,
+            kind: c.kind,
+            summary: c.summary,
+            createdAt: c.createdAt,
+            visibility: c.visibility,
+          })),
+          sessionStartedAtIso: baseMeta.summary.startedAtIso,
+          sessionEndedAtIso: baseMeta.summary.endedAtIso,
+        });
     setModel({
       summary: baseMeta.summary,
       selfRole: baseMeta.selfRole,
@@ -215,10 +254,12 @@ export function useSessionPrepareRecap(
       }),
       recapCta: buildRecapPrimaryCta({ role: baseMeta.selfRole }),
       highlights,
+      summaryText: usePersisted ? persistedSummaryText : null,
+      highlightsSource: usePersisted ? 'persisted' : 'runtime',
       flagCount: Object.keys(projected.flags).length,
       definitionRef: projected.definitionRef,
     });
-  }, [baseMeta, runtime.state, projectId]);
+  }, [baseMeta, runtime.state, projectId, persistedHighlights, persistedSummaryText]);
 
   const createNextSession = useCallback(async () => {
     if (!projectId || !baseMeta || baseMeta.selfRole !== 'gamemaster') {
