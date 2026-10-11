@@ -169,7 +169,10 @@ export type AdventureRuntimeOp =
   | 'add_consequence'
   | 'set_definition_ref'
   | 'hydrate_from_project'
-  | 'persist_to_project';
+  | 'persist_to_project'
+  | 'advance_time'
+  | 'apply_simulation_batch'
+  | 'set_party_location';
 
 export type AdventureRuntimeCommand = {
   readonly op: AdventureRuntimeOp;
@@ -187,6 +190,16 @@ export type AdventureRuntimeCommand = {
   readonly summary?: string | null;
   readonly definitionRef?: string | null;
   readonly note?: string | null;
+  /** #577 simulation batch */
+  readonly days?: number | null;
+  readonly batchId?: string | null;
+  readonly simulationPatch?: Record<string, unknown> | null;
+  readonly appendConsequences?: readonly {
+    readonly kind: string;
+    readonly summary: string;
+    readonly visibility: AdventureVisibility;
+  }[] | null;
+  readonly locationRef?: string | null;
 };
 
 export type AdventureRuntimeApplyResult =
@@ -208,6 +221,9 @@ const OPS: readonly AdventureRuntimeOp[] = [
   'set_definition_ref',
   'hydrate_from_project',
   'persist_to_project',
+  'advance_time',
+  'apply_simulation_batch',
+  'set_party_location',
 ];
 
 export function emptyAdventureRuntimeState(): AdventureRuntimeState {
@@ -360,6 +376,33 @@ export function readAdventureRuntime(shared: Record<string, unknown>): Adventure
   return parseAdventureRuntimeState(shared.adventure);
 }
 
+/** Read adventure as v2 (upgrades v1; preserves v2 tracks from JSON). */
+export function readAdventureRuntimeV2(shared: Record<string, unknown>): AdventureRuntimeStateV2 {
+  const raw = shared.adventure;
+  const v1 = parseAdventureRuntimeState(raw);
+  const base = upgradeAdventureRuntimeV1toV2(v1);
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return base;
+  const row = raw as Record<string, unknown>;
+  if (row.schemaVersion !== ADVENTURE_RUNTIME_SCHEMA_VERSION_V2) return base;
+  const timeRaw = row.time;
+  const day =
+    timeRaw && typeof timeRaw === 'object' && !Array.isArray(timeRaw)
+      && typeof (timeRaw as { day?: unknown }).day === 'number'
+      && Number.isFinite((timeRaw as { day: number }).day)
+      ? Math.max(0, Math.floor((timeRaw as { day: number }).day))
+      : base.time.day;
+  return {
+    ...base,
+    time: { day },
+    partyLocationRef:
+      typeof row.partyLocationRef === 'string' ? row.partyLocationRef.slice(0, 80) : base.partyLocationRef,
+    rngSeed:
+      typeof row.rngSeed === 'number' && Number.isFinite(row.rngSeed)
+        ? row.rngSeed >>> 0
+        : base.rngSeed,
+  };
+}
+
 /** Strip gm_only bodies for player/viewer projections (server must mirror). */
 export function projectAdventureRuntimeForAudience(
   state: AdventureRuntimeState,
@@ -449,6 +492,30 @@ export function parseAdventureRuntimeCommand(raw: unknown): AdventureRuntimeComm
     definitionRef:
       typeof row.definitionRef === 'string' ? row.definitionRef.trim().slice(0, 120) : null,
     note: typeof row.note === 'string' ? row.note : null,
+    days:
+      typeof row.days === 'number' && Number.isFinite(row.days)
+        ? Math.max(0, Math.min(30, Math.floor(row.days)))
+        : null,
+    batchId: typeof row.batchId === 'string' ? row.batchId.trim().slice(0, 80) : null,
+    simulationPatch:
+      row.simulationPatch && typeof row.simulationPatch === 'object' && !Array.isArray(row.simulationPatch)
+        ? (row.simulationPatch as Record<string, unknown>)
+        : null,
+    appendConsequences: Array.isArray(row.appendConsequences)
+      ? row.appendConsequences
+          .filter((c): c is Record<string, unknown> => !!c && typeof c === 'object' && !Array.isArray(c))
+          .slice(0, 32)
+          .map((c) => ({
+            kind: typeof c.kind === 'string' ? c.kind.slice(0, 40) : 'generic',
+            summary: typeof c.summary === 'string' ? c.summary.slice(0, 200) : '',
+            visibility:
+              typeof c.visibility === 'string' && isAdventureVisibility(c.visibility)
+                ? c.visibility
+                : ('gm_only' as const),
+          }))
+          .filter((c) => c.summary)
+      : null,
+    locationRef: typeof row.locationRef === 'string' ? row.locationRef.trim().slice(0, 80) : null,
   };
 }
 
@@ -638,6 +705,14 @@ export function applyAdventureRuntimeCommand(input: {
         },
       };
     }
+    case 'advance_time':
+    case 'apply_simulation_batch':
+    case 'set_party_location':
+      // Authoritative apply is SQL (#577); client uses pure advanceTime for preview.
+      return {
+        ok: false,
+        reason: 'Simulations-Ops nur über Server-RPC',
+      };
   }
 }
 

@@ -60,6 +60,7 @@ migrations=(
   062_session_recap_ai_summary.sql
   063_saga_definitions.sql
   064_saga_editor_v1.sql
+  065_saga_simulation_ops.sql
 )
 
 only="${1:-}"
