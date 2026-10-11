@@ -240,6 +240,14 @@ function checkSagaEditorV1() {
   });
 }
 
+function checkSagaSimulationKernel() {
+  console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
+  execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1918,6 +1926,7 @@ checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
 checkSagaEditorV1();
+checkSagaSimulationKernel();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();

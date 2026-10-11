@@ -31,6 +31,34 @@ export type SagaPregenRef = {
   readonly displayName: string;
 };
 
+/** Minimal simulation templates on a story definition (#576; authoring UI in #579). */
+export type SagaDefinitionSimulationSlice = {
+  readonly startDay: number;
+  readonly deadlines: readonly {
+    readonly id: string;
+    readonly label: string;
+    readonly dueDay: number;
+    readonly visibility: string;
+    readonly summaryPlayer: string;
+    readonly summaryGm: string;
+  }[];
+  readonly threats: readonly {
+    readonly id: string;
+    readonly label: string;
+    readonly max: number;
+    readonly tickPerDay: number;
+    readonly visibility: string;
+    readonly doomSummaryPlayer: string;
+    readonly doomSummaryGm: string;
+  }[];
+  readonly rules: readonly {
+    readonly id: string;
+    readonly label: string;
+    readonly whenKind: string;
+    readonly thenKinds: readonly string[];
+  }[];
+};
+
 export type SagaDefinitionPayload = {
   readonly packageId: string | null;
   readonly title: string;
@@ -40,6 +68,7 @@ export type SagaDefinitionPayload = {
   readonly knowledgeFacts: readonly SagaKnowledgeFact[];
   readonly locations: readonly SagaLocationRef[];
   readonly pregens: readonly SagaPregenRef[];
+  readonly simulation: SagaDefinitionSimulationSlice | null;
 };
 
 export type SagaDefinitionVersionVm = {
@@ -155,6 +184,75 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
   }
   const synopsis = asString(rec.synopsis, '');
   const blurb = asString(rec.blurb, synopsis);
+  let simulation: SagaDefinitionSimulationSlice | null = null;
+  if (isRecord(rec.simulation)) {
+    const sim = rec.simulation;
+    simulation = {
+      startDay:
+        typeof sim.startDay === 'number' && Number.isFinite(sim.startDay)
+          ? Math.max(0, Math.floor(sim.startDay))
+          : 0,
+      deadlines: Array.isArray(sim.deadlines)
+        ? sim.deadlines
+            .filter(isRecord)
+            .map((d) => ({
+              id: asString(d.id),
+              label: asString(d.label),
+              dueDay:
+                typeof d.dueDay === 'number' && Number.isFinite(d.dueDay)
+                  ? Math.floor(d.dueDay)
+                  : 0,
+              visibility: asString(d.visibility, 'public'),
+              summaryPlayer: asString(d.summaryPlayer),
+              summaryGm: asString(d.summaryGm),
+            }))
+            .filter((d) => d.id)
+        : [],
+      threats: Array.isArray(sim.threats)
+        ? sim.threats
+            .filter(isRecord)
+            .map((t) => ({
+              id: asString(t.id),
+              label: asString(t.label),
+              max:
+                typeof t.max === 'number' && Number.isFinite(t.max)
+                  ? Math.max(1, Math.floor(t.max))
+                  : 4,
+              tickPerDay:
+                typeof t.tickPerDay === 'number' && Number.isFinite(t.tickPerDay)
+                  ? Math.floor(t.tickPerDay)
+                  : 0,
+              visibility: asString(t.visibility, 'shared'),
+              doomSummaryPlayer: asString(t.doomSummaryPlayer),
+              doomSummaryGm: asString(t.doomSummaryGm),
+            }))
+            .filter((t) => t.id)
+        : [],
+      rules: Array.isArray(sim.rules)
+        ? sim.rules
+            .filter(isRecord)
+            .map((r) => {
+              const whenKind = isRecord(r.when) ? asString(r.when.kind) : asString(r.whenKind);
+              const thenKinds = Array.isArray(r.then)
+                ? r.then
+                    .filter(isRecord)
+                    .map((e) => asString(e.kind))
+                    .filter(Boolean)
+                : Array.isArray(r.thenKinds)
+                  ? r.thenKinds.filter((k): k is string => typeof k === 'string')
+                  : [];
+              return {
+                id: asString(r.id),
+                label: asString(r.label),
+                whenKind,
+                thenKinds,
+              };
+            })
+            .filter((r) => r.id)
+        : [],
+    };
+  }
+
   return {
     packageId: typeof rec.packageId === 'string' ? rec.packageId : null,
     title: asString(rec.title, ''),
@@ -163,6 +261,7 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
     knowledgeFacts: facts,
     locations,
     pregens,
+    simulation,
   };
 }
 
@@ -235,6 +334,7 @@ export function draftToPayload(draft: SagaDefinitionDraft): SagaDefinitionPayloa
     knowledgeFacts: draft.knowledgeFacts,
     locations: draft.locations,
     pregens: draft.pregens,
+    simulation: null,
   };
 }
 
