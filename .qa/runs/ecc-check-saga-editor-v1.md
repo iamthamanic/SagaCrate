@@ -1,6 +1,6 @@
 # ECC Check — saga-editor-v1 (#575)
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: 94f3f4f2873ff2b2f66094b07d5a24e95cf868d6
 - Verdict: READY
 
 ## Phase A test-gate
