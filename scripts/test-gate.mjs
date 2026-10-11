@@ -232,6 +232,14 @@ function checkSagaDefinitionsVersions() {
   });
 }
 
+function checkSagaEditorV1() {
+  console.log('Saga editor v1 (#575): draft RPCs, hook, route, AU markers...');
+  execFileSync(process.execPath, ['scripts/saga-editor-v1-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1909,6 +1917,7 @@ checkSagaOverviewHubUi();
 checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
+checkSagaEditorV1();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();

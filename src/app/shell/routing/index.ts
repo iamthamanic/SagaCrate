@@ -14,6 +14,8 @@ export {
   pathForNpcCreatureEdit,
   pathForSagaList,
   pathForSagaNew,
+  pathForSagaDefinitionCreate,
+  pathForSagaDefinitionEdit,
   pathForSagaSection,
   pathForSessionLive,
   pathForSessionPhase,

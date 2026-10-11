@@ -15,6 +15,7 @@ import { NotFoundPlaceholder, ItemWorkbenchScreen } from './app/items';
 import { LookCreateScreen, LookEditScreen, takeLookEditorReturnPath } from './app/look';
 import { NpcCreatureCreateScreen, NpcCreatureEditorScreen } from './app/npc-creature';
 import { SagaResourceScreen } from './app/project';
+import { SagaEditorScreen } from './app/saga';
 import { SessionResourceScreen } from './app/session';
 import {
   assertPlayerNotRoutedToGamemaster,
@@ -83,6 +84,7 @@ function AppShell() {
     itemId,
     createTypeSlug,
     lookId,
+    sagaDefinitionId,
     npcCreatureDefinitionId,
     route,
     navigateToView,
@@ -93,6 +95,7 @@ function AppShell() {
     navigateToLookEdit,
     navigateToNpcCreatureCreate,
     navigateToNpcCreatureEdit,
+    navigateToSagaDefinitionEdit,
     navigateToSessionLive,
     navigateToSessionPhase,
   } = useAppLocation();
@@ -122,6 +125,8 @@ function AppShell() {
     || currentView === 'saga-list'
     || currentView === 'saga-new'
     || currentView === 'saga-section'
+    || currentView === 'saga-definition-create'
+    || currentView === 'saga-definition-edit'
     || currentView === 'session-phase'
     || currentView === 'session-live'
     || currentView === 'session-invite'
@@ -367,6 +372,25 @@ function AppShell() {
             section={route.kind === 'saga-section' ? route.section : 'overview'}
             onNavigateHome={() => handleNavigate('dashboard')}
             onNavigate={handleNavigate}
+          />
+        );
+      case 'saga-definition-create':
+        return (
+          <SagaEditorScreen
+            mode="create"
+            sagaId={null}
+            onBack={() => handleNavigate('library')}
+            onNavigateToEditor={(id) => navigateToSagaDefinitionEdit(id, { replace: true })}
+          />
+        );
+      case 'saga-definition-edit':
+        return (
+          <SagaEditorScreen
+            key={sagaDefinitionId ?? 'missing'}
+            mode="edit"
+            sagaId={sagaDefinitionId}
+            onBack={() => handleNavigate('library')}
+            onNavigateToEditor={(id) => navigateToSagaDefinitionEdit(id, { replace: true })}
           />
         );
       case 'session-phase':

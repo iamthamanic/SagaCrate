@@ -31,6 +31,8 @@ export type ShellViewId =
   | 'saga-list'
   | 'saga-new'
   | 'saga-section'
+  | 'saga-definition-create'
+  | 'saga-definition-edit'
   | 'session-phase'
   | 'session-live'
   | 'character-public'
@@ -73,6 +75,8 @@ export type ResolvedRoute =
         | 'saga-list'
         | 'saga-new'
         | 'saga-section'
+        | 'saga-definition-create'
+        | 'saga-definition-edit'
         | 'session-phase'
         | 'session-live'
         | 'character-public'
@@ -88,6 +92,8 @@ export type ResolvedRoute =
   | { kind: 'saga-list' }
   | { kind: 'saga-new' }
   | { kind: 'saga-section'; sagaPublicId: string; section: SagaSectionId }
+  | { kind: 'saga-definition-create' }
+  | { kind: 'saga-definition-edit'; sagaDefinitionId: string }
   | {
       kind: 'session-phase';
       sagaPublicId: string;
@@ -120,6 +126,8 @@ const VIEW_PATHS: Record<
     | 'saga-list'
     | 'saga-new'
     | 'saga-section'
+    | 'saga-definition-create'
+    | 'saga-definition-edit'
     | 'session-phase'
     | 'session-live'
     | 'character-public'
@@ -247,6 +255,22 @@ export function pathForSagaNew(): string {
   return '/sagas/new';
 }
 
+/** Story definition editor (UUID of saga_definitions — not SA- public id). */
+export function pathForSagaDefinitionCreate(): string {
+  return '/story-definitions/new';
+}
+
+export function pathForSagaDefinitionEdit(sagaDefinitionId: string): string {
+  const safe = encodeURIComponent(sagaDefinitionId.trim());
+  return `/story-definitions/${safe}/edit`;
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value.trim(),
+  );
+}
+
 export function pathForSagaSection(
   sagaPublicId: string,
   section: SagaSectionId = 'overview',
@@ -288,7 +312,23 @@ export function pathForCharacterPublic(
   return mode === 'edit' ? `/characters/${id}/edit` : `/characters/${id}`;
 }
 
+function resolveStoryDefinitionRoutes(path: string): ResolvedRoute | null {
+  if (path === '/story-definitions/new') return { kind: 'saga-definition-create' };
+  const edit = path.match(/^\/story-definitions\/([^/]+)\/edit$/);
+  if (edit) {
+    const sagaDefinitionId = decodeSegment(edit[1] ?? '').trim();
+    if (!sagaDefinitionId || !isUuid(sagaDefinitionId)) {
+      return { kind: 'not-found', attemptedPath: path };
+    }
+    return { kind: 'saga-definition-edit', sagaDefinitionId };
+  }
+  return null;
+}
+
 function resolveSagaRoutes(path: string): ResolvedRoute | null {
+  const story = resolveStoryDefinitionRoutes(path);
+  if (story) return story;
+
   if (path === '/sagas') return { kind: 'saga-list' };
   if (path === '/sagas/new') return { kind: 'saga-new' };
 
@@ -526,6 +566,10 @@ export function routeToShellView(route: ResolvedRoute): ShellViewId {
       return 'saga-new';
     case 'saga-section':
       return 'saga-section';
+    case 'saga-definition-create':
+      return 'saga-definition-create';
+    case 'saga-definition-edit':
+      return 'saga-definition-edit';
     case 'session-phase':
       return 'session-phase';
     case 'session-live':
@@ -549,6 +593,8 @@ export function knownViewIds(): string[] {
     'saga-list',
     'saga-new',
     'saga-section',
+    'saga-definition-create',
+    'saga-definition-edit',
     'session-phase',
     'session-live',
     'character-public',

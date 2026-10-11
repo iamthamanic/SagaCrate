@@ -1,11 +1,19 @@
 /**
- * saga-definition — Story definition + version contracts (#574).
+ * saga-definition — Story definition + version contracts (#574 / #575).
  * Location: src/domains/saga/contracts/saga-definition.ts
  *
- * Pure domain: parse + audience project. No React / Supabase.
+ * Pure domain: parse + audience project + draft validation. No React / Supabase.
  */
 
 export type SagaDefinitionOrigin = 'native' | 'user' | 'private_backfill';
+
+/** Visibility for knowledge facts — aligned with adventure / Dornhain contracts. */
+export type SagaKnowledgeVisibility =
+  | 'public'
+  | 'gm_only'
+  | 'discovered'
+  | 'shared'
+  | 'character_specific';
 
 export type SagaKnowledgeFact = {
   readonly id: string;
@@ -13,12 +21,25 @@ export type SagaKnowledgeFact = {
   readonly summary: string;
 };
 
+export type SagaLocationRef = {
+  readonly id: string;
+  readonly label: string;
+};
+
+export type SagaPregenRef = {
+  readonly id: string;
+  readonly displayName: string;
+};
+
 export type SagaDefinitionPayload = {
   readonly packageId: string | null;
   readonly title: string;
+  /** Player-safe blurb (Klappentext). Falls back to synopsis when absent. */
+  readonly blurb: string;
   readonly synopsis: string;
   readonly knowledgeFacts: readonly SagaKnowledgeFact[];
-  readonly locations: readonly { readonly id: string; readonly label: string }[];
+  readonly locations: readonly SagaLocationRef[];
+  readonly pregens: readonly SagaPregenRef[];
 };
 
 export type SagaDefinitionVersionVm = {
@@ -34,12 +55,50 @@ export type SagaDefinitionVersionVm = {
   readonly isGmProjection: boolean;
 };
 
+/** Mutable draft document for the Saga Editor (#575). */
+export type SagaDefinitionDraft = {
+  readonly sagaId: string;
+  readonly sagaSlug: string;
+  readonly origin: SagaDefinitionOrigin;
+  readonly canEdit: boolean;
+  readonly title: string;
+  readonly blurb: string;
+  readonly locations: SagaLocationRef[];
+  readonly knowledgeFacts: SagaKnowledgeFact[];
+  readonly pregens: SagaPregenRef[];
+  readonly packageId: string | null;
+};
+
+export type SagaDefinitionEditorVm = {
+  readonly sagaId: string;
+  readonly sagaSlug: string;
+  readonly title: string;
+  readonly synopsis: string;
+  readonly origin: SagaDefinitionOrigin;
+  readonly versionId: string;
+  readonly versionLabel: string;
+  readonly status: string;
+  readonly payload: SagaDefinitionPayload;
+  readonly revision: number;
+  readonly canEdit: boolean;
+};
+
+export type SagaDefinitionFieldErrors = {
+  readonly title?: string;
+  readonly blurb?: string;
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 function asString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback;
+}
+
+function parseOrigin(raw: string): SagaDefinitionOrigin {
+  if (raw === 'native' || raw === 'private_backfill' || raw === 'user') return raw;
+  return 'user';
 }
 
 /** Strip gm_only knowledge facts for non-GM audiences. */
@@ -73,7 +132,7 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
       });
     }
   }
-  const locations: { id: string; label: string }[] = [];
+  const locations: SagaLocationRef[] = [];
   if (Array.isArray(rec.locations)) {
     for (const item of rec.locations) {
       if (!isRecord(item)) continue;
@@ -82,12 +141,28 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
       locations.push({ id, label: asString(item.label, id) });
     }
   }
+  const pregens: SagaPregenRef[] = [];
+  if (Array.isArray(rec.pregens)) {
+    for (const item of rec.pregens) {
+      if (!isRecord(item)) continue;
+      const id = asString(item.id);
+      if (!id) continue;
+      pregens.push({
+        id,
+        displayName: asString(item.displayName, id),
+      });
+    }
+  }
+  const synopsis = asString(rec.synopsis, '');
+  const blurb = asString(rec.blurb, synopsis);
   return {
     packageId: typeof rec.packageId === 'string' ? rec.packageId : null,
     title: asString(rec.title, ''),
-    synopsis: asString(rec.synopsis, ''),
+    blurb,
+    synopsis,
     knowledgeFacts: facts,
     locations,
+    pregens,
   };
 }
 
@@ -96,23 +171,85 @@ export function parseSagaDefinitionVersion(raw: unknown): SagaDefinitionVersionV
   const sagaId = asString(raw.sagaId);
   const versionId = asString(raw.versionId);
   if (!sagaId || !versionId) throw new Error('Saga-Definition unvollständig');
-  const originRaw = asString(raw.origin, 'user');
-  const origin: SagaDefinitionOrigin =
-    originRaw === 'native' || originRaw === 'private_backfill' || originRaw === 'user'
-      ? originRaw
-      : 'user';
   return {
     sagaId,
     sagaSlug: asString(raw.sagaSlug),
     title: asString(raw.title),
     synopsis: asString(raw.synopsis),
-    origin,
+    origin: parseOrigin(asString(raw.origin, 'user')),
     versionId,
     versionLabel: asString(raw.versionLabel, 'v1'),
     status: asString(raw.status, 'published'),
     payload: parseSagaDefinitionPayload(raw.payload),
     isGmProjection: raw.isGmProjection === true,
   };
+}
+
+export function parseSagaDefinitionEditor(raw: unknown): SagaDefinitionEditorVm {
+  if (!isRecord(raw)) throw new Error('Ungültige Saga-Definition');
+  const sagaId = asString(raw.sagaId);
+  const versionId = asString(raw.versionId);
+  if (!sagaId || !versionId) throw new Error('Saga-Definition unvollständig');
+  const revision =
+    typeof raw.revision === 'number' && Number.isFinite(raw.revision)
+      ? Math.max(0, Math.floor(raw.revision))
+      : 0;
+  return {
+    sagaId,
+    sagaSlug: asString(raw.sagaSlug),
+    title: asString(raw.title),
+    synopsis: asString(raw.synopsis),
+    origin: parseOrigin(asString(raw.origin, 'user')),
+    versionId,
+    versionLabel: asString(raw.versionLabel, 'draft'),
+    status: asString(raw.status, 'draft'),
+    payload: parseSagaDefinitionPayload(raw.payload),
+    revision,
+    canEdit: raw.canEdit === true,
+  };
+}
+
+export function editorVmToDraft(vm: SagaDefinitionEditorVm): SagaDefinitionDraft {
+  const payload = vm.payload;
+  return {
+    sagaId: vm.sagaId,
+    sagaSlug: vm.sagaSlug,
+    origin: vm.origin,
+    canEdit: vm.canEdit,
+    title: payload.title || vm.title,
+    blurb: payload.blurb || payload.synopsis || vm.synopsis,
+    locations: payload.locations.map((l) => ({ ...l })),
+    knowledgeFacts: payload.knowledgeFacts.map((f) => ({ ...f })),
+    pregens: payload.pregens.map((p) => ({ ...p })),
+    packageId: payload.packageId,
+  };
+}
+
+export function draftToPayload(draft: SagaDefinitionDraft): SagaDefinitionPayload {
+  const blurb = draft.blurb.trim();
+  return {
+    packageId: draft.packageId,
+    title: draft.title.trim(),
+    blurb,
+    synopsis: blurb,
+    knowledgeFacts: draft.knowledgeFacts,
+    locations: draft.locations,
+    pregens: draft.pregens,
+  };
+}
+
+export function validateSagaDefinitionDraft(
+  draft: SagaDefinitionDraft,
+): SagaDefinitionFieldErrors {
+  const errors: { title?: string; blurb?: string } = {};
+  if (!draft.title.trim()) {
+    errors.title = 'Titel darf nicht leer sein.';
+  }
+  return errors;
+}
+
+export function isSagaDefinitionDraftValid(draft: SagaDefinitionDraft): boolean {
+  return Object.keys(validateSagaDefinitionDraft(draft)).length === 0;
 }
 
 /** Group playthroughs (projects) by story definition id. */
