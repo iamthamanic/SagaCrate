@@ -9,6 +9,8 @@ export {
   BASE_TILE_PX,
   PIN_COLOR_CYAN,
   PIN_COLOR_GOLD,
+  PARTY_MARKER_COLOR,
+  PARTY_MARKER_RING,
 } from './constants';
 export {
   tileKey,

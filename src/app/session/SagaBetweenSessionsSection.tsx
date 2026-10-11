@@ -6,6 +6,7 @@
  */
 import type { LiveSessionAccess } from '../../domains/session/contracts/live-session-access';
 import type { OpenDeadlineLine } from '../../domains/session/contracts/bote-lines';
+import { SagaPartyLocationGmPanel } from './SagaPartyLocationGmPanel';
 import { SagaSimulationGmPanel } from './SagaSimulationGmPanel';
 
 export type SagaBetweenSessionsSectionProps = {
@@ -68,8 +69,9 @@ export function SagaBetweenSessionsSection({
       ) : null}
 
       {isGm ? (
-        <div data-saga-between-sessions-gm>
+        <div data-saga-between-sessions-gm className="space-y-3">
           <SagaSimulationGmPanel sessionId={sessionId} access={GM_ACCESS} />
+          <SagaPartyLocationGmPanel sessionId={sessionId} access={GM_ACCESS} />
         </div>
       ) : null}
     </section>

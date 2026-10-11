@@ -13,7 +13,11 @@ import { useAuth } from '../../lib/auth-context';
 import { useProjectSummaries } from '../project';
 import { AdventureNpcCreatureInstancesPanel } from './AdventureNpcCreatureInstancesPanel';
 import { AdventureRuntimeControls } from './AdventureRuntimeControls';
+import { SagaPartyLocationGmPanel } from './SagaPartyLocationGmPanel';
 import { SagaSimulationGmPanel } from './SagaSimulationGmPanel';
+import { WorldMapPlayerView } from '../world';
+import { useAdventureRuntime } from './hooks/useAdventureRuntime';
+import { upgradeAdventureRuntimeV1toV2 } from '../../domains/session/contracts/adventure-runtime-state';
 import { SessionLookSettings } from './SessionLookSettings';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
 import { GoldenAdventureDornhainPanel } from './GoldenAdventureDornhainPanel';
@@ -73,6 +77,10 @@ export function GamemasterLiveScreen({
   const [runtimeSessionId, setRuntimeSessionId] = useState<string | null>(null);
   const runtime = useSessionRuntime(runtimeSessionId);
   const gmAccess = { role: 'gamemaster' as const, capabilities: [] as const, characterId: null };
+  const adventure = useAdventureRuntime({ sessionId: runtimeSessionId, access: gmAccess });
+  const partyLocationRef = upgradeAdventureRuntimeV1toV2(adventure.state).partyLocationRef;
+  const activeProject = projects.find((p) => p.publicId === sagaPublicId) ?? gmProjects[0] ?? null;
+  const worldProfileId = activeProject?.worldProfileId ?? null;
 
   useEffect(() => {
     let cancelled = false;
@@ -160,6 +168,23 @@ export function GamemasterLiveScreen({
             sessionId={runtimeSessionId}
             access={gmAccess}
           />
+          <SagaPartyLocationGmPanel
+            sessionId={runtimeSessionId}
+            access={gmAccess}
+          />
+          {worldProfileId ? (
+            <div data-gm-party-map className="space-y-2">
+              <p className="text-xs text-muted-foreground">Gruppe auf der Karte verschieben</p>
+              <WorldMapPlayerView
+                worldProfileId={worldProfileId}
+                partyLocationRef={partyLocationRef}
+                canMoveParty
+                onPartyLocationChange={async (locationRef) => {
+                  await adventure.run({ op: 'set_party_location', locationRef });
+                }}
+              />
+            </div>
+          ) : null}
           <div data-gm-generic-action-slot="world" className="min-h-11">
             <GmActionPalette
               access={gmAccess}

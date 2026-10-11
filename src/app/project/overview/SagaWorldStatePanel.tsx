@@ -1,19 +1,27 @@
 /**
- * SagaWorldStatePanel — Audience-safe clocks / consequences / deadlines (#571 / #578).
+ * SagaWorldStatePanel — Audience-safe clocks / consequences / deadlines / party (#571 / #578 / #581).
  * Location: src/app/project/overview/SagaWorldStatePanel.tsx
  *
  * Renders only the audience-safe overview world summary from the hub VM.
  */
 import type { SagaWorldStateSummaryVm } from '../../../domains/project/contracts/saga-overview';
+import { partyLocationDisplayLabel } from '../../../domains/session/contracts/party-location';
+import { WorldMapPlayerView } from '../../world';
 
 export type SagaWorldStatePanelProps = {
   summary: SagaWorldStateSummaryVm;
+  worldProfileId?: string | null;
 };
 
-export function SagaWorldStatePanel({ summary }: SagaWorldStatePanelProps) {
+export function SagaWorldStatePanel({
+  summary,
+  worldProfileId = null,
+}: SagaWorldStatePanelProps) {
   const hasClocks = summary.clocks.length > 0;
   const hasCons = summary.consequences.length > 0;
   const hasDeadlines = summary.openDeadlines.length > 0;
+  const partyLabel = partyLocationDisplayLabel(summary.partyLocationRef);
+  const hasParty = Boolean(partyLabel);
 
   return (
     <section className="space-y-3" data-saga-overview-world aria-labelledby="saga-overview-world-title">
@@ -27,7 +35,26 @@ export function SagaWorldStatePanel({ summary }: SagaWorldStatePanelProps) {
         </p>
       </div>
 
-      {!hasClocks && !hasCons && !hasDeadlines ? (
+      {hasParty ? (
+        <p
+          className="text-sm font-medium text-cyan-700 dark:text-cyan-300"
+          data-saga-overview-party-location
+        >
+          Ihr seid hier: {partyLabel}
+        </p>
+      ) : null}
+
+      {worldProfileId ? (
+        <div data-saga-overview-party-map>
+          <WorldMapPlayerView
+            worldProfileId={worldProfileId}
+            partyLocationRef={summary.partyLocationRef}
+            canMoveParty={false}
+          />
+        </div>
+      ) : null}
+
+      {!hasClocks && !hasCons && !hasDeadlines && !hasParty ? (
         <p className="text-sm text-muted-foreground" data-saga-overview-world-empty>
           Noch keine öffentlichen Welt-Ereignisse.
         </p>

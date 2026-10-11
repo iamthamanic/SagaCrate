@@ -314,7 +314,10 @@ function SagaOverviewSection({
             />
             <SagaEpisodeList episodes={model.episodes} onOpenEpisode={openEpisode} />
             <SagaEnsembleStrip ensemble={model.ensemble} />
-            <SagaWorldStatePanel summary={model.worldStateSummary} />
+            <SagaWorldStatePanel
+              summary={model.worldStateSummary}
+              worldProfileId={model.worldProfileId}
+            />
           </>
         ) : null}
 

@@ -118,7 +118,7 @@ export function useWorldMapEditor(input: { worldProfileId: string | null }) {
   };
 
   const paintAt = (x: number, y: number) => {
-    if (tool === 'pan' || tool === 'pin') return;
+    if (tool === 'pan' || tool === 'pin' || tool === 'party') return;
     const next =
       tool === 'eraser'
         ? setTileAt(data, x, y, null)

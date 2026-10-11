@@ -15,3 +15,7 @@ export const BASE_TILE_PX = 28;
 /** Normal pins: brand cyan / gold — never danger-red. */
 export const PIN_COLOR_CYAN = '#0891b2';
 export const PIN_COLOR_GOLD = '#ca8a04';
+
+/** Party marker — primary cyan, larger than location pins (#581). */
+export const PARTY_MARKER_COLOR = '#06b6d4';
+export const PARTY_MARKER_RING = '#ecfeff';
