@@ -1,8 +1,8 @@
 /**
- * SessionRecapScreen — Audience-safe Recap + next-session CTA (#492).
+ * SessionRecapScreen — Audience-safe Recap + next-session CTA (#492 / #572).
  * Location: src/app/session/SessionRecapScreen.tsx
  *
- * Uses projected adventure consequences; GM can create next same-saga session.
+ * Prefers persisted session_recaps when completed; GM creates next same-saga session.
  */
 import { Button } from '../../shared/ui/button';
 import { AdaptivePage } from '../../shared/ui/adaptive';
@@ -112,6 +112,18 @@ export function SessionRecapScreen({
                 </div>
               </dl>
             </section>
+
+            {model.summaryText ? (
+              <section
+                className="rounded-lg border border-border bg-card/40 p-4"
+                data-session-recap-summary
+              >
+                <h2 className="text-sm font-medium">Zusammenfassung</h2>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
+                  {model.summaryText}
+                </p>
+              </section>
+            ) : null}
 
             <section
               className="rounded-lg border border-border bg-card/40 p-4"

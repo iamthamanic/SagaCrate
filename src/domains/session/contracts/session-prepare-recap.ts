@@ -92,11 +92,52 @@ export function buildRecapPrimaryCta(input: {
   return { kind: 'saga', labelDe: 'Zur Saga' };
 }
 
+export type RecapConsequenceInput = {
+  readonly id: string;
+  readonly kind: string;
+  readonly summary: string;
+  readonly createdAt?: string | null;
+  readonly visibility?: string | null;
+};
+
+/**
+ * Build recap highlight lines for an episode (#492 / #572).
+ * Prefer newest consequences; optionally filter to a session time window.
+ */
 export function buildRecapHighlightLines(input: {
-  readonly consequences: readonly { id: string; kind: string; summary: string }[];
+  readonly consequences: readonly RecapConsequenceInput[];
   readonly emptyLabelDe?: string;
+  /** When set, only include consequences with createdAt in [start, end]. */
+  readonly sessionStartedAtIso?: string | null;
+  readonly sessionEndedAtIso?: string | null;
+  readonly maxLines?: number;
 }): readonly RecapHighlightLine[] {
-  if (input.consequences.length === 0) {
+  const maxLines =
+    typeof input.maxLines === 'number' && Number.isFinite(input.maxLines)
+      ? Math.max(1, Math.floor(input.maxLines))
+      : 20;
+  const startMs = input.sessionStartedAtIso
+    ? Date.parse(input.sessionStartedAtIso)
+    : Number.NaN;
+  const endMs = input.sessionEndedAtIso ? Date.parse(input.sessionEndedAtIso) : Number.NaN;
+  const hasWindow = Number.isFinite(startMs) || Number.isFinite(endMs);
+
+  const filtered = input.consequences.filter((c) => {
+    if (!hasWindow || !c.createdAt) return true;
+    const t = Date.parse(c.createdAt);
+    if (!Number.isFinite(t)) return true;
+    if (Number.isFinite(startMs) && t < startMs) return false;
+    if (Number.isFinite(endMs) && t > endMs) return false;
+    return true;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    const ta = a.createdAt ? Date.parse(a.createdAt) : 0;
+    const tb = b.createdAt ? Date.parse(b.createdAt) : 0;
+    return tb - ta;
+  });
+
+  if (sorted.length === 0) {
     return [
       {
         id: 'empty',
@@ -105,11 +146,37 @@ export function buildRecapHighlightLines(input: {
       },
     ];
   }
-  return input.consequences.slice(0, 20).map((c) => ({
+
+  return sorted.slice(0, maxLines).map((c) => ({
     id: c.id,
     kind: c.kind,
     summary: c.summary,
   }));
+}
+
+/** Map persisted session_recaps.highlight_lines JSON into view lines. */
+export function parsePersistedRecapHighlightLines(
+  raw: unknown,
+  emptyLabelDe?: string,
+): readonly RecapHighlightLine[] {
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return buildRecapHighlightLines({ consequences: [], emptyLabelDe });
+  }
+  const consequences: RecapConsequenceInput[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    const row = item as Record<string, unknown>;
+    const summary = typeof row.summary === 'string' ? row.summary : '';
+    if (!summary.trim()) continue;
+    consequences.push({
+      id: typeof row.id === 'string' ? row.id : summary.slice(0, 32),
+      kind: typeof row.kind === 'string' ? row.kind : 'generic',
+      summary,
+      visibility: typeof row.visibility === 'string' ? row.visibility : null,
+      createdAt: typeof row.createdAt === 'string' ? row.createdAt : null,
+    });
+  }
+  return buildRecapHighlightLines({ consequences, emptyLabelDe });
 }
 
 export function nextSessionDefaultName(baseName: string, sessionNumber: number): string {
