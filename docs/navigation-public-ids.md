@@ -29,6 +29,9 @@ Public IDs are **identifiers, not secrets**. Knowledge of an ID never grants acc
 ## Canonical Saga / Session URLs
 
 ```text
+/story-definitions/new
+/story-definitions/:sagaDefinitionUuid/edit   → Saga-Editor (draft; UUID of saga_definitions, not SA-)
+
 /sagas
 /sagas/new
 /sagas/:sagaPublicId → /overview

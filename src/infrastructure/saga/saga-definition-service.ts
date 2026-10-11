@@ -1,13 +1,18 @@
 /**
- * saga-definition-service — Load projected saga definitions via RPC (#574).
+ * saga-definition-service — Load/save/publish saga definitions via RPC (#574 / #575).
  * Location: src/infrastructure/saga/saga-definition-service.ts
  */
 import { supabase } from '../../lib/supabase';
 import { raceWithTimeoutReject, SUPABASE_QUERY_TIMEOUT_MS } from '../../lib/networkTimeout';
 import {
+  draftToPayload,
+  parseSagaDefinitionEditor,
   parseSagaDefinitionVersion,
+  type SagaDefinitionDraft,
+  type SagaDefinitionEditorVm,
   type SagaDefinitionVersionVm,
 } from '../../domains/saga/contracts/saga-definition';
+
 class SagaDefinitionService {
   async getVersionById(versionId: string): Promise<SagaDefinitionVersionVm> {
     const { data, error } = await raceWithTimeoutReject(
@@ -31,6 +36,118 @@ class SagaDefinitionService {
       throw new Error(error.message || 'Native Saga konnte nicht geladen werden');
     }
     return parseSagaDefinitionVersion(data);
+  }
+
+  async getEditor(sagaId: string): Promise<SagaDefinitionEditorVm> {
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('get_saga_definition_editor', { p_saga_id: sagaId }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Saga-Editor Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Saga-Editor konnte nicht geladen werden');
+    }
+    return parseSagaDefinitionEditor(data);
+  }
+
+  async saveDraft(input: {
+    readonly sagaId: string;
+    readonly draft: SagaDefinitionDraft;
+    readonly expectedRevision: number;
+  }): Promise<{ readonly revision: number; readonly versionId: string }> {
+    const payload = draftToPayload(input.draft);
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('save_saga_definition_draft', {
+        p_saga_id: input.sagaId,
+        p_payload: payload,
+        p_expected_revision: input.expectedRevision,
+      }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Speichern Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Entwurf konnte nicht gespeichert werden');
+    }
+    if (!data || typeof data !== 'object') {
+      throw new Error('Ungültige Speicher-Antwort');
+    }
+    const row = data as { revision?: number; versionId?: string };
+    if (typeof row.revision !== 'number' || typeof row.versionId !== 'string') {
+      throw new Error('Speicher-Antwort unvollständig');
+    }
+    return { revision: row.revision, versionId: row.versionId };
+  }
+
+  async publishVersion(input: {
+    readonly sagaId: string;
+    readonly expectedRevision: number;
+  }): Promise<{ readonly versionId: string; readonly versionLabel: string }> {
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('publish_saga_definition_version', {
+        p_saga_id: input.sagaId,
+        p_expected_revision: input.expectedRevision,
+      }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Veröffentlichen Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Fassung konnte nicht veröffentlicht werden');
+    }
+    if (!data || typeof data !== 'object') {
+      throw new Error('Ungültige Publish-Antwort');
+    }
+    const row = data as { versionId?: string; versionLabel?: string };
+    if (typeof row.versionId !== 'string') {
+      throw new Error('Publish ohne versionId');
+    }
+    return {
+      versionId: row.versionId,
+      versionLabel: typeof row.versionLabel === 'string' ? row.versionLabel : 'v?',
+    };
+  }
+
+  async createCopyFromNative(sourceSagaId: string): Promise<{ readonly sagaId: string }> {
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('copy_native_saga_definition', { p_source_saga_id: sourceSagaId }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Kopie Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Kopie konnte nicht erstellt werden');
+    }
+    if (!data || typeof data !== 'object') {
+      throw new Error('Ungültige Kopie-Antwort');
+    }
+    const row = data as { sagaId?: string };
+    if (typeof row.sagaId !== 'string') {
+      throw new Error('Kopie ohne sagaId');
+    }
+    return { sagaId: row.sagaId };
+  }
+
+  async createUserSaga(input: {
+    readonly title: string;
+    readonly blurb?: string;
+  }): Promise<{ readonly sagaId: string }> {
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('create_user_saga_definition', {
+        p_title: input.title,
+        p_blurb: input.blurb ?? '',
+      }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Saga anlegen Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Saga konnte nicht angelegt werden');
+    }
+    if (!data || typeof data !== 'object') {
+      throw new Error('Ungültige Create-Antwort');
+    }
+    const row = data as { sagaId?: string };
+    if (typeof row.sagaId !== 'string') {
+      throw new Error('Create ohne sagaId');
+    }
+    return { sagaId: row.sagaId };
   }
 
   async createProjectFromVersion(input: {

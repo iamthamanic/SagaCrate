@@ -10,7 +10,12 @@ import { useProjectSummaries } from '../project';
 import type { ProjectSummaryVm } from '../../domains/project/contracts/project.types';
 import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
 import { useAuth } from '../../lib/auth-context';
-import { pathForSagaNew, pathForSagaSection } from '../shell';
+import {
+  pathForSagaDefinitionCreate,
+  pathForSagaDefinitionEdit,
+  pathForSagaNew,
+  pathForSagaSection,
+} from '../shell';
 import { EntityBrowser, type EntityBrowserRenderContext } from './EntityBrowser';
 import { EntityBrowserCard } from './EntityBrowserCard';
 import { getSpeciesDevelopmentMode } from '../../domains/world/worldModuleRegistry';
@@ -340,6 +345,20 @@ export function Library({
                 </span>
               </Button>
             ) : null}
+            {project.sagaId && project.gmUserId === user?.id ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-11 w-full"
+                onClick={() => onNavigate(pathForSagaDefinitionEdit(project.sagaId!))}
+                data-library-saga-edit-story={project.sagaId}
+              >
+                <Edit className="mr-1 h-3 w-3" />
+                <span className="text-xs">
+                  {project.sagaOrigin === 'native' ? 'Geschichte ansehen' : 'Geschichte bearbeiten'}
+                </span>
+              </Button>
+            ) : null}
           </>
         }
       />
@@ -634,16 +653,29 @@ export function Library({
                   </span>
                 }
                 toolbarRight={
-                  <Button
-                    size="sm"
-                    className="min-h-11"
-                    onClick={() => onNavigate(pathForSagaNew())}
-                    data-library-saga-create
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    <span className="hidden sm:inline">Saga erstellen</span>
-                    <span className="sm:hidden">Neu</span>
-                  </Button>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="min-h-11"
+                      onClick={() => onNavigate(pathForSagaDefinitionCreate())}
+                      data-library-story-create
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      <span className="hidden sm:inline">Geschichte schreiben</span>
+                      <span className="sm:hidden">Schreiben</span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="min-h-11"
+                      onClick={() => onNavigate(pathForSagaNew())}
+                      data-library-saga-create
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      <span className="hidden sm:inline">Gruppe starten</span>
+                      <span className="sm:hidden">Neu</span>
+                    </Button>
+                  </div>
                 }
               />
             )}

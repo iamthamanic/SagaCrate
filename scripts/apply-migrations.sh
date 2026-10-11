@@ -59,6 +59,7 @@ migrations=(
   061_session_recaps_and_handover.sql
   062_session_recap_ai_summary.sql
   063_saga_definitions.sql
+  064_saga_editor_v1.sql
 )
 
 only="${1:-}"

@@ -14,6 +14,8 @@ import {
   pathForNpcCreatureEdit,
   pathForSagaList,
   pathForSagaNew,
+  pathForSagaDefinitionCreate,
+  pathForSagaDefinitionEdit,
   pathForSagaSection,
   pathForSessionLive,
   pathForSessionPhase,
@@ -78,6 +80,8 @@ export function useAppLocation() {
   const itemId = route.kind === 'item-detail' ? route.itemId : null;
   const createTypeSlug = route.kind === 'item-create' ? route.typeSlug ?? null : null;
   const lookId = route.kind === 'look-edit' ? route.lookId : null;
+  const sagaDefinitionId =
+    route.kind === 'saga-definition-edit' ? route.sagaDefinitionId : null;
   const npcCreatureDefinitionId =
     route.kind === 'npc-creature-edit' ? route.definitionId : null;
   const sagaPublicId =
@@ -158,6 +162,17 @@ export function useAppLocation() {
     navigateToPath(pathForSagaNew(), options);
   };
 
+  const navigateToSagaDefinitionCreate = (options?: { replace?: boolean }) => {
+    navigateToPath(pathForSagaDefinitionCreate(), options);
+  };
+
+  const navigateToSagaDefinitionEdit = (
+    definitionId: string,
+    options?: { replace?: boolean },
+  ) => {
+    navigateToPath(pathForSagaDefinitionEdit(definitionId), options);
+  };
+
   const navigateToSagaSection = (
     sagaId: string,
     section: SagaSectionId = 'overview',
@@ -200,6 +215,7 @@ export function useAppLocation() {
     itemId,
     createTypeSlug,
     lookId,
+    sagaDefinitionId,
     npcCreatureDefinitionId,
     sagaPublicId,
     sessionPublicId,
@@ -214,6 +230,8 @@ export function useAppLocation() {
     navigateToNpcCreatureEdit,
     navigateToSagaList,
     navigateToSagaNew,
+    navigateToSagaDefinitionCreate,
+    navigateToSagaDefinitionEdit,
     navigateToSagaSection,
     navigateToSessionPhase,
     navigateToSessionLive,
