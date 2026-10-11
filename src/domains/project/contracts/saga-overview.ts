@@ -56,9 +56,18 @@ export type SagaOverviewConsequenceVm = {
   readonly createdAt: string | null;
 };
 
+/** Open (unfired) deadline for hub Zeigarnik (#578). */
+export type SagaOverviewDeadlineVm = {
+  readonly id: string;
+  readonly label: string;
+  readonly dueDay: number;
+  readonly visibility: string;
+};
+
 export type SagaWorldStateSummaryVm = {
   readonly clocks: readonly SagaOverviewClockVm[];
   readonly consequences: readonly SagaOverviewConsequenceVm[];
+  readonly openDeadlines: readonly SagaOverviewDeadlineVm[];
   readonly flagCount: number;
   readonly updatedAt: string | null;
 };
@@ -192,9 +201,21 @@ function parseConsequence(raw: unknown): SagaOverviewConsequenceVm | null {
   };
 }
 
+function parseDeadline(raw: unknown): SagaOverviewDeadlineVm | null {
+  if (!isRecord(raw)) return null;
+  const id = asString(raw.id);
+  if (!id) return null;
+  return {
+    id,
+    label: asString(raw.label, id),
+    dueDay: Math.max(0, Math.floor(asNumber(raw.dueDay, 0))),
+    visibility: asString(raw.visibility, 'shared'),
+  };
+}
+
 function parseWorldStateSummary(raw: unknown): SagaWorldStateSummaryVm {
   if (!isRecord(raw)) {
-    return { clocks: [], consequences: [], flagCount: 0, updatedAt: null };
+    return { clocks: [], consequences: [], openDeadlines: [], flagCount: 0, updatedAt: null };
   }
   const clocks: SagaOverviewClockVm[] = [];
   if (Array.isArray(raw.clocks)) {
@@ -210,9 +231,17 @@ function parseWorldStateSummary(raw: unknown): SagaWorldStateSummaryVm {
       if (cons) consequences.push(cons);
     }
   }
+  const openDeadlines: SagaOverviewDeadlineVm[] = [];
+  if (Array.isArray(raw.openDeadlines)) {
+    for (const item of raw.openDeadlines) {
+      const dl = parseDeadline(item);
+      if (dl) openDeadlines.push(dl);
+    }
+  }
   return {
     clocks,
     consequences,
+    openDeadlines,
     flagCount: Math.max(0, Math.floor(asNumber(raw.flagCount, 0))),
     updatedAt: asNullableString(raw.updatedAt),
   };
@@ -279,6 +308,11 @@ export function assertSagaOverviewAudienceSafe(vm: SagaOverviewVm): void {
       throw new Error('Player-Übersicht enthält gm_only Consequence');
     }
   }
+  for (const dl of vm.worldStateSummary.openDeadlines) {
+    if (dl.visibility === 'gm_only') {
+      throw new Error('Player-Übersicht enthält gm_only Frist');
+    }
+  }
 }
 
 /** True when overview world summary contains any gm_only entry (GM-only expectation). */
@@ -286,5 +320,6 @@ export function sagaOverviewHasGmOnlyWorldFields(vm: SagaOverviewVm): boolean {
   return (
     vm.worldStateSummary.clocks.some((c) => c.visibility === 'gm_only')
     || vm.worldStateSummary.consequences.some((c) => c.visibility === 'gm_only')
+    || vm.worldStateSummary.openDeadlines.some((d) => d.visibility === 'gm_only')
   );
 }

@@ -1,14 +1,16 @@
 /**
- * SessionPrepareScreen — Product Prepare surface before Lobby/Live (#492).
+ * SessionPrepareScreen — Product Prepare surface before Lobby/Live (#492 / #578).
  * Location: src/app/session/SessionPrepareScreen.tsx
  *
- * Metadata, invite share, lobby entry. No parallel join flow.
+ * Context → Zwischen den Sessions / Der Bote → Invite/Lobby CTA.
  */
 import { Button } from '../../shared/ui/button';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { pathForSessionLobby } from '../../domains/session/contracts/session-lobby';
 import { pathForSessionLive, pathForSessionPhase } from '../shell';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
+import { SagaBetweenSessionsSection } from './SagaBetweenSessionsSection';
+import { SagaBotePanel } from './SagaBotePanel';
 import { useSessionPrepareRecap } from './hooks/useSessionPrepareRecap';
 
 type SessionPrepareScreenProps = {
@@ -142,6 +144,15 @@ export function SessionPrepareScreen({
                 ))}
               </ul>
             </section>
+
+            <SagaBetweenSessionsSection
+              sessionId={model.summary.sessionId}
+              isGm={model.selfRole === 'gamemaster'}
+              worldDay={model.worldDay}
+              openDeadlines={model.openDeadlines}
+            />
+
+            <SagaBotePanel lines={model.boteLines} />
 
             <section
               className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"

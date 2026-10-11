@@ -1,5 +1,5 @@
 /**
- * SagaWorldStatePanel — Audience-safe clocks / consequences summary (#571).
+ * SagaWorldStatePanel — Audience-safe clocks / consequences / deadlines (#571 / #578).
  * Location: src/app/project/overview/SagaWorldStatePanel.tsx
  *
  * Renders only the audience-safe overview world summary from the hub VM.
@@ -13,6 +13,7 @@ export type SagaWorldStatePanelProps = {
 export function SagaWorldStatePanel({ summary }: SagaWorldStatePanelProps) {
   const hasClocks = summary.clocks.length > 0;
   const hasCons = summary.consequences.length > 0;
+  const hasDeadlines = summary.openDeadlines.length > 0;
 
   return (
     <section className="space-y-3" data-saga-overview-world aria-labelledby="saga-overview-world-title">
@@ -21,15 +22,33 @@ export function SagaWorldStatePanel({ summary }: SagaWorldStatePanelProps) {
           Weltzustand
         </h3>
         <p className="text-sm text-muted-foreground">
-          Öffentliche Uhren und was bisher geschah
+          Öffentliche Uhren, Fristen und was bisher geschah
           {summary.flagCount > 0 ? ` · ${summary.flagCount} Marken` : ''}
         </p>
       </div>
 
-      {!hasClocks && !hasCons ? (
+      {!hasClocks && !hasCons && !hasDeadlines ? (
         <p className="text-sm text-muted-foreground" data-saga-overview-world-empty>
           Noch keine öffentlichen Welt-Ereignisse.
         </p>
+      ) : null}
+
+      {hasDeadlines ? (
+        <div className="space-y-2" data-saga-overview-open-deadlines>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Offene Fristen</p>
+          <ul className="space-y-1.5">
+            {summary.openDeadlines.map((d) => (
+              <li
+                key={d.id}
+                className="flex flex-wrap justify-between gap-2 text-sm"
+                data-saga-overview-deadline={d.id}
+              >
+                <span className="font-medium text-foreground">{d.label}</span>
+                <span className="text-muted-foreground">fällig Tag {d.dueDay}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
 
       {hasClocks ? (
