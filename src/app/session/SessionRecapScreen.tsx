@@ -9,6 +9,7 @@ import { AdaptivePage } from '../../shared/ui/adaptive';
 import { pathForSagaSection, pathForSessionPhase } from '../shell';
 import { useSessionPrepareRecap } from './hooks/useSessionPrepareRecap';
 import { EpisodeSummaryPanel } from './EpisodeSummaryPanel';
+import { SessionRecapPromoteActions } from './SessionRecapPromoteActions';
 
 type SessionRecapScreenProps = {
   sagaPublicId: string;
@@ -213,6 +214,12 @@ export function SessionRecapScreen({
                   {h.kind}
                 </span>
                 <p>{h.summary}</p>
+                {model?.selfRole === 'gamemaster' && model.summary.sessionId ? (
+                  <SessionRecapPromoteActions
+                    sessionId={model.summary.sessionId}
+                    highlight={h}
+                  />
+                ) : null}
               </li>
             ))}
           </ul>

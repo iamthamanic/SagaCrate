@@ -264,6 +264,14 @@ function checkWorldMapPartyPosition() {
   });
 }
 
+function checkSagaPromoteToWorld() {
+  console.log('Saga promote to world/saga (#582): RPCs, ledger, recap UI...');
+  execFileSync(process.execPath, ['scripts/saga-promote-to-world-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaSimulationKernel() {
   console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
   execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
@@ -1969,6 +1977,7 @@ checkSagaEditorV1();
 checkSagaEditorV2();
 checkWorldMapScriptonyPort();
 checkWorldMapPartyPosition();
+checkSagaPromoteToWorld();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
 checkSagaBetweenSessionsBote();
