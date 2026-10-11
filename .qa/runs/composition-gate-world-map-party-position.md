@@ -1,5 +1,5 @@
 # Composition Gate — world-map-party-position
-- HEAD_SHA: acecf9a4d2e177693bab3b64ad4ec4bc6f814cdc
+- HEAD_SHA: b6f8b943eb315c316a6b28ce976df073d484d32c
 - BASE_SHA: fef75f7138878dda025a6171920733a7e8e1d920
 - Date: 2026-10-11
 - Verdict: CLEAR
@@ -15,7 +15,7 @@ SagaPartyLocationGmPanel / WorldMapPlayerView(canMoveParty) → useAdventureRunt
 |------|----------|----------|--------|
 | N-actors | Only GM writes; two projects independent | RPC GM gate + per-project runtime | pass |
 | Invalid/missing | empty locationRef rejected | SQL 22023 | pass |
-| Two consumers | Overview + live map same ref; map missing → text | partyLocationDisplayLabel fallback | pass |
+| Two consumers / crash | Overview + live map same ref; map missing → text | partyLocationDisplayLabel fallback | pass |
 
 ## Flags
 | Tag | Severity | Hops | Why | Fix |
