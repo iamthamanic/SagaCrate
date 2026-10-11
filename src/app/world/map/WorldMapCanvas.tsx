@@ -1,16 +1,21 @@
 /**
- * WorldMapCanvas — Canvas 2D tile grid with pointer events (#580).
+ * WorldMapCanvas — Canvas 2D tile grid with pointer events (#580 / #581).
  * Location: src/app/world/map/WorldMapCanvas.tsx
+ *
+ * Party marker (#581) is runtime overlay — not stored in world_maps.
  */
 import { useEffect, useRef } from 'react';
 import {
   BASE_TILE_PX,
+  PARTY_MARKER_COLOR,
+  PARTY_MARKER_RING,
   PIN_COLOR_CYAN,
   PIN_COLOR_GOLD,
   tileKey,
   type WorldMapData,
   type WorldMapTool,
 } from '../../../domains/world/map';
+import type { PartyMapPosition } from '../../../domains/session/contracts/party-location';
 
 const FILL: Record<string, string> = {
   grass: '#4ade80',
@@ -26,13 +31,24 @@ type Props = {
   data: WorldMapData;
   zoom: number;
   tool: WorldMapTool;
+  partyPosition?: PartyMapPosition | null;
   onPaint: (x: number, y: number) => void;
   onPinPlace: (x: number, y: number) => void;
+  onPartyPlace?: (x: number, y: number) => void;
 };
 
-export function WorldMapCanvas({ data, zoom, tool, onPaint, onPinPlace }: Props) {
+export function WorldMapCanvas({
+  data,
+  zoom,
+  tool,
+  partyPosition = null,
+  onPaint,
+  onPinPlace,
+  onPartyPlace,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const painting = useRef(false);
+  const draggingParty = useRef(false);
   const tilePx = BASE_TILE_PX * zoom;
   const px = Math.floor(data.size * tilePx);
 
@@ -69,12 +85,38 @@ export function WorldMapCanvas({ data, zoom, tool, onPaint, onPinPlace }: Props)
       const cy = pin.y * tilePx + tilePx / 2;
       ctx.beginPath();
       ctx.fillStyle = index % 2 === 0 ? PIN_COLOR_CYAN : PIN_COLOR_GOLD;
-      ctx.arc(cx, cy, Math.max(4, tilePx * 0.28), 0, Math.PI * 2);
+      ctx.arc(cx, cy, Math.max(4, tilePx * 0.22), 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#0f172a';
       ctx.stroke();
     });
-  }, [data, px, tilePx]);
+    if (
+      partyPosition
+      && partyPosition.x >= 0
+      && partyPosition.y >= 0
+      && partyPosition.x < data.size
+      && partyPosition.y < data.size
+    ) {
+      const cx = partyPosition.x * tilePx + tilePx / 2;
+      const cy = partyPosition.y * tilePx + tilePx / 2;
+      const r = Math.max(8, tilePx * 0.42);
+      ctx.beginPath();
+      ctx.fillStyle = PARTY_MARKER_COLOR;
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = PARTY_MARKER_RING;
+      ctx.stroke();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#0f172a';
+      ctx.stroke();
+      ctx.fillStyle = PARTY_MARKER_RING;
+      ctx.font = `600 ${Math.max(10, Math.floor(tilePx * 0.35))}px system-ui,sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('Ihr seid hier', cx, cy - r - 2);
+    }
+  }, [data, partyPosition, px, tilePx]);
 
   const coordsFromEvent = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
@@ -100,6 +142,11 @@ export function WorldMapCanvas({ data, zoom, tool, onPaint, onPinPlace }: Props)
           canvasRef.current?.setPointerCapture(e.pointerId);
           const c = coordsFromEvent(e.clientX, e.clientY);
           if (!c) return;
+          if (tool === 'party') {
+            draggingParty.current = true;
+            onPartyPlace?.(c.x, c.y);
+            return;
+          }
           if (tool === 'pin') {
             onPinPlace(c.x, c.y);
             return;
@@ -108,15 +155,22 @@ export function WorldMapCanvas({ data, zoom, tool, onPaint, onPinPlace }: Props)
           onPaint(c.x, c.y);
         }}
         onPointerMove={(e) => {
+          if (tool === 'party' && draggingParty.current) {
+            const c = coordsFromEvent(e.clientX, e.clientY);
+            if (c) onPartyPlace?.(c.x, c.y);
+            return;
+          }
           if (!painting.current || tool === 'pin' || tool === 'pan') return;
           const c = coordsFromEvent(e.clientX, e.clientY);
           if (c) onPaint(c.x, c.y);
         }}
         onPointerUp={() => {
           painting.current = false;
+          draggingParty.current = false;
         }}
         onPointerCancel={() => {
           painting.current = false;
+          draggingParty.current = false;
         }}
       />
     </div>

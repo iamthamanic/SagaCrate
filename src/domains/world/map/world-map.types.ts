@@ -12,7 +12,7 @@ export type WorldMapTileType =
   | 'city'
   | 'empty';
 
-export type WorldMapTool = 'brush' | 'eraser' | 'pin' | 'pan';
+export type WorldMapTool = 'brush' | 'eraser' | 'pin' | 'pan' | 'party';
 
 export type WorldMapTile = {
   readonly type: WorldMapTileType;

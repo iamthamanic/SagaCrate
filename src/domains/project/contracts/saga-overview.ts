@@ -68,6 +68,8 @@ export type SagaWorldStateSummaryVm = {
   readonly clocks: readonly SagaOverviewClockVm[];
   readonly consequences: readonly SagaOverviewConsequenceVm[];
   readonly openDeadlines: readonly SagaOverviewDeadlineVm[];
+  /** #581 party position (locationRef or map:x,y) */
+  readonly partyLocationRef: string | null;
   readonly flagCount: number;
   readonly updatedAt: string | null;
 };
@@ -80,6 +82,8 @@ export type SagaOverviewVm = {
   readonly status: string;
   readonly selfRole: SagaOverviewRole;
   readonly isGm: boolean;
+  /** Linked world profile for hub map (#581) */
+  readonly worldProfileId: string | null;
   readonly definitionRef: string | null;
   /** #574 story definition pin */
   readonly sagaDefinitionId: string | null;
@@ -215,7 +219,14 @@ function parseDeadline(raw: unknown): SagaOverviewDeadlineVm | null {
 
 function parseWorldStateSummary(raw: unknown): SagaWorldStateSummaryVm {
   if (!isRecord(raw)) {
-    return { clocks: [], consequences: [], openDeadlines: [], flagCount: 0, updatedAt: null };
+    return {
+      clocks: [],
+      consequences: [],
+      openDeadlines: [],
+      partyLocationRef: null,
+      flagCount: 0,
+      updatedAt: null,
+    };
   }
   const clocks: SagaOverviewClockVm[] = [];
   if (Array.isArray(raw.clocks)) {
@@ -238,10 +249,12 @@ function parseWorldStateSummary(raw: unknown): SagaWorldStateSummaryVm {
       if (dl) openDeadlines.push(dl);
     }
   }
+  const partyRaw = asNullableString(raw.partyLocationRef);
   return {
     clocks,
     consequences,
     openDeadlines,
+    partyLocationRef: partyRaw ? partyRaw.trim().slice(0, 80) || null : null,
     flagCount: Math.max(0, Math.floor(asNumber(raw.flagCount, 0))),
     updatedAt: asNullableString(raw.updatedAt),
   };
@@ -283,6 +296,7 @@ export function parseSagaOverview(raw: unknown): SagaOverviewVm {
     status: asString(raw.status, 'active'),
     selfRole: parseRole(raw.selfRole),
     isGm: raw.isGm === true,
+    worldProfileId: asNullableString(raw.worldProfileId),
     definitionRef: asNullableString(raw.definitionRef),
     sagaDefinitionId: asNullableString(raw.sagaDefinitionId),
     sagaVersionId: asNullableString(raw.sagaVersionId),
