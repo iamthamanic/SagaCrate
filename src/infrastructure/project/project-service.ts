@@ -317,9 +317,12 @@ class ProjectService {
   private async fetchUserProjectSummaries(): Promise<ProjectSummaryVm[]> {
     const userId = await getAuthenticatedUserId();
 
+    const projectSummarySelect =
+      'id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status, saga_id, saga_version_id, saga_definitions(title, origin)';
+
     const { data: gmProjects, error: gmError } = await supabase
       .from(this.tableName)
-      .select('id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status')
+      .select(projectSummarySelect)
       .eq('gm_user_id', userId)
       .order('created_at', { ascending: false });
 
@@ -329,9 +332,7 @@ class ProjectService {
 
     const { data: memberRecords, error: memberError } = await supabase
       .from(this.membersTableName)
-      .select(
-        'projects!inner(id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status)',
-      )
+      .select(`projects!inner(${projectSummarySelect})`)
       .eq('user_id', userId)
       .eq('status', 'active');
 
@@ -346,19 +347,44 @@ class ProjectService {
       public_id?: string | null;
       world_id?: string | null;
       world_profile_id?: string | null;
+      saga_id?: string | null;
+      saga_version_id?: string | null;
+      saga_definitions?: { title?: string | null; origin?: string | null } | null;
     };
     const combined = new Map<string, ProjectSummaryRow>();
 
+    const normalizeSummaryRow = (raw: unknown): ProjectSummaryRow | null => {
+      if (!isProjectSummaryRow(raw)) return null;
+      const row = raw as ProjectSummaryRow & { saga_definitions?: unknown };
+      let def: ProjectSummaryRow['saga_definitions'] = null;
+      if (Array.isArray(row.saga_definitions)) {
+        const first = row.saga_definitions[0];
+        if (isRecord(first)) {
+          def = {
+            title: typeof first.title === 'string' ? first.title : null,
+            origin: typeof first.origin === 'string' ? first.origin : null,
+          };
+        }
+      } else if (isRecord(row.saga_definitions)) {
+        def = {
+          title: typeof row.saga_definitions.title === 'string' ? row.saga_definitions.title : null,
+          origin: typeof row.saga_definitions.origin === 'string' ? row.saga_definitions.origin : null,
+        };
+      }
+      return { ...row, saga_definitions: def };
+    };
+
     for (const project of gmProjects ?? []) {
-      if (!isProjectSummaryRow(project)) continue;
-      combined.set(project.id, project);
+      const normalized = normalizeSummaryRow(project);
+      if (!normalized) continue;
+      combined.set(normalized.id, normalized);
     }
 
     for (const record of memberRecords ?? []) {
       if (!isRecord(record)) continue;
-      const project = record.projects;
-      if (!isProjectSummaryRow(project)) continue;
-      combined.set(project.id, project);
+      const normalized = normalizeSummaryRow(record.projects);
+      if (!normalized) continue;
+      combined.set(normalized.id, normalized);
     }
 
     const projectIds = [...combined.keys()];
@@ -382,6 +408,12 @@ class ProjectService {
 
     return projectIds.map((id) => {
       const project = combined.get(id)!;
+      const def = project.saga_definitions;
+      const originRaw = def && typeof def.origin === 'string' ? def.origin : null;
+      const sagaOrigin =
+        originRaw === 'native' || originRaw === 'user' || originRaw === 'private_backfill'
+          ? originRaw
+          : null;
       return {
         id: project.id,
         publicId: typeof project.public_id === 'string' ? project.public_id : '',
@@ -391,6 +423,10 @@ class ProjectService {
         worldId: typeof project.world_id === 'string' ? project.world_id : null,
         worldProfileId:
           typeof project.world_profile_id === 'string' ? project.world_profile_id : null,
+        sagaId: typeof project.saga_id === 'string' ? project.saga_id : null,
+        sagaVersionId: typeof project.saga_version_id === 'string' ? project.saga_version_id : null,
+        sagaTitle: def && typeof def.title === 'string' ? def.title : null,
+        sagaOrigin,
         gmUserId: project.gm_user_id,
         status: project.status,
         memberCount: memberCounts.get(id) ?? 0,

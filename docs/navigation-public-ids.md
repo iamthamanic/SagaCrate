@@ -12,7 +12,7 @@ Rules: uppercase; ≥1 letter and ≥1 digit; server-generated; immutable; UNIQU
 
 | Prefix | Resource |
 |--------|----------|
-| `SA-` | Saga (`projects`) |
+| `SA-` | Gruppen-Saga / Playthrough (`projects`) — Spielstand einer Gruppe an einer gepinnten Story-Fassung. Die Story-Definition selbst liegt in `saga_definitions` (#574), nicht unter einem eigenen Public-ID-Prefix. |
 | `SE-` | Session (`sessions`) |
 | `CH-` | Character |
 | `IT-` | Item definition |
@@ -21,6 +21,8 @@ Rules: uppercase; ≥1 letter and ≥1 digit; server-generated; immutable; UNIQU
 | `QT-` | Quest (reserved) |
 
 Internal UUID / TEXT PKs remain the relational source of truth. `projects.code` stays the join code and must never be merged with `SA-XXXXX`.
+
+**Terminology (#574):** User-facing „Saga“ often means the story (`saga_definitions` + published `saga_definition_versions`). The URL segment `/sagas/:sagaPublicId` and prefix `SA-` still address the **group playthrough** (`projects`) pinned via `projects.saga_id` / `projects.saga_version_id`. Deep links stay stable.
 
 Public IDs are **identifiers, not secrets**. Knowledge of an ID never grants access — Auth, RLS, and membership do.
 

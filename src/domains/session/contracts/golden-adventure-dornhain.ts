@@ -75,6 +75,10 @@ const LOCATIONS: readonly DornhainLocationRef[] = [
   { id: 'loc.bandit-camp', label: 'Banditenlager (falsche Spur)', scenePresetHint: 'forest' },
 ];
 
+/**
+ * Client-safe knowledge catalog (#574).
+ * gm_only summaries are empty in the bundle — full text lives in DB seed only.
+ */
 const KNOWLEDGE: readonly DornhainKnowledgeFact[] = [
   {
     id: 'fact.disappearances',
@@ -89,12 +93,12 @@ const KNOWLEDGE: readonly DornhainKnowledgeFact[] = [
   {
     id: 'fact.relic-opened',
     visibility: 'gm_only',
-    summary: 'Ein Relikt wurde geöffnet; die Gefahr eskaliert mit der Zeit.',
+    summary: '',
   },
   {
     id: 'fact.hidden-npc',
     visibility: 'gm_only',
-    summary: 'Ein vertrauter Dorfbewohner ist in die Reliktöffnung verwickelt.',
+    summary: '',
   },
 ];
 
@@ -239,8 +243,13 @@ export function assertGoldenAdventureDornhainIntegrity(
   if (!pkg.itemDefinitionIds.includes(DORNHAIN_EQUIPPABLE_ID)) {
     throw new Error('Equippable missing');
   }
-  if (pkg.knowledgeFacts.some((f) => f.visibility === 'gm_only') !== true) {
+  const gmOnly = pkg.knowledgeFacts.filter((f) => f.visibility === 'gm_only');
+  if (gmOnly.length < 1) {
     throw new Error('Need gm_only knowledge facts');
+  }
+  // #574 — client bundle must not embed gm_only secret summaries.
+  if (gmOnly.some((f) => f.summary.trim().length > 0)) {
+    throw new Error('Client Dornhain package must redact gm_only summaries');
   }
   if (pkg.stressScenarios.length < 1) {
     throw new Error('Need death stress scenario');

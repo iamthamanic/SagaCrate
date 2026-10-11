@@ -8,6 +8,7 @@ import type { CharacterSummaryVm } from '../../domains/character';
 import { resolveAvatarSurfaceView } from '../../domains/character/avatar';
 import { useProjectSummaries } from '../project';
 import type { ProjectSummaryVm } from '../../domains/project/contracts/project.types';
+import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
 import { useAuth } from '../../lib/auth-context';
 import { pathForSagaNew, pathForSagaSection } from '../shell';
 import { EntityBrowser, type EntityBrowserRenderContext } from './EntityBrowser';
@@ -93,9 +94,15 @@ export function Library({
   const { characters, isLoading, error, deleteCharacter, refreshCharacters } = useCharacterSummaries({
     enabled: visitedTabs.has('characters'),
   });
-  const { projects, isLoading: projectsLoading, error: projectsError } = useProjectSummaries({
+  const {
+    projects,
+    isLoading: projectsLoading,
+    error: projectsError,
+    refreshProjects,
+  } = useProjectSummaries({
     enabled: visitedTabs.has('adventures') || visitedTabs.has('npcs'),
   });
+  const [creatingGroupFor, setCreatingGroupFor] = useState<string | null>(null);
   const {
     worlds,
     isLoading: worldsLoading,
@@ -221,6 +228,43 @@ export function Library({
     openSagaOverview(project);
   };
 
+  const runCountBySagaId = (() => {
+    const counts = new Map<string, number>();
+    for (const p of projects) {
+      if (!p.sagaId) continue;
+      counts.set(p.sagaId, (counts.get(p.sagaId) ?? 0) + 1);
+    }
+    return counts;
+  })();
+
+  const createNewGroupRun = async (project: ProjectSummaryVm) => {
+    if (!project.sagaId || !project.sagaVersionId) {
+      toast.error('Diese Saga hat keine Fassung');
+      return;
+    }
+    if (project.gmUserId !== user?.id) {
+      toast.error('Nur die Spielleitung kann eine neue Gruppe starten');
+      return;
+    }
+    setCreatingGroupFor(project.id);
+    try {
+      const created = await sagaDefinitionService.createProjectFromVersion({
+        sagaId: project.sagaId,
+        versionId: project.sagaVersionId,
+        name: `${project.sagaTitle ?? project.name} · Gruppe`,
+      });
+      await refreshProjects({ force: true });
+      toast.success('Neue Gruppe erstellt');
+      if (created.publicId) {
+        onNavigate(pathForSagaSection(created.publicId, 'overview'));
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Gruppe fehlgeschlagen');
+    } finally {
+      setCreatingGroupFor(null);
+    }
+  };
+
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredCharacters = characters.filter(char =>
     char.name.toLowerCase().includes(normalizedSearch) ||
@@ -237,46 +281,70 @@ export function Library({
     project.code.toLowerCase().includes(normalizedSearch)
   );
 
-  const renderProject = (project: ProjectSummaryVm, context: EntityBrowserRenderContext) => (
-    <EntityBrowserCard
-      title={project.name}
-      meta={project.description || 'Keine Beschreibung'}
-      imageFallback={project.name}
-      imageAlt={`Saga ${project.name}`}
-      metaChips={[
-        PROJECT_STATUS_LABELS[project.status],
-        `${project.memberCount} Mitglied${project.memberCount !== 1 ? 'er' : ''}`,
-        `Code: ${project.code}`,
-      ]}
-      variant={context.variant}
-      isCenter={context.isCenter}
-      onOpen={context.variant === 'list' || context.isCenter ? () => openProject(project) : undefined}
-      actions={
-        <>
-          <Button
-            variant="default"
-            size="sm"
-            className="min-h-11 flex-1 bg-cyan-600 text-white hover:bg-cyan-500"
-            onClick={() => openSagaOverview(project)}
-            data-library-saga-open={project.publicId}
-          >
-            <BookOpen className="mr-1 h-3 w-3" />
-            <span className="text-xs">Saga öffnen</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="min-h-11 flex-1"
-            onClick={() => openProjectAsParticipant(project)}
-            data-library-saga-join={project.publicId}
-          >
-            <Gamepad2 className="mr-1 h-3 w-3" />
-            <span className="text-xs">Teilnehmen</span>
-          </Button>
-        </>
-      }
-    />
-  );
+  const renderProject = (project: ProjectSummaryVm, context: EntityBrowserRenderContext) => {
+    const storyTitle = project.sagaTitle?.trim() || project.name;
+    const runCount = project.sagaId ? (runCountBySagaId.get(project.sagaId) ?? 1) : 1;
+    const showGroupLabel = runCount > 1;
+    const chips = [
+      PROJECT_STATUS_LABELS[project.status],
+      `${project.memberCount} Mitglied${project.memberCount !== 1 ? 'er' : ''}`,
+      `Code: ${project.code}`,
+    ];
+    if (project.sagaOrigin === 'native') chips.unshift('Native');
+    if (showGroupLabel) chips.push(`Gruppe: ${project.name}`);
+
+    return (
+      <EntityBrowserCard
+        title={storyTitle}
+        meta={project.description || 'Keine Beschreibung'}
+        imageFallback={storyTitle}
+        imageAlt={`Saga ${storyTitle}`}
+        metaChips={chips}
+        variant={context.variant}
+        isCenter={context.isCenter}
+        onOpen={context.variant === 'list' || context.isCenter ? () => openProject(project) : undefined}
+        actions={
+          <>
+            <Button
+              variant="default"
+              size="sm"
+              className="min-h-11 flex-1 bg-cyan-600 text-white hover:bg-cyan-500"
+              onClick={() => openSagaOverview(project)}
+              data-library-saga-open={project.publicId}
+            >
+              <BookOpen className="mr-1 h-3 w-3" />
+              <span className="text-xs">Saga öffnen</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-11 flex-1"
+              onClick={() => openProjectAsParticipant(project)}
+              data-library-saga-join={project.publicId}
+            >
+              <Gamepad2 className="mr-1 h-3 w-3" />
+              <span className="text-xs">Teilnehmen</span>
+            </Button>
+            {showGroupLabel && project.gmUserId === user?.id ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-11 w-full"
+                disabled={creatingGroupFor === project.id}
+                onClick={() => void createNewGroupRun(project)}
+                data-library-saga-new-group={project.publicId}
+              >
+                <Users className="mr-1 h-3 w-3" />
+                <span className="text-xs">
+                  {creatingGroupFor === project.id ? 'Wird erstellt…' : 'Mit neuer Gruppe spielen'}
+                </span>
+              </Button>
+            ) : null}
+          </>
+        }
+      />
+    );
+  };
 
   const renderWorld = (world: WorldProfileVm, context: EntityBrowserRenderContext) => {
     const speciesDevelopmentMode = getSpeciesDevelopmentMode(world.modules);

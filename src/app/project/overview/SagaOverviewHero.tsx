@@ -30,6 +30,12 @@ export function SagaOverviewHero({ model, primaryAction, onPrimary }: SagaOvervi
         <h2 id="saga-overview-title" className="text-2xl font-semibold text-foreground md:text-3xl">
           {model.title}
         </h2>
+        {model.versionLabel ? (
+          <p className="text-xs text-muted-foreground" data-saga-overview-version>
+            Fassung {model.versionLabel}
+            {model.newerVersionAvailable ? ' · Neue Fassung verfügbar' : ''}
+          </p>
+        ) : null}
         {blurb ? (
           <div className="space-y-1">
             <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">{shown}</p>

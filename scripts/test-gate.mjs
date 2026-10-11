@@ -224,6 +224,14 @@ function checkSessionRecapAiSummary() {
   });
 }
 
+function checkSagaDefinitionsVersions() {
+  console.log('Saga definitions + versions (#574): tables, Dornhain seed, client redaction...');
+  execFileSync(process.execPath, ['scripts/saga-definitions-versions-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1900,6 +1908,7 @@ checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
+checkSagaDefinitionsVersions();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();

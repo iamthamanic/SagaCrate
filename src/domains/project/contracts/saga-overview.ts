@@ -72,6 +72,11 @@ export type SagaOverviewVm = {
   readonly selfRole: SagaOverviewRole;
   readonly isGm: boolean;
   readonly definitionRef: string | null;
+  /** #574 story definition pin */
+  readonly sagaDefinitionId: string | null;
+  readonly sagaVersionId: string | null;
+  readonly versionLabel: string | null;
+  readonly newerVersionAvailable: boolean;
   readonly primaryAction: SagaPrimaryAction;
   readonly episodes: readonly SagaEpisodeVm[];
   readonly ensemble: readonly SagaEnsembleMemberVm[];
@@ -250,6 +255,10 @@ export function parseSagaOverview(raw: unknown): SagaOverviewVm {
     selfRole: parseRole(raw.selfRole),
     isGm: raw.isGm === true,
     definitionRef: asNullableString(raw.definitionRef),
+    sagaDefinitionId: asNullableString(raw.sagaDefinitionId),
+    sagaVersionId: asNullableString(raw.sagaVersionId),
+    versionLabel: asNullableString(raw.versionLabel),
+    newerVersionAvailable: raw.newerVersionAvailable === true,
     primaryAction: parsePrimaryAction(raw.primaryAction),
     episodes,
     ensemble,
