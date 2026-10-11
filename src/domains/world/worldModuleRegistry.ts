@@ -13,7 +13,11 @@ import {
 } from '../npc-creature/world-catalog';
 import type { WorldModuleConfigMap } from './contracts/world.types';
 
-export type WorldModuleId = 'species-development' | 'item-catalog' | 'npc-creature-catalog';
+export type WorldModuleId =
+  | 'species-development'
+  | 'item-catalog'
+  | 'npc-creature-catalog'
+  | 'map';
 export type SpeciesDevelopmentMode = 'explicit' | 'progressive' | 'disabled';
 
 export interface WorldModuleSettingOption {
@@ -86,6 +90,14 @@ export const WORLD_MODULE_REGISTRY: readonly WorldModuleDefinition[] = [
     label: 'NPCs & Kreaturen',
     description:
       'Wählt Built-in-Packs und einzelne Figuren aus, die in dieser Welt standardmäßig angeboten werden. Core-Archetypen bleiben immer sichtbar.',
+    settings: [],
+    customEditor: true,
+  },
+  {
+    id: 'map',
+    label: 'Weltkarte',
+    description:
+      'Kachelkarte mit Pins für diese Welt. Speicherung in world_maps; Pin-Bilder über Storage.',
     settings: [],
     customEditor: true,
   },

@@ -24,6 +24,7 @@ import {
   WorldNpcCreatureCatalogModuleSection,
   WorldNpcCreatureCatalogSection,
 } from '../npc-creature-catalog';
+import { WorldMapEditorScreen } from '../map';
 import {
   WORLD_MODULE_REGISTRY,
   getWorldModuleSettingValue,
@@ -199,11 +200,17 @@ export function WorldProfileEditorDialog({
                 worldProfileId={world.id}
                 onCatalogChanged={() => setNpcCatalogRevision((token) => token + 1)}
               />
+              <div
+                className="border-t border-border pt-5"
+                data-world-map-module-section
+              >
+                <WorldMapEditorScreen worldProfileId={world.id} />
+              </div>
             </>
           ) : (
             <p className="border-t border-border pt-5 text-sm text-muted-foreground">
-              Speichere die Welt zuerst, bevor du Ausrüstung & Gegenstände oder NPCs & Kreaturen
-              für dieses Weltprofil anlegst.
+              Speichere die Welt zuerst, bevor du Ausrüstung & Gegenstände, NPCs & Kreaturen
+              oder die Weltkarte für dieses Weltprofil anlegst.
             </p>
           )}
 
