@@ -31,7 +31,17 @@ export type SagaPregenRef = {
   readonly displayName: string;
 };
 
-/** Minimal simulation templates on a story definition (#576; authoring UI in #579). */
+/** Faction template: seeds a clock + relationship track (#579). */
+export type SagaDefinitionFactionTemplate = {
+  readonly id: string;
+  readonly label: string;
+  readonly clockLabel: string;
+  readonly clockMax: number;
+  readonly relationshipLabel: string;
+  readonly visibility: string;
+};
+
+/** Minimal simulation templates on a story definition (#576 / #579). */
 export type SagaDefinitionSimulationSlice = {
   readonly startDay: number;
   readonly deadlines: readonly {
@@ -55,9 +65,61 @@ export type SagaDefinitionSimulationSlice = {
     readonly id: string;
     readonly label: string;
     readonly whenKind: string;
+    /** Optional threat id when whenKind is threat-at-least. */
+    readonly whenThreatId: string;
     readonly thenKinds: readonly string[];
   }[];
+  readonly factions: readonly SagaDefinitionFactionTemplate[];
 };
+
+export function emptySagaDefinitionSimulation(): SagaDefinitionSimulationSlice {
+  return {
+    startDay: 0,
+    deadlines: [],
+    threats: [],
+    rules: [],
+    factions: [],
+  };
+}
+
+/** Dornhain defaults when seed payload has no simulation slice yet (#579). */
+export function dornhainSimulationDefaults(): SagaDefinitionSimulationSlice {
+  return {
+    startDay: 0,
+    deadlines: [],
+    threats: [
+      {
+        id: 'danger',
+        label: 'Reliktgefahr',
+        max: 6,
+        tickPerDay: 1,
+        visibility: 'shared',
+        doomSummaryPlayer: 'Die Gefahr ist greifbar nah.',
+        doomSummaryGm: 'Threat danger at max.',
+      },
+      {
+        id: 'suspicion',
+        label: 'Dorfverdacht',
+        max: 4,
+        tickPerDay: 0,
+        visibility: 'shared',
+        doomSummaryPlayer: 'Das Dorf misstraut euch.',
+        doomSummaryGm: 'Threat suspicion at max.',
+      },
+    ],
+    rules: [],
+    factions: [
+      {
+        id: 'faction.village',
+        label: 'Dorf',
+        clockLabel: 'Dorfspannung',
+        clockMax: 4,
+        relationshipLabel: 'Dorfvertrauen',
+        visibility: 'shared',
+      },
+    ],
+  };
+}
 
 export type SagaDefinitionPayload = {
   readonly packageId: string | null;
@@ -84,7 +146,7 @@ export type SagaDefinitionVersionVm = {
   readonly isGmProjection: boolean;
 };
 
-/** Mutable draft document for the Saga Editor (#575). */
+/** Mutable draft document for the Saga Editor (#575 / #579). */
 export type SagaDefinitionDraft = {
   readonly sagaId: string;
   readonly sagaSlug: string;
@@ -96,6 +158,7 @@ export type SagaDefinitionDraft = {
   readonly knowledgeFacts: SagaKnowledgeFact[];
   readonly pregens: SagaPregenRef[];
   readonly packageId: string | null;
+  readonly simulation: SagaDefinitionSimulationSlice;
 };
 
 export type SagaDefinitionEditorVm = {
@@ -115,6 +178,7 @@ export type SagaDefinitionEditorVm = {
 export type SagaDefinitionFieldErrors = {
   readonly title?: string;
   readonly blurb?: string;
+  readonly simulation?: string;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -233,6 +297,9 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
             .filter(isRecord)
             .map((r) => {
               const whenKind = isRecord(r.when) ? asString(r.when.kind) : asString(r.whenKind);
+              const whenThreatId = isRecord(r.when)
+                ? asString(r.when.threatId)
+                : asString(r.whenThreatId);
               const thenKinds = Array.isArray(r.then)
                 ? r.then
                     .filter(isRecord)
@@ -245,10 +312,27 @@ export function parseSagaDefinitionPayload(raw: unknown): SagaDefinitionPayload 
                 id: asString(r.id),
                 label: asString(r.label),
                 whenKind,
+                whenThreatId,
                 thenKinds,
               };
             })
             .filter((r) => r.id)
+        : [],
+      factions: Array.isArray(sim.factions)
+        ? sim.factions
+            .filter(isRecord)
+            .map((f) => ({
+              id: asString(f.id),
+              label: asString(f.label),
+              clockLabel: asString(f.clockLabel, asString(f.label)),
+              clockMax:
+                typeof f.clockMax === 'number' && Number.isFinite(f.clockMax)
+                  ? Math.max(1, Math.floor(f.clockMax))
+                  : 4,
+              relationshipLabel: asString(f.relationshipLabel, asString(f.label)),
+              visibility: asString(f.visibility, 'shared'),
+            }))
+            .filter((f) => f.id)
         : [],
     };
   }
@@ -308,8 +392,30 @@ export function parseSagaDefinitionEditor(raw: unknown): SagaDefinitionEditorVm 
   };
 }
 
+function cloneSimulationSlice(
+  sim: SagaDefinitionSimulationSlice,
+): SagaDefinitionSimulationSlice {
+  return {
+    startDay: sim.startDay,
+    deadlines: sim.deadlines.map((d) => ({ ...d })),
+    threats: sim.threats.map((t) => ({ ...t })),
+    rules: sim.rules.map((r) => ({ ...r, thenKinds: [...r.thenKinds] })),
+    factions: sim.factions.map((f) => ({ ...f })),
+  };
+}
+
 export function editorVmToDraft(vm: SagaDefinitionEditorVm): SagaDefinitionDraft {
   const payload = vm.payload;
+  let simulation = payload.simulation
+    ? cloneSimulationSlice(payload.simulation)
+    : emptySagaDefinitionSimulation();
+  const packageId = payload.packageId ?? '';
+  if (
+    simulation.threats.length === 0
+    && (packageId.includes('dornhain') || vm.sagaSlug.includes('dornhain'))
+  ) {
+    simulation = dornhainSimulationDefaults();
+  }
   return {
     sagaId: vm.sagaId,
     sagaSlug: vm.sagaSlug,
@@ -321,11 +427,13 @@ export function editorVmToDraft(vm: SagaDefinitionEditorVm): SagaDefinitionDraft
     knowledgeFacts: payload.knowledgeFacts.map((f) => ({ ...f })),
     pregens: payload.pregens.map((p) => ({ ...p })),
     packageId: payload.packageId,
+    simulation,
   };
 }
 
 export function draftToPayload(draft: SagaDefinitionDraft): SagaDefinitionPayload {
   const blurb = draft.blurb.trim();
+  const sim = draft.simulation;
   return {
     packageId: draft.packageId,
     title: draft.title.trim(),
@@ -334,16 +442,51 @@ export function draftToPayload(draft: SagaDefinitionDraft): SagaDefinitionPayloa
     knowledgeFacts: draft.knowledgeFacts,
     locations: draft.locations,
     pregens: draft.pregens,
-    simulation: null,
+    simulation: {
+      startDay: Math.max(0, Math.floor(sim.startDay)),
+      deadlines: sim.deadlines,
+      threats: sim.threats,
+      rules: sim.rules.map((r) => ({
+        id: r.id,
+        label: r.label,
+        whenKind: r.whenKind,
+        whenThreatId: r.whenThreatId,
+        thenKinds: r.thenKinds,
+      })),
+      factions: sim.factions,
+    },
   };
 }
 
 export function validateSagaDefinitionDraft(
   draft: SagaDefinitionDraft,
 ): SagaDefinitionFieldErrors {
-  const errors: { title?: string; blurb?: string } = {};
+  const errors: { title?: string; blurb?: string; simulation?: string } = {};
   if (!draft.title.trim()) {
     errors.title = 'Titel darf nicht leer sein.';
+  }
+  const threatIds = new Set(draft.simulation.threats.map((t) => t.id));
+  for (const rule of draft.simulation.rules) {
+    if (rule.whenKind === 'threat-at-least' && rule.whenThreatId && !threatIds.has(rule.whenThreatId)) {
+      return {
+        ...errors,
+        simulation: `Regel „${rule.label || rule.id}“ verweist auf unbekannte Bedrohung.`,
+      };
+    }
+    if (rule.whenKind === 'threat-at-least' && !rule.whenThreatId.trim()) {
+      return {
+        ...errors,
+        simulation: `Regel „${rule.label || rule.id}“ braucht eine Bedrohungs-ID.`,
+      };
+    }
+  }
+  for (const threat of draft.simulation.threats) {
+    if (threat.doomSummaryGm.length > 500 || threat.doomSummaryPlayer.length > 500) {
+      return {
+        ...errors,
+        simulation: 'Doom-Text darf höchstens 500 Zeichen haben.',
+      };
+    }
   }
   return errors;
 }

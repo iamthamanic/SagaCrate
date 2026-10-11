@@ -240,6 +240,14 @@ function checkSagaEditorV1() {
   });
 }
 
+function checkSagaEditorV2() {
+  console.log('Saga editor v2 (#579): threats, deadlines, rules, factions...');
+  execFileSync(process.execPath, ['scripts/saga-editor-v2-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaSimulationKernel() {
   console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
   execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
@@ -1942,6 +1950,7 @@ checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
 checkSagaEditorV1();
+checkSagaEditorV2();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
 checkSagaBetweenSessionsBote();
