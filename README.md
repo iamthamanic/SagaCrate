@@ -165,8 +165,8 @@ Regeln & Validierung: [`docs/sagadrive core rules.md`](docs/sagadrive%20core%20r
 | --- | --- | --- |
 | Character-Lore | `character-lore` | Provider: `ollama` / `openai-compatible`; Keys nie im Browser |
 | Portraits | Bucket `character-portraits` | Owner-scoped, signierte URLs |
-| Item 2D | Meshy Text-to-Image → `item-thumbnails` | Prod: User-BYOK |
-| Item 3D | Meshy Image-to-3D → `item-models` | GLB max. 50 MB; Bibliothek zeigt nur Thumbnails |
+| Item 2D | Edge `item-thumbnail` · Meshy Text-to-Image → `item-thumbnails` | Prod: User-BYOK; ohne Key: `not-configured` (fail-closed) |
+| Item 3D | Edge `item-model3d` · Meshy Image-to-3D → `item-models` | GLB max. 50 MB; Bibliothek zeigt nur Thumbnails |
 | Avatar-Katalog | Manifeste + optional `VITE_AVATAR_ASSET_BASE_URL` | Lizenzierte / gepinnte Assets — siehe [`docs/avatar assets.md`](docs/avatar%20assets.md) |
 
 Wichtige Server-Env (Edge / Host — **nicht** im Vite-Bundle):
@@ -180,7 +180,7 @@ CREDENTIALS_ENCRYPTION_KEY=
 # AI_PROVIDER_ALLOW_HOST_KEYS=1
 ```
 
-CORS ist fail-closed (kein Default `*`). Rate-Limits laufen persistent über Postgres-RPCs.
+CORS und fehlende Provider-Keys sind fail-closed (kein Default `*`). Rate-Limits laufen persistent über Postgres-RPCs.
 
 ---
 
