@@ -1,175 +1,197 @@
-# SagaDrive (SagaDrive)
+<div align="center">
 
-SagaDrive ist eine webbasierte Rollenspiel-Plattform für Spielleitungen und Spieler, um Kampagnen gemeinsam zu planen und zu spielen. Das Tool bündelt zentrale Bereiche wie Projekte/Kampagnen, Charakterverwaltung, Sessions, Rulesets und einen Marketplace in einer Oberfläche.
+<img src="docs/brand/sagadrive-logo.png" width="148" alt="SagaDrive Logo" />
 
-Dieses Repository enthält das React + Vite Frontend mit Supabase-Integration und modularer Feature-Struktur (Projects, Characters, Sessions, Rulesets, Marketplace).
+# SagaDrive
 
-Original Design-Basis:  
-https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive
+**Webbasierte TTRPG-Plattform für Spielleitung und Spieler**
+
+Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inventar verwalten
+
+[![React](https://img.shields.io/badge/React_18-061B24?style=flat-square&logo=react&logoColor=06B6D4)](#tech-stack)
+[![Vite](https://img.shields.io/badge/Vite_6-061B24?style=flat-square&logo=vite&logoColor=E8A641)](#tech-stack)
+[![TypeScript](https://img.shields.io/badge/TypeScript-061B24?style=flat-square&logo=typescript&logoColor=0891B2)](#tech-stack)
+[![Supabase](https://img.shields.io/badge/Supabase_Self--Host-061B24?style=flat-square&logo=supabase&logoColor=3ECF8E)](#backend--self-host)
+[![Tailwind](https://img.shields.io/badge/Tailwind_4-061B24?style=flat-square&logo=tailwindcss&logoColor=06B6D4)](#design--uiux)
+
+[Figma Design](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive) · [Theme Guide](src/THEME_GUIDE.md) · [Self-Host](README_SELFHOST.md) · [Architektur](src/ARCHITECTURE.md)
+
+</div>
+
+---
+
+## Überblick
+
+SagaDrive ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard. Das Repo enthält das **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) und einer klaren Schichtenarchitektur:
+
+`domains` → `infrastructure` → `app` · UI-Primitives in `shared/ui`
+
+| Rolle | Nutzen |
+| --- | --- |
+| **Spielleitung** | Projekte, Sessions, Bibliothek, Weltprofile, Live-Steuerung |
+| **Spieler** | Charaktereditor (SagaDrive Core), Inventar, Session-Join, Look / LiveAct |
+| **Creator** | Items, NPCs, Avatar-Assets, optional Meshy 2D/3D (BYOK) |
+
+---
+
+## Features
+
+| Bereich | Was drin ist |
+| --- | --- |
+| **Projekte & Mitgliedschaft** | Sagas anlegen, Join-by-Code, RLS-gesicherte Rollen (GM / Spieler) |
+| **SagaDrive Core Editor** | Spezies · Parameter · Look · Inventar · Einstellungen / Presets |
+| **Live Sessions** | Lobby, GM- und Player-Panel, Realtime Session-Runtime |
+| **Bibliothek & Welten** | Abenteuer, World Profiles, Maps |
+| **Inventar & Items** | Inventory v2, Item-Workbench, Thumbnails & optional GLB |
+| **LiveAct** | MediaPipe Face Tracking, Avatar-Capabilities, Kalibrierung |
+| **KI (optional)** | Character-Lore, Portraits, Meshy Text-to-Image / Image-to-3D |
+| **Marketplace & Rulesets** | Erweiterbare Inhalte und Regelwerke |
+| **Adaptive UI** | Phone / Tablet / Desktop-Rekomposition (`AU-*` Experience Contract) |
+
+---
+
+## Design & UI/UX
+
+SagaDrive folgt einer klaren Markenidentität aus dem Logo: **Teal für Auswahl & CTA**, **Gold für Hover & Premium**. Surfaces bleiben dunkel und ruhig — professionell und fokussiert.
+
+<div align="center">
+
+| | Primär | Akzent | Surface |
+| :---: | :---: | :---: | :---: |
+| **Dark** | `#06B6D4` | `#F59E0B` | `#0F172A` |
+| **Light** | `#0891B2` | `#E8A641` | `#FFFFFF` |
+
+<img src="docs/brand/sagadrive-mark.svg" width="56" alt="SagaDrive Mark" />
+
+</div>
+
+**Gestaltungsprinzipien**
+
+- **Werkzeug zuerst** — klare Hierarchie, wenig Dekoration, hohe Lesbarkeit
+- **Zwei Markenrollen** — Cyan = Auswahl / primäre Aktion · Gold = Hover / Premium
+- **Imagination First** — Visualisierung unterstützt das Spiel, ersetzt es nicht
+- **Adaptive Content Width** — Journey/Session folgt der Main-Pane (`@container/main`)
+- **Radix + Tailwind** — zugängliche Primitives, Tokens in `src/styles/globals.css`
+
+| Dokument | Inhalt |
+| --- | --- |
+| [`src/THEME_GUIDE.md`](src/THEME_GUIDE.md) | Kanonische CI, Farbrollen, Control-Affordances |
+| [`docs/ui-styleguide.md`](docs/ui-styleguide.md) | UI-Komponenten & Patterns |
+| [`docs/concepts/adaptive-ui-experience-contract.md`](docs/concepts/adaptive-ui-experience-contract.md) | Mobile / Touch / Safe Areas / `AU-*` |
+| [`docs/concepts/conductor-experience-contract.md`](docs/concepts/conductor-experience-contract.md) | Performance Mode, Live-Steuerung, Motion |
+| [`docs/concepts/imagination-first-visualization-contract.md`](docs/concepts/imagination-first-visualization-contract.md) | Scenes, 2D/3D, Visual Authority |
+
+---
 
 ## Tech Stack
 
-- React 18
-- Vite 6
-- TypeScript
-- Tailwind CSS 4
-- Radix UI + shadcn-basierte UI-Komponenten
-- Supabase (Auth, DB, Edge Functions)
+| Schicht | Technologie |
+| --- | --- |
+| Frontend | React 18 · Vite 6 · TypeScript · Tailwind CSS 4 |
+| UI | Radix UI · shadcn-basierte Primitives (`src/shared/ui`) |
+| 3D / Avatar | Three.js · `@pixiv/three-vrm` · MediaPipe Face Landmarker |
+| Backend | Self-hosted Supabase: Postgres · GoTrue · PostgREST · Storage · Realtime · Kong · Deno Edge |
+| Qualität | Playwright · `test-gate` · `composition-gate` · Architecture Boundary Check |
+| Deploy | Docker Compose Self-Host (Vite-Build → `build/`) |
 
-## Voraussetzungen
+Dev-Server: **`http://localhost:3004`** (`vite.config.ts` → `server.port = 3004`)
 
-- Node.js 20+ (empfohlen: aktuelle LTS)
-- npm 10+
-- Deno LTS für lokale `npm run test-gate`-Prüfungen, sobald `supabase/functions/**/*.ts` im Branch-Diff geändert wurde
+---
 
-## Lokale Entwicklung
+## Quick Start
 
-1. Abhängigkeiten installieren:
+**Voraussetzungen:** Node.js 20+ · npm 10+ · für Edge-Diffs im Gate: Deno LTS
 
 ```bash
 npm install
-```
-
-2. Dev-Server starten:
-
-```bash
 npm run dev
 ```
 
-Der lokale Entwicklungsserver läuft auf:
-
-- `http://localhost:3004`
-
-Der Port ist im Projekt fest konfiguriert (`vite.config.ts`):
-
-- `server.port = 3004`
-
-## Build
-
-Produktions-Build erstellen:
+Produktions-Build:
 
 ```bash
-npm run build
+npm run build   # Output: build/
 ```
 
-Output-Verzeichnis:
+Umgebungsvariablen: siehe [`.env.example`](.env.example). Secrets nie mit `VITE_` / `NEXT_PUBLIC_` ins Client-Bundle legen.
 
-- `build/`
+Self-Host-Stack (Docker): → **[`README_SELFHOST.md`](README_SELFHOST.md)**  
+Migrationen anwenden: `bash scripts/apply-migrations.sh <migration.sql>`
+
+---
+
+## Architektur
+
+Modularer Monolith mit harten Importgrenzen (CI-enforced):
+
+```text
+src/
+├── app/              # Vertikale Slices / User Journeys
+├── domains/          # Reine Domain-Verträge & SagaDrive-Core-Regeln
+├── infrastructure/   # Supabase-, Storage-, Three-/LiveAct-Adapter
+├── shared/ui/        # Fachlich neutrale UI-Primitives
+├── lib/              # Auth, Supabase-Client, Querschnitt
+└── styles/           # Theme-Tokens (globals.css)
+```
+
+| Layer | Darf importieren | Darf nicht |
+| --- | --- | --- |
+| `domains/` | stdlib, sibling domains | React, UI, Supabase, `app/` |
+| `infrastructure/` | domains, `lib/supabase` | React, `shared/ui`, `app/` |
+| `app/<area>/` | domains, infrastructure, `shared/ui`, andere Areas nur über Public Barrel | direkte Supabase-Calls, fremde Private-Dateien |
+
+`src/modules/**` und `src/components/**` sind **entfernt** — Neu anlegen bricht den Architecture Gate. Details: [`src/ARCHITECTURE.md`](src/ARCHITECTURE.md).
+
+---
 
 ## SagaDrive Core Character Editor
 
-Der aktuelle **Neuer-Charakter-Flow** konzentriert sich bewusst ausschließlich auf **SagaDrive Core**. „Charakter erstellen“ öffnet zuerst einen Zwei-Karten-Chooser (eigener Charakter vs. Preset). Der Character Editor verwendet fünf Haupttabs:
+„Charakter erstellen“ öffnet einen Zwei-Karten-Chooser (eigener Charakter vs. Preset). Der Editor hat fünf Haupttabs:
 
-- `Spezies`
-- `Parameter` (Attribute / Kompetenzen inkl. Hintergrund-Framework / Archetyp / Essenz)
-- `Look`
-- `Inventar`
-- `Einstellungen` mit Subtabs `Statistik` (Abenteuer-Bögen) und `Preset` (versionierte Sheet-Snapshots, Migrationen `012`/`013_character_presets`)
+**Spezies** · **Parameter** · **Look** · **Inventar** · **Einstellungen** (`Statistik` / `Preset`)
 
-Die UI behandelt SagaDrive Core nicht als umbenannte D&D-Maske. Sie verwendet die Core-Begriffe **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand** und **Wahrnehmung**, die Startattributverteilung `4,3,3,2,2,1`, alle 18 Core-Fertigkeiten sowie die definierten Fertigkeitsbudgets und -grenzen. Die fünf Primärarchetypen liefern ihre jeweilige Rang-I-Kernfähigkeit automatisch; freie Platzhalterfähigkeiten werden nicht erzeugt.
+SagaDrive Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
 
-Spezies und ihre angeborenen Merkmale werden gemeinsam im Spezies-Tab konfiguriert. Jede Core-Spezies besitzt eine feste Merkmals-Allowlist und muss genau `3 / 3` Speziespunkte ausgeben. Konfigurierbare Merkmale verlangen ihre Details direkt an der Merkmalskarte. `Alien` dient als freier Spezies-Builder mit verpflichtendem Profilnamen und optionaler Körperbeschreibung; `Außergewöhnlicher Körperbau` bleibt bis zur Definition verbindlicher Varianten sichtbar, aber nicht auswählbar.
+Persistenz (Auszug): `attributes` · `skills` · `sagadrive_profile` · `background_story` · `notes`  
+Legacy-Keys (`constitution` → Ausdauer usw.) werden beim Lesen normalisiert.
 
-Regelbegriffe und abgeleitete Werte besitzen kontextuelle Hilfen. Im Kompetenzen-Subtab verbinden Attributkarten per Bracket-Linien die davon abhängigen abgeleiteten Werte (Filter, ausgegraute Restwerte, Wert-Flash). Attribute, Fertigkeitsbudgets, Verteidigung, Gesundheit, Widerstände, Erholung und Traglast werden aus den Core-Regeln abgeleitet statt frei eingegeben. Das Inventar v2 nutzt **20 feste Basisplätze** plus Ausrüstung; die **Traglast** bleibt `5 + 2 × Stärke` (Überlastungsfolgen in der UI). Details: `docs/inventory-v2.md`. Der Look-Tab ist ausdrücklich kosmetisch und verändert keine Regelwerte.
+Regeln & Validierung: [`docs/sagadrive core rules.md`](docs/sagadrive%20core%20rules.md) · [`docs/inventory-v2.md`](docs/inventory-v2.md)
 
-Die regelrelevanten Character-Creation-Daten werden getrennt gespeichert:
+---
 
-- `attributes` – SagaDrive-Attribute
-- `skills` – berechnete Fertigkeitsstände
-- `sagadrive_profile` – Essenz, Speziesmerkmale samt strukturierten Merkmalsdetails und optionalem Alien-Speziesprofil, mechanischer Hintergrund, Archetyp-Punkt, Drive/Momentum
-- `background_story` – freie bzw. generierte Lore
-- `notes` – freie Spielnotizen
+## KI, Portraits & Meshy
 
-Alte Attributdaten mit `constitution`, `intelligence` und `wisdom` werden beim Lesen weiterhin auf `Ausdauer`, `Verstand` und `Wahrnehmung` normalisiert. D&D-Metadaten bleiben im Datenvertrag aus Kompatibilitätsgründen erhalten, sind aber **nicht Teil des aktuell ausgebauten Neuer-Charakter-Flows**.
+| Feature | Edge / Storage | Hinweis |
+| --- | --- | --- |
+| Character-Lore | `character-lore` | Provider: `ollama` / `openai-compatible`; Keys nie im Browser |
+| Portraits | Bucket `character-portraits` | Owner-scoped, signierte URLs |
+| Item 2D | Meshy Text-to-Image → `item-thumbnails` | Prod: User-BYOK |
+| Item 3D | Meshy Image-to-3D → `item-models` | GLB max. 50 MB; Bibliothek zeigt nur Thumbnails |
+| Avatar-Katalog | Manifeste + optional `VITE_AVATAR_ASSET_BASE_URL` | Lizenzierte / gepinnte Assets — siehe [`docs/avatar assets.md`](docs/avatar%20assets.md) |
 
-## Character-Lore-KI
-
-Der CharacterEditor besitzt eine Hintergrundgeschichten-Pipeline. Die UI erzeugt einen typisierten Character-Context; die Supabase Edge Function `character-lore` baut daraus serverseitig den versionierten Prompt und ruft den konfigurierten Provider auf. API-Keys werden nie an den Browser ausgeliefert.
-
-Im Hintergrund-Tab kann optional ein für den eingeloggten User sichtbares Projekt als **Kampagnen-Lore** gewählt werden. Der Browser sendet dabei `projectId` und, falls vorhanden, die verknüpfte `worldId`. Diese IDs sind nur untrusted Kontext-Hinweise: Die Edge Function verifiziert Projektmitgliedschaft bzw. GM-Rechte und die Projekt-Welt-Zuordnung erneut serverseitig, bevor Lore gelesen wird. Ohne Auswahl bleibt die Generierung setting-neutral.
-
-Projektmitgliedschaft ist dabei selbst Teil der Sicherheitsgrenze. `supabase/migrations/004_project_membership_security.sql` entfernt browserseitige Schreibrechte auf `project_id`, `user_id`, `role` und `status`. Self-Service-Beitritt läuft ausschließlich über die `SECURITY DEFINER`-RPC `join_project_by_code`; die eigene Charakterzuordnung über `set_my_project_character`. Gekickte Mitgliedschaften können sich nicht selbst reaktivieren oder löschen. Die Migration härtet auch Legacy-Ressourcen-Policies auf aktive Mitgliedschaften und erzwingt eine case-insensitiv eindeutige Projektcode-Identität.
-
-Unterstützte Provider:
-
-- `ollama`
-- `openai-compatible`
-
-Relevante Server-Variablen:
+Wichtige Server-Env (Edge / Host — **nicht** im Vite-Bundle):
 
 ```bash
 CHARACTER_AI_PROVIDER=ollama
-# CHARACTER_AI_MODEL=llama3.2
-# CHARACTER_AI_BASE_URL=http://ollama:11434
-# CHARACTER_AI_API_KEY=
 CHARACTER_AI_RATE_LIMIT_PER_MINUTE=6
-# CORS fail-closed: localhost only when unset; set exact origin(s) for production
 CHARACTER_AI_ALLOWED_ORIGIN=http://localhost:3004
-```
-
-Für Ollama können `OLLAMA_MODEL` und `OLLAMA_HOST` als Fallback verwendet werden. Bei `openai-compatible` sind `CHARACTER_AI_BASE_URL`, `CHARACTER_AI_API_KEY` und ein Modell erforderlich. `CHARACTER_AI_ALLOWED_ORIGIN` defaultet **nicht** auf `*`.
-
-`CHARACTER_AI_RATE_LIMIT_PER_MINUTE` wird nicht pro Edge-Process im Speicher gezählt. Die Migration `supabase/migrations/003_character_lore_rate_limits.sql` legt einen persistenten, atomaren Postgres-Limiter an. Jede authentifizierte User-ID teilt dadurch dasselbe Minutenkontingent über alle Edge-Runtime-Instanzen hinweg. Die RPC ist nur für `service_role` ausführbar. Ist der persistente Limiter nicht verfügbar oder nicht migriert, schlägt `character-lore` vor dem Provider-Aufruf fail-closed mit `503` fehl.
-
-Der Prompt liegt versioniert unter `supabase/functions/_shared/character-lore-prompt.ts`. SagaDrive Core verwendet den gewählten Character-Kontext als Lore-Rahmen. Freie Charakter-Notizen werden bewusst nicht an die Generierung übertragen.
-
-`ruleset_key` bleibt unabhängig vom optionalen `ruleset_id` als stabiler Editor-Key gespeichert. `dnd_background` bleibt für bestehende D&D-Daten erhalten; `background_story` und `sagadrive_profile` sind davon getrennt.
-
-Character-Portraits werden über denselben konfigurierten Supabase-Client direkt in den privaten Storage-Bucket `character-portraits` geladen. Dadurch funktioniert `Portrait erzeugen` sowohl gegen Hosted Supabase als auch im dokumentierten Self-Host-Stack mit `VITE_SUPABASE_URL`. Migration `006_character_portrait_storage.sql` legt den privaten Bucket mit 5-MB-/MIME-Limits an und erlaubt authentifizierten Nutzern ausschließlich Zugriff auf Objekte unter ihrem eigenen User-ID-Pfad. Der CharacterEditor speichert weiterhin eine signierte Portrait-URL.
-
-## Item-Thumbnails (2D) + Meshy
-
-Die Item-Workbench kann PNG/JPEG-Thumbnails (max. 10 MB) hochladen oder optional über Meshy Text-to-Image generieren. Keys liegen **nie** im Client (`VITE_` / `NEXT_PUBLIC_`). In Prod gilt **User-BYOK** (Einstellungen → AI → Bild, Edge `ai-provider-credentials`, verschlüsselt mit `CREDENTIALS_ENCRYPTION_KEY`). Host-`MESHY_API_KEY` nur mit `AI_PROVIDER_ALLOW_HOST_KEYS=1` (lokal/CI). Fehlt ein nutzbarer Key, antwortet Generate mit `not-configured` (fail-closed); Upload und Typ-Fallbacks bleiben nutzbar. Erfolgreiche Meshy-Ergebnisse werden vor dem Setzen von `assetKey` in den privaten Bucket `item-thumbnails` materialisiert (Provider-URLs sind keine Dauerreferenz).
-
-Server-Env (Supabase Edge / Host Secrets — nicht im Vite-Bundle):
-
-```text
-# Required to store user keys in Settings
 CREDENTIALS_ENCRYPTION_KEY=
-# Optional local/CI host fallback (never for prod)
+# MESHY_API_KEY=                 # nur lokal/CI mit AI_PROVIDER_ALLOW_HOST_KEYS=1
 # AI_PROVIDER_ALLOW_HOST_KEYS=1
-MESHY_API_KEY=
-# Optional overrides
-# MESHY_API_BASE_URL=https://api.meshy.ai/openapi/v1
-# MESHY_TEXT_TO_IMAGE_MODEL=nano-banana
-ITEM_THUMBNAIL_RATE_LIMIT_PER_MINUTE=4
-# CORS (fail-closed; falls back to CHARACTER_AI_ALLOWED_ORIGIN if unset)
-ITEM_THUMBNAIL_ALLOWED_ORIGIN=http://localhost:3004
-# Offline/dev only: mock Meshy provider (never enable in production)
-# ITEM_THUMBNAIL_MESHY_MOCK=1
 ```
 
-Migration `017_item_thumbnail_assets.sql` legt Bucket, Manifest-/Job-Tabellen und die persistente Rate-Limit-RPC an. `020_user_ai_provider_credentials.sql` speichert verschlüsselte User-Provider-Keys. Offline-CI deckt Validierung und Mock-Provider über `supabase/functions/_shared/item-thumbnail_test.ts` ab — Live-Meshy ist für den Test-Gate nicht erforderlich.
+CORS ist fail-closed (kein Default `*`). Rate-Limits laufen persistent über Postgres-RPCs.
 
-## Item-3D (GLB) + Meshy Image-to-3D
+---
 
-Die Item-Workbench kann optional GLB-Modelle (max. 50 MB) hochladen oder über Meshy Image-to-3D aus einem **gespeicherten Thumbnail** generieren. Keys liegen **nie** im Client. In Prod: User-BYOK unter Einstellungen → AI → 3D (gleicher Meshy-Credential wie Bild). Host-`MESHY_API_KEY` nur mit `AI_PROVIDER_ALLOW_HOST_KEYS=1`. Fehlt ein nutzbarer Key, antwortet Generate mit `not-configured` (fail-closed); GLB-Upload bleibt nutzbar. Erfolgreiche Meshy-Ergebnisse werden vor dem Setzen von `payload.model3d` in den privaten Bucket `item-models` materialisiert (Provider-URLs sind keine Dauerreferenz). Bibliothek und Inventar laden weiterhin nur Thumbnails — kein 3D.
+## Backend & Self-Host
 
-Server-Env (Supabase Edge / Host Secrets — nicht im Vite-Bundle):
+Kern-Services für den Produktbetrieb:
 
-```text
-CREDENTIALS_ENCRYPTION_KEY=
-# AI_PROVIDER_ALLOW_HOST_KEYS=1
-MESHY_API_KEY=
-# Optional overrides
-# MESHY_API_BASE_URL=https://api.meshy.ai/openapi/v1
-# MESHY_IMAGE_TO_3D_MODEL=latest
-ITEM_MODEL3D_RATE_LIMIT_PER_MINUTE=2
-# CORS (fail-closed; falls back to ITEM_THUMBNAIL_ALLOWED_ORIGIN / CHARACTER_AI_ALLOWED_ORIGIN)
-ITEM_MODEL3D_ALLOWED_ORIGIN=http://localhost:3004
-# Offline/dev only: mock Meshy Image-to-3D provider (never enable in production)
-# ITEM_MODEL3D_MESHY_MOCK=1
-```
+**Postgres · Auth · PostgREST · Storage · Realtime · Kong**  
+Edge / Ollama / Meshy sind **optional** für AI-Features. Studio/Meta sind Dev-Tooling.
 
-Migration `018_item_model3d_assets.sql` legt Bucket, Manifest-/Job-Tabellen (inkl. Input-Thumbnail-Snapshot) und die persistente Rate-Limit-RPC an. Offline-CI deckt GLB-Validierung und Mock-Provider über `supabase/functions/_shared/item-model3d_test.ts` ab — Live-Meshy ist für den Test-Gate nicht erforderlich.
-
-## Avatar-Asset-Katalog
-
-Die 3D-Vorschau löst die gewählte SagaDrive-Spezies über stabile Avatar-Manifeste auf. Remote-Fallbacks werden nur mit dokumentierter Provenienz und Lizenz ausgeliefert und auf einen konkreten Upstream-Commit gepinnt; veränderliche `main`-URLs sind nicht Teil des freigegebenen Katalogs. Spezies ohne nachweisbar passendes Spezialasset verwenden ausdrücklich gekennzeichnete neutrale Fallbacks statt ungeprüfter Modelle. Self-Host-Installationen können dieselben Manifest-IDs über `VITE_AVATAR_ASSET_BASE_URL` mit eigenen Dateien bedienen.
-
-Die vollständige Zuordnung, Lizenzprüfung und Aufnahmeregeln stehen in `docs/avatar assets.md`.
-
-Für den aktuellen Character-/Lore-Stand sind bei bestehenden Datenbanken diese Migrationen in Reihenfolge erforderlich:
+Relevante Character-/Asset-Migrationen (Reihenfolge):
 
 ```text
 002_character_trait_arrays.sql
@@ -192,81 +214,92 @@ Für den aktuellen Character-/Lore-Stand sind bei bestehenden Datenbanken diese 
 020_user_ai_provider_credentials.sql
 ```
 
-`002` stellt die vier Trait-Gruppen auf Arrays um, `003` aktiviert die persistente Character-Lore-Quota, `004` macht Projektmitgliedschaft zu einem server-/GM-kontrollierten Autorisierungsnachweis, `005` ergänzt die stabile Regelset-/D&D-Hintergrund-Persistenz, `006` richtet den privaten owner-scoped Portrait-Storage ein, `007` ergänzt `sagadrive_profile` sowie persistente Character-Notizen, `008` legt owner-scoped Weltprofile an, `009` speichert Abenteuer-Bögen inkl. Entwicklungsgeschichte, `010`–`013` bringen V3-Spalten/Presets nach und `014` ergänzt `abilities`/`emotion_profiles` für Character-Save. `015` legt den Inventory-v2-Katalog an; `016` persistiert den Charakter-Inventarzustand; `017` richtet Item-Thumbnail-Storage, Manifeste, Jobs und Rate-Limits ein; `018` richtet Item-3D-Storage (GLB), Manifeste, Image-to-3D-Jobs und Rate-Limits ein; `020` speichert verschlüsselte User-AI-Provider-Credentials (BYOK). Self-Host: `bash scripts/apply-migrations.sh 015_inventory_item_definitions.sql` und `… 016_character_inventory_v2.sql` sowie `… 017_item_thumbnail_assets.sql`, `… 018_item_model3d_assets.sql` und `… 020_user_ai_provider_credentials.sql`. Bei Schema V3 zuerst die kanonischen RLS-Policies aus `src/supabase/schema_v3_rls.sql` anwenden und danach die Migrationen in der genannten Reihenfolge.
+Bei Schema V3 zuerst die kanonischen RLS-Policies aus `src/supabase/schema_v3_rls.sql` anwenden, danach die Migrationen oben.  
+Self-Host: [`README_SELFHOST.md`](README_SELFHOST.md) · Deploy: [`src/supabase/DEPLOY_V3.md`](src/supabase/DEPLOY_V3.md)
+
+---
 
 ## Quality Gates
 
-GitHub Actions führt auf Pushes sowie auf Pull Requests gegen `main` die technischen und semantischen Gates aus:
+Auf Push / PR gegen `main`:
 
 ```bash
-npm run test-gate
-npm run composition-gate
+npm run test-gate          # Lint, Typecheck, Build, Deno, Contracts, Secrets-Scan, Architecture
+npm run composition-gate   # Semantische Multi-Hop-Proofs
+npm run test:e2e           # Playwright (Chromium)
 ```
 
-Agent-Konfiguration (Cursor) liegt unter [`.cursor/`](.cursor/). Scan vor Änderungen daran:
-
-```bash
-npx ecc-agentshield scan --path .cursor
-```
-
-Zusätzlich läuft nach einem erfolgreichen Test Gate ein Chromium-Playwright-Job mit:
-
-```bash
-npm run test:e2e
-```
-
-Die Browser-Evidence und Playwright-Berichte werden im CI-Lauf als Artifact `character-editor-browser-evidence` hochgeladen.
-
-## Recent changes
-
-- **2026-10-10** — Adaptive Content-Width: Journey/Session Join folgt der Main-Pane-Breite (`@container/main`, `AdaptiveJourneyColumn`, AU-CONTENT-WIDTH) (`feat/adaptive-content-width`)
-- **2026-10-10** — Character-Editor: Human-Vorlage lädt leichte Preview-LOD (~10 MB) statt face3-HQ (~28–34 MB); Speichern bleibt face3 (`perf/template-preview-lod`)
-- **2026-10-07** — Starttemplates: Icons + Playstyle-Tooltips im Create-Picker; Editor zeigt Vorlage-Badge und pulsierende Tab-Hinweise bei offenen Lücken (`agent/starting-template-editor-ux`)
-- **2026-09-30** — Bibliothek Abenteuer: GM kann **Leiten** und **Teilnehmen** (Session-Join) von derselben Karte (`fix/library-adventure-gm-teilnehmen`)
-- **2026-09-25** — LiveAct Face Setup 3/6: Auto Mapping (MediaPipe IMAGE + shared mesh raycast → proposed draft; #421)
-- **2026-09-25** — LiveAct: Kopfachsen/L/R-Spiegel/LookAt-Korrektur, gestufte Kalibrierung, Motion-Test + Peak-Export, Full-Detail-Overlay; Neutral/Gaze-Restbias offen (`#443`)
-- **2026-09-21** — LiveAct Face Asset Validator: Khronos + SagaDrive CLI gate (`#383`)
-- **2026-09-21** — LiveAct Face Asset Contract: `core-v1` / `full-v1` + gazeMode (`#382`)
-- **2026-09-21** — LiveAct: Input- vs Avatar-Capabilities getrennt (`composeLiveActCapabilities`, #381)
-- **2026-09-21** — LiveAct: Kameravorschau verschiebbar (Default unten links), Bones-Debug sichtbar durch Mesh, GLB Capability Input-Flags; Species-Authoring-Scripts (`feat/liveact-pip-drag-and-rig-visibility`)
-
-Lokal kann dieselbe Browser-Regression ausgeführt werden:
+Lokal:
 
 ```bash
 npx playwright install chromium
 npm run test:e2e
 ```
 
-`test-gate` führt die technischen Checks aus: diff-spezifischer Typed-Strict-Lint, Typecheck, Produktions-Build, `deno check` für geänderte Supabase-Edge-Function-TypeScript-Dateien, Deno-Tests, den Project-Membership-Security-Contract, den Character-Editor-Regression-Contract, die Avatar-Runtime-/Asset-Katalog-Regressionen und den Secrets-Diff-Scan. GitHub Actions stellt dafür Deno LTS über `denoland/setup-deno@v2` bereit. `npm audit --omit=dev` wird zusätzlich sichtbar protokolliert.
+Agent-Konfiguration: [`.cursor/`](.cursor/) — vor Änderungen: `npx ecc-agentshield scan --path .cursor`
 
-`composition-gate` prüft die Bedeutung über Modul-/Service-/Backend-Hops. Reine Docs-/Tooling-Diffs und sichere Single-Hop-Diffs werden dokumentiert übersprungen. Bei Multi-Hop-, Persistenz-, Worker-, Queue-, Webhook- oder Side-Effect-relevanten Änderungen muss ein aktueller Proof unter `.qa/runs/composition-gate-<slug>.md` mit `CLEAR` oder begründetem `SKIPPED` vorliegen.
+---
 
-## Wichtige Projektstruktur
+## Projektstruktur
 
-- `src/` – Haupt-Frontend-Code
-- `src/components/` – UI- und Feature-Komponenten
-- `src/modules/` – Domänenmodule (projects, characters, sessions, rulesets, worlds, marketplace)
-- `src/lib/` – gemeinsame Clients/Provider (u. a. Supabase, Auth)
-- `src/supabase/` – SQL-Skripte, Migrations und Deploy-Hilfen
-- `supabase/functions/` – Supabase Edge Functions
-- `supabase/config/` – lokale Supabase-Konfiguration
+```text
+sagadrive/
+├── src/                 # Frontend (app · domains · infrastructure · shared · lib)
+├── supabase/            # migrations · functions · config
+├── public/              # Favicons, MediaPipe, Item-/NPC-Assets
+├── docs/                # Regeln, Styleguides, Brand, Concepts
+│   └── brand/           # Logo & Mark für Doku / README
+├── e2e/ · scripts/ · assets/
+├── docker-compose*.yml
+├── README.md
+└── README_SELFHOST.md
+```
 
-## Relevante Doku im Repo
+---
 
-- `INTEGRATION.md`
-- `README_SELFHOST.md`
-- `FEATURE_COMPARISON.md`
-- `src/ARCHITECTURE.md`
-- `src/SUPABASE_SETUP.md`
-- `src/AUTH_SETUP.md`
-- `docs/items.md` — Item-Taxonomie, Packs, World `item-catalog`, Assets/Meshy, Archive/Fork
-- `docs/inventory-v2.md` — Inventory-v2 Spielvertrag (Definitionen vs. Character-Instanzen)
-- `docs/avatar assets.md`
-- `docs/world profiles.md`
-- `src/modules/marketplace/README.md`
-- `src/supabase/DEPLOY_V3.md`
+## Dokumentation
+
+| Thema | Pfad |
+| --- | --- |
+| Self-Host | [`README_SELFHOST.md`](README_SELFHOST.md) |
+| Integration | [`INTEGRATION.md`](INTEGRATION.md) |
+| Feature-Vergleich | [`FEATURE_COMPARISON.md`](FEATURE_COMPARISON.md) |
+| Architektur | [`src/ARCHITECTURE.md`](src/ARCHITECTURE.md) |
+| Auth / Supabase Setup | [`src/AUTH_SETUP.md`](src/AUTH_SETUP.md) · [`src/SUPABASE_SETUP.md`](src/SUPABASE_SETUP.md) |
+| Items | [`docs/items.md`](docs/items.md) |
+| Inventory v2 | [`docs/inventory-v2.md`](docs/inventory-v2.md) |
+| Avatar Assets | [`docs/avatar assets.md`](docs/avatar%20assets.md) |
+| World Profiles | [`docs/world profiles.md`](docs/world%20profiles.md) |
+| Deploy V3 | [`src/supabase/DEPLOY_V3.md`](src/supabase/DEPLOY_V3.md) |
+
+---
+
+## Recent changes
+
+- **2026-10-11** — Backend-Audit: Variant A (Supabase-Stack optimieren); Realtime/`SECRET_KEY_BASE` & Footprint dokumentiert
+- **2026-10-10** — Adaptive Content-Width: Journey/Session Join folgt Main-Pane (`AdaptiveJourneyColumn`, AU-CONTENT-WIDTH)
+- **2026-10-10** — Character-Editor: Human-Vorlage lädt Preview-LOD (~10 MB); Speichern bleibt face3
+- **2026-10-07** — Starttemplates: Icons + Playstyle-Tooltips; Editor-Hinweise bei offenen Lücken
+- **2026-09-30** — Bibliothek Abenteuer: GM kann Leiten und Teilnehmen von derselben Karte
+- **2026-09-25** — LiveAct Face Setup: Auto Mapping, Kopfachsen, Kalibrierung, Motion-Test
+- **2026-09-21** — LiveAct Face Asset Contract / Validator / Capabilities
+
+---
 
 ## Hinweise
 
-- Beim Start mit `npm run dev` öffnet Vite automatisch den Browser (`server.open = true`).
-- Falls Port `3004` lokal belegt ist, den belegenden Prozess beenden oder den Port in `vite.config.ts` anpassen.
+- `npm run dev` öffnet den Browser automatisch (`server.open = true`).
+- Port `3004` belegt → Prozess beenden oder Port in `vite.config.ts` anpassen.
+- Original Design-Basis: [Figma · SagaDrive](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive)
+
+<div align="center">
+
+<br />
+
+<img src="docs/brand/sagadrive-mark.svg" width="40" alt="" />
+
+<br />
+
+<sub>SagaDrive · Teal <code>#0891B2</code> · Gold <code>#E8A641</code></sub>
+
+</div>
