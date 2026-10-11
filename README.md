@@ -169,7 +169,7 @@ Regeln & Validierung: [`docs/sagadrive core rules.md`](docs/sagadrive%20core%20r
 | Item 3D | Edge `item-model3d` · Meshy Image-to-3D → `item-models` | GLB max. 50 MB; Bibliothek zeigt nur Thumbnails |
 | Avatar-Katalog | Manifeste + optional `VITE_AVATAR_ASSET_BASE_URL` | Lizenzierte / gepinnte Assets — siehe [`docs/avatar assets.md`](docs/avatar%20assets.md) |
 
-Wichtige Server-Env (Edge / Host — **nicht** im Vite-Bundle):
+Wichtige Server-Env (Edge / Host — **nicht** im Vite-Bundle). Keys liegen **nie** als `VITE_*MESHY` / `NEXT_PUBLIC_*` im Client:
 
 ```bash
 CHARACTER_AI_PROVIDER=ollama
