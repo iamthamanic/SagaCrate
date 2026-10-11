@@ -16,7 +16,12 @@ EpisodeSummaryPanel → useEpisodeSummary → session-recap-ai-service.invoke(`s
 |------|----------|----------|--------|
 | N-actors | Player never sees draft | table SELECT revoked; RPC nulls non-approved for non-GM | pass |
 | Invalid/missing | Non-GM / incomplete session / client payload → 4xx | edge checks | pass |
-| Two consumers | Rate limit per user; no queue fan-out | persistent RPC quota | pass |
+| Two consumers / crash | Rate limit per user; no queue fan-out; abort mid-generate | persistent RPC quota + AbortController | pass |
 
 ## Flags
-(none)
+| Tag | Severity | Hops | Why local review missed it | Fix |
+|-----|----------|------|----------------------------|-----|
+| (none) | | | | |
+
+## Skip reason
+n/a
