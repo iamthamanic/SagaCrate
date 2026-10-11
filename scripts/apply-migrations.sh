@@ -64,6 +64,7 @@ migrations=(
   066_saga_between_sessions_bote.sql
   068_world_maps.sql
   069_party_location_overview.sql
+  070_saga_promote_session_outcomes.sql
 )
 
 only="${1:-}"
