@@ -125,6 +125,11 @@ export interface ProjectSummaryVm {
   worldId: string | null;
   /** Optional world-profile binding hint for fixture/prepare UIs. */
   worldProfileId: string | null;
+  /** Story definition pin (#574). */
+  sagaId: string | null;
+  sagaVersionId: string | null;
+  sagaTitle: string | null;
+  sagaOrigin: 'native' | 'user' | 'private_backfill' | null;
   gmUserId: string;
   status: 'active' | 'paused' | 'completed' | 'archived';
   memberCount: number;
