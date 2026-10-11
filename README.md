@@ -3,9 +3,9 @@
 
 # SagaTree
 
-**Dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard.**
+**Die gemeinsame Werkbank für Spielleitung und Spieler am Pen-&-Paper-Tisch.**
 
-Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inventar verwalten
+Kampagnen führen · Charaktere bauen · Sessions live halten · Welten und Inventar im Griff
 </div>
 
 <p align="center">
@@ -29,11 +29,20 @@ Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inve
 
 ### Elevator Pitch
 
-**SagaTree** ist die selbst gehostete Werkbank für tabletop RPGs: Spielleitung und Spieler planen Kampagnen, bauen Charaktere und führen Sessions live — in einer dunklen, fokussierten Oberfläche statt eines generischen Gaming-Dashboards. Das Repo liefert das **React + Vite**-Frontend plus einen **eigenen Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) mit klarer Schichtenarchitektur:
+**SagaTree** ist die TTRPG-Werkbank, die Spielleitung und Spieler am selben Tisch hält — statt PDF, Discord und Tabellen gegeneinander.
 
-`domains` → `infrastructure` → `app` · UI-Primitives in `shared/ui`
+| | Job |
+| --- | --- |
+| **Für Spielleitung** | Kampagne und Welt im Griff behalten, Session vorbereiten und live führen, ohne zwischen Tools zu verlieren, was am Tisch passiert. |
+| **Für Spieler** | Einen echten Charakter bauen und mitnehmen (SagaTree Core), der Gruppe beitreten und Inventar, Look und Fortschritt dort haben, wo gespielt wird. |
 
-Produktmarke und Regelwerk heißen **SagaTree** / **SagaTree Core** (interne Ruleset-ID bleibt `sagadrive-core` bis zur späteren Schema-Phase).
+Dunkle, werkzeugartige Oberfläche — gebaut für den Tisch, nicht als generisches Gaming-Dashboard.
+
+### Produkt & Stack
+
+Marke und Regelwerk: **SagaTree** / **SagaTree Core** (interne Ruleset-ID `sagadrive-core` bis zur Schema-Phase).
+
+Dieses Repo: **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge) und Schichten `domains` → `infrastructure` → `app` · UI in `shared/ui`.
 
 | Rolle | Nutzen |
 | --- | --- |

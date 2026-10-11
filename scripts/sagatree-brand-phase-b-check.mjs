@@ -39,9 +39,15 @@ forbidMatch(creation, /label:\s*'SagaDrive Core'/, 'ruleset still labeled SagaDr
 
 const readme = read('README.md');
 requireMatch(readme, /### Elevator Pitch/, 'README Elevator Pitch section');
-requireMatch(readme, /werkzeugartige TTRPG-Oberfläche/, 'README pitch tool-like surface');
+requireMatch(readme, /\*\*Für Spielleitung\*\*/, 'README pitch for DMs');
+requireMatch(readme, /\*\*Für Spieler\*\*/, 'README pitch for players');
 requireMatch(readme, /SagaTree Core/, 'README SagaTree Core');
 forbidMatch(readme, /heißt weiterhin \*\*SagaDrive Core\*\*/, 'README still keeps SagaDrive Core');
+const pitchBlock = (readme.match(/### Elevator Pitch\n([\s\S]*?)(?=\n### |\n## )/) || [])[1] || '';
+if (!pitchBlock) fail('could not isolate Elevator Pitch block');
+if (/React|Vite|Supabase|Postgres/i.test(pitchBlock)) {
+  fail('Elevator Pitch must stay product-first (no stack jargon in pitch block)');
+}
 
 const editor = read('src/app/character/edit/CharacterEditor.tsx');
 forbidMatch(editor, /Wähle SagaDrive Core/, 'editor toast still SagaDrive Core');
