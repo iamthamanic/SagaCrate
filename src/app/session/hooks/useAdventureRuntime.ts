@@ -63,10 +63,18 @@ export function useAdventureRuntime(input: {
       if (command.summary) payload.summary = command.summary;
       if (command.definitionRef) payload.definitionRef = command.definitionRef;
       if (command.note) payload.note = command.note;
+      if (command.days !== null && command.days !== undefined) payload.days = command.days;
+      if (command.batchId) payload.batchId = command.batchId;
+      if (command.simulationPatch) payload.simulationPatch = command.simulationPatch;
+      if (command.appendConsequences) payload.appendConsequences = command.appendConsequences;
+      if (command.locationRef) payload.locationRef = command.locationRef;
       const next = await runtime.applyCommand({
         kind: 'adventure',
         payload,
-        idempotencyKey: `adventure:${command.op}:${command.key ?? command.clockId ?? Date.now()}`,
+        idempotencyKey:
+          command.batchId
+            ? `simulation:${command.batchId}`
+            : `adventure:${command.op}:${command.key ?? command.clockId ?? Date.now()}`,
       });
       return next !== null;
     } catch (err) {

@@ -13,6 +13,7 @@ import { useAuth } from '../../lib/auth-context';
 import { useProjectSummaries } from '../project';
 import { AdventureNpcCreatureInstancesPanel } from './AdventureNpcCreatureInstancesPanel';
 import { AdventureRuntimeControls } from './AdventureRuntimeControls';
+import { SagaSimulationGmPanel } from './SagaSimulationGmPanel';
 import { SessionLookSettings } from './SessionLookSettings';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
 import { GoldenAdventureDornhainPanel } from './GoldenAdventureDornhainPanel';
@@ -152,6 +153,10 @@ export function GamemasterLiveScreen({
             access={gmAccess}
           />
           <AdventureRuntimeControls
+            sessionId={runtimeSessionId}
+            access={gmAccess}
+          />
+          <SagaSimulationGmPanel
             sessionId={runtimeSessionId}
             access={gmAccess}
           />

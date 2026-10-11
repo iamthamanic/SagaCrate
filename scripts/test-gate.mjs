@@ -248,6 +248,14 @@ function checkSagaSimulationKernel() {
   });
 }
 
+function checkSagaSimulationLiveOps() {
+  console.log('Saga simulation live ops (#577): batch patch, hook, GM panel...');
+  execFileSync(process.execPath, ['scripts/saga-simulation-live-ops-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1927,6 +1935,7 @@ checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
 checkSagaEditorV1();
 checkSagaSimulationKernel();
+checkSagaSimulationLiveOps();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();
