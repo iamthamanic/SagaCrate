@@ -1,5 +1,5 @@
 # Composition Gate — world-map-party-position
-- HEAD_SHA: 7eb0012970dbd3c1fe7e03bd39f3d5c2e4756532
+- HEAD_SHA: acecf9a4d2e177693bab3b64ad4ec4bc6f814cdc
 - BASE_SHA: fef75f7138878dda025a6171920733a7e8e1d920
 - Date: 2026-10-11
 - Verdict: CLEAR
