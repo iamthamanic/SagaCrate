@@ -43,6 +43,9 @@ requireMatch(readme, /\*\*Für Spielleitung\*\*/, 'README pitch for DMs');
 requireMatch(readme, /\*\*Für Spieler\*\*/, 'README pitch for players');
 requireMatch(readme, /SagaTree Core/, 'README SagaTree Core');
 forbidMatch(readme, /heißt weiterhin \*\*SagaDrive Core\*\*/, 'README still keeps SagaDrive Core');
+forbidMatch(readme, /## SagaDrive Core Character Editor/, 'README section still SagaDrive Core Character Editor');
+forbidMatch(readme, /\*\*SagaDrive Core Editor\*\*/, 'README features still SagaDrive Core Editor');
+
 const pitchBlock = (readme.match(/### Elevator Pitch\n([\s\S]*?)(?=\n### |\n## )/) || [])[1] || '';
 if (!pitchBlock) fail('could not isolate Elevator Pitch block');
 if (/React|Vite|Supabase|Postgres/i.test(pitchBlock)) {

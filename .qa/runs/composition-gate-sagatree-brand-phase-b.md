@@ -1,9 +1,23 @@
-# composition-gate — sagatree-brand-phase-b
+# Composition Gate — sagatree-brand-phase-b
+- HEAD_SHA: bab99ffc0ed7d306f434603eef24bb9817b38230
+- BASE_SHA: c907838dae1e618d52e4f7d6b999d9f56466d0d8
+- Date: 2026-10-12
+- Verdict: CLEAR
 
-## Verdict
-CLEAR
+## Event
+User-facing brand copy and ruleset label switch from SagaDrive Core → SagaTree Core; lore Edge prompt branding updates; README elevator pitch product-first. Internal ruleset key `sagadrive-core` unchanged.
 
-## Path
-character-creation label `SagaTree Core` → CharacterEditor select → e2e assertion → phase-b contract check → README Elevator Pitch consumer (humans/docs).
+## Hop chain
+character-creation label `SagaTree Core` → CharacterEditor Select / toasts → preset + inventory UI copy → Edge `character-lore-prompt` product name → README / e2e consumers.
 
-Internal key `sagadrive-core` unchanged (no DB hop).
+## Simulations
+| Case | Intended | Composed | Result |
+|------|----------|----------|--------|
+| N-actors | GM + player see SagaTree Core in editor; lore writer framed as SagaTree | label + prompt strings | pass |
+| Invalid/missing | Old SagaDrive Core label absent from ruleset option | phase-b contract forbids SagaDrive Core label | pass |
+| Two consumers / crash | test-gate phase-b check + e2e character-editor both assert SagaTree Core | same label source | pass |
+
+## Flags
+| Tag | Severity | Hops | Why | Fix |
+|-----|----------|------|-----|-----|
+| (none) | | | | |
