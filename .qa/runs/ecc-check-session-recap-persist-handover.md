@@ -1,7 +1,7 @@
 # ECC Check — session-recap-persist-handover (#572)
 
 - Date: 2026-10-11
-- HEAD_SHA: WORKTREE (pre-commit)
+- HEAD_SHA: 050c08dd6be3f2e9a2c99bab1747671cc337356f
 - Verdict: READY
 
 ## Phase A — test-gate

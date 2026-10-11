@@ -1,6 +1,6 @@
 # Composition Gate — session-recap-persist-handover
 
-- HEAD_SHA: WORKTREE (pre-commit)
+- HEAD_SHA: 050c08dd6be3f2e9a2c99bab1747671cc337356f
 - BASE_SHA: 7de64b053ee4a9aa0f5479efa47599f887f8988b
 - Date: 2026-10-11
 - Verdict: CLEAR
