@@ -1,30 +1,37 @@
 <div align="center">
+<img src="docs/brand/sagatree-logo.png" width="148" alt="SagaTree Logo" />
 
-<img src="docs/brand/sagadrive-logo.png" width="148" alt="SagaDrive Logo" />
-
-# SagaDrive
+# SagaTree
 
 **Webbasierte TTRPG-Plattform für Spielleitung und Spieler**
 
 Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inventar verwalten
-
-[![React](https://img.shields.io/badge/React_18-061B24?style=flat-square&logo=react&logoColor=06B6D4)](#tech-stack)
-[![Vite](https://img.shields.io/badge/Vite_6-061B24?style=flat-square&logo=vite&logoColor=E8A641)](#tech-stack)
-[![TypeScript](https://img.shields.io/badge/TypeScript-061B24?style=flat-square&logo=typescript&logoColor=0891B2)](#tech-stack)
-[![Supabase](https://img.shields.io/badge/Supabase_Self--Host-061B24?style=flat-square&logo=supabase&logoColor=3ECF8E)](#backend--self-host)
-[![Tailwind](https://img.shields.io/badge/Tailwind_4-061B24?style=flat-square&logo=tailwindcss&logoColor=06B6D4)](#design--uiux)
-
-[Figma Design](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive) · [Theme Guide](src/THEME_GUIDE.md) · [Self-Host](README_SELFHOST.md) · [Architektur](src/ARCHITECTURE.md)
-
 </div>
+
+<p align="center">
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/React_18-0891B2?style=flat-square" alt="React" /></a>
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/Vite_6-E8A641?style=flat-square" alt="Vite" /></a>
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/TypeScript-0891B2?style=flat-square" alt="TypeScript" /></a>
+  <a href="#backend--self-host"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square" alt="Supabase" /></a>
+  <a href="#design--uiux"><img src="https://img.shields.io/badge/Tailwind_4-06B6D4?style=flat-square" alt="Tailwind" /></a>
+</p>
+
+<p align="center">
+  <a href="https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive">Figma Design</a> ·
+  <a href="src/THEME_GUIDE.md">Theme Guide</a> ·
+  <a href="README_SELFHOST.md">Self-Host</a> ·
+  <a href="src/ARCHITECTURE.md">Architektur</a>
+</p>
 
 ---
 
 ## Überblick
 
-SagaDrive ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard. Das Repo enthält das **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) und einer klaren Schichtenarchitektur:
+**SagaTree** ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard. Das Repo enthält das **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) und einer klaren Schichtenarchitektur:
 
 `domains` → `infrastructure` → `app` · UI-Primitives in `shared/ui`
+
+Produktmarke ist **SagaTree**; das Regelwerk im Editor heißt weiterhin **SagaDrive Core**.
 
 | Rolle | Nutzen |
 | --- | --- |
@@ -52,18 +59,14 @@ SagaDrive ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches
 
 ## Design & UI/UX
 
-SagaDrive folgt einer klaren Markenidentität aus dem Logo: **Teal für Auswahl & CTA**, **Gold für Hover & Premium**. Surfaces bleiben dunkel und ruhig — professionell und fokussiert.
-
-<div align="center">
+SagaTree folgt einer klaren Markenidentität aus dem Logo: **Teal für Auswahl & CTA**, **Gold für Hover & Premium**. Surfaces bleiben dunkel und ruhig — professionell und fokussiert.
 
 | | Primär | Akzent | Surface |
 | :---: | :---: | :---: | :---: |
 | **Dark** | `#06B6D4` | `#F59E0B` | `#0F172A` |
 | **Light** | `#0891B2` | `#E8A641` | `#FFFFFF` |
 
-<img src="docs/brand/sagadrive-mark.svg" width="56" alt="SagaDrive Mark" />
-
-</div>
+<p align="center"><img src="docs/brand/sagatree-mark.svg" width="56" alt="SagaTree Mark" /></p>
 
 **Gestaltungsprinzipien**
 
@@ -243,12 +246,12 @@ Agent-Konfiguration: [`.cursor/`](.cursor/) — vor Änderungen: `npx ecc-agents
 ## Projektstruktur
 
 ```text
-sagadrive/
+SagaTree/                 # Repo (historisch auch sagadrive/ lokal)
 ├── src/                 # Frontend (app · domains · infrastructure · shared · lib)
 ├── supabase/            # migrations · functions · config
 ├── public/              # Favicons, MediaPipe, Item-/NPC-Assets
 ├── docs/                # Regeln, Styleguides, Brand, Concepts
-│   └── brand/           # Logo & Mark für Doku / README
+│   └── brand/           # SagaTree Logo & Mark für Doku / README
 ├── e2e/ · scripts/ · assets/
 ├── docker-compose*.yml
 ├── README.md
@@ -290,16 +293,9 @@ sagadrive/
 
 - `npm run dev` öffnet den Browser automatisch (`server.open = true`).
 - Port `3004` belegt → Prozess beenden oder Port in `vite.config.ts` anpassen.
-- Original Design-Basis: [Figma · SagaDrive](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive)
+- Original Design-Basis: [Figma](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive)
 
-<div align="center">
-
-<br />
-
-<img src="docs/brand/sagadrive-mark.svg" width="40" alt="" />
-
-<br />
-
-<sub>SagaDrive · Teal <code>#0891B2</code> · Gold <code>#E8A641</code></sub>
-
-</div>
+<p align="center">
+  <img src="docs/brand/sagatree-mark.svg" width="40" alt="SagaTree" /><br />
+  <sub>SagaTree · Teal <code>#0891B2</code> · Gold <code>#E8A641</code></sub>
+</p>
