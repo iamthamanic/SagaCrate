@@ -1,7 +1,7 @@
 # ECC Check — saga-between-sessions-bote (#578)
 
 **Verdict:** READY  
-**HEAD_SHA:** (set at commit)  
+**HEAD_SHA:** 498276c638b50a072e035e32930222d3423b0132  
 **Date:** 2026-10-11
 
 ## Gates
