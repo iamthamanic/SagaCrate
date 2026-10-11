@@ -1,0 +1,130 @@
+{
+  "ok": true,
+  "stack": "sagadrive-regular",
+  "gateway": "http://localhost:8000",
+  "startedAt": "2026-10-11T22:09:42.499Z",
+  "checks": [
+    {
+      "name": "login.gotrue_health",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "login.gm",
+      "pass": true,
+      "detail": "cw-gm-mv4dlv8j@example.com"
+    },
+    {
+      "name": "login.player",
+      "pass": true,
+      "detail": "cw-player-mv4dlv8j@example.com"
+    },
+    {
+      "name": "login.stranger",
+      "pass": true,
+      "detail": "cw-stranger-mv4dlv8j@example.com"
+    },
+    {
+      "name": "project.create",
+      "pass": "dc659fc9-9d15-4d67-9ac6-cd122d152a27",
+      "detail": "status=201 id=dc659fc9-9d15-4d67-9ac6-cd122d152a27"
+    },
+    {
+      "name": "project.member_bootstrap",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "project.list",
+      "pass": true,
+      "detail": "status=200 listed=true"
+    },
+    {
+      "name": "session.create",
+      "pass": "734LRG",
+      "detail": "status=200 id=b3e2051a-9cc1-4f1a-8f0f-e6f1122304fa code=734LRG"
+    },
+    {
+      "name": "session.join_player",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "session.mutate_rest",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "session.player_read_after_mutate",
+      "pass": true,
+      "detail": "status=200 name=CW mutated mv4dlv8j"
+    },
+    {
+      "name": "realtime.postgres_changes",
+      "pass": false,
+      "detail": "BLOCKED_604 — skipped live WS (needs-human #604)"
+    },
+    {
+      "name": "storage.upload",
+      "pass": true,
+      "detail": "status=200 path=75ea1b67-a555-4568-8457-3ca2ec0953fb/cw-probe-mv4dlv8j.png"
+    },
+    {
+      "name": "storage.read",
+      "pass": true,
+      "detail": "status=200 bytes=70"
+    },
+    {
+      "name": "edge.dm_tools_member",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "edge.dm_tools_anon_deny",
+      "pass": false,
+      "detail": "BLOCKED_605 status=200"
+    },
+    {
+      "name": "edge.ai_gm_stranger_deny",
+      "pass": false,
+      "detail": "BLOCKED_605 status=500"
+    }
+  ],
+  "realtime": {
+    "status": "BLOCKED_604",
+    "containerStatus": "exited",
+    "detail": "sagadrive-realtime not healthy; SECRET_KEY_BASE / tenant wiring is #604",
+    "logSnippet": "    (elixir 1.14.3) src/elixir.erl:294: :elixir.eval_forms/4\n    (elixir 1.14.3) lib/module/parallel_checker.ex:110: Module.ParallelChecker.verify/1\n    (elixir 1.14.3) lib/code.ex:425: Code.validated_eval_string/3\n\n{\"init terminating in do_boot\",{#{'__exception__'=>true,'__struct__'=>'Elixir.RuntimeError',message=><<101,110,118,105,114,111,110,109,101,110,116,32,118,97,114,105,97,98,108,101,32,83,69,67,82,69,84,95,75,69,89,95,66,65,83,69,32,105,115,32,109,105,115,115,105,110,103,46,10,89,111,117,32,99,97,110,32,103,101,110,101,114,97,116,101,32,111,110,101,32,98,121,32,99,97,108,108,105,110,103,58,32,109,105,120,32,112,104,120,46,103,101,110,46,115,101,99,114,101,116,10>>},[{elixir_eval,'__FILE__',1,[{file,\"/app/releases/2.25.15/runtime.exs\"},{line,17}]},{elixir,'-eval_external_handler/1-fun-2-',4,[{file,\"src/elixir.erl\"},{line,309},{error_info,#{module=>'Elixir.Exception'}}]},{erl_eval,do_apply,7,[{file,\"erl_eval.erl\"},{line,748}]},{erl_eval,expr,6,[{file,\"erl_eval.erl\"},{line,492}]},{erl_eval,exprs,6,[{file,\"erl_eval.erl\"},{line,136}]},{elixir,eval_forms,4,[{file,\"src/elixir.erl\"},{line,294}]},{'Elixir.Module.ParallelChecker',verify,1,[{file,\"lib/module/parallel_checker.ex\"},{line,110}]},{'Elixir.Code',validated_eval_string,3,[{file,\"lib/code.ex\"},{line,425}]}]}}\r\ninit terminating in do_boot ({,[{elixir_eval,__FILE__,1,[{_},{_}]},{elixir,-eval_external_handler/1-fun-2-,4,[{_},{_},{_}]},{erl_eval,do_apply,7,[{_},{_}]},{erl_eval,expr,6,[{_},{_}]},{erl_eval,exprs,6,[{_},{_}]},{elixir,eval_forms,4,[{_},{_}]},{Elixir.Module.ParallelChecker,verify,1,[{_},{_}]},{Elixir.Code,validated_eval_string,3,[{_},{_}]}]})\r"
+  },
+  "errors": [],
+  "edgeAuthz": {
+    "status": "BLOCKED_605",
+    "detail": "anon reached dm-tools/dice — VERIFY_JWT/compose defaults are #605",
+    "anonStatus": 200,
+    "strangerStatus": 500,
+    "strangerBody": "{\"error\":\"Internal server error\",\"message\":\"error sending request for url (http://ollama:11434/api/generate): error trying to connect: dns error: failed to lookup address informati"
+  },
+  "finishedAt": "2026-10-11T22:09:44.041Z",
+  "ids": {
+    "projectId": "dc659fc9-9d15-4d67-9ac6-cd122d152a27",
+    "sessionId": "b3e2051a-9cc1-4f1a-8f0f-e6f1122304fa",
+    "sessionCode": "734LRG"
+  },
+  "acceptance": {
+    "coreRequired": [
+      "login.gm",
+      "login.player",
+      "project.create",
+      "project.list",
+      "session.create",
+      "session.join_player",
+      "session.mutate_rest",
+      "session.player_read_after_mutate",
+      "storage.upload",
+      "storage.read",
+      "edge.dm_tools_member"
+    ],
+    "realtimeNote": "Realtime BLOCKED_604 documented; core APIs PASS (#604 needs-human)",
+    "edgeNote": "Edge negative authz BLOCKED_605 documented (#605 needs-human)"
+  }
+}

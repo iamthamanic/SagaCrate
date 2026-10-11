@@ -192,6 +192,14 @@ function checkSagaStateColumnPrivileges() {
   });
 }
 
+function checkSagatreeCoreWorkflowsContract() {
+  console.log('SagaTree core workflows (#606): checking live evidence contract...');
+  execFileSync(process.execPath, ['scripts/sagatree-core-workflows-contract-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -1976,6 +1984,7 @@ checkPlayerTestMultiuserE2eSecurity();
 checkPlayerTestInstrumentationRunbook();
 checkProjectMembershipSecurity();
 checkSagaStateColumnPrivileges();
+checkSagatreeCoreWorkflowsContract();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSessionRecapPersistHandover();
