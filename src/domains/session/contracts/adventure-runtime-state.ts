@@ -9,6 +9,8 @@ import type { LiveSessionAccess } from './live-session-access';
 import { canExecuteLiveSessionCommand } from './live-session-access';
 
 export const ADVENTURE_RUNTIME_SCHEMA_VERSION = 1 as const;
+/** Schema v2 — game time + simulation tracks (#576). Persist wiring in #577. */
+export const ADVENTURE_RUNTIME_SCHEMA_VERSION_V2 = 2 as const;
 
 export type AdventureVisibility = 'public' | 'shared' | 'gm_only';
 
@@ -59,6 +61,106 @@ export type AdventureRuntimeState = {
   readonly sliceRevision: number;
   readonly updatedAt: string | null;
 };
+
+/** Runtime deadline track (#576). */
+export type AdventureDeadlineRuntime = {
+  readonly id: string;
+  readonly label: string;
+  readonly dueDay: number;
+  readonly fired: boolean;
+  readonly visibility: AdventureVisibility;
+};
+
+/** Staged threat clock at runtime (#576) — mirrors AdventureClock + stage label. */
+export type AdventureThreatRuntime = {
+  readonly id: string;
+  readonly label: string;
+  readonly value: number;
+  readonly max: number;
+  readonly visibility: AdventureVisibility;
+  readonly impendingDoomFired: boolean;
+};
+
+/** Runtime copy of a when→then rule id for tracking (#576). */
+export type AdventureRuleRuntime = {
+  readonly id: string;
+  readonly label: string;
+};
+
+/**
+ * Adventure runtime schema v2 — calendar time + simulation tracks (#576).
+ * Durable SQL may still require v1 until #577; kernel works on v2 in memory.
+ */
+export type AdventureRuntimeStateV2 = {
+  readonly schemaVersion: typeof ADVENTURE_RUNTIME_SCHEMA_VERSION_V2;
+  readonly definitionRef: string | null;
+  readonly flags: Readonly<Record<string, AdventureFlagEntry>>;
+  readonly relationships: Readonly<Record<string, AdventureRelationship>>;
+  readonly clocks: Readonly<Record<string, AdventureClock>>;
+  readonly consequences: readonly AdventureConsequence[];
+  readonly sliceRevision: number;
+  readonly updatedAt: string | null;
+  readonly time: { readonly day: number };
+  readonly deadlines: readonly AdventureDeadlineRuntime[];
+  readonly threats: readonly AdventureThreatRuntime[];
+  readonly rules: readonly AdventureRuleRuntime[];
+  readonly partyLocationRef: string | null;
+  readonly rngSeed: number;
+};
+
+/** Derive a stable numeric seed from a v1 state when none is stored. */
+export function deriveAdventureRuntimeSeed(state: AdventureRuntimeState): number {
+  const base = `${state.definitionRef ?? ''}|${state.sliceRevision}|${Object.keys(state.clocks).sort().join(',')}`;
+  let h = 2166136261;
+  for (let i = 0; i < base.length; i += 1) {
+    h ^= base.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+export function isAdventureRuntimeStateV2(
+  state: AdventureRuntimeState | AdventureRuntimeStateV2,
+): state is AdventureRuntimeStateV2 {
+  return state.schemaVersion === ADVENTURE_RUNTIME_SCHEMA_VERSION_V2;
+}
+
+export function upgradeAdventureRuntimeV1toV2(
+  state: AdventureRuntimeState | AdventureRuntimeStateV2,
+  options?: { readonly seed?: number },
+): AdventureRuntimeStateV2 {
+  if (isAdventureRuntimeStateV2(state)) {
+    return state;
+  }
+  const seed =
+    typeof options?.seed === 'number' && Number.isFinite(options.seed)
+      ? options.seed >>> 0
+      : deriveAdventureRuntimeSeed(state);
+  const threats: AdventureThreatRuntime[] = Object.values(state.clocks).map((c) => ({
+    id: c.id,
+    label: c.label,
+    value: c.value,
+    max: c.max,
+    visibility: c.visibility,
+    impendingDoomFired: c.value >= c.max,
+  }));
+  return {
+    schemaVersion: ADVENTURE_RUNTIME_SCHEMA_VERSION_V2,
+    definitionRef: state.definitionRef,
+    flags: state.flags,
+    relationships: state.relationships,
+    clocks: state.clocks,
+    consequences: state.consequences,
+    sliceRevision: state.sliceRevision,
+    updatedAt: state.updatedAt,
+    time: { day: 0 },
+    deadlines: [],
+    threats,
+    rules: [],
+    partyLocationRef: null,
+    rngSeed: seed,
+  };
+}
 
 export type AdventureRuntimeOp =
   | 'set_flag'
