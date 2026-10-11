@@ -86,6 +86,36 @@ requireMatch(
   /059_saga_state_column_privileges\.sql/,
   'apply-migrations lists 059',
 );
+requireMatch(
+  applyMigrations,
+  /071_restore_authenticated_project_session_writes\.sql/,
+  'apply-migrations lists 071',
+);
+
+const restoreWrites = 'supabase/migrations/071_restore_authenticated_project_session_writes.sql';
+if (!existsSync(join(root, restoreWrites))) fail(`missing ${restoreWrites}`);
+const restoreMig = read(restoreWrites);
+requireMatch(
+  restoreMig,
+  /GRANT INSERT, UPDATE, DELETE ON TABLE public\.projects TO authenticated/i,
+  '071 grants project writes',
+);
+requireMatch(
+  restoreMig,
+  /GRANT INSERT, UPDATE, DELETE ON TABLE public\.sessions TO authenticated/i,
+  '071 grants session writes',
+);
+requireMatch(restoreMig, /saga_id/, '071 grants saga_id SELECT');
+requireMatch(
+  restoreMig,
+  /REVOKE SELECT \(adventure_runtime\) ON TABLE public\.projects/i,
+  '071 keeps adventure_runtime unreadable',
+);
+requireMatch(
+  restoreMig,
+  /REVOKE SELECT \(world_state, notes\) ON TABLE public\.sessions/i,
+  '071 keeps world_state/notes unreadable',
+);
 
 const projectService = read('src/infrastructure/project/project-service.ts');
 const sessionService = read('src/infrastructure/session/session-service.ts');
@@ -93,6 +123,12 @@ const sessionService = read('src/infrastructure/session/session-service.ts');
 requireMatch(projectService, /PROJECT_SAFE_COLUMNS/, 'PROJECT_SAFE_COLUMNS constant');
 requireMatch(projectService, /SESSION_SAFE_COLUMNS/, 'SESSION_SAFE_COLUMNS in project-service');
 requireMatch(sessionService, /SESSION_SAFE_COLUMNS/, 'SESSION_SAFE_COLUMNS in session-service');
+requireMatch(
+  projectService,
+  /\.insert\(projectData\)\s*\.select\(PROJECT_SAFE_COLUMNS\)/,
+  'createProject returns PROJECT_SAFE_COLUMNS (not select *)',
+);
+requireMatch(projectService, /saga_id, saga_version_id/, 'PROJECT_SAFE_COLUMNS includes saga pins');
 
 function safeColumnList(source, constName) {
   const match = source.match(
