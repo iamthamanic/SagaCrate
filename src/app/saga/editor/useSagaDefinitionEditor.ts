@@ -47,6 +47,16 @@ function cloneDraft(draft: SagaDefinitionDraft): SagaDefinitionDraft {
     locations: draft.locations.map((l) => ({ ...l })),
     knowledgeFacts: draft.knowledgeFacts.map((f) => ({ ...f })),
     pregens: draft.pregens.map((p) => ({ ...p })),
+    simulation: {
+      startDay: draft.simulation.startDay,
+      deadlines: draft.simulation.deadlines.map((d) => ({ ...d })),
+      threats: draft.simulation.threats.map((t) => ({ ...t })),
+      rules: draft.simulation.rules.map((r) => ({
+        ...r,
+        thenKinds: [...r.thenKinds],
+      })),
+      factions: draft.simulation.factions.map((f) => ({ ...f })),
+    },
   };
 }
 

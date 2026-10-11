@@ -118,7 +118,14 @@ const draft = {
   knowledgeFacts: [],
   pregens: [],
   packageId: null,
-};
+  simulation: {
+    startDay: 0,
+    deadlines: [],
+    threats: [],
+    rules: [],
+    factions: [],
+  },
+}
 const errors = mod.validateSagaDefinitionDraft(draft);
 if (!errors.title) fail('expected empty title validation error');
 

@@ -1,5 +1,5 @@
 /**
- * SagaEditorScreen — Author draft editor for story definitions (#575).
+ * SagaEditorScreen — Author draft editor for story definitions (#575 / #579).
  * Location: src/app/saga/editor/SagaEditorScreen.tsx
  *
  * Adaptive UI Journey surface: one section focus, ≥44px CTAs, safe-area padding.
@@ -13,6 +13,10 @@ import { SagaEditorGeneralSection } from './SagaEditorGeneralSection';
 import { SagaEditorLocationsSection } from './SagaEditorLocationsSection';
 import { SagaEditorSecretsSection } from './SagaEditorSecretsSection';
 import { SagaEditorPregensSection } from './SagaEditorPregensSection';
+import { SagaEditorThreatsSection } from './SagaEditorThreatsSection';
+import { SagaEditorDeadlinesSection } from './SagaEditorDeadlinesSection';
+import { SagaEditorRulesSection } from './SagaEditorRulesSection';
+import { SagaEditorFactionsSection } from './SagaEditorFactionsSection';
 import { useSagaDefinitionEditor } from './useSagaDefinitionEditor';
 
 type Props = {
@@ -267,6 +271,35 @@ export function SagaEditorScreen({ sagaId, mode, onBack, onNavigateToEditor }: P
             draft={draft}
             readOnly={readOnly}
             onChange={(pregens) => editor.setField('pregens', pregens)}
+          />
+        ) : null}
+        {section === 'threats' ? (
+          <SagaEditorThreatsSection
+            draft={draft}
+            readOnly={readOnly}
+            onChange={(simulation) => editor.setField('simulation', simulation)}
+          />
+        ) : null}
+        {section === 'deadlines' ? (
+          <SagaEditorDeadlinesSection
+            draft={draft}
+            readOnly={readOnly}
+            onChange={(simulation) => editor.setField('simulation', simulation)}
+          />
+        ) : null}
+        {section === 'rules' ? (
+          <SagaEditorRulesSection
+            draft={draft}
+            readOnly={readOnly}
+            fieldError={editor.fieldErrors.simulation}
+            onChange={(simulation) => editor.setField('simulation', simulation)}
+          />
+        ) : null}
+        {section === 'factions' ? (
+          <SagaEditorFactionsSection
+            draft={draft}
+            readOnly={readOnly}
+            onChange={(simulation) => editor.setField('simulation', simulation)}
           />
         ) : null}
       </main>
