@@ -24,7 +24,14 @@ import {
 import {
   projectAdventureRuntimeForAudience,
   readAdventureRuntime,
+  readAdventureRuntimeV2,
 } from '../../../domains/session/contracts/adventure-runtime-state';
+import {
+  buildBoteLines,
+  listOpenDeadlines,
+  type BoteLine,
+  type OpenDeadlineLine,
+} from '../../../domains/session/contracts/bote-lines';
 import { useSessionRuntime } from './useSessionRuntime';
 
 export type PrepareRecapRosterMember = {
@@ -50,6 +57,12 @@ export type PrepareRecapViewModel = {
   readonly highlightsSource: 'persisted' | 'runtime';
   readonly flagCount: number;
   readonly definitionRef: string | null;
+  /** #578 Der Bote — public/shared sim news (domain-built). */
+  readonly boteLines: readonly BoteLine[];
+  /** #578 open deadlines for Zeigarnik (audience-safe). */
+  readonly openDeadlines: readonly OpenDeadlineLine[];
+  /** Calendar day from adventure runtime v2. */
+  readonly worldDay: number;
 };
 
 type UseSessionPrepareRecapInput = {
@@ -225,22 +238,37 @@ export function useSessionPrepareRecap(
       readAdventureRuntime(shared),
       audience,
     );
+    const v2 = readAdventureRuntimeV2(shared);
+    const openDeadlines = listOpenDeadlines({
+      deadlines:
+        audience === 'gamemaster'
+          ? v2.deadlines
+          : v2.deadlines.filter(
+              (d) => d.visibility === 'public' || d.visibility === 'shared',
+            ),
+    });
+    const consequenceInputs = projected.consequences.map((c) => ({
+      id: c.id,
+      kind: c.kind,
+      summary: c.summary,
+      createdAt: c.createdAt,
+      visibility: c.visibility,
+    }));
     const usePersisted =
       (baseMeta.status === 'completed' || baseMeta.status === 'cancelled')
       && persistedHighlights != null;
     const highlights = usePersisted
       ? persistedHighlights
       : buildRecapHighlightLines({
-          consequences: projected.consequences.map((c) => ({
-            id: c.id,
-            kind: c.kind,
-            summary: c.summary,
-            createdAt: c.createdAt,
-            visibility: c.visibility,
-          })),
+          consequences: consequenceInputs,
           sessionStartedAtIso: baseMeta.summary.startedAtIso,
           sessionEndedAtIso: baseMeta.summary.endedAtIso,
         });
+    const boteLines = buildBoteLines({
+      consequences: consequenceInputs,
+      // Between sessions: prefer news after previous episode ended when known.
+      sinceIso: baseMeta.summary.endedAtIso,
+    });
     setModel({
       summary: baseMeta.summary,
       selfRole: baseMeta.selfRole,
@@ -258,6 +286,9 @@ export function useSessionPrepareRecap(
       highlightsSource: usePersisted ? 'persisted' : 'runtime',
       flagCount: Object.keys(projected.flags).length,
       definitionRef: projected.definitionRef,
+      boteLines,
+      openDeadlines,
+      worldDay: v2.time.day,
     });
   }, [baseMeta, runtime.state, projectId, persistedHighlights, persistedSummaryText]);
 

@@ -21,6 +21,7 @@ export function SagaSimulationGmPanel({ sessionId, access }: Props) {
   const sim = useSagaSimulation({ sessionId, access });
   const [days, setDays] = useState(1);
   const [showAll, setShowAll] = useState(false);
+  const [commitNote, setCommitNote] = useState<string | null>(null);
   const disabled = sim.isBusy || access?.role !== 'gamemaster';
 
   const events = sim.pendingPreview?.proposedEvents ?? [];
@@ -157,7 +158,11 @@ export function SagaSimulationGmPanel({ sessionId, access }: Props) {
               disabled={disabled || !sim.pendingPreview}
               onClick={() => {
                 if (!sim.pendingPreview) return;
-                void sim.commitPreview(sim.pendingPreview);
+                void sim.commitPreview(sim.pendingPreview).then((ok) => {
+                  if (ok) {
+                    setCommitNote('Die Welt hat sich bewegt.');
+                  }
+                });
               }}
               data-saga-simulation-commit
             >
@@ -175,6 +180,16 @@ export function SagaSimulationGmPanel({ sessionId, access }: Props) {
             </Button>
           </div>
         </div>
+      ) : null}
+
+      {commitNote && !sim.pendingPreview ? (
+        <p
+          className="text-sm text-foreground"
+          role="status"
+          data-saga-simulation-commit-note
+        >
+          {commitNote}
+        </p>
       ) : null}
     </div>
   );

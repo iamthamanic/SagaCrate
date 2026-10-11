@@ -256,6 +256,14 @@ function checkSagaSimulationLiveOps() {
   });
 }
 
+function checkSagaBetweenSessionsBote() {
+  console.log('Saga between-sessions + Bote (#578): Prepare, Bote, open deadlines...');
+  execFileSync(process.execPath, ['scripts/saga-between-sessions-bote-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1936,6 +1944,7 @@ checkSagaDefinitionsVersions();
 checkSagaEditorV1();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
+checkSagaBetweenSessionsBote();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();
