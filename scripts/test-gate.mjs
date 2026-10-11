@@ -248,6 +248,14 @@ function checkSagaEditorV2() {
   });
 }
 
+function checkWorldMapScriptonyPort() {
+  console.log('World map Scriptony port (#580): registry, 6 UI, RPCs, soft-cap...');
+  execFileSync(process.execPath, ['scripts/world-map-scriptony-port-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaSimulationKernel() {
   console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
   execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
@@ -1951,6 +1959,7 @@ checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
 checkSagaEditorV1();
 checkSagaEditorV2();
+checkWorldMapScriptonyPort();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
 checkSagaBetweenSessionsBote();
