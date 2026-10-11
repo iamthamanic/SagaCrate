@@ -12,6 +12,8 @@ import {
 export type SessionRecapDto = {
   readonly sessionId: string;
   readonly summaryText: string | null;
+  /** #573 — none|draft|approved (players only receive approved text). */
+  readonly summaryStatus: 'none' | 'draft' | 'approved';
   readonly highlights: readonly RecapHighlightLine[];
   readonly createdAt: string | null;
   readonly updatedAt: string | null;
@@ -35,9 +37,13 @@ class SessionRecapService {
     if (!isRecord(data)) {
       throw new Error('Ungültige Recap-Antwort');
     }
+    const statusRaw = typeof data.summaryStatus === 'string' ? data.summaryStatus : 'none';
+    const summaryStatus =
+      statusRaw === 'approved' || statusRaw === 'draft' ? statusRaw : 'none';
     return {
       sessionId: typeof data.sessionId === 'string' ? data.sessionId : sessionId,
       summaryText: typeof data.summaryText === 'string' ? data.summaryText : null,
+      summaryStatus,
       highlights: parsePersistedRecapHighlightLines(data.highlightLines),
       createdAt: typeof data.createdAt === 'string' ? data.createdAt : null,
       updatedAt: typeof data.updatedAt === 'string' ? data.updatedAt : null,
