@@ -67,7 +67,7 @@ export const CHARACTER_LORE_PROMPT_VERSION = 'character-background-v1';
 
 const RULESET_GUIDANCE: Record<CharacterLoreRuleset, string> = {
   'sagadrive-core': [
-    'SagaDrive Core is setting-flexible.',
+    'SagaTree Core is setting-flexible.',
     'Archetype describes a broad dramatic role and is not a fixed D&D-style class.',
     'Essence profile describes how the character relates to power, action or transformation.',
     'Treat the selected setting as the genre frame and do not silently convert SagaDrive concepts into D&D concepts.',

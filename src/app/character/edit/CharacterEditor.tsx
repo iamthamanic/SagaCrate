@@ -494,7 +494,7 @@ export function CharacterEditor() {
   const collectValidationProblems = (): ValidationProblem[] => {
     const problems: ValidationProblem[] = [];
     if (!characterName.trim()) problems.push({ tab: 'info', message: 'Bitte gib deinem Charakter einen Namen.' });
-    if (ruleset === 'dnd-5.5e') problems.push({ tab: 'info', message: 'D&D 5.5e ist in diesem Editor noch nicht verfügbar. Wähle SagaDrive Core.' });
+    if (ruleset === 'dnd-5.5e') problems.push({ tab: 'info', message: 'D&D 5.5e ist in diesem Editor noch nicht verfügbar. Wähle SagaTree Core.' });
     if (!genderReadingComplete) problems.push({ tab: 'info', message: 'Bitte wähle, wie dein Charakter gelesen wird (männlich, weiblich oder divers).' });
     if (speciesTraitCost !== SAGA_DRIVE_SPECIES_TRAIT_BUDGET) problems.push({ tab: 'info', message: `Wähle Speziesmerkmale im Wert von genau ${SAGA_DRIVE_SPECIES_TRAIT_BUDGET} Punkten.` });
     if (characterRace === 'alien' && !speciesProfileName.trim()) problems.push({ tab: 'info', message: 'Gib deinem Alien-Speziesprofil einen Namen.' });
@@ -1101,7 +1101,7 @@ export function CharacterEditor() {
     if (ruleset === 'dnd-5.5e') {
       setValidationAttempted(true);
       setActiveTab('info');
-      toast.error('D&D 5.5e ist in diesem Editor noch nicht verfügbar. Wähle SagaDrive Core.');
+      toast.error('D&D 5.5e ist in diesem Editor noch nicht verfügbar. Wähle SagaTree Core.');
       return;
     }
 

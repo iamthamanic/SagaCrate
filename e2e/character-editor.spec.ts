@@ -18,7 +18,7 @@ test.beforeAll(() => {
   fs.mkdirSync('.qa/evidence/skill-progression-v2-character-editor-ux', { recursive: true });
 });
 
-test('character editor exposes the SagaDrive Core creation flow', async ({ page }) => {
+test('character editor exposes the SagaTree Core creation flow', async ({ page }) => {
   test.setTimeout(420_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await ensureLoggedIn(page);
@@ -31,7 +31,7 @@ test('character editor exposes the SagaDrive Core creation flow', async ({ page 
   await expect(page.getByRole('heading', { name: 'Charakter erstellen' })).toBeVisible();
   await page.getByRole('button', { name: /Eigenen Charakter erstellen/i }).click();
   await expect(page.getByRole('heading', { name: 'Charakter Editor' }).first()).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByText('SagaDrive Core').first()).toBeVisible();
+  await expect(page.getByText('SagaTree Core').first()).toBeVisible();
   await expect(page.getByRole('combobox', { name: /Regelset/i }).first()).toBeVisible();
 
   for (const tab of ['Spezies', 'Charakter', 'Look', 'Inventar', 'Einstellungen']) {

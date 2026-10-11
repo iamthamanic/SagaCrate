@@ -1,8 +1,8 @@
-# SagaDrive Corporate Identity and UI Theme Guide
+# SagaTree Corporate Identity and UI Theme Guide
 
 ## Status
 
-Diese Datei ist die kanonische visuelle Designsystem-Referenz fuer SagaDrive. Fuer AI-/Figma-Make-Generierung gilt zusaetzlich `src/guidelines/Guidelines.md`. Die technische Source of Truth sind die Theme-Tokens in `src/styles/globals.css` und die Primitives unter `src/shared/ui/`.
+Diese Datei ist die kanonische visuelle Designsystem-Referenz fuer SagaTree. Fuer AI-/Figma-Make-Generierung gilt zusaetzlich `src/guidelines/Guidelines.md`. Die technische Source of Truth sind die Theme-Tokens in `src/styles/globals.css` und die Primitives unter `src/shared/ui/`.
 
 Produktverhalten ist separat verbindlich definiert:
 - `docs/concepts/conductor-experience-contract.md` fuer Performance Mode, Live-Steuerung, Responsivitaet, Motion, Command Depth und Mastery.
@@ -15,7 +15,7 @@ Diese Experience-Vertraege sind keine optionalen Designhinweise. Relevante UI-/V
 
 ## Design Read
 
-SagaDrive ist eine moderne TTRPG-Produktoberflaeche mit dunklen, ruhigen Surfaces und zwei Markenfarben aus dem Logo. Die UI soll professionell und werkzeugartig wirken, nicht wie eine Marketing-Landingpage oder ein generisches Gaming-Dashboard.
+**SagaTree** ist eine dunkle, werkzeugartige TTRPG-Oberflaeche — kein generisches Gaming-Dashboard. Dunkle, ruhige Surfaces und zwei Markenfarben aus dem Logo; professionell und fokussiert, nicht wie eine Marketing-Landingpage.
 
 ## Farbpalette
 

@@ -1,10 +1,10 @@
-# SagaDrive Frontend Architecture
+# SagaTree Frontend Architecture
 
 > Product/data vision below. For **code layout and import boundaries**, see [Layered Architecture](#layered-architecture-94).
 
 ## Layered Architecture (#94)
 
-SagaDrive uses a **Modular Monolith** with explicit layers:
+SagaTree uses a **Modular Monolith** with explicit layers:
 
 | Layer | Path | May import | Must NOT import |
 |-------|------|------------|-----------------|
@@ -59,7 +59,7 @@ Design reference: `.qa/design/scalable-domain-vertical-slice-architecture.md`
 
 
 ## Vision
-**SagaDrive** ist eine D&D Beyond + Roll20 Alternative mit maximaler Flexibilität für alle TTRPG-Systeme.
+**SagaTree** ist die selbst gehostete, werkzeugartige TTRPG-Oberfläche für Spielleitung und Spieler — Kampagnen, Charaktere (SagaTree Core), Live-Sessions — kein generisches Gaming-Dashboard. Flexibel für weitere Regelwerke, mit klarem Stack: React + Vite Frontend und eigener Supabase-Backend-Stack.
 
 ---
 

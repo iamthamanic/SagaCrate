@@ -3,7 +3,7 @@
 
 # SagaTree
 
-**Webbasierte TTRPG-Plattform für Spielleitung und Spieler**
+**Dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard.**
 
 Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inventar verwalten
 </div>
@@ -27,16 +27,18 @@ Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inve
 
 ## Überblick
 
-**SagaTree** ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard. Das Repo enthält das **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) und einer klaren Schichtenarchitektur:
+### Elevator Pitch
+
+**SagaTree** ist die selbst gehostete Werkbank für tabletop RPGs: Spielleitung und Spieler planen Kampagnen, bauen Charaktere und führen Sessions live — in einer dunklen, fokussierten Oberfläche statt eines generischen Gaming-Dashboards. Das Repo liefert das **React + Vite**-Frontend plus einen **eigenen Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) mit klarer Schichtenarchitektur:
 
 `domains` → `infrastructure` → `app` · UI-Primitives in `shared/ui`
 
-Produktmarke ist **SagaTree**; das Regelwerk im Editor heißt weiterhin **SagaDrive Core**.
+Produktmarke und Regelwerk heißen **SagaTree** / **SagaTree Core** (interne Ruleset-ID bleibt `sagadrive-core` bis zur späteren Schema-Phase).
 
 | Rolle | Nutzen |
 | --- | --- |
 | **Spielleitung** | Projekte, Sessions, Bibliothek, Weltprofile, Live-Steuerung |
-| **Spieler** | Charaktereditor (SagaDrive Core), Inventar, Session-Join, Look / LiveAct |
+| **Spieler** | Charaktereditor (SagaTree Core), Inventar, Session-Join, Look / LiveAct |
 | **Creator** | Items, NPCs, Avatar-Assets, optional Meshy 2D/3D (BYOK) |
 
 ---
@@ -46,7 +48,7 @@ Produktmarke ist **SagaTree**; das Regelwerk im Editor heißt weiterhin **SagaDr
 | Bereich | Was drin ist |
 | --- | --- |
 | **Projekte & Mitgliedschaft** | Sagas anlegen, Join-by-Code, RLS-gesicherte Rollen (GM / Spieler) |
-| **SagaDrive Core Editor** | Spezies · Parameter · Look · Inventar · Einstellungen / Presets |
+| **SagaTree Core Editor** | Spezies · Parameter · Look · Inventar · Einstellungen / Presets |
 | **Live Sessions** | Lobby, GM- und Player-Panel, Realtime Session-Runtime |
 | **Bibliothek & Welten** | Abenteuer, World Profiles, Maps |
 | **Inventar & Items** | Inventory v2, Item-Workbench, Thumbnails & optional GLB |
@@ -130,7 +132,7 @@ Modularer Monolith mit harten Importgrenzen (CI-enforced):
 ```text
 src/
 ├── app/              # Vertikale Slices / User Journeys
-├── domains/          # Reine Domain-Verträge & SagaDrive-Core-Regeln
+├── domains/          # Reine Domain-Verträge & SagaTree-Core-Regeln
 ├── infrastructure/   # Supabase-, Storage-, Three-/LiveAct-Adapter
 ├── shared/ui/        # Fachlich neutrale UI-Primitives
 ├── lib/              # Auth, Supabase-Client, Querschnitt
@@ -147,13 +149,13 @@ src/
 
 ---
 
-## SagaDrive Core Character Editor
+## SagaTree Core Character Editor
 
 „Charakter erstellen“ öffnet einen Zwei-Karten-Chooser (eigener Charakter vs. Preset). Der Editor hat fünf Haupttabs:
 
 **Spezies** · **Parameter** · **Look** · **Inventar** · **Einstellungen** (`Statistik` / `Preset`)
 
-SagaDrive Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
+SagaTree Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
 
 Persistenz (Auszug): `attributes` · `skills` · `sagadrive_profile` · `background_story` · `notes`  
 Legacy-Keys (`constitution` → Ausdauer usw.) werden beim Lesen normalisiert.

@@ -23,7 +23,7 @@ Shared primitives live under `src/shared/ui/adaptive/**` (#482). Automated gates
 
 ## 1. Product Thesis
 
-SagaDrive is a **tools-first TTRPG product surface**, not a marketing landing page and not a shrunk desktop dashboard.
+SagaTree is a **tools-first TTRPG product surface** — dark, tool-like, not a marketing landing page and not a shrunk desktop dashboard.
 
 Canonical adaptive thesis:
 
