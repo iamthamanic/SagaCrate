@@ -112,7 +112,7 @@ Keine neuen Hex-Hardcodes in Feature-Komponenten, wenn ein semantischer Theme-To
 
 ## Typografie
 
-SagaDrive verwendet Darker Grotesque fuer UI und Headings.
+SagaTree verwendet Darker Grotesque fuer UI und Headings.
 
 ```css
 font-family: 'Darker Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

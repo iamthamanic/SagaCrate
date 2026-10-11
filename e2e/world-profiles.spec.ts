@@ -96,7 +96,7 @@ test('world profiles are created and configured through the library', async ({ p
   await expect(page.getByText(/Normales Level-up vergibt keine Speziespunkte/i)).toBeVisible();
 
   await page.getByLabel('Name *').fill('Nebelarchipel');
-  await page.getByLabel('Beschreibung').fill('Eine modulare Testwelt für SagaDrive.');
+  await page.getByLabel('Beschreibung').fill('Eine modulare Testwelt für SagaTree.');
   await modeSelect.click();
   await page.getByRole('option', { name: 'Progressiv' }).click();
   await expect(page.getByText(/regulär erwerbbare Speziesentwicklungen/i)).toBeVisible();
@@ -109,7 +109,7 @@ test('world profiles are created and configured through the library', async ({ p
   await page.getByRole('button', { name: 'Bearbeiten' }).last().click();
   await expect(page.getByRole('heading', { name: 'Welt bearbeiten' })).toBeVisible();
   await expect(page.getByLabel('Name *')).toHaveValue('Nebelarchipel');
-  await expect(page.getByLabel('Beschreibung')).toHaveValue('Eine modulare Testwelt für SagaDrive.');
+  await expect(page.getByLabel('Beschreibung')).toHaveValue('Eine modulare Testwelt für SagaTree.');
   await expect(page.getByRole('combobox', { name: 'Speziesentwicklung: Verfügbarkeit' })).toHaveText(/Progressiv/);
 
   await page.setViewportSize({ width: 390, height: 844 });

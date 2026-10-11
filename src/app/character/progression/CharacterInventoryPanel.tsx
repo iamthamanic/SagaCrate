@@ -140,7 +140,7 @@ export function CharacterInventoryPanel({ items, onChange, strength }: Character
 
       <Dialog open={dialogOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Gegenstand hinzufügen</DialogTitle><DialogDescription>Lege nur die Werte fest, die für den Gegenstand im SagaDrive-Core relevant sind.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>Gegenstand hinzufügen</DialogTitle><DialogDescription>Lege nur die Werte fest, die für den Gegenstand im SagaTree Core relevant sind.</DialogDescription></DialogHeader>
           <div className="grid gap-4">
             <div className="space-y-2"><Label htmlFor="inventory-name">Name</Label><Input id="inventory-name" value={name} onChange={(event) => { setName(event.target.value); if (validationError) setValidationError(''); }} placeholder="z. B. Langschwert" aria-invalid={Boolean(validationError)} />{validationError && <p className="text-sm text-destructive">{validationError}</p>}</div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

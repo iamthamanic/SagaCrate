@@ -1,8 +1,8 @@
-# SagaDrive Adaptive UI & Mobile Experience Contract
+# SagaTree Adaptive UI & Mobile Experience Contract
 
 ## Status
 
-This document is a **canonical product-experience contract** for SagaDrive adaptive layout, touch interaction, safe areas, motion restraint, accessibility, and device-appropriate recomposition.
+This document is a **canonical product-experience contract** for SagaTree adaptive layout, touch interaction, safe areas, motion restraint, accessibility, and device-appropriate recomposition.
 
 It exists because words such as "responsive", "mobile-first", "premium", or "Apple-like" are not acceptance criteria. Agents must translate them into observable layout/interaction rules and measurable `AU-*` gates.
 

@@ -206,7 +206,7 @@ export function WorldItemCatalogSection({ worldProfileId }: WorldItemCatalogSect
         <div>
           <h3 className="font-semibold">Ausrüstung & Gegenstände</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Definiert Gegenstände, die zusätzlich zum SagaDrive-Core in dieser Welt verfügbar sind.
+            Definiert Gegenstände, die zusätzlich zum SagaTree Core in dieser Welt verfügbar sind.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

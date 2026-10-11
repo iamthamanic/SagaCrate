@@ -1,5 +1,5 @@
 /**
- * skillRuleHelp — Gemeinsame Tooltip-Inhalte und abgeleitete Hinweise für SagaDrive-Fertigkeiten.
+ * skillRuleHelp — Gemeinsame Tooltip-Inhalte und abgeleitete Hinweise für SagaTree-Core-Fertigkeiten.
  * Location: src/app/character/progression/skillRuleHelp.tsx
  */
 import {
