@@ -21,11 +21,11 @@ import type {
   SessionVm,
 } from '../../domains/project/contracts/project.types';
 
-/** Safe project columns for authenticated SELECT (#569 — excludes adventure_runtime). */
+/** Safe project columns for authenticated SELECT (#569/#603 — excludes adventure_runtime). */
 const PROJECT_SAFE_COLUMNS =
-  'id, public_id, code, name, description, world_id, world_profile_id, default_look_profile_id, allow_player_character_look_override, gm_user_id, status, created_at, updated_at';
+  'id, public_id, code, name, description, world_id, world_profile_id, default_look_profile_id, allow_player_character_look_override, gm_user_id, status, saga_id, saga_version_id, created_at, updated_at';
 
-/** Safe session columns for authenticated SELECT (#569 — excludes world_state, notes). */
+/** Safe session columns for authenticated SELECT (#569/#603 — excludes world_state, notes). */
 const SESSION_SAFE_COLUMNS =
   'id, public_id, project_id, session_number, name, description, status, started_at, ended_at, look_profile_id, created_at, updated_at';
 
@@ -269,7 +269,7 @@ class ProjectService {
     const { data, error } = await supabase
       .from(this.tableName)
       .insert(projectData)
-      .select()
+      .select(PROJECT_SAFE_COLUMNS)
       .single();
 
     if (error) {

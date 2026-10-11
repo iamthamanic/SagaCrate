@@ -65,6 +65,7 @@ migrations=(
   068_world_maps.sql
   069_party_location_overview.sql
   070_saga_promote_session_outcomes.sql
+  071_restore_authenticated_project_session_writes.sql
 )
 
 only="${1:-}"

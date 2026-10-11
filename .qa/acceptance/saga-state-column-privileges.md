@@ -45,6 +45,7 @@ N/A (kein UI)
 
 ## Implementation Notes
 - Migration `059` converts table-level SELECT to column allow-lists (PG ignores column REVOKE while table SELECT remains).
-- `project-service` / `session-service` use `PROJECT_SAFE_COLUMNS` / `SESSION_SAFE_COLUMNS`.
+- Migration `071` (#603) restores INSERT/UPDATE/DELETE for authenticated and re-grants SELECT allow-list including `saga_id` / `saga_version_id`, without SELECT on secrets.
+- `project-service` / `session-service` use `PROJECT_SAFE_COLUMNS` / `SESSION_SAFE_COLUMNS`; `createProject` must `.select(PROJECT_SAFE_COLUMNS)`.
 - Check script `scripts/saga-state-column-privileges-check.mjs` wired into `test-gate.mjs`.
 - Local verify: `has_column_privilege(authenticated, adventure_runtime/world_state/notes)=false`; `SELECT name` still works.
