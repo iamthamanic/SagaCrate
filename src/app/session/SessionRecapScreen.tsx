@@ -8,6 +8,7 @@ import { Button } from '../../shared/ui/button';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { pathForSagaSection, pathForSessionPhase } from '../shell';
 import { useSessionPrepareRecap } from './hooks/useSessionPrepareRecap';
+import { EpisodeSummaryPanel } from './EpisodeSummaryPanel';
 
 type SessionRecapScreenProps = {
   sagaPublicId: string;
@@ -113,17 +114,11 @@ export function SessionRecapScreen({
               </dl>
             </section>
 
-            {model.summaryText ? (
-              <section
-                className="rounded-lg border border-border bg-card/40 p-4"
-                data-session-recap-summary
-              >
-                <h2 className="text-sm font-medium">Zusammenfassung</h2>
-                <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
-                  {model.summaryText}
-                </p>
-              </section>
-            ) : null}
+            <EpisodeSummaryPanel
+              sessionId={model.summary.sessionId}
+              isGm={model.selfRole === 'gamemaster'}
+              playerSummaryText={model.summaryText}
+            />
 
             <section
               className="rounded-lg border border-border bg-card/40 p-4"

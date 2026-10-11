@@ -216,6 +216,14 @@ function checkSessionRecapPersistHandover() {
   });
 }
 
+function checkSessionRecapAiSummary() {
+  console.log('Session recap AI summary (#573): edge, rate limit, prompt redaction, hook...');
+  execFileSync(process.execPath, ['scripts/session-recap-ai-summary-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkCharacterEditorRegressions() {
   console.log('Character editor regression contract: checking persistence, avatar replay, and legacy project status...');
   execFileSync(process.execPath, ['scripts/character-editor-regression-check.mjs'], {
@@ -1891,6 +1899,7 @@ checkSagaStateColumnPrivileges();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSessionRecapPersistHandover();
+checkSessionRecapAiSummary();
 checkCharacterEditorRegressions();
 checkCharacterPresetsRegressions();
 checkInventoryV2Domain();
