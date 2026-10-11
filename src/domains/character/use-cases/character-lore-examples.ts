@@ -32,8 +32,8 @@ function getWorldFrame(context: CharacterLoreContext): string {
   }
 
   return context.setting?.trim()
-    ? `einem ${context.setting.trim()} geprägten SagaDrive-Setting`
-    : 'einer offenen SagaDrive-Welt';
+    ? `einem ${context.setting.trim()} geprägten SagaTree-Setting`
+    : 'einer offenen SagaTree-Welt';
 }
 
 export function buildCharacterBackgroundExamples(context: CharacterLoreContext): string[] {

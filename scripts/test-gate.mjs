@@ -272,6 +272,14 @@ function checkSagaPromoteToWorld() {
   });
 }
 
+function checkSagaTreeBrandPhaseA() {
+  console.log('SagaTree brand Phase A (#589): title, shell, package, smoke...');
+  execFileSync(process.execPath, ['scripts/sagatree-brand-phase-a-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaSimulationKernel() {
   console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
   execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
@@ -1978,6 +1986,7 @@ checkSagaEditorV2();
 checkWorldMapScriptonyPort();
 checkWorldMapPartyPosition();
 checkSagaPromoteToWorld();
+checkSagaTreeBrandPhaseA();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
 checkSagaBetweenSessionsBote();

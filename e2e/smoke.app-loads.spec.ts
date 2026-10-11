@@ -15,6 +15,7 @@ test('app loads SagaTree shell', async ({ page }) => {
   page.on('pageerror', (error) => errors.push(error.message));
 
   await page.goto('/');
+  await expect(page).toHaveTitle(/SagaTree/);
   await expect(page.getByRole('heading', { name: 'SagaTree' }).first()).toBeVisible();
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, '01-app-loads.png'),
