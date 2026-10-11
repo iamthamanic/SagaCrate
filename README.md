@@ -3,9 +3,9 @@
 
 # SagaTree
 
-**Die gemeinsame Werkbank für Spielleitung und Spieler am Pen-&-Paper-Tisch.**
+**Die Open-Source-Plattform für Pen-&-Paper am Tisch.**
 
-Kampagnen führen · Charaktere bauen · Sessions live halten · Welten und Inventar im Griff
+Charaktere · Sessions · Welten — für Spielleitung und Spieler
 </div>
 
 <p align="center">
@@ -29,14 +29,10 @@ Kampagnen führen · Charaktere bauen · Sessions live halten · Welten und Inve
 
 ### Elevator Pitch
 
-**SagaTree** ist die TTRPG-Werkbank, die Spielleitung und Spieler am selben Tisch hält — statt PDF, Discord und Tabellen gegeneinander.
+**SagaTree** verbindet Spielleitung und Spieler in einer App: Charaktere bauen, Sessions live führen, Kampagne und Welt behalten.
 
-| | Job |
-| --- | --- |
-| **Für Spielleitung** | Kampagne und Welt im Griff behalten, Session vorbereiten und live führen, ohne zwischen Tools zu verlieren, was am Tisch passiert. |
-| **Für Spieler** | Einen echten Charakter bauen und mitnehmen (SagaTree Core), der Gruppe beitreten und Inventar, Look und Fortschritt dort haben, wo gespielt wird. |
-
-Dunkle, werkzeugartige Oberfläche — gebaut für den Tisch, nicht als generisches Gaming-Dashboard.
+- **Für Spielleitung** — Session vorbereiten und am Tisch steuern; Welten, Bibliothek und Live-Runtime an einem Ort.
+- **Für Spieler** — Charakter mit SagaTree Core erstellen, der Gruppe beitreten, Inventar und Look dort haben, wo gespielt wird.
 
 ### Produkt & Stack
 
