@@ -1,6 +1,6 @@
 # ECC Check — saga-simulation-core (#576)
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: 01d438527a511bd767eb30473014771d31877303
 - Verdict: READY
 
 ## Phase A test-gate
