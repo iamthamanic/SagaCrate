@@ -9,12 +9,13 @@ test.beforeAll(() => {
   fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
 });
 
-test('app loads SagaDrive shell', async ({ page }) => {
+test('app loads SagaTree shell', async ({ page }) => {
+
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'SagaDrive' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'SagaTree' }).first()).toBeVisible();
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, '01-app-loads.png'),
     fullPage: true,

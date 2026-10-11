@@ -22,7 +22,8 @@ import { toast } from 'sonner';
 import { Badge } from '../../shared/ui/badge';
 import { isCompactBand, useAdaptiveBand } from '../../shared/ui/adaptive';
 import { ImageWithFallback } from '../../shared/ui/figma/ImageWithFallback';
-import logoImage from 'figma:asset/5cdcbab5ea0860d6cbb920fecd888377cdc015a0.png';
+import logoImage from '../../assets/sagatree-logo.png';
+
 
 /** Minimal auth shape for chrome identity — avoid app→@supabase import (#94). */
 type AuthDisplayUser = {
@@ -154,13 +155,14 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                 <div className={`flex-shrink-0 ${sidebarCollapsed ? 'w-10 h-10' : 'w-12 h-12'}`}>
                   <ImageWithFallback
                     src={logoImage}
-                    alt="SagaDrive Logo"
+                    alt="SagaTree Logo"
                     className="w-full h-full object-contain"
                   />
                 </div>
                 {!sidebarCollapsed && (
                   <div className="min-w-0">
-                    <h1 className="text-sidebar-foreground truncate">SagaDrive</h1>
+                    <h1 className="text-sidebar-foreground truncate">SagaTree</h1>
+
                   </div>
                 )}
               </div>
@@ -266,11 +268,12 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                 <div className="w-8 h-8 flex-shrink-0">
                   <ImageWithFallback
                     src={logoImage}
-                    alt="SagaDrive Logo"
+                    alt="SagaTree Logo"
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h1 className="text-base">SagaDrive</h1>
+                <h1 className="text-base">SagaTree</h1>
+
               </div>
               <div className="flex items-center gap-2">
                 {displayName ? (

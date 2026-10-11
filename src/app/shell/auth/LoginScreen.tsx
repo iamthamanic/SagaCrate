@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../shared/ui/tab
 import { Alert, AlertDescription } from '../../../shared/ui/alert';
 import { Loader2, AlertCircle, Moon, Sun } from 'lucide-react';
 import { toast } from 'sonner';
-import { SagaDriveLogo } from '../SagaDriveLogo';
+import { SagaTreeLogo } from '../SagaTreeLogo';
+
 
 export function LoginScreen() {
   const { signIn, signUp } = useAuth();
@@ -83,10 +84,11 @@ export function LoginScreen() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center mb-2">
-            <SagaDriveLogo className="h-32 w-32" />
+            <SagaTreeLogo className="h-32 w-32" />
           </div>
           <div>
-            <h1 className="text-3xl">SagaDrive</h1>
+            <h1 className="text-3xl">SagaTree</h1>
+
             <p className="text-muted-foreground mt-2">
               Erstelle epische Rollenspiel-Abenteuer
             </p>
