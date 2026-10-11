@@ -1,5 +1,5 @@
 # Composition Gate — saga-promote-to-world
-- HEAD_SHA: PLACEHOLDER
+- HEAD_SHA: ac5b52d943e469ef31711015638a8de3cc7c8b85
 - BASE_SHA: 2d1b5871191b9e34488c31b2d0d0419f6c7b2d8b
 - Date: 2026-10-11
 - Verdict: CLEAR
