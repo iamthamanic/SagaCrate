@@ -1,5 +1,5 @@
 # ECC Check — saga-simulation-live-ops (#577)
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: c412b7d75f96c109ab9b7fe45a061360ecf48580
 - Verdict: READY
 ## Phase A test-gate
 PASS
