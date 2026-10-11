@@ -1,5 +1,5 @@
 <div align="center">
-<img src="docs/brand/sagatree-logo.png" width="148" alt="SagaTree Logo" />
+<img src="docs/brand/logo.png" width="148" alt="SagaTree Logo" />
 
 # SagaTree
 
@@ -66,7 +66,7 @@ SagaTree folgt einer klaren Markenidentität aus dem Logo: **Teal für Auswahl &
 | **Dark** | `#06B6D4` | `#F59E0B` | `#0F172A` |
 | **Light** | `#0891B2` | `#E8A641` | `#FFFFFF` |
 
-<p align="center"><img src="docs/brand/sagatree-mark.svg" width="56" alt="SagaTree Mark" /></p>
+<p align="center"><img src="docs/brand/mark.png" width="56" alt="SagaTree Mark" /></p>
 
 **Gestaltungsprinzipien**
 
@@ -296,6 +296,6 @@ SagaTree/                 # Repo (historisch auch sagadrive/ lokal)
 - Original Design-Basis: [Figma](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive)
 
 <p align="center">
-  <img src="docs/brand/sagatree-mark.svg" width="40" alt="SagaTree" /><br />
+  <img src="docs/brand/mark.png" width="40" alt="SagaTree" /><br />
   <sub>SagaTree · Teal <code>#0891B2</code> · Gold <code>#E8A641</code></sub>
 </p>
