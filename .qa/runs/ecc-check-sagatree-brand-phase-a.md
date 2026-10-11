@@ -4,7 +4,7 @@ READY
 ## Phase A — test-gate
 PASS
 ## Phase B2 — composition-gate
-(see composition-gate file)
+SKIPPED (display-only single-hop)
 ## Phase C — review-ticket
 ACCEPT
 ## Secure-by-Default
