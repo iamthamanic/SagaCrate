@@ -4,6 +4,7 @@
  */
 export { AuthGate } from './auth/AuthGate';
 export { Layout } from './Layout';
+export { SagaTreeLogo } from './SagaTreeLogo';
 export { ViewLoadingFallback } from './ViewLoadingFallback';
 export {
   knownViewIds,
