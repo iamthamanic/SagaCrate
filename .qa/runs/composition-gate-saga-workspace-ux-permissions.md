@@ -1,6 +1,7 @@
 # Composition Gate — saga-workspace-ux-permissions
 
-- HEAD_SHA: 1730767904802fb85447f4dd9353278f70322847
+- HEAD_SHA: 6c6de62e7dfc0726130eaf669bd6711999e82135
+- BASE_SHA: 786eb085c17907cb7337d965c0e359ef9fd3ee22
 - Date: 2026-10-12
 - Verdict: CLEAR
 
@@ -18,9 +19,9 @@ Secondary (Library nav): Dashboard/Alle Sagas → `pathForSagaList` → `/librar
 
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| 1 event, N actors | One create → one lobby nav; code shared, not N emails | No fan-out; invite share is explicit user action on Lobby | pass |
-| invalid / missing | Fail closed; no live redirect | `resolveCanonicalLobbyEntry` unauthorized; lobby recoverable error | pass |
-| 2 consumers / crash | No duplicate create side-effect | Single load path; interstitial/timeout removed (no double destination) | pass |
+| N-actors | One create → one lobby nav; code shared, not N emails | No fan-out; invite share is explicit user action on Lobby | pass |
+| Invalid/missing | Fail closed; no live redirect | `resolveCanonicalLobbyEntry` unauthorized; lobby recoverable error | pass |
+| Two consumers / crash | No duplicate create side-effect | Single load path; interstitial/timeout removed (no double destination) | pass |
 
 ## Flags
 
@@ -28,7 +29,7 @@ Secondary (Library nav): Dashboard/Alle Sagas → `pathForSagaList` → `/librar
 |-----|----------|------|----------------------------|-----|
 | — | — | — | — | n/a |
 
-Prior fail modes cleared in this WORKTREE: `waiting` status mapping; direct public_id fallback; `code` in SESSION_SAFE_COLUMNS; 2s interstitial removed.
+Prior fail modes cleared at feature HEAD: `waiting` status mapping; direct public_id fallback; `code` in SESSION_SAFE_COLUMNS; 2s interstitial removed. Follow-up commits after `6c6de62e` are `.qa/` proof pins only.
 
 ## Skip reason
 
