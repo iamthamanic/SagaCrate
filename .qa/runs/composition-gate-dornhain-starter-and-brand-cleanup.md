@@ -1,5 +1,5 @@
 # Composition Gate — dornhain-starter-and-brand-cleanup
-- HEAD_SHA: 3b57aa75bf2153d438e15d07aa6fb12dc584bf0c
+- HEAD_SHA: e702269b5d0b9724a94273d02978af063be86313
 - BASE_SHA: 00d470c3a85f6c27aef2f6cebef44ee1626bdf44
 - Date: 2026-10-12
 - Verdict: CLEAR
