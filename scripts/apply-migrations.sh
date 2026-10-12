@@ -98,6 +98,7 @@ migrations=(
   074_seed_local_player.sql
   075_saga_permission_grants.sql
   076_dornhain_full_catalog_seed.sql
+  077_dornhain_default_all_accounts.sql
 )
 
 only="${1:-}"
