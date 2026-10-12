@@ -30,6 +30,7 @@ import {
   raceWithTimeoutOrSymbol,
 } from './networkTimeout';
 import type { AuthTokenResponsePassword, User } from '@supabase/supabase-js';
+import { projectService } from '../infrastructure/project/project-service';
 
 interface AuthContextType {
   user: User | null;
@@ -37,6 +38,13 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+}
+
+/** Soft-provision Dornhain defaults after GoTrue auth (idempotent RPC + DB trigger). */
+function provisionDornhainDefaultForSession(): void {
+  void projectService.ensureNativeStarterProject().catch((error: unknown) => {
+    console.warn('[auth] dornhain default provision:', error);
+  });
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -309,6 +317,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       applyUser(session.user, generation);
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+        provisionDornhainDefaultForSession();
+      }
     });
 
     return () => {
@@ -349,6 +360,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
           expectingGoTrueLocalAdminRef.current = null;
           applyUser(data.user, generation);
+          provisionDornhainDefaultForSession();
           return;
         }
       } catch (error) {
@@ -390,15 +402,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     if (error) throw error;
     if (!isLiveGeneration(generation)) return;
-    if (data.user) applyUser(data.user, generation);
+    if (data.user) {
+      applyUser(data.user, generation);
+      provisionDornhainDefaultForSession();
+    }
   };
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
     if (error) throw error;
+    // DB trigger provisions on auth.users INSERT; client ensure covers session-present signups.
+    if (data.session?.user) {
+      provisionDornhainDefaultForSession();
+    }
   };
 
   const signOut = async () => {
