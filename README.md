@@ -3,7 +3,7 @@
 
 # SagaTree
 
-**Die Open-Source-Plattform für Pen-&-Paper am Tisch.**
+**Die Open-Source-Plattform für immersive Pen-&-Paper Abenteuer .**
 
 Charaktere · Sessions · Welten — für Spielleitung und Spieler
 </div>
