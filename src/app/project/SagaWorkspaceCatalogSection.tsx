@@ -13,7 +13,6 @@ import {
   type SagaAssetKind,
   type SagaPermissionKey,
 } from '../../domains/saga/permissions';
-import { projectService } from '../../infrastructure/project/project-service';
 import {
   sagaPermissionService,
   type SagaAssetBindingVm,
@@ -94,10 +93,9 @@ export function SagaWorkspaceCatalogSection({
     let cancelled = false;
     void (async () => {
       try {
-        const project = await projectService.getProjectByPublicId(sagaPublicId);
         const my = await sagaPermissionService.getMyPermissions(sagaPublicId);
         if (cancelled) return;
-        setProjectId(project.id);
+        setProjectId(my.projectId);
         setPerms(my);
       } catch {
         if (!cancelled) {

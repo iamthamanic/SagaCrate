@@ -12,7 +12,6 @@ import {
   hasSagaPermission,
   type SagaBundleId,
 } from '../../domains/saga/permissions';
-import { projectService } from '../../infrastructure/project/project-service';
 import {
   sagaPermissionService,
   type SagaMemberPermissionStateVm,
@@ -54,11 +53,9 @@ export function SagaPermissionSettings({ sagaPublicId }: SagaPermissionSettingsP
     setError(null);
     void (async () => {
       try {
-        const project = await projectService.getProjectByPublicId(sagaPublicId);
-        if (cancelled) return;
-        setProjectId(project.id);
         const perms = await sagaPermissionService.getMyPermissions(sagaPublicId);
         if (cancelled) return;
+        setProjectId(perms.projectId);
         setMine(perms);
         if (
           perms.isGm
