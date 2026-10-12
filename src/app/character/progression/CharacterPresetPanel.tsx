@@ -67,7 +67,7 @@ export function CharacterPresetPanel({
 
   const assertCore = (): boolean => {
     if (ruleset !== 'sagadrive-core') {
-      toast.error('Presets sind derzeit nur für SagaDrive Core verfügbar.');
+      toast.error('Presets sind derzeit nur für SagaTree Core verfügbar.');
       return false;
     }
     return true;

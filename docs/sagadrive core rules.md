@@ -1,14 +1,15 @@
-# SagaDrive Core Rules
+# SagaTree Core Rules
 
 > **Dokumentstatus:** Verbindlicher Core-Regelstand in Validierungsphase  
 > **Stand:** 2. September 2026  
+> **Produktname:** SagaTree Core (interne Ruleset-ID: `sagadrive-core`)  
 > **Zuletzt abgeschlossener Entscheidungsblock:** Skill Progression v2 Core (Issue #89) – Attribute-Bonuspool, drei Skillquellen, gestufter anwendbarer EB  
 > **Aktueller Arbeitsblock:** 19 – Mathematische Prüfung und Spieltests  
 > **Ziel:** Universelles, analog vollständig spielbares Kernregelsystem mit optionalen digitalen Erweiterungen
 
 ## Verwendung dieses Dokuments
 
-Dieses Dokument ist die zentrale Arbeitsgrundlage für die SagaDrive Core Rules.
+Dieses Dokument ist die zentrale Arbeitsgrundlage für die SagaTree Core Rules.
 
 - Regeln in den Abschnitten 1 bis 18 gelten als **verbindlicher aktueller Core-Regelstand**.
 - Zahlenwerte in diesen Abschnitten gelten als **verbindliche Playtestwerte**. Sie werden nur geändert, wenn Validierung oder Spieltests einen konkreten Änderungsbedarf zeigen.

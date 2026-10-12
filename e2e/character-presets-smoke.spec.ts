@@ -3,7 +3,7 @@
  * Evidence: .qa/evidence/character-presets/
  *
  * Verify-UI gap (documented blocker for 03/05):
- * Full save → release → from-preset needs a green SagaDrive Core sheet
+ * Full save → release → from-preset needs a green SagaTree Core sheet
  * (species traits, background 2-of-4, free skill points, attribute budget).
  * Existing character-editor e2e does not complete a valid Speichern either.
  * Screenshots 03-preset-version-pick / 05-version-list-after-save remain

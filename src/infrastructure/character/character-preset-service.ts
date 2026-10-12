@@ -60,7 +60,7 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
     throw new Error('Ungültiger Preset-Snapshot (Schema).');
   }
   if (snapshot.ruleset_key !== 'sagadrive-core') {
-    throw new Error('Presets sind derzeit nur für SagaDrive Core verfügbar.');
+    throw new Error('Presets sind derzeit nur für SagaTree Core verfügbar.');
   }
   if (!snapshot.name.trim()) {
     throw new Error('Preset-Snapshot braucht einen Charakternamen.');
@@ -248,7 +248,7 @@ class CharacterPresetService {
   async createPresetFromCharacter(input: CreateCharacterPresetInput): Promise<CharacterPresetVm> {
     const userId = await getAuthenticatedUserId();
     if (input.rulesetKey !== 'sagadrive-core') {
-      throw new Error('Presets sind derzeit nur für SagaDrive Core verfügbar.');
+      throw new Error('Presets sind derzeit nur für SagaTree Core verfügbar.');
     }
     const snapshot = withSafePortraitUrl(input.snapshot);
     assertValidSnapshot(snapshot);

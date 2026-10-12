@@ -288,6 +288,14 @@ function checkSagaTreeBrandPhaseA() {
   });
 }
 
+function checkSagaTreeBrandPhaseB() {
+  console.log('SagaTree brand Phase B: SagaTree Core visible ruleset label...');
+  execFileSync(process.execPath, ['scripts/sagatree-brand-phase-b-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaSimulationKernel() {
   console.log('Saga simulation kernel (#576): advanceTime, v1→v2, determinism...');
   execFileSync(process.execPath, ['scripts/saga-simulation-kernel-check.mjs'], {
@@ -1996,6 +2004,7 @@ checkWorldMapScriptonyPort();
 checkWorldMapPartyPosition();
 checkSagaPromoteToWorld();
 checkSagaTreeBrandPhaseA();
+checkSagaTreeBrandPhaseB();
 checkSagaSimulationKernel();
 checkSagaSimulationLiveOps();
 checkSagaBetweenSessionsBote();

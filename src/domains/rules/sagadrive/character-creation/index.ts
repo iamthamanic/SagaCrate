@@ -116,7 +116,7 @@ export const SAGA_DRIVE_EXPERIENCE_BONUS_LEVEL_1 = 1;
 export const SAGA_DRIVE_SPECIES_TRAIT_BUDGET = 3;
 
 export const characterRulesetOptions: readonly CharacterCreationOption[] = [
-  { value: 'sagadrive-core', label: 'SagaDrive Core' },
+  { value: 'sagadrive-core', label: 'SagaTree Core' },
   { value: 'dnd-5.5e', label: 'Dungeons & Dragons 5.5e' },
 ];
 

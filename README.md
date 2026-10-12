@@ -3,9 +3,9 @@
 
 # SagaTree
 
-**Webbasierte TTRPG-Plattform für Spielleitung und Spieler**
+**Die Open-Source-Plattform für Pen-&-Paper am Tisch.**
 
-Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inventar verwalten
+Charaktere · Sessions · Welten — für Spielleitung und Spieler
 </div>
 
 <p align="center">
@@ -23,20 +23,40 @@ Kampagnen planen · Charaktere bauen · Sessions live führen · Welten und Inve
   <a href="src/ARCHITECTURE.md">Architektur</a>
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/carousel.gif" alt="SagaTree Screens: Login, Dashboard, Bibliothek, Charakter-Editor, Marktplatz, Session" width="720" />
+</p>
+
+<p align="center">
+  <a href="docs/screenshots/01-login.png">Login</a> ·
+  <a href="docs/screenshots/02-dashboard.png">Dashboard</a> ·
+  <a href="docs/screenshots/03-bibliothek.png">Bibliothek</a> ·
+  <a href="docs/screenshots/04-character-editor.png">Charakter-Editor</a> ·
+  <a href="docs/screenshots/05-marktplatz.png">Marktplatz</a> ·
+  <a href="docs/screenshots/06-session-join.png">Session</a>
+</p>
+
 ---
 
 ## Überblick
 
-**SagaTree** ist eine dunkle, werkzeugartige TTRPG-Oberfläche — kein generisches Gaming-Dashboard. Das Repo enthält das **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge Functions) und einer klaren Schichtenarchitektur:
+### Elevator Pitch
 
-`domains` → `infrastructure` → `app` · UI-Primitives in `shared/ui`
+**SagaTree** verbindet Spielleitung und Spieler in einer App: Charaktere bauen, Sessions live führen, Kampagne und Welt behalten.
 
-Produktmarke ist **SagaTree**; das Regelwerk im Editor heißt weiterhin **SagaDrive Core**.
+- **Für Spielleitung** — Session vorbereiten und am Tisch steuern; Welten, Bibliothek und Live-Runtime an einem Ort.
+- **Für Spieler** — Charakter mit SagaTree Core erstellen, der Gruppe beitreten, Inventar und Look dort haben, wo gespielt wird.
+
+### Produkt & Stack
+
+Marke und Regelwerk: **SagaTree** / **SagaTree Core** (interne Ruleset-ID `sagadrive-core` bis zur Schema-Phase).
+
+Dieses Repo: **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge) und Schichten `domains` → `infrastructure` → `app` · UI in `shared/ui`.
 
 | Rolle | Nutzen |
 | --- | --- |
 | **Spielleitung** | Projekte, Sessions, Bibliothek, Weltprofile, Live-Steuerung |
-| **Spieler** | Charaktereditor (SagaDrive Core), Inventar, Session-Join, Look / LiveAct |
+| **Spieler** | Charaktereditor (SagaTree Core), Inventar, Session-Join, Look / LiveAct |
 | **Creator** | Items, NPCs, Avatar-Assets, optional Meshy 2D/3D (BYOK) |
 
 ---
@@ -46,7 +66,7 @@ Produktmarke ist **SagaTree**; das Regelwerk im Editor heißt weiterhin **SagaDr
 | Bereich | Was drin ist |
 | --- | --- |
 | **Projekte & Mitgliedschaft** | Sagas anlegen, Join-by-Code, RLS-gesicherte Rollen (GM / Spieler) |
-| **SagaDrive Core Editor** | Spezies · Parameter · Look · Inventar · Einstellungen / Presets |
+| **SagaTree Core Editor** | Spezies · Parameter · Look · Inventar · Einstellungen / Presets |
 | **Live Sessions** | Lobby, GM- und Player-Panel, Realtime Session-Runtime |
 | **Bibliothek & Welten** | Abenteuer, World Profiles, Maps |
 | **Inventar & Items** | Inventory v2, Item-Workbench, Thumbnails & optional GLB |
@@ -130,7 +150,7 @@ Modularer Monolith mit harten Importgrenzen (CI-enforced):
 ```text
 src/
 ├── app/              # Vertikale Slices / User Journeys
-├── domains/          # Reine Domain-Verträge & SagaDrive-Core-Regeln
+├── domains/          # Reine Domain-Verträge & SagaTree-Core-Regeln
 ├── infrastructure/   # Supabase-, Storage-, Three-/LiveAct-Adapter
 ├── shared/ui/        # Fachlich neutrale UI-Primitives
 ├── lib/              # Auth, Supabase-Client, Querschnitt
@@ -147,13 +167,13 @@ src/
 
 ---
 
-## SagaDrive Core Character Editor
+## SagaTree Core Character Editor
 
 „Charakter erstellen“ öffnet einen Zwei-Karten-Chooser (eigener Charakter vs. Preset). Der Editor hat fünf Haupttabs:
 
 **Spezies** · **Parameter** · **Look** · **Inventar** · **Einstellungen** (`Statistik` / `Preset`)
 
-SagaDrive Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
+SagaTree Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
 
 Persistenz (Auszug): `attributes` · `skills` · `sagadrive_profile` · `background_story` · `notes`  
 Legacy-Keys (`constitution` → Ausdauer usw.) werden beim Lesen normalisiert.

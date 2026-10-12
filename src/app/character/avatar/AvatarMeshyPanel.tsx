@@ -591,7 +591,7 @@ export function AvatarMeshyPanel({ characterId, onSuccess, onJobChange }: Avatar
         data-avatar-gen-summary
       >
         <p className="text-[11px] font-medium" data-avatar-gen-summary-title>
-          {dirty ? `Preset: ${presetDisplayLabel}` : `${presetDisplayLabel} für SagaDrive`}
+          {dirty ? `Preset: ${presetDisplayLabel}` : `${presetDisplayLabel} für SagaTree`}
         </p>
         <ul className="list-inside list-disc text-[11px] text-muted-foreground">
           {summaryLines.map((line) => (

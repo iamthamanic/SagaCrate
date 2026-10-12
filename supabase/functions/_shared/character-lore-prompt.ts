@@ -67,10 +67,10 @@ export const CHARACTER_LORE_PROMPT_VERSION = 'character-background-v1';
 
 const RULESET_GUIDANCE: Record<CharacterLoreRuleset, string> = {
   'sagadrive-core': [
-    'SagaDrive Core is setting-flexible.',
+    'SagaTree Core is setting-flexible.',
     'Archetype describes a broad dramatic role and is not a fixed D&D-style class.',
     'Essence profile describes how the character relates to power, action or transformation.',
-    'Treat the selected setting as the genre frame and do not silently convert SagaDrive concepts into D&D concepts.',
+    'Treat the selected setting as the genre frame and do not silently convert SagaTree Core concepts into D&D concepts.',
   ].join(' '),
   'dnd-5.5e': [
     'Use the selected Dungeons & Dragons 5.5e class, species and background as character-building facts.',
@@ -86,7 +86,7 @@ export function buildCharacterLorePrompt(
   currentBackgroundStory?: string,
 ): CharacterLorePrompt {
   const system = [
-    'You are the character-lore writer for SagaDrive.',
+    'You are the character-lore writer for SagaTree.',
     'Write a coherent German background story of roughly 300 to 500 words.',
     'Respect every supplied character fact, but translate numeric stats into narrative tendencies instead of listing raw scores unless a number is narratively essential.',
     'Use selected personality traits, ideals, bonds and flaws as causes of decisions, not as a bullet list.',
