@@ -16,4 +16,7 @@ Seed Dornhain native catalog bindings (PCs/NPCs/items/quests/maps/locations/lore
 
 ## Composition Gate
 
-- See `.qa/runs/composition-gate-saga-workspace-phase-3-dornhain-seed.md`
+- HEAD_SHA: b6b508a8916cc37cb75ba9d4ad8fb5f171d10d44
+- BASE_SHA: cd83bf64ee5c714869bad1b60bf32f973fd7e3f2
+- Verdict: CLEAR
+- Proof: `.qa/runs/composition-gate-saga-workspace-phase-3-dornhain-seed.md`
