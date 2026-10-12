@@ -150,9 +150,11 @@ test.beforeAll(() => {
   fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
 });
 
-test('GM Teilnehmen keeps adventure id + join intent on session-join', async ({ page }) => {
+test('session-join join intent keeps saga + project query scoped', async ({ page }) => {
   test.setTimeout(90_000);
 
+  // Library saga cards no longer expose per-card „Teilnehmen“ — join intent is
+  // deep-linked via session-join query (Library → Saga öffnen → Sessions, or share URL).
   await stubLibraryProjects(page);
   await page.setViewportSize({ width: 1440, height: 900 });
   await ensureLoggedIn(page);
@@ -161,8 +163,12 @@ test('GM Teilnehmen keeps adventure id + join intent on session-join', async ({ 
   await expect(page.getByRole('heading', { name: 'Meine Bibliothek' })).toBeVisible();
   await page.getByRole('tab', { name: 'Sagas' }).first().click();
   await expect(page.getByText('Teilnehmen Regression Saga').first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /Saga öffnen/i }).first()).toBeVisible();
 
-  await page.getByRole('button', { name: /Teilnehmen/i }).first().click();
+  const joinPath =
+    `/session-join?saga=${encodeURIComponent(MOCK_PROJECT.public_id)}` +
+    `&project_id=${encodeURIComponent(MOCK_PROJECT.id)}&intent=join`;
+  await page.goto(joinPath);
 
   await expect(page).toHaveURL(/\/session-join\?/);
   const url = new URL(page.url());

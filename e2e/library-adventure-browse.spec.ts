@@ -159,6 +159,6 @@ test('library adventures empty state offers join CTA', async ({ page }) => {
 
   await page.getByRole('tab', { name: 'Sagas' }).first().click();
   await expect(page.getByText('Noch keine Sagas gestartet').first()).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Saga erstellen' }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Neue Saga' }).first()).toBeVisible();
   await page.screenshot({ path: path.join(EVIDENCE_DIR, '05-adventures-empty.png'), fullPage: true });
 });
