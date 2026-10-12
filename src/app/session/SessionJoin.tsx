@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../shared/ui/select';
-import { ArrowLeft, Users, Gamepad2, Copy, Check, Loader2, History } from 'lucide-react';
+import { ArrowLeft, Users, Gamepad2, Loader2, History } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui/tabs';
 import { AdaptiveJourneyColumn, AdaptivePage } from '../../shared/ui/adaptive';
 import { useProjectSummaries } from '../project';
@@ -27,7 +27,6 @@ import { useCharacterSummaries } from '../character';
 import { useSessions } from './hooks/useSessions';
 import { SessionPastSessionsPanel } from './SessionPastSessionsPanel';
 import { nextEpisodeSessionName } from '../../domains/session/contracts/session-episode-name';
-import { SessionInviteShareButton } from './SessionInviteShareButton';
 import {
   assertOwnedCharacterId,
   resolveCharacterAssignmentPick,
@@ -81,14 +80,8 @@ export function SessionJoin({
   const [activeTab, setActiveTab] = useState<SessionJoinTab>(
     initialSearch.intentJoin ? 'join' : 'create',
   );
-  const [copied, setCopied] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
-  const [createdSession, setCreatedSession] = useState<{
-    id: string;
-    code: string;
-    name: string;
-  } | null>(null);
   const [selectedCharacterId, setSelectedCharacterId] = useState<string>('');
   const [sessionName, setSessionName] = useState('');
   const [sessionNameDirty, setSessionNameDirty] = useState(false);
@@ -201,13 +194,9 @@ export function SessionJoin({
       });
 
       if (session) {
-        setCreatedSession({ id: session.id, code: session.code, name: session.name });
-        toast.success('Session erstellt!');
-
-        // Auto-navigate after 2 seconds
-        setTimeout(() => {
-          onJoinAsGM(session.id, resolveSurfaceMeta(session));
-        }, 2000);
+        toast.success('Session erstellt — Lobby öffnet…');
+        // Direct lobby entry: join code lives on the lobby surface (no interstitial).
+        onJoinAsGM(session.id, resolveSurfaceMeta(session));
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Fehler beim Erstellen der Session';
@@ -266,15 +255,6 @@ export function SessionJoin({
     }
   };
 
-  const copyToClipboard = () => {
-    if (createdSession) {
-      navigator.clipboard.writeText(createdSession.code);
-      setCopied(true);
-      toast.success('Code kopiert!');
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   return (
     <AdaptivePage data-au-surface="session-join" className="h-full w-full">
       <AdaptiveJourneyColumn className="space-y-4 md:space-y-6">
@@ -319,15 +299,13 @@ export function SessionJoin({
             </TabsTrigger>
           </TabsList>
 
-          {/* Create Session */}
+          {/* Create Session — success lands in Lobby (code shown there). */}
           <TabsContent value="create" className="space-y-4">
-            {!createdSession ? (
-              <>
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base md:text-lg">Neue Session erstellen</CardTitle>
                   <CardDescription className="text-xs md:text-sm">
-                    Du wirst als Gamemaster starten. Der Session-Name wird automatisch vergeben.
+                    Nach dem Erstellen öffnet sich die Lobby. Dort teilst du den Session-Code.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -410,51 +388,6 @@ export function SessionJoin({
                   </Button>
                 </CardContent>
               </Card>
-              </>
-            ) : (
-              <Card className="border-primary">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base md:text-lg">Session erstellt!</CardTitle>
-                  <CardDescription className="text-xs md:text-sm">
-                    Teile diesen Code mit deinen Spielern
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-muted rounded-lg p-4 text-center">
-                      <p className="text-2xl md:text-3xl font-mono tracking-wider">
-                        {createdSession.code}
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="min-h-11 min-w-11"
-                      onClick={copyToClipboard}
-                    >
-                      {copied ? (
-                        <Check className="w-4 h-4 text-green-600" />
-                      ) : (
-                        <Copy className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </div>
-
-                  <SessionInviteShareButton sessionId={createdSession.id} />
-
-                  <div className="bg-muted rounded-lg p-3 md:p-4">
-                    <p className="text-xs md:text-sm text-muted-foreground mb-2">
-                      Session Details:
-                    </p>
-                    <p className="text-sm md:text-base font-medium">{createdSession.name}</p>
-                  </div>
-
-                  <p className="text-xs md:text-sm text-muted-foreground">
-                    Die Session wird in 2 Sekunden gestartet...
-                  </p>
-                </CardContent>
-              </Card>
-            )}
           </TabsContent>
 
           {/* Join Session */}

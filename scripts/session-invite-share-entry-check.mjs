@@ -86,10 +86,11 @@ mustInclude(
   'invite share button',
 );
 
+// Join-code + invite copy live on Lobby after create (no SessionJoin interstitial).
 mustInclude(
-  'src/app/session/SessionJoin.tsx',
-  ['SessionInviteShareButton'],
-  'SessionJoin share wiring',
+  'src/app/session/SessionLobbyScreen.tsx',
+  ['SessionInviteShareButton', 'data-session-lobby-join-code'],
+  'SessionLobby share wiring',
 );
 
 mustInclude(

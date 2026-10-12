@@ -63,7 +63,23 @@ migrations=(
   036_character_avatar_artifacts.sql
   037_character_avatar_analysis_result.sql
   038_character_avatar_body_profile.sql
+  039_public_resource_ids_and_session_numbers.sql
+  040_session_join_code_security.sql
+  041_session_runtime_state.sql
+  042_session_shared_rolls.sql
+  043_session_shared_scene_presentation.sql
+  044_session_combat_encounter.sql
   045_character_avatar_meshy_pending_glb.sql
+  046_look_profiles.sql
+  047_session_program_presentation.sql
+  048_session_knowledge_reveals.sql
+  049_session_death_lifecycle.sql
+  050_session_adventure_runtime.sql
+  051_session_director_runtime.sql
+  052_projects_look_settings.sql
+  053_sessions_look_override.sql
+  054_characters_personal_look_override.sql
+  055_session_invites.sql
   059_saga_state_column_privileges.sql
   060_saga_overview.sql
   061_session_recaps_and_handover.sql
@@ -79,6 +95,7 @@ migrations=(
   071_restore_authenticated_project_session_writes.sql
   072_dornhain_seed_and_character_rls.sql
   073_sagatree_schema_rename_compat.sql
+  074_seed_local_player.sql
 )
 
 only="${1:-}"

@@ -39,6 +39,7 @@ export interface ProjectMemberDto {
 
 export type ProjectSessionStatus =
   | 'scheduled'
+  | 'waiting'
   | 'active'
   | 'paused'
   | 'completed'

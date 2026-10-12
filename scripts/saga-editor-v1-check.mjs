@@ -71,9 +71,11 @@ requireMatch(domain, /validateSagaDefinitionDraft/i, 'validation');
 requireMatch(domain, /pregens/i, 'pregens field');
 requireMatch(domain, /blurb/i, 'blurb field');
 
+// Library card no longer embeds story-edit CTA (#workspace UX); create stays.
 const library = read('src/app/library/Library.tsx');
-requireMatch(library, /data-library-saga-edit-story/i, 'library nav entry');
-requireMatch(library, /pathForSagaDefinitionEdit/i, 'library path');
+requireMatch(library, /data-library-saga-create/i, 'library saga create CTA');
+requireMatch(library, /pathForSagaNew/i, 'library saga new path');
+// Story definition editor remains reachable via routed path helper (routes check above).
 
 const apply = read('scripts/apply-migrations.sh');
 if (!apply.includes('064_saga_editor_v1.sql')) fail('apply-migrations must list 064');

@@ -27,7 +27,7 @@ const PROJECT_SAFE_COLUMNS =
 
 /** Safe session columns for authenticated SELECT (#569/#603 — excludes world_state, notes). */
 const SESSION_SAFE_COLUMNS =
-  'id, public_id, project_id, session_number, name, description, status, started_at, ended_at, look_profile_id, created_at, updated_at';
+  'id, public_id, project_id, session_number, name, description, status, code, started_at, ended_at, look_profile_id, created_at, updated_at';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -114,6 +114,7 @@ function isProjectSummaryRow(
 function isSessionStatus(value: unknown): value is SessionDto['status'] {
   return (
     value === 'scheduled'
+    || value === 'waiting'
     || value === 'active'
     || value === 'paused'
     || value === 'completed'
@@ -692,11 +693,38 @@ class ProjectService {
     sessionPublicId: string,
   ): Promise<{ project: ProjectVm; session: SessionVm }> {
     const project = await this.getProjectByPublicId(sagaPublicId);
-    const session = project.sessions.find(
-      (row) => row.publicId === sessionPublicId.trim().toUpperCase(),
-    );
+    const wanted = sessionPublicId.trim().toUpperCase();
+    let session = project.sessions.find((row) => row.publicId === wanted);
     if (!session) {
-      throw new Error('Session not found in saga');
+      // Direct lookup — avoids dropping rows when status filters/mapping lag behind create.
+      const { data: row, error } = await supabase
+        .from(this.sessionsTableName)
+        .select(SESSION_SAFE_COLUMNS)
+        .eq('project_id', project.id)
+        .eq('public_id', wanted)
+        .maybeSingle();
+      if (error || !row || !isSessionDto(row)) {
+        throw new Error('Session not found in saga');
+      }
+      const normalized = normalizeSessionDto({
+        ...row,
+        notes: row.notes ?? null,
+      });
+      session = {
+        id: normalized.id,
+        publicId: typeof normalized.public_id === 'string' ? normalized.public_id : '',
+        projectId: normalized.project_id,
+        sessionNumber: normalized.session_number,
+        name: normalized.name,
+        notes: normalized.notes,
+        status: normalized.status,
+        startedAt: normalized.started_at,
+        endedAt: normalized.ended_at,
+        durationMinutes: normalized.duration_minutes ?? null,
+        lookProfileId:
+          typeof normalized.look_profile_id === 'string' ? normalized.look_profile_id : null,
+        createdAt: normalized.created_at,
+      };
     }
     return { project, session };
   }

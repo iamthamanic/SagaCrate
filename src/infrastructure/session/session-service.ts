@@ -36,7 +36,7 @@ import {
 
 /** Safe session columns for authenticated SELECT (#569 — excludes world_state, notes). */
 const SESSION_SAFE_COLUMNS =
-  'id, public_id, project_id, session_number, name, description, status, started_at, ended_at, look_profile_id, created_at, updated_at';
+  'id, public_id, project_id, session_number, name, description, status, code, started_at, ended_at, look_profile_id, created_at, updated_at';
 
 type SessionRow = {
   id: string;

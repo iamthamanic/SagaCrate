@@ -46,6 +46,11 @@ function readPathname(): string {
   return window.location.pathname || '/';
 }
 
+function readSearch(): string {
+  if (typeof window === 'undefined') return '';
+  return window.location.search || '';
+}
+
 function allowLeave(): boolean {
   if (!navigationBlocker) return true;
   const result = navigationBlocker();
@@ -59,17 +64,21 @@ function allowLeave(): boolean {
 
 export function useAppLocation() {
   const [pathname, setPathname] = useState(readPathname);
+  const [search, setSearch] = useState(readSearch);
   const pathnameRef = useRef(pathname);
+  const searchRef = useRef(search);
   pathnameRef.current = pathname;
+  searchRef.current = search;
 
   useEffect(() => {
     const onPopState = () => {
       if (!allowLeave()) {
         // Revert browser history navigation when a dirty form blocks leave.
-        window.history.pushState(null, '', pathnameRef.current);
+        window.history.pushState(null, '', `${pathnameRef.current}${searchRef.current}`);
         return;
       }
       setPathname(readPathname());
+      setSearch(readSearch());
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -108,10 +117,9 @@ export function useAppLocation() {
     const [pathPart, searchPart = ''] = withoutHash.split('?');
     const normalized =
       pathPart.length > 1 && pathPart.endsWith('/') ? pathPart.slice(0, -1) : pathPart || '/';
-    const search = searchPart ? `?${searchPart}` : '';
-    const href = `${normalized}${search}`;
-    const currentSearch = window.location.search || '';
-    if (normalized === pathnameRef.current && search === currentSearch) return;
+    const nextSearch = searchPart ? `?${searchPart}` : '';
+    const href = `${normalized}${nextSearch}`;
+    if (normalized === pathnameRef.current && nextSearch === searchRef.current) return;
     if (!allowLeave()) return;
     if (options?.replace) {
       window.history.replaceState(null, '', href);
@@ -119,6 +127,7 @@ export function useAppLocation() {
       window.history.pushState(null, '', href);
     }
     setPathname(normalized);
+    setSearch(nextSearch);
   };
 
   const navigateToView = (viewId: string, options?: { replace?: boolean }) => {
@@ -210,6 +219,7 @@ export function useAppLocation() {
 
   return {
     pathname,
+    search,
     route,
     currentView,
     itemId,

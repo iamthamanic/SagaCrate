@@ -3,13 +3,18 @@
  * Location: src/app/session/SessionLobbyScreen.tsx
  *
  * Shared surface with role-projected CTAs. Media/LiveAct only after user gesture.
+ * Join code is the primary share affordance after session create (Peak-End).
  */
+import { useState } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '../../shared/ui/button';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { decideLobbyEnterLive, lobbyLiveActStatusLabelDe, lobbyMediaStatusLabelDe } from '../../domains/session/contracts/session-lobby';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
 import { pathForSessionLive } from '../shell';
 import { useSessionLobby } from './hooks/useSessionLobby';
+import { SessionInviteShareButton } from './SessionInviteShareButton';
 
 type SessionLobbyScreenProps = {
   sagaPublicId: string;
@@ -39,6 +44,34 @@ export function SessionLobbyScreen({
   } = useSessionLobby({ sagaPublicId, sessionPublicId });
 
   const selfReady = model?.roster.find((m) => m.isSelf)?.isReady === true;
+  const [codeCopied, setCodeCopied] = useState(false);
+
+  const handleCopyCode = async () => {
+    const code = model?.summary.code?.trim();
+    if (!code) {
+      toast.error('Kein Session-Code verfügbar');
+      return;
+    }
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(code);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = code;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCodeCopied(true);
+      toast.success('Code kopiert!');
+      window.setTimeout(() => setCodeCopied(false), 2000);
+    } catch {
+      toast.error('Code konnte nicht kopiert werden');
+    }
+  };
 
   const handleEnter = () => {
     if (!model) return;
@@ -107,6 +140,47 @@ export function SessionLobbyScreen({
           <p className="text-sm text-destructive" role="alert" data-session-lobby-error>
             {error}
           </p>
+        ) : null}
+
+        {model?.summary.code ? (
+          <section
+            className="rounded-lg border border-primary/40 bg-card/60 p-4 sm:p-5"
+            data-session-lobby-join-code
+          >
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Session-Code
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Teile diesen Code mit deinen Spielern — Beitritt über Session → Beitreten.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="min-w-0 flex-1 rounded-lg bg-muted px-4 py-3 text-center">
+                <p
+                  className="font-mono text-3xl tracking-[0.2em] text-foreground sm:text-4xl"
+                  data-session-lobby-code
+                >
+                  {model.summary.code}
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="min-h-11 min-w-11"
+                onClick={() => void handleCopyCode()}
+                aria-label="Session-Code kopieren"
+                data-session-lobby-copy-code
+              >
+                {codeCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
+              </Button>
+            </div>
+            <div className="mt-3">
+              <SessionInviteShareButton
+                sessionId={model.summary.sessionId}
+                className="min-h-11 w-full"
+              />
+            </div>
+          </section>
         ) : null}
 
         {/* Media probes are always available after first paint — never gated on roster load. */}
@@ -198,10 +272,6 @@ export function SessionLobbyScreen({
                       ? ` (${model.selfCharacterPublicId})`
                       : ''}
                   </dd>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">Code</dt>
-                  <dd className="font-mono">{model.summary.code || '—'}</dd>
                 </div>
               </dl>
               {model.canChangeCharacter ? (
