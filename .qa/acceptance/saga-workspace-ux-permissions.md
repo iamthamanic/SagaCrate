@@ -69,6 +69,6 @@ Make the Saga workspace and session entry usable: Overview must load (apply miss
 
 ## Composition Gate
 
-- HEAD_SHA: a0d3cabb0da557a5e3008d761b72beb075ca6507
+- HEAD_SHA: 1730767904802fb85447f4dd9353278f70322847
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-saga-workspace-ux-permissions.md`
