@@ -59,6 +59,6 @@ Register `saga.*` permission keys and GM/Player bundles; let GMs assign bundles 
 
 ## Composition Gate
 
-- HEAD_SHA: WORKTREE (pre-commit #617)
+- HEAD_SHA: 04ef35b97608fe4c1c893239a887a99a140fd8fc
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-saga-workspace-phase-2-permissions.md`

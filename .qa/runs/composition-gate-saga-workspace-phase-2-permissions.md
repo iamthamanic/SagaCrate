@@ -1,6 +1,6 @@
 # Composition Gate — saga-workspace-phase-2-permissions
 
-- HEAD_SHA: WORKTREE (pre-commit; matches uncommitted #617 Phase 2 scope)
+- HEAD_SHA: 04ef35b97608fe4c1c893239a887a99a140fd8fc
 - BASE_SHA: 7fd607525eb7c5c6b75975bb259f6b9713c9f4fd
 - Date: 2026-10-12
 - Verdict: CLEAR
