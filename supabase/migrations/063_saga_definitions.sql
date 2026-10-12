@@ -280,6 +280,8 @@ REVOKE ALL ON FUNCTION public.create_project_from_saga_version(UUID, UUID, TEXT)
 GRANT EXECUTE ON FUNCTION public.create_project_from_saga_version(UUID, UUID, TEXT) TO authenticated;
 
 -- Fixed UUIDs for idempotent Dornhain seed.
+-- Bypass trg_forbid_native_saga_insert: migration apply runs as postgres, not service_role.
+ALTER TABLE public.saga_definitions DISABLE TRIGGER trg_forbid_native_saga_insert;
 DO $$
 DECLARE
   v_saga_id UUID := 'a5740000-0000-4000-8000-00000000d001';
@@ -335,6 +337,7 @@ BEGIN
         published_at = COALESCE(public.saga_definition_versions.published_at, NOW());
 END;
 $$;
+ALTER TABLE public.saga_definitions ENABLE TRIGGER trg_forbid_native_saga_insert;
 
 -- Backfill: each project without saga_id gets a private definition from name/description.
 DO $$

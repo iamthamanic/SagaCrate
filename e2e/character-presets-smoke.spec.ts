@@ -44,7 +44,7 @@ test('create chooser shows two cards and Preset tab under Einstellungen', async 
   await expect(page.getByRole('heading', { name: /Vorlage wählen/i })).toBeVisible({
     timeout: 15_000,
   });
-  await expect(page.getByText(/SagaDrive-Starttemplates/i).first()).toBeVisible({
+  await expect(page.getByText(/SagaTree-Starttemplates/i).first()).toBeVisible({
     timeout: 10_000,
   });
   await expect(page.getByRole('button', { name: /Berserker/i })).toBeVisible();

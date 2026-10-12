@@ -136,7 +136,11 @@ export function SessionJoin({
 
   useEffect(() => {
     if (selectedProjectId || gmProjects.length === 0) return;
-    setSelectedProjectId(gmProjects[0].id);
+    const dornhain =
+      gmProjects.find((p) => p.sagaOrigin === 'native' && /dornhain/i.test(p.name))
+      ?? gmProjects.find((p) => p.sagaOrigin === 'native')
+      ?? gmProjects[0];
+    setSelectedProjectId(dornhain.id);
     setSessionNameDirty(false);
   }, [gmProjects, selectedProjectId]);
 
