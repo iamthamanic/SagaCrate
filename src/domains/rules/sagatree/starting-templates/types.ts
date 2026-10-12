@@ -1,6 +1,6 @@
 /**
  * starting-templates types — species-neutral Level-1 SagaDrive start builds (#463).
- * Location: src/domains/rules/sagadrive/starting-templates/types.ts
+ * Location: src/domains/rules/sagatree/starting-templates/types.ts
  *
  * Pure domain: no React, Supabase, race/appearance/inventory fields.
  */

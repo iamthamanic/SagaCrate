@@ -53,7 +53,7 @@ requireMatch(migrationHardening, /origin is immutable/, 'origin immutable on upd
 requireMatch(types, /interface CharacterPresetSnapshot/, 'preset snapshot type');
 requireMatch(types, /schemaVersion: 1/, 'snapshot schema version');
 rejectMatch(types, /freeSkillRanks:\s*Record<SagaDriveSkillKey,\s*number>/, 'parallel top-level freeSkillRanks on CharacterPresetSnapshot');
-requireMatch(types, /sagadrive_profile: SagaDriveProfileDto/, 'skill provenance via sagadrive_profile only');
+requireMatch(types, /sagatree_profile: SagaDriveProfileDto/, 'skill provenance via sagatree_profile');
 requireMatch(types, /published: boolean/, 'published flag on preset vm/dto');
 
 requireMatch(service, /export function assertValidSnapshot/, 'exported snapshot validation');

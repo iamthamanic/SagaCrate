@@ -50,7 +50,7 @@ mustInclude(
 );
 
 mustInclude(
-  'src/domains/rules/sagadrive/probe/index.ts',
+  'src/domains/rules/sagatree/probe/index.ts',
   [
     'resolveProbeGrade',
     'resolveProbeFromDice',
@@ -62,7 +62,7 @@ mustInclude(
 );
 
 mustNotInclude(
-  'src/domains/rules/sagadrive/probe/index.ts',
+  'src/domains/rules/sagatree/probe/index.ts',
   ['supabase', "from 'react'", 'from "react"'],
   'pure probe domain',
 );
@@ -103,7 +103,7 @@ mkdirSync(cacheDir, { recursive: true });
 
 const probeOut = join(cacheDir, 'probe.mjs');
 esbuild.buildSync({
-  entryPoints: [join(root, 'src/domains/rules/sagadrive/probe/index.ts')],
+  entryPoints: [join(root, 'src/domains/rules/sagatree/probe/index.ts')],
   outfile: probeOut,
   bundle: true,
   format: 'esm',

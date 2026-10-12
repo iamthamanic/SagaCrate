@@ -72,20 +72,20 @@ function walkFiles(dir, acc = []) {
 section('1 · structure & ownership');
 
 mustInclude(
-  'src/domains/rules/sagadrive/index.ts',
+  'src/domains/rules/sagatree/index.ts',
   ["export * from './items'"],
   'rules barrel exports items',
 );
 
 mustInclude(
-  'src/domains/rules/sagadrive/items/index.ts',
+  'src/domains/rules/sagatree/items/index.ts',
   ['./types', './validators', './carry-capacity', './tool-rules', './resource-affordability'],
   'items slice barrel',
 );
 
 mustInclude(
   'src/domains/character/inventory-v2/primitives.ts',
-  ["from '../../rules/sagadrive/items'", 'ItemLoad', 'ItemCost', 'MinimumStrength', 'ItemProtection'],
+  ["from '../../rules/sagatree/items'", 'ItemLoad', 'ItemCost', 'MinimumStrength', 'ItemProtection'],
   'inventory re-exports rule types',
 );
 
@@ -102,18 +102,18 @@ mustInclude(
 );
 
 mustInclude(
-  'src/domains/rules/sagadrive/derived-stats/compute-derived-stats.ts',
+  'src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts',
   ["from '../items'", 'computeCarryCapacity'],
   'derived-stats uses rules carryCapacity',
 );
 
 mustNotInclude(
-  'src/domains/rules/sagadrive/derived-stats/compute-derived-stats.ts',
+  'src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts',
   ['5 + 2 * attributes.strength'],
   'derived-stats must not duplicate Traglast formula',
 );
 
-const itemsRulesDir = join(root, 'src/domains/rules/sagadrive/items');
+const itemsRulesDir = join(root, 'src/domains/rules/sagatree/items');
 for (const file of walkFiles(itemsRulesDir)) {
   const text = readFileSync(file, 'utf8');
   const rel = file.slice(root.length + 1);
@@ -136,7 +136,7 @@ const esbuild = join(root, 'node_modules', '.bin', 'esbuild');
 execFileSync(
   esbuild,
   [
-    join(root, 'src/domains/rules/sagadrive/items/index.ts'),
+    join(root, 'src/domains/rules/sagatree/items/index.ts'),
     '--bundle',
     '--format=esm',
     `--outfile=${join(outdir, 'rules-items.mjs')}`,

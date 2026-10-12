@@ -12,9 +12,9 @@ import { createContext, useContext, useEffect, useRef, useState, ReactNode } fro
 import { supabase } from './supabase';
 import {
   isLocalAdminSession,
+  setLocalAdminSession,
   LOCAL_ADMIN_EMAIL,
   LOCAL_ADMIN_PASSWORD,
-  LOCAL_ADMIN_STORAGE_KEY,
   LOCAL_ADMIN_USER_ID,
   LOCAL_ADMIN_USERNAME,
 } from './localAdmin';
@@ -317,7 +317,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isLocalAdminShortcut(email, password)) {
       const generation = bumpAuthGeneration();
       expectingGoTrueLocalAdminRef.current = generation;
-      window.localStorage.setItem(LOCAL_ADMIN_STORAGE_KEY, 'true');
+      setLocalAdminSession(true);
       const loginPromise = supabase.auth.signInWithPassword({
         email: LOCAL_ADMIN_EMAIL,
         password: LOCAL_ADMIN_PASSWORD,
@@ -371,7 +371,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const generation = bumpAuthGeneration();
-    window.localStorage.removeItem(LOCAL_ADMIN_STORAGE_KEY);
+    setLocalAdminSession(false);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -391,7 +391,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     bumpAuthGeneration();
-    window.localStorage.removeItem(LOCAL_ADMIN_STORAGE_KEY);
+    setLocalAdminSession(false);
     userRef.current = null;
     setUser(null);
     try {

@@ -6,8 +6,8 @@
  */
 import type { SyntheticEvent } from 'react';
 import { CircleHelp } from 'lucide-react';
-import { listSagaDriveStartingTemplates } from '../../../domains/rules/sagadrive/starting-templates';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagadrive/starting-templates';
+import { listSagaDriveStartingTemplates } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../../shared/ui/tooltip';
 import { StartingTemplateIcon } from './StartingTemplateIcon';
 

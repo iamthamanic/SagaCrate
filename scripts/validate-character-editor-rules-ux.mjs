@@ -47,9 +47,9 @@ const e2eRules = existsSync('e2e/validate-character-editor-rules-ux.spec.ts')
   ? read('e2e/validate-character-editor-rules-ux.spec.ts')
   : '';
 const e2eCore = read('e2e/character-editor.spec.ts');
-const attrSrc = read('src/domains/rules/sagadrive/attribute-progression/index.ts');
-const skillSrc = read('src/domains/rules/sagadrive/skill-progression/index.ts');
-const creationSrc = read('src/domains/rules/sagadrive/character-creation/index.ts');
+const attrSrc = read('src/domains/rules/sagatree/attribute-progression/index.ts');
+const skillSrc = read('src/domains/rules/sagatree/skill-progression/index.ts');
+const creationSrc = read('src/domains/rules/sagatree/character-creation/index.ts');
 const report20 = existsSync('.qa/runs/validate-character-creation-progression-report.md')
   ? read('.qa/runs/validate-character-creation-progression-report.md')
   : '';

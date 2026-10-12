@@ -15,7 +15,7 @@ const MOCK_CHARACTER = {
   description: null,
   class: 'Wanderer',
   race: 'Mensch',
-  ruleset_key: 'sagadrive-core',
+  ruleset_key: 'sagatree-core',
   level: 1,
   portrait_url: null,
   sheet_status: 'ready',

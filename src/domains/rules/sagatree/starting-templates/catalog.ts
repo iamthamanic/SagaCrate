@@ -1,6 +1,6 @@
 /**
  * starting-templates catalog — ten Level-1 builds from #465 design (#463).
- * Location: src/domains/rules/sagadrive/starting-templates/catalog.ts
+ * Location: src/domains/rules/sagatree/starting-templates/catalog.ts
  */
 import {
   createEmptySagaDriveSkillRanks,

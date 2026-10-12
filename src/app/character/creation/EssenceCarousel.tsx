@@ -3,7 +3,7 @@
  * Location: src/app/character/creation/EssenceCarousel.tsx
  */
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { sagaDriveEssenceOptions, type SagaDriveEssenceKey } from '../../../domains/rules/sagadrive/character-creation';
+import { sagaDriveEssenceOptions, type SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 import { EssenceIcon } from './EssenceIcon';
 import { RuleHelp } from '../shared/RuleHelp';
 import { Badge } from '../../../shared/ui/badge';

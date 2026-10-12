@@ -37,8 +37,8 @@ import {
 import {
   getSagaDriveSkill,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
-import type { SagaDriveBackgroundTemplate } from '../../../domains/rules/sagadrive/background-templates';
+} from '../../../domains/rules/sagatree/character-creation';
+import type { SagaDriveBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 import { useCarouselScrollSync } from '../../../app/character/shared/useCarouselScrollSync';
 import { RuleHelp } from '../shared/RuleHelp';

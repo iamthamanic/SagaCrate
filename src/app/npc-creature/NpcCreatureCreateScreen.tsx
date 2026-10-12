@@ -20,7 +20,7 @@ import {
   type SagaDriveCombatProfile,
   type SagaDriveCombatRole,
   type SagaDriveNpcLevel,
-} from '../../domains/rules/sagadrive/npc-creature-power';
+} from '../../domains/rules/sagatree/npc-creature-power';
 import { createNpcCreatureDefinition } from '../../infrastructure/npc-creature/npc-creature-service';
 import { clearCharacterEditorBootstrap } from '../character';
 import { useWorldProfiles } from '../world';

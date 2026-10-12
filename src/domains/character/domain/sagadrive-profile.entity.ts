@@ -8,14 +8,14 @@ import type {
   SagaDriveEssenceKey,
   SagaDriveSkillKey,
   SagaDriveSpeciesTraitKey,
-} from '../../rules/sagadrive/character-creation';
+} from '../../rules/sagatree/character-creation';
 import type {
   SagaDriveBackgroundSkillPoints,
   SagaDriveSkillAdvanceDto,
   SagaDriveSpecializationRecordDto,
   SagaDriveSpecializationSource,
-} from '../../rules/sagadrive/skill-progression';
-import type { SagaDriveSpeciesTraitOptionKey } from '../../rules/sagadrive/species-trait-options';
+} from '../../rules/sagatree/skill-progression';
+import type { SagaDriveSpeciesTraitOptionKey } from '../../rules/sagatree/species-trait-options';
 import type { CharacterAttributesDto } from './character.entity';
 
 export type SagaDriveAttributeAdvancesDto = Partial<Record<8 | 16, SagaDriveAttributeKey>>;

@@ -10,8 +10,8 @@ import {
   getSagaDriveSkill,
   type SagaDriveAttributeKey,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
-import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagadrive/skill-progression';
+} from '../../../domains/rules/sagatree/character-creation';
+import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
 import { RuleHelp } from '../shared/RuleHelp';
 import type { CarouselScrollPhase } from './ArchetypeCarousel';
 

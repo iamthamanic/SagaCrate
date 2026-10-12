@@ -1,6 +1,6 @@
 /**
  * sagadrive carry capacity — §6.7 / §10.2 / §10.0.1 Traglast formula.
- * Location: src/domains/rules/sagadrive/items/carry-capacity.ts
+ * Location: src/domains/rules/sagatree/items/carry-capacity.ts
  *
  * Single source of truth for `5 + 2 × Stärke`. Inventory v2 owns load *summing*
  * (`calculateTotalLoad`); this module owns the capacity ceiling. Consumers must

@@ -20,7 +20,7 @@ import type {
   SagaDriveCombatProfile,
   SagaDriveCombatRole,
   SagaDriveNpcLevel,
-} from '../rules/sagadrive/npc-creature-power';
+} from '../rules/sagatree/npc-creature-power';
 
 /** Generic encounter fodder vs unique campaign figure. */
 export type NpcCreatureInstanceKind = 'generic' | 'persistent';

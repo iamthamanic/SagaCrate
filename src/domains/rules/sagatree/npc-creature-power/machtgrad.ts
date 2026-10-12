@@ -1,6 +1,6 @@
 /**
  * Machtgrad display mapping from level 1–20.
- * Location: src/domains/rules/sagadrive/npc-creature-power/machtgrad.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/machtgrad.ts
  */
 import type { SagaDriveMachtgrad, SagaDriveNpcLevel } from './types';
 

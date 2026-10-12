@@ -47,6 +47,9 @@ export interface CharacterDto {
   speed?: number;
   resources?: Record<string, unknown>;
   conditions?: string[];
+  /** Canonical SagaTree Core profile column (073+). */
+  sagatree_profile?: Partial<SagaDriveProfileDto> | null;
+  /** Legacy alias column — kept in sync by DB trigger during rename transition. */
   sagadrive_profile?: Partial<SagaDriveProfileDto> | null;
   personality_traits?: string[];
   ideals?: string[];

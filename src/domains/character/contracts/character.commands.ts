@@ -12,7 +12,7 @@ import type {
 } from '../domain/character.entity';
 import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
 import type { InventoryState } from '../inventory-v2';
-import type { CharacterAbstractResources } from '../../rules/sagadrive/items';
+import type { CharacterAbstractResources } from '../../rules/sagatree/items';
 import type { CharacterSheetStatus } from './character.views';
 
 export interface CreateCharacterDto {
@@ -34,6 +34,8 @@ export interface CreateCharacterDto {
   appearance?: Partial<CharacterAppearanceDto>;
   attributes?: Partial<CharacterAttributesDto>;
   skills?: Partial<Record<SagaDriveSkillKey, number>>;
+  sagatree_profile?: SagaDriveProfileDto;
+  /** @deprecated Prefer sagatree_profile — still accepted during rename transition. */
   sagadrive_profile?: SagaDriveProfileDto;
   abilities?: AbilityDto[];
   inventory?: ItemDto[];
@@ -61,6 +63,8 @@ export interface UpdateCharacterDto {
   appearance?: Partial<CharacterAppearanceDto>;
   attributes?: Partial<CharacterAttributesDto>;
   skills?: Partial<Record<SagaDriveSkillKey, number>>;
+  sagatree_profile?: SagaDriveProfileDto;
+  /** @deprecated Prefer sagatree_profile — still accepted during rename transition. */
   sagadrive_profile?: SagaDriveProfileDto;
   abilities?: AbilityDto[];
   inventory?: ItemDto[];

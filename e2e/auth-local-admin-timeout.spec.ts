@@ -16,7 +16,7 @@ const EVIDENCE = '.qa/evidence/auth-local-admin-timeout';
 const AUTH_SESSION_TIMEOUT_MS = 1_500;
 /** CI slack after timeout for dashboard paint (case 2 timing). */
 const AUTH_FALLBACK_VISIBLE_SLACK_MS = 4_500;
-const LOCAL_ADMIN_STORAGE_KEY = 'sagadrive-local-admin-session';
+const LOCAL_ADMIN_STORAGE_KEY = 'sagatree-local-admin-session';
 
 function isGoTrueToken(url: string): boolean {
   return /\/auth\/v1\/token/.test(url);

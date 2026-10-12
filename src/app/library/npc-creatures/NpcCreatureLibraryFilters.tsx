@@ -17,7 +17,7 @@ import {
 import type {
   SagaDriveCombatRole,
   SagaDriveMachtgrad,
-} from '../../../domains/rules/sagadrive/npc-creature-power';
+} from '../../../domains/rules/sagatree/npc-creature-power';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import { Label } from '../../../shared/ui/label';

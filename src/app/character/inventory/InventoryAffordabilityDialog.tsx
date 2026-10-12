@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../../shared/ui/dialog';
-import type { AffordabilityDecision, PurchaseMode } from '../../../domains/rules/sagadrive/items';
+import type { AffordabilityDecision, PurchaseMode } from '../../../domains/rules/sagatree/items';
 
 export interface InventoryAffordabilityDialogProps {
   open: boolean;

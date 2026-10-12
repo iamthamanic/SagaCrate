@@ -17,7 +17,7 @@ import {
   createDefaultAbstractResources,
   type AbstractResourceLevel,
   type CharacterAbstractResources,
-} from '../../../domains/rules/sagadrive/items';
+} from '../../../domains/rules/sagatree/items';
 import type { InventoryLoadInfo } from '../progression';
 import { characterService } from '../../../infrastructure/character/character-service';
 

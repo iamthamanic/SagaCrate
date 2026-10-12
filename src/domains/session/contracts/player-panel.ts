@@ -12,14 +12,14 @@ import {
   getSagaDriveExperienceBonus,
   resolveSagaDriveSkillBuildState,
   resolveSagaDriveSkillRanksSafe,
-} from '../../rules/sagadrive/skill-progression';
+} from '../../rules/sagatree/skill-progression';
 import {
   getSagaDriveSkill,
   sagaDriveAttributeDefinitions,
   type SagaDriveAttributeKey,
   type SagaDriveSkillKey,
-} from '../../rules/sagadrive/character-creation';
-import { computeSagaDriveDerivedStats } from '../../rules/sagadrive/derived-stats';
+} from '../../rules/sagatree/character-creation';
+import { computeSagaDriveDerivedStats } from '../../rules/sagatree/derived-stats';
 import type { PlaySessionStatus } from './session-lifecycle';
 import type { SessionPresenceEntry, SessionRuntimeState } from './session-runtime';
 import { readLastSharedRoll, type SharedRollResultView } from './shared-rolls';

@@ -7,14 +7,14 @@ import {
   getSagaDriveAttribute,
   getSagaDriveSkill,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
+} from '../../../domains/rules/sagatree/character-creation';
 import type { CharacterAttributesDto } from '../../../domains/character';
 import {
   SAGA_DRIVE_SPECIALIZATION_BONUS,
   getSagaDriveAppliedExperienceBonus,
   getSagaDriveExperienceBonus,
   type SagaDriveBackgroundSkillPoints,
-} from '../../../domains/rules/sagadrive/skill-progression';
+} from '../../../domains/rules/sagatree/skill-progression';
 
 interface SkillCheckFormulaPanelProps {
   skillKey: SagaDriveSkillKey;

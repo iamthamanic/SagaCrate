@@ -65,7 +65,7 @@ import {
   type AbstractResourceLevel,
   type AffordabilityDecision,
   type PurchaseMode,
-} from '../../../domains/rules/sagadrive/items';
+} from '../../../domains/rules/sagatree/items';
 
 export interface InventoryCatalogDialogProps {
   open: boolean;

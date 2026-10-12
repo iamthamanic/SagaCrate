@@ -26,7 +26,7 @@ import { SPECIALIZATION_BONUS, rankRowFor } from './lib/core-probe.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REPORT_PATH = '.qa/runs/validate-all-core-skills-report.md';
-const DOMAIN_SKILLS_PATH = 'src/domains/rules/sagadrive/character-creation/index.ts';
+const DOMAIN_SKILLS_PATH = 'src/domains/rules/sagatree/character-creation/index.ts';
 
 const FINDINGS = [];
 const ROWS = [];

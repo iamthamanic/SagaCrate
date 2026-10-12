@@ -4,7 +4,7 @@
  * Location: src/app/character/progression/AttributeSkillConnector.tsx
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { SagaDriveSkillKey } from '../../../domains/rules/sagadrive/character-creation';
+import type { SagaDriveSkillKey } from '../../../domains/rules/sagatree/character-creation';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 
 interface AttributeSkillConnectorProps {

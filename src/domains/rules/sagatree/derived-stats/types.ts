@@ -1,6 +1,6 @@
 /**
  * derived-stats types — UI-independent SagaDrive derived stat computation contracts.
- * Location: src/domains/rules/sagadrive/derived-stats/types.ts
+ * Location: src/domains/rules/sagatree/derived-stats/types.ts
  */
 import type { SagaDriveAttributeKey, SagaDriveSkillKey } from '../character-creation';
 

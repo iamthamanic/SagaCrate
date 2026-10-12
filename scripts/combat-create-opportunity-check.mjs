@@ -83,12 +83,12 @@ mustInclude(
 section('2 · structure & purity');
 
 mustInclude(
-  'src/domains/rules/sagadrive/index.ts',
+  'src/domains/rules/sagatree/index.ts',
   ["export * from './combat-create-opportunity'"],
   'rules barrel',
 );
 
-const kernelFile = 'src/domains/rules/sagadrive/combat-create-opportunity/index.ts';
+const kernelFile = 'src/domains/rules/sagatree/combat-create-opportunity/index.ts';
 const kernelText = readFileSync(join(root, kernelFile), 'utf8');
 check(!/\bfrom\s+['"]react(?:\/|$)/.test(kernelText), `${kernelFile}: no React`);
 check(!/from\s+['"][^'"]*supabase[^'"]*['"]/i.test(kernelText), `${kernelFile}: no Supabase import`);
@@ -108,7 +108,7 @@ const outfile = join(outdir, 'combat-create-opportunity.mjs');
 execFileSync(
   esbuild,
   [
-    join(root, 'src/domains/rules/sagadrive/combat-create-opportunity/index.ts'),
+    join(root, 'src/domains/rules/sagatree/combat-create-opportunity/index.ts'),
     '--bundle',
     '--format=esm',
     `--outfile=${outfile}`,

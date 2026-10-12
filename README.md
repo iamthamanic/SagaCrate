@@ -49,7 +49,7 @@ Charaktere · Sessions · Welten — für Spielleitung und Spieler
 
 ### Produkt & Stack
 
-Marke und Regelwerk: **SagaTree** / **SagaTree Core** (interne Ruleset-ID `sagadrive-core` bis zur Schema-Phase).
+Marke und Regelwerk: **SagaTree** / **SagaTree Core** (Ruleset-ID `sagatree-core`; Legacy-Alias `sagadrive-core` bleibt lesbar).
 
 Dieses Repo: **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge) und Schichten `domains` → `infrastructure` → `app` · UI in `shared/ui`.
 

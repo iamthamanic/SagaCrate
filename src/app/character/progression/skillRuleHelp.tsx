@@ -6,7 +6,7 @@ import {
   getSagaDriveAttribute,
   getSagaDriveSkill,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
+} from '../../../domains/rules/sagatree/character-creation';
 
 export function getSkillDerivedHints(skillKey: SagaDriveSkillKey): string[] {
   if (skillKey === 'melee' || skillKey === 'acrobatics') {

@@ -10,8 +10,8 @@ import {
   type ProbeGrade,
   type ProbeMode,
   type ProbeOutcome,
-} from '../../rules/sagadrive/probe';
-import { isSagaDriveSkillKey, type SagaDriveSkillKey } from '../../rules/sagadrive/character-creation';
+} from '../../rules/sagatree/probe';
+import { isSagaDriveSkillKey, type SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
 
 /** Client-forged result keys — server must strip before resolve. */
 export const FORGED_ROLL_RESULT_KEYS = [

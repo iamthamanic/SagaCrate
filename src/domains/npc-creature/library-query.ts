@@ -9,7 +9,7 @@ import {
   machtgradForLevel,
   type SagaDriveCombatRole,
   type SagaDriveMachtgrad,
-} from '../rules/sagadrive/npc-creature-power';
+} from '../rules/sagatree/npc-creature-power';
 import type { NpcCreatureDefinition } from './definition';
 import type { NpcCreatureCatalogRecord } from './policy';
 import type {

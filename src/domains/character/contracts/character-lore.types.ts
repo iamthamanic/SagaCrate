@@ -2,7 +2,7 @@
  * character-lore.types — Contracts for lore generation and trait categories.
  * Location: src/domains/character/contracts/character-lore.types.ts
  */
-import type { CharacterRulesetKey } from '../../rules/sagadrive/character-creation';
+import type { CharacterRulesetKey } from '../../rules/sagatree/character-creation';
 
 export type CharacterTraitCategory = 'personality' | 'ideals' | 'bonds' | 'flaws';
 

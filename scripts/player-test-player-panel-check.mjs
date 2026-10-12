@@ -204,7 +204,7 @@ function minimalCharacter() {
     description: '',
     class: 'Kämpfer',
     race: 'Mensch',
-    rulesetKey: 'sagadrive-core',
+    rulesetKey: 'sagatree-core',
     level: 3,
     sheetStatus: 'complete',
     notes: '',

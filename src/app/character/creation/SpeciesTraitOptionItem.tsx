@@ -6,7 +6,7 @@
 import * as SelectPrimitive from '@radix-ui/react-select@2.1.6';
 import { CheckIcon } from 'lucide-react';
 import { cn } from '../../../shared/ui/utils';
-import type { SagaDriveSpeciesTraitOption } from '../../../domains/rules/sagadrive/species-trait-options';
+import type { SagaDriveSpeciesTraitOption } from '../../../domains/rules/sagatree/species-trait-options';
 
 type SpeciesTraitOptionItemProps = {
   option: SagaDriveSpeciesTraitOption;

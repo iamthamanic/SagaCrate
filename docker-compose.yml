@@ -1,7 +1,7 @@
 version: '3.8'
 
 # ===========================================
-# SagaDrive Self-Host Stack
+# SagaTree Self-Host Stack
 # - Supabase (Auth, DB, Storage, Realtime, Functions)
 # - Ollama (LLM)
 # - Neo4j (Knowledge Graph)
@@ -21,7 +21,7 @@ services:
   # PostgreSQL Database
   supabase-db:
     image: supabase/postgres:15.1.0.147
-    container_name: sagadrive-db
+    container_name: sagatree-db
     healthcheck:
       test: pg_isready -U postgres -h localhost
       interval: 5s
@@ -40,12 +40,12 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Kong API Gateway
   supabase-kong:
     image: kong:2.8.1
-    container_name: sagadrive-kong
+    container_name: sagatree-kong
     environment:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
@@ -62,12 +62,12 @@ services:
       supabase-auth:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # GoTrue Auth Service
   supabase-auth:
     image: supabase/gotrue:v2.143.0
-    container_name: sagadrive-auth
+    container_name: sagatree-auth
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:9999/health
       interval: 5s
@@ -95,12 +95,12 @@ services:
       supabase-db:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # PostgREST API
   supabase-rest:
     image: postgrest/postgrest:v12.0.1
-    container_name: sagadrive-rest
+    container_name: sagatree-rest
     environment:
       PGRST_DB_URI: postgres://postgres:${POSTGRES_PASSWORD:-your-super-secret-password}@supabase-db:5432/postgres
       PGRST_DB_SCHEMA: public
@@ -110,12 +110,12 @@ services:
       supabase-db:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Realtime WebSocket
   supabase-realtime:
     image: supabase/realtime:v2.25.15
-    container_name: sagadrive-realtime
+    container_name: sagatree-realtime
     environment:
       DB_HOST: supabase-db
       DB_PORT: 5432
@@ -132,12 +132,12 @@ services:
       supabase-db:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Storage API
   supabase-storage:
     image: supabase/storage-api:v0.40.4
-    container_name: sagadrive-storage
+    container_name: sagatree-storage
     environment:
       ANON_KEY: ${SUPABASE_ANON_KEY}
       SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
@@ -158,12 +158,12 @@ services:
       supabase-rest:
         condition: service_started
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Meta API (for Studio)
   supabase-meta:
     image: supabase/postgres-meta:v0.75.0
-    container_name: sagadrive-meta
+    container_name: sagatree-meta
     environment:
       PG_META_PORT: 8080
       PG_META_DB_HOST: supabase-db
@@ -175,12 +175,12 @@ services:
       supabase-db:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Edge Runtime (Functions) — main dispatcher routes /<fn> to each function folder
   supabase-edge:
     image: supabase/edge-runtime:v1.29.0
-    container_name: sagadrive-edge
+    container_name: sagatree-edge
     restart: unless-stopped
     command: ["start", "--main-service", "/home/deno/functions/main", "--import-map", "/home/deno/import_map.json", "--port", "9998"]
     environment:
@@ -220,12 +220,12 @@ services:
       supabase-db:
         condition: service_healthy
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Studio Dashboard
   supabase-studio:
     image: supabase/studio:20240318-6cf0f6f
-    container_name: sagadrive-studio
+    container_name: sagatree-studio
     environment:
       STUDIO_PG_META_URL: http://supabase-meta:8080
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-your-super-secret-password}
@@ -243,7 +243,7 @@ services:
       supabase-edge:
         condition: service_started
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # ===========================================
   # AI SERVICES
@@ -252,7 +252,7 @@ services:
   # Ollama (LLM for AI Game Master)
   ollama:
     image: ollama/ollama:latest
-    container_name: sagadrive-ollama
+    container_name: sagatree-ollama
     ports:
       - "11434:11434"
     volumes:
@@ -260,7 +260,7 @@ services:
     environment:
       OLLAMA_HOST: 0.0.0.0:11434
     networks:
-      - sagadrive-network
+      - sagatree-network
     # Optional: GPU Support
     # deploy:
     #   resources:
@@ -273,7 +273,7 @@ services:
   # Neo4j (Knowledge Graph for Lorekeeper)
   neo4j:
     image: neo4j:5.13.0
-    container_name: sagadrive-neo4j
+    container_name: sagatree-neo4j
     ports:
       - "7474:7474"  # HTTP
       - "7687:7687"  # Bolt
@@ -286,19 +286,19 @@ services:
       - neo4j-data:/data
       - neo4j-logs:/logs
     networks:
-      - sagadrive-network
+      - sagatree-network
 
   # Redis (Session Cache for DM Tools)
   redis:
     image: redis:7-alpine
-    container_name: sagadrive-redis
+    container_name: sagatree-redis
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
     networks:
-      - sagadrive-network
+      - sagatree-network
 
 volumes:
   supabase-db-data:
@@ -309,5 +309,5 @@ volumes:
   redis-data:
 
 networks:
-  sagadrive-network:
+  sagatree-network:
     driver: bridge

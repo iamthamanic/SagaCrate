@@ -16,7 +16,7 @@ mkdirSync(outdir, { recursive: true });
 
 const esbuild = join(root, 'node_modules', '.bin', 'esbuild');
 const entries = {
-  rules: 'src/domains/rules/sagadrive/skill-progression/index.ts',
+  rules: 'src/domains/rules/sagatree/skill-progression/index.ts',
   persistence: 'src/domains/character/use-cases/assert-character-persistence.ts',
   normalize: 'src/domains/character/use-cases/normalize-character.ts',
 };
@@ -129,7 +129,7 @@ function snapshotFor(build, extra = {}) {
     description: '',
     class: 'fighter',
     race: 'human',
-    ruleset_key: 'sagadrive-core',
+    ruleset_key: 'sagatree-core',
     level,
     appearance: {
       gender_reading: 'diverse',

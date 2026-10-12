@@ -1,6 +1,6 @@
 /**
  * compute-derived-stats — Pure SagaDrive derived stat formulas (no UI).
- * Location: src/domains/rules/sagadrive/derived-stats/compute-derived-stats.ts
+ * Location: src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts
  */
 import {
   getSagaDriveSkill,

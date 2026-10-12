@@ -5,7 +5,7 @@
  */
 import type { CharacterPresetSnapshot } from '../../../domains/character/contracts/character-preset.types';
 import type { NpcPromotionPlan } from '../../../domains/npc-creature';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagadrive/starting-templates';
+import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 
 const CHARACTER_EDIT_STORAGE_KEY = 'sagadrive:character-edit-id';
 const NPC_PROMOTION_STORAGE_KEY = 'sagadrive:npc-promotion';

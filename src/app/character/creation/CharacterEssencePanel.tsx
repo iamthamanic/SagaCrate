@@ -5,7 +5,7 @@
  */
 import { EssenceCarousel } from './EssenceCarousel';
 import { RuleHelp } from '../shared/RuleHelp';
-import type { SagaDriveEssenceKey } from '../../../domains/rules/sagadrive/character-creation';
+import type { SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 
 interface CharacterEssencePanelProps {
   selectedEssence?: SagaDriveEssenceKey;

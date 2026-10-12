@@ -36,7 +36,7 @@ const esbuild = join(root, 'node_modules', '.bin', 'esbuild');
 execFileSync(
   esbuild,
   [
-    join(root, 'src/domains/rules/sagadrive/items/index.ts'),
+    join(root, 'src/domains/rules/sagatree/items/index.ts'),
     '--bundle',
     '--format=esm',
     `--outfile=${join(outdir, 'rules-items.mjs')}`,

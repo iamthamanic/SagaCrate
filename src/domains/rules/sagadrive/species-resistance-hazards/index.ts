@@ -1,14 +1,2 @@
-import {
-  isSagaDriveSpeciesTraitOptionKeyForTrait,
-  sagaDriveNarrowResistanceHazardOptions,
-  type SagaDriveSpeciesTraitOption,
-  type SagaDriveSpeciesTraitOptionKey,
-} from '../species-trait-options';
-
-export { sagaDriveNarrowResistanceHazardOptions };
-export type SagaDriveNarrowResistanceHazardOption = SagaDriveSpeciesTraitOption;
-export type SagaDriveNarrowResistanceHazardKey = SagaDriveSpeciesTraitOptionKey;
-
-export function isSagaDriveNarrowResistanceHazardKey(value: string): value is SagaDriveNarrowResistanceHazardKey {
-  return isSagaDriveSpeciesTraitOptionKeyForTrait('narrow-resistance', value);
-}
+/** @deprecated Import from domains/rules/sagatree/species-resistance-hazards */
+export * from '../../sagatree/species-resistance-hazards';

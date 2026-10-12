@@ -1,6 +1,6 @@
 /**
  * sagadrive item rule validators — fail-closed parsers for untrusted values.
- * Location: src/domains/rules/sagadrive/items/validators.ts
+ * Location: src/domains/rules/sagatree/items/validators.ts
  *
  * Domain-pure: no React, no Supabase, no inventory state.
  */

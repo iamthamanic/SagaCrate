@@ -2,7 +2,7 @@
  * normalize-character — Pure normalization for character domain payloads.
  * Location: src/domains/character/use-cases/normalize-character.ts
  */
-import { getSagaDriveBackgroundTemplate } from '../../rules/sagadrive/background-templates';
+import { getSagaDriveBackgroundTemplate } from '../../rules/sagatree/background-templates';
 import {
   createEmptySagaDriveSkillRanks,
   isSagaDriveArchetypeKey,
@@ -11,22 +11,22 @@ import {
   isSagaDriveSpeciesTraitKey,
   sagaDriveSkillDefinitions,
   type SagaDriveSkillKey,
-} from '../../rules/sagadrive/character-creation';
+} from '../../rules/sagatree/character-creation';
 import {
   normalizeSagaDriveAttributeAdvances,
   type SagaDriveAttributeAdvances,
-} from '../../rules/sagadrive/attribute-progression';
+} from '../../rules/sagatree/attribute-progression';
 import {
   backgroundSkillPointsToTrainedSkills,
   normalizeBackgroundSkillPoints,
   normalizeFreeSkillRanks,
   normalizeSkillAdvances,
   normalizeSpecializationRecords,
-} from '../../rules/sagadrive/skill-progression';
+} from '../../rules/sagatree/skill-progression';
 import {
   getSagaDriveSpeciesTraitOptionCatalog,
   normalizeSagaDriveSpeciesTraitOptionKey,
-} from '../../rules/sagadrive/species-trait-options';
+} from '../../rules/sagatree/species-trait-options';
 import type {
   CharacterAttributesDto,
   CharacterAttributeStorageDto,
@@ -266,6 +266,6 @@ export function normalizeTextBlocks(value: unknown): string[] {
   return [];
 }
 
-export { isValidSagaDriveAttributeBuild } from '../../rules/sagadrive/attribute-progression';
+export { isValidSagaDriveAttributeBuild } from '../../rules/sagatree/attribute-progression';
 export { normalizeSagaDriveAttributeAdvances };
 export type { SagaDriveAttributeAdvances };

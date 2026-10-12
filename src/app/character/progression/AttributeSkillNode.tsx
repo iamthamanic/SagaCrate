@@ -11,7 +11,7 @@ import {
   getSagaDriveAttribute,
   getSagaDriveSkill,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
+} from '../../../domains/rules/sagatree/character-creation';
 import { SkillIcon } from './SkillIcon';
 
 function rankLabel(rank: number): string {

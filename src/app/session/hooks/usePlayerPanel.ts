@@ -7,7 +7,7 @@ import {
   buildPlayerPanelModel,
   type PlayerPanelModel,
 } from '../../../domains/session/contracts/player-panel';
-import type { SagaDriveSkillKey } from '../../../domains/rules/sagadrive/character-creation';
+import type { SagaDriveSkillKey } from '../../../domains/rules/sagatree/character-creation';
 import type { RollMode } from '../../../domains/session/contracts/shared-rolls';
 import type { CharacterVm } from '../../../domains/character';
 import { assertUrlCharacterMatchesMembership } from '../../../domains/session/contracts/player-character-assignment';

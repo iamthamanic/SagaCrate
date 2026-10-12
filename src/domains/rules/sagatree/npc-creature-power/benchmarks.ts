@@ -1,6 +1,6 @@
 /**
  * Binding level 1–20 Standard+Balanced benchmarks for compact NPC/creatures.
- * Location: src/domains/rules/sagadrive/npc-creature-power/benchmarks.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/benchmarks.ts
  */
 import { machtgradForLevel } from './machtgrad';
 import { SAGADRIVE_NPC_DAMAGE_STEPS } from './damage-steps';

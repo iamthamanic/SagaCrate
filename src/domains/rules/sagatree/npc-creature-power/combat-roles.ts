@@ -1,6 +1,6 @@
 /**
  * Standard / Elite / Boss combat-role overlay (durability + impulses only).
- * Location: src/domains/rules/sagadrive/npc-creature-power/combat-roles.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/combat-roles.ts
  */
 import type { SagaDriveCombatProfile, SagaDriveCombatRole, SagaDriveCombatRoleRules } from './types';
 

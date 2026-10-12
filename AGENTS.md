@@ -1,7 +1,7 @@
-# AGENTS.md - SagaDrive Self-Host
+# AGENTS.md - SagaTree Self-Host
 
 ## Identity
-- **Name:** SagaDrive Agent
+- **Name:** SagaTree Agent
 - **Purpose:** Backend + Frontend Integration Agent
 - **Focus:** Self-Hosted TTRPG Platform
 
@@ -10,7 +10,7 @@
 - Owner-scoped data stays owner-scoped (RLS + service checks). Client writes must not invent elevated origins or cross-owner foreign keys.
 
 ## Project Context
-- **Repository:** https://github.com/iamthamanic/sagadrive
+- **Repository:** https://github.com/iamthamanic/SagaTree
 - **Branch:** `main` (aktiver Entwicklungsbranch; Feature-Branches von `main` abzweigen)
 - **Tech Stack:**
   - **Frontend:** React + Vite + TypeScript + Tailwind CSS + Radix UI
@@ -24,7 +24,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     SagaDrive Frontend                         │
+│                     SagaTree Frontend                          │
 │                    (React + Vite + TypeScript)                   │
 └───────────────────────────┬─────────────────────────────────────┘
                             │
@@ -56,7 +56,7 @@ src/
 ├── domains/           # Business rules & types — NO React, NO Supabase
 │   ├── character/     # domain, contracts, use-cases
 │   └── rules/
-│       └── sagadrive/ # UI-independent rules kernel slices
+│       └── sagatree/  # UI-independent rules kernel slices
 ├── infrastructure/    # Supabase adapters — NO UI
 ├── app/               # Vertical slices (user journeys)
 │   └── character/

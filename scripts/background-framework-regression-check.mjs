@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import process from 'node:process';
 
-const source = readFileSync(new URL('../src/domains/rules/sagadrive/background-templates/index.ts', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../src/domains/rules/sagatree/background-templates/index.ts', import.meta.url), 'utf8');
 const carousel = readFileSync(new URL('../src/app/character/creation/BackgroundCarousel.tsx', import.meta.url), 'utf8');
 const panel = readFileSync(new URL('../src/app/character/creation/CharacterBackgroundPanel.tsx', import.meta.url), 'utf8');
 
