@@ -86,6 +86,7 @@ function AppShell() {
     lookId,
     sagaDefinitionId,
     npcCreatureDefinitionId,
+    search,
     route,
     navigateToView,
     navigateToPath,
@@ -171,6 +172,7 @@ function AppShell() {
         return (
           <LazyView>
             <Library
+              key={search || 'library'}
               onNavigate={handleNavigate}
               onNavigateToItem={navigateToItem}
               onNavigateToLookCreate={navigateToLookCreate}

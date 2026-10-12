@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Button } from '../../shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui/tabs';
 import { Input } from '../../shared/ui/input';
-import { Plus, Search, User, BookOpen, Edit, Trash2, Loader2, Globe2, Package, Users, Palette, Gamepad2 } from 'lucide-react';
+import { Plus, Search, User, BookOpen, Edit, Trash2, Loader2, Globe2, Package, Users, Palette } from 'lucide-react';
 import { useCharacterSummaries, CreateCharacterEntryDialog, setCharacterEditorBootstrap } from '../character';
 import type { CharacterSummaryVm } from '../../domains/character';
 import { resolveAvatarSurfaceView } from '../../domains/character/avatar';
@@ -11,10 +11,11 @@ import type { ProjectSummaryVm } from '../../domains/project/contracts/project.t
 import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
 import { useAuth } from '../../lib/auth-context';
 import {
-  pathForSagaDefinitionCreate,
-  pathForSagaDefinitionEdit,
+  parseLibraryTabParam,
+  pathForLibraryTab,
   pathForSagaNew,
   pathForSagaSection,
+  type LibraryTabId,
 } from '../shell';
 import { EntityBrowser, type EntityBrowserRenderContext } from './EntityBrowser';
 import { EntityBrowserCard } from './EntityBrowserCard';
@@ -59,7 +60,13 @@ interface LibraryProps {
   canMutateLooks?: boolean;
 }
 
-type LibraryTab = 'characters' | 'npcs' | 'adventures' | 'worlds' | 'items' | 'looks';
+type LibraryTab = LibraryTabId;
+
+function readLibraryTabFromLocation(): LibraryTab {
+  if (typeof window === 'undefined') return 'characters';
+  return parseLibraryTabParam(new URLSearchParams(window.location.search).get('tab'))
+    ?? 'characters';
+}
 
 const SPECIES_DEVELOPMENT_MODE_LABELS = {
   explicit: 'Explizit',
@@ -89,8 +96,11 @@ export function Library({
   canMutateLooks = true,
 }: LibraryProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<LibraryTab>('characters');
-  const [visitedTabs, setVisitedTabs] = useState<Set<LibraryTab>>(() => new Set(['characters']));
+  const [activeTab, setActiveTab] = useState<LibraryTab>(() => readLibraryTabFromLocation());
+  const [visitedTabs, setVisitedTabs] = useState<Set<LibraryTab>>(() => {
+    const initial = readLibraryTabFromLocation();
+    return new Set<LibraryTab>(['characters', initial]);
+  });
   const [createCharacterOpen, setCreateCharacterOpen] = useState(false);
   const [worldEditorOpen, setWorldEditorOpen] = useState(false);
   const [editingWorld, setEditingWorld] = useState<WorldProfileVm | null>(null);
@@ -133,10 +143,26 @@ export function Library({
     void refreshCharacters({ force: true });
   }, [refreshCharacters]);
 
+  // Honor ?tab= from deep links (e.g. Dashboard "Alle Sagas" → adventures).
+  useEffect(() => {
+    const applyTabFromUrl = () => {
+      const tab = readLibraryTabFromLocation();
+      setActiveTab(tab);
+      setVisitedTabs((current) => new Set(current).add(tab));
+    };
+    applyTabFromUrl();
+    window.addEventListener('popstate', applyTabFromUrl);
+    return () => window.removeEventListener('popstate', applyTabFromUrl);
+  }, []);
+
   const handleTabChange = (value: string) => {
     const tab = value as LibraryTab;
     setActiveTab(tab);
     setVisitedTabs((current) => new Set(current).add(tab));
+    const nextPath = pathForLibraryTab(tab);
+    if (typeof window !== 'undefined' && `${window.location.pathname}${window.location.search}` !== nextPath) {
+      window.history.replaceState(null, '', nextPath);
+    }
   };
 
   const handleNpcCreate = () => {
@@ -217,16 +243,6 @@ export function Library({
   /** #571 — Library primary entry is always saga overview (not Leiten/Teilnehmen). */
   const openSagaOverview = (project: ProjectSummaryVm) => {
     onNavigate(pathForSagaSection(project.publicId, 'overview'));
-  };
-
-  /** Secondary: session join with participant intent (kept beside primary). */
-  const openProjectAsParticipant = (project: ProjectSummaryVm) => {
-    const params = new URLSearchParams({
-      project_id: project.id,
-      saga: project.publicId,
-      intent: 'join',
-    });
-    onNavigate(`/session-join?${params.toString()}`);
   };
 
   const openProject = (project: ProjectSummaryVm) => {
@@ -320,21 +336,11 @@ export function Library({
               <BookOpen className="mr-1 h-3 w-3" />
               <span className="text-xs">Saga öffnen</span>
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="min-h-11 flex-1"
-              onClick={() => openProjectAsParticipant(project)}
-              data-library-saga-join={project.publicId}
-            >
-              <Gamepad2 className="mr-1 h-3 w-3" />
-              <span className="text-xs">Teilnehmen</span>
-            </Button>
             {showGroupLabel && project.gmUserId === user?.id ? (
               <Button
                 variant="outline"
                 size="sm"
-                className="min-h-11 w-full"
+                className="min-h-11 min-w-[8rem] flex-1"
                 disabled={creatingGroupFor === project.id}
                 onClick={() => void createNewGroupRun(project)}
                 data-library-saga-new-group={project.publicId}
@@ -342,20 +348,6 @@ export function Library({
                 <Users className="mr-1 h-3 w-3" />
                 <span className="text-xs">
                   {creatingGroupFor === project.id ? 'Wird erstellt…' : 'Mit neuer Gruppe spielen'}
-                </span>
-              </Button>
-            ) : null}
-            {project.sagaId && project.gmUserId === user?.id ? (
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 w-full"
-                onClick={() => onNavigate(pathForSagaDefinitionEdit(project.sagaId!))}
-                data-library-saga-edit-story={project.sagaId}
-              >
-                <Edit className="mr-1 h-3 w-3" />
-                <span className="text-xs">
-                  {project.sagaOrigin === 'native' ? 'Geschichte ansehen' : 'Geschichte bearbeiten'}
                 </span>
               </Button>
             ) : null}
@@ -498,7 +490,7 @@ export function Library({
       {!searchQuery && (
         <Button className="min-h-11" onClick={() => onNavigate(pathForSagaNew())} data-library-saga-create>
           <Plus className="w-4 h-4 mr-2" />
-          Saga erstellen
+          Neue Saga
         </Button>
       )}
     </div>
@@ -653,29 +645,15 @@ export function Library({
                   </span>
                 }
                 toolbarRight={
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="min-h-11"
-                      onClick={() => onNavigate(pathForSagaDefinitionCreate())}
-                      data-library-story-create
-                    >
-                      <Edit className="w-4 h-4 mr-2" />
-                      <span className="hidden sm:inline">Geschichte schreiben</span>
-                      <span className="sm:hidden">Schreiben</span>
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="min-h-11"
-                      onClick={() => onNavigate(pathForSagaNew())}
-                      data-library-saga-create
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      <span className="hidden sm:inline">Gruppe starten</span>
-                      <span className="sm:hidden">Neu</span>
-                    </Button>
-                  </div>
+                  <Button
+                    size="sm"
+                    className="min-h-11"
+                    onClick={() => onNavigate(pathForSagaNew())}
+                    data-library-saga-create
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Neue Saga
+                  </Button>
                 }
               />
             )}

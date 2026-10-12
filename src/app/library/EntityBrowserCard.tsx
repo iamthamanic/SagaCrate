@@ -231,7 +231,7 @@ export function EntityBrowserCard({
             </div>
             {actions && (
               <div
-                className="flex flex-shrink-0 items-center gap-2"
+                className="flex max-w-[min(100%,28rem)] flex-shrink-0 flex-wrap items-center justify-end gap-2"
                 onClick={(event) => event.stopPropagation()}
               >
                 {actions}

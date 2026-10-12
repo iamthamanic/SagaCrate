@@ -71,7 +71,7 @@ mustNotInclude(
 
 mustInclude(
   'src/app/library/Library.tsx',
-  ['pathForSagaNew', 'Saga erstellen', 'data-library-saga-create'],
+  ['pathForSagaNew', 'Neue Saga', 'data-library-saga-create'],
   'Library Saga CTAs',
 );
 

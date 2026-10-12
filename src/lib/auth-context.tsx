@@ -19,6 +19,11 @@ import {
   LOCAL_ADMIN_USERNAME,
 } from './localAdmin';
 import {
+  isLocalPlayerShortcut,
+  LOCAL_PLAYER_EMAIL,
+  LOCAL_PLAYER_PASSWORD,
+} from './localPlayer';
+import {
   AUTH_SESSION_TIMEOUT_MS,
   isTimedOut,
   raceWithTimeout,
@@ -372,9 +377,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const generation = bumpAuthGeneration();
     setLocalAdminSession(false);
+    // Resolve local demo shortcuts to seeded GoTrue emails (admin handled above).
+    const resolvedEmail = isLocalPlayerShortcut(email, password)
+      ? LOCAL_PLAYER_EMAIL
+      : email.trim();
+    const resolvedPassword = isLocalPlayerShortcut(email, password)
+      ? LOCAL_PLAYER_PASSWORD
+      : password;
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: resolvedEmail,
+      password: resolvedPassword,
     });
     if (error) throw error;
     if (!isLiveGeneration(generation)) return;

@@ -23,6 +23,7 @@ import { SagaListPanel } from './SagaListPanel';
 import { SagaWorkspaceNav } from './SagaWorkspaceNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
+import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { useSagaOverview } from './hooks/useSagaOverview';
 import { SagaOverviewHero } from './overview/SagaOverviewHero';
 import { SagaEpisodeList } from './overview/SagaEpisodeList';
@@ -39,21 +40,23 @@ type SagaResourceScreenProps = {
 
 const SECTION_LABELS: Record<SagaSectionId, string> = {
   overview: 'Übersicht',
-  characters: 'Charaktere',
+  characters: 'Spieler-Charaktere',
   world: 'Welt',
   'npc-creatures': 'NSCs / Kreaturen',
   items: 'Gegenstände',
   quests: 'Quests',
+  lore: 'Lore / Verlauf',
   sessions: 'Sessions',
   settings: 'Einstellungen',
 };
 
-const UNAVAILABLE_COPY: Partial<Record<SagaSectionId, string>> = {
-  characters: 'Charakterverwaltung öffnest du über die Bibliothek — hier folgt später die Saga-Zuordnung.',
-  'npc-creatures': 'NSC-/Kreatur-Werkzeuge findest du in der Bibliothek.',
-  items: 'Gegenstände verwaltest du in der Bibliothek / Item-Workbench.',
-  quests: 'Quest-Werkzeuge sind in dieser Saga-Ansicht noch nicht verfügbar.',
-};
+const CATALOG_SECTIONS = new Set<SagaSectionId>([
+  'characters',
+  'npc-creatures',
+  'items',
+  'quests',
+  'lore',
+]);
 
 export function SagaResourceScreen({
   mode,
@@ -202,13 +205,29 @@ export function SagaResourceScreen({
     );
   }
 
+  if (CATALOG_SECTIONS.has(section)) {
+    return (
+      <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
+        <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6" data-saga-section={section}>
+          {header}
+          <SagaWorkspaceCatalogSection
+            section={section as 'characters' | 'npc-creatures' | 'items' | 'quests' | 'lore'}
+            onNavigate={navigate}
+          />
+          <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
+            Zurück
+          </Button>
+        </div>
+      </AdaptivePage>
+    );
+  }
+
   return (
     <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
       <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6" data-saga-section={section}>
         {header}
         <p className="text-sm text-muted-foreground" data-saga-section-unavailable>
-          {UNAVAILABLE_COPY[section] ??
-            `Bereich „${SECTION_LABELS[section]}“ ist noch nicht verfügbar.`}
+          {`Bereich „${SECTION_LABELS[section]}“ ist noch nicht verfügbar.`}
         </p>
         <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
           Zurück

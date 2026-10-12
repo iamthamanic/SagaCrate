@@ -45,6 +45,7 @@ export type SagaSectionId =
   | 'npc-creatures'
   | 'items'
   | 'quests'
+  | 'lore'
   | 'sessions'
   | 'settings';
 
@@ -170,6 +171,7 @@ const SAGA_SECTIONS = new Set<SagaSectionId>([
   'npc-creatures',
   'items',
   'quests',
+  'lore',
   'sessions',
   'settings',
 ]);
@@ -247,8 +249,44 @@ export function pathForNpcCreatureEdit(definitionId: string): string {
   return `/npc-creatures/${safe}`;
 }
 
+/** Library entity tabs — `adventures` is the Sagas tab in the UI. */
+export type LibraryTabId =
+  | 'characters'
+  | 'npcs'
+  | 'adventures'
+  | 'worlds'
+  | 'items'
+  | 'looks';
+
+const LIBRARY_TAB_ALIASES: Record<string, LibraryTabId> = {
+  characters: 'characters',
+  charaktere: 'characters',
+  npcs: 'npcs',
+  adventures: 'adventures',
+  sagas: 'adventures',
+  worlds: 'worlds',
+  welten: 'worlds',
+  items: 'items',
+  looks: 'looks',
+};
+
+export function parseLibraryTabParam(raw: string | null | undefined): LibraryTabId | null {
+  if (!raw) return null;
+  return LIBRARY_TAB_ALIASES[raw.trim().toLowerCase()] ?? null;
+}
+
+/** Deep-link into Bibliothek with a tab selected (default characters → bare /library). */
+export function pathForLibraryTab(tab: LibraryTabId = 'characters'): string {
+  if (tab === 'characters') return '/library';
+  return `/library?tab=${tab}`;
+}
+
+/**
+ * "Alle Sagas" and other saga-list entry points open Bibliothek → Sagas tab.
+ * Direct `/sagas` still resolves to SagaResourceScreen for bookmarked URLs.
+ */
 export function pathForSagaList(): string {
-  return '/sagas';
+  return pathForLibraryTab('adventures');
 }
 
 export function pathForSagaNew(): string {

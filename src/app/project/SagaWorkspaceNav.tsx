@@ -8,11 +8,12 @@ import { pathForSagaSection } from '../shell';
 
 const SECTIONS: readonly { id: SagaSectionId; label: string }[] = [
   { id: 'overview', label: 'Übersicht' },
-  { id: 'characters', label: 'Charaktere' },
+  { id: 'characters', label: 'Spieler-Charaktere' },
   { id: 'world', label: 'Welt' },
   { id: 'npc-creatures', label: 'NSCs / Kreaturen' },
   { id: 'items', label: 'Gegenstände' },
   { id: 'quests', label: 'Quests' },
+  { id: 'lore', label: 'Lore / Verlauf' },
   { id: 'sessions', label: 'Sessions' },
   { id: 'settings', label: 'Einstellungen' },
 ];
