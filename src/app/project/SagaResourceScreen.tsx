@@ -22,6 +22,7 @@ import { SagaCreateForm } from './SagaCreateForm';
 import { SagaListPanel } from './SagaListPanel';
 import { SagaWorkspaceNav } from './SagaWorkspaceNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
+import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { useSagaOverview } from './hooks/useSagaOverview';
@@ -153,6 +154,7 @@ export function SagaResourceScreen({
         <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 md:p-6" data-saga-section="settings">
           {header}
           <SagaVisualStyleSettings sagaPublicId={id} onNavigate={onNavigate} />
+          <SagaPermissionSettings sagaPublicId={id} />
           <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
             Zurück
           </Button>
@@ -211,6 +213,7 @@ export function SagaResourceScreen({
         <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6" data-saga-section={section}>
           {header}
           <SagaWorkspaceCatalogSection
+            sagaPublicId={id}
             section={section as 'characters' | 'npc-creatures' | 'items' | 'quests' | 'lore'}
             onNavigate={navigate}
           />

@@ -216,6 +216,14 @@ function checkSagaOverviewHubUi() {
   });
 }
 
+function checkSagaPermissionGrants() {
+  console.log('Saga permission grants (#617): catalog, bundles, reveal, Lore, Settings Rechte...');
+  execFileSync(process.execPath, ['scripts/saga-permission-grants-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSessionRecapPersistHandover() {
   console.log('Session recap persist + handover (#572): table, hydrate, domain, hook...');
   execFileSync(process.execPath, ['scripts/session-recap-persist-handover-check.mjs'], {
@@ -1995,6 +2003,7 @@ checkSagaStateColumnPrivileges();
 checkSagatreeCoreWorkflowsContract();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
+checkSagaPermissionGrants();
 checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();

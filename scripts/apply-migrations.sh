@@ -96,6 +96,7 @@ migrations=(
   072_dornhain_seed_and_character_rls.sql
   073_sagatree_schema_rename_compat.sql
   074_seed_local_player.sql
+  075_saga_permission_grants.sql
 )
 
 only="${1:-}"
