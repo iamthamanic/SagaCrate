@@ -90,7 +90,7 @@ requireMatch(dialog, /Deine Presets/, 'user presets section');
 requireMatch(dialog, /Level /, 'version level picker');
 requireMatch(dialog, /setCharacterEditorBootstrap/, 'bootstrap wiring from dialog');
 requireMatch(dialog, /assertValidSnapshot/, 'assert before bootstrap handoff');
-requireMatch(startingTemplatePicker, /SagaDrive-Starttemplates/, 'system starttemplates section');
+requireMatch(startingTemplatePicker, /SagaTree-Starttemplates/, 'system starttemplates section');
 requireMatch(startingTemplatePicker, /listSagaDriveStartingTemplates/, 'catalog list in picker');
 requireMatch(startingTemplatePicker, /StartingTemplateIcon/, 'starttemplate icon per row');
 requireMatch(startingTemplatePicker, /summaryDe/, 'starttemplate playstyle tooltip');

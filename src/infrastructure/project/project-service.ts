@@ -314,8 +314,24 @@ class ProjectService {
     return counts;
   }
 
+  /**
+   * Ensures the native Dornhain starter playthrough exists for the current GM.
+   * Soft-fails so list views still load if the definition/RPC is missing.
+   */
+  async ensureNativeStarterProject(slug = 'dornhain.whisper'): Promise<void> {
+    const { error } = await supabase.rpc('ensure_native_starter_project', {
+      p_slug: slug,
+    });
+    if (error) {
+      console.warn('[project-service] ensure_native_starter_project:', error.message);
+    }
+  }
+
   private async fetchUserProjectSummaries(): Promise<ProjectSummaryVm[]> {
     const userId = await getAuthenticatedUserId();
+
+    // Bridge native saga_definitions → selectable GM project (SessionJoin / Library).
+    await this.ensureNativeStarterProject();
 
     const projectSummarySelect =
       'id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status, saga_id, saga_version_id, saga_definitions(title, origin)';

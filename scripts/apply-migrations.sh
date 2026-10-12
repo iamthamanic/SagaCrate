@@ -62,10 +62,12 @@ migrations=(
   064_saga_editor_v1.sql
   065_saga_simulation_ops.sql
   066_saga_between_sessions_bote.sql
+  067_ensure_native_starter_project.sql
   068_world_maps.sql
   069_party_location_overview.sql
   070_saga_promote_session_outcomes.sql
   071_restore_authenticated_project_session_writes.sql
+  072_dornhain_seed_and_character_rls.sql
 )
 
 only="${1:-}"

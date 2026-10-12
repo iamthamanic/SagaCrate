@@ -114,7 +114,7 @@ export function CreateCharacterEntryDialog({
           </DialogTitle>
           <DialogDescription>
             {step === 'chooser' && 'Starte mit einem leeren Bogen oder übernehme ein gespeichertes Preset.'}
-            {step === 'presets' && 'SagaDrive-Starttemplate oder eigenes Preset verwenden.'}
+            {step === 'presets' && 'SagaTree-Starttemplate oder eigenes Preset verwenden.'}
             {step === 'versions' && 'Wähle eine Level-Version — es wird ein neuer Charakter geöffnet.'}
           </DialogDescription>
         </DialogHeader>
@@ -141,7 +141,7 @@ export function CreateCharacterEntryDialog({
               {loading ? <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden /> : <Sparkles className="h-8 w-8 text-primary" aria-hidden />}
               <div className="space-y-1">
                 <p className="text-lg font-semibold">Vorlage wählen</p>
-                <p className="text-sm text-muted-foreground">SagaDrive-Starttemplate oder eigenes Preset verwenden.</p>
+                <p className="text-sm text-muted-foreground">SagaTree-Starttemplate oder eigenes Preset verwenden.</p>
               </div>
             </button>
           </div>

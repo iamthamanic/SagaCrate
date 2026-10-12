@@ -25,8 +25,8 @@ export function StartingTemplatePicker({ onSelect }: StartingTemplatePickerProps
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium">SagaDrive-Starttemplates</p>
-      <ul className="max-h-64 space-y-2 overflow-y-auto" aria-label="SagaDrive-Starttemplates">
+      <p className="text-sm font-medium">SagaTree-Starttemplates</p>
+      <ul className="max-h-64 space-y-2 overflow-y-auto" aria-label="SagaTree-Starttemplates">
         {templates.map((template) => (
           <li key={template.key}>
             <button
