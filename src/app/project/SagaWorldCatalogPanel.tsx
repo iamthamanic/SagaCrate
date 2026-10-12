@@ -15,7 +15,6 @@ import {
   type SagaAssetBindingVm,
   type SagaMyPermissionsVm,
 } from '../../infrastructure/project/saga-permission-service';
-import { projectService } from '../../infrastructure/project/project-service';
 import { SagaBindingRevealControl } from './SagaBindingRevealControl';
 
 export type SagaWorldCatalogPanelProps = {
@@ -84,22 +83,39 @@ export function SagaWorldCatalogPanel({ sagaPublicId }: SagaWorldCatalogPanelPro
     setError(null);
     void (async () => {
       try {
-        const project = await projectService.getProjectByPublicId(sagaPublicId);
+        // Prefer permission RPC for projectId — avoids client projects SELECT RLS gaps
+        // that still allow DEFINER catalog/lore RPCs (verify-ui Local Admin path).
         const my = await sagaPermissionService.getMyPermissions(sagaPublicId);
-        const [mapRows, locRows, loreRows] = await Promise.all([
-          sagaPermissionService.listBindings(sagaPublicId, 'map'),
-          sagaPermissionService.listBindings(sagaPublicId, 'location'),
-          sagaPermissionService.listBindings(sagaPublicId, 'lore'),
-        ]);
         if (cancelled) return;
-        setProjectId(project.id);
+        setProjectId(my.projectId);
         setPerms(my);
-        setMaps(mapRows);
-        setLocations(locRows);
-        setLore(loreRows);
+        try {
+          const [mapRows, locRows, loreRows] = await Promise.all([
+            sagaPermissionService.listBindings(sagaPublicId, 'map'),
+            sagaPermissionService.listBindings(sagaPublicId, 'location'),
+            sagaPermissionService.listBindings(sagaPublicId, 'lore'),
+          ]);
+          if (cancelled) return;
+          setMaps(mapRows);
+          setLocations(locRows);
+          setLore(loreRows);
+          setError(null);
+        } catch (bindErr) {
+          if (cancelled) return;
+          setMaps([]);
+          setLocations([]);
+          setLore([]);
+          setError(
+            bindErr instanceof Error
+              ? bindErr.message
+              : 'Welt-Bindings konnten nicht geladen werden',
+          );
+        }
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Welt-Katalog konnte nicht geladen werden');
+          setPerms(null);
+          setProjectId(null);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -123,7 +139,7 @@ export function SagaWorldCatalogPanel({ sagaPublicId }: SagaWorldCatalogPanelPro
     );
   }
 
-  if (error) {
+  if (!perms && error) {
     return (
       <p className="text-sm text-destructive" role="alert" data-saga-world-error>
         {error}
@@ -136,6 +152,11 @@ export function SagaWorldCatalogPanel({ sagaPublicId }: SagaWorldCatalogPanelPro
       <p className="text-sm text-muted-foreground">
         Karten, Orte und Lore dieser Saga (Reveal steuert Party-Sicht).
       </p>
+      {error ? (
+        <p className="text-sm text-destructive" role="alert" data-saga-world-error>
+          {error}
+        </p>
+      ) : null}
       <BindingGroup
         title="Karten"
         icon={<Map className="size-4 text-muted-foreground" aria-hidden />}
