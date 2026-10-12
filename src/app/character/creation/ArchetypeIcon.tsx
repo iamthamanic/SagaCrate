@@ -10,7 +10,7 @@ import {
   VenetianMask,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveArchetypeKey } from '../../../domains/rules/sagadrive/character-creation';
+import type { SagaDriveArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
 
 const ARCHETYPE_ICONS: Record<SagaDriveArchetypeKey, LucideIcon> = {
   fighter: Swords,

@@ -3,7 +3,7 @@
  * sagatree-brand-phase-b-check — visible SagaTree Core ruleset label (#589 Phase B).
  * Location: scripts/sagatree-brand-phase-b-check.mjs
  *
- * Locks user-facing "SagaTree Core" copy. Keeps ruleset key `sagadrive-core`.
+ * Locks user-facing "SagaTree Core" copy. Canonical ruleset key `sagatree-core`.
  */
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -29,10 +29,10 @@ function forbidMatch(content, pattern, label) {
   if (pattern.test(content)) fail(`forbidden ${label}`);
 }
 
-const creation = read('src/domains/rules/sagadrive/character-creation/index.ts');
+const creation = read('src/domains/rules/sagatree/character-creation/index.ts');
 requireMatch(
   creation,
-  /value:\s*'sagadrive-core',\s*label:\s*'SagaTree Core'/,
+  /value:\s*'sagatree-core',\s*label:\s*'SagaTree Core'/,
   'ruleset option label SagaTree Core',
 );
 forbidMatch(creation, /label:\s*'SagaDrive Core'/, 'ruleset still labeled SagaDrive Core');

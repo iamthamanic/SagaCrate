@@ -6,7 +6,7 @@ import type { DerivedStatCardProps } from '../../../app/character/shared/Derived
 import {
   computeSagaDriveDerivedStats,
   type ComputeSagaDriveDerivedStatsInput,
-} from '../../../domains/rules/sagadrive/derived-stats';
+} from '../../../domains/rules/sagatree/derived-stats';
 
 export function buildSagaDriveDerivedStatCards(input: ComputeSagaDriveDerivedStatsInput): DerivedStatCardProps[] {
   return computeSagaDriveDerivedStats(input).map(({ key: _key, ...card }) => card);

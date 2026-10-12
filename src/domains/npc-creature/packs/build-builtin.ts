@@ -11,8 +11,8 @@ import type {
   SagaDriveCombatProfile,
   SagaDriveCombatRole,
   SagaDriveNpcLevel,
-} from '../../rules/sagadrive/npc-creature-power';
-import { normalizeCombatRoleForProfile } from '../../rules/sagadrive/npc-creature-power';
+} from '../../rules/sagatree/npc-creature-power';
+import { normalizeCombatRoleForProfile } from '../../rules/sagatree/npc-creature-power';
 
 export interface BuiltinNpcCreatureInput {
   id: string;

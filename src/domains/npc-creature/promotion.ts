@@ -6,7 +6,7 @@
  * Illegal compact values become unresolved legal choices — never a silent Full build.
  */
 
-import { isValidSagaDriveBaseAttributeDistribution } from '../rules/sagadrive/attribute-progression';
+import { isValidSagaDriveBaseAttributeDistribution } from '../rules/sagatree/attribute-progression';
 import type { CharacterAttributesDto } from '../character/domain/character.entity';
 import type { NpcCreatureDefinition, NpcCreatureDefinitionWriteDraft } from './definition';
 import { librarySourceOf } from './library-query';
@@ -344,8 +344,8 @@ export function assertFullSheetHasNoSilentIllegalAttributes(
   }
   if (!isLegalFullBaseAttributes(candidate)) {
     // Higher-level builds may include advances in the displayed attributes object.
-    // Accept when sagadrive_profile.baseAttributes is present and legal instead.
-    const profile = fullSheet.sagadrive_profile;
+    // Accept when sagatree_profile.baseAttributes is present and legal instead.
+    const profile = fullSheet.sagatree_profile ?? fullSheet.sagadrive_profile;
     if (profile && typeof profile === 'object' && !Array.isArray(profile)) {
       const base = (profile as { baseAttributes?: CharacterAttributesDto }).baseAttributes;
       if (base && isLegalFullBaseAttributes(base)) {

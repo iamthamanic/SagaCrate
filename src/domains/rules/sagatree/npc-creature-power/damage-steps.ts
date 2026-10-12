@@ -1,6 +1,6 @@
 /**
  * NPC damage step ladder (Core §15 / benchmarks design).
- * Location: src/domains/rules/sagadrive/npc-creature-power/damage-steps.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/damage-steps.ts
  */
 import type { SagaDriveDamageStep } from './types';
 

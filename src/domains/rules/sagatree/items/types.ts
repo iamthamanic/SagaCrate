@@ -1,6 +1,6 @@
 /**
  * sagadrive item rule types — §5.7 / §8.3 / §10 load, cost, protection, traits.
- * Location: src/domains/rules/sagadrive/items/types.ts
+ * Location: src/domains/rules/sagatree/items/types.ts
  *
  * Domain-pure: no React, no Supabase, no inventory state.
  */

@@ -42,7 +42,7 @@ import { InventorySummaryBar } from './InventorySummaryBar';
 import {
   DEFAULT_ABSTRACT_RESOURCE_LEVEL,
   type AbstractResourceLevel,
-} from '../../../domains/rules/sagadrive/items';
+} from '../../../domains/rules/sagatree/items';
 
 export interface InventoryLoadInfo {
   totalLoad: number;

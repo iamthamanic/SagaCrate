@@ -16,7 +16,7 @@ import {
   sagaDriveSkillDefinitions,
   type CharacterRulesetKey,
   type SagaDriveSkillKey,
-} from '../../domains/rules/sagadrive/character-creation';
+} from '../../domains/rules/sagatree/character-creation';
 import type { CharacterAttributesDto, CharacterGenderReading, SagaDriveProfileDto } from '../../domains/character';
 import type {
   CharacterPresetDto,
@@ -59,7 +59,7 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
   if (snapshot.schemaVersion !== 1) {
     throw new Error('Ungültiger Preset-Snapshot (Schema).');
   }
-  if (snapshot.ruleset_key !== 'sagadrive-core') {
+  if (snapshot.ruleset_key !== 'sagatree-core') {
     throw new Error('Presets sind derzeit nur für SagaTree Core verfügbar.');
   }
   if (!snapshot.name.trim()) {
@@ -73,9 +73,9 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
     throw new Error('Preset-Level muss zwischen 1 und 20 liegen.');
   }
 
-  const profile = snapshot.sagadrive_profile;
+  const profile = snapshot.sagatree_profile ?? snapshot.sagadrive_profile;
   if (!profile) {
-    throw new Error('Preset-Snapshot braucht ein SagaDrive-Profil.');
+    throw new Error('Preset-Snapshot braucht ein SagaTree-Profil.');
   }
   if (!isSagaDriveEssenceKey(profile.essence)) {
     throw new Error('Preset-Snapshot braucht eine Essenz.');
@@ -114,11 +114,17 @@ function normalizeSnapshot(value: unknown): CharacterPresetSnapshot | null {
   if (!isRecord(value) || value.schemaVersion !== 1) return null;
   if (typeof value.name !== 'string' || typeof value.race !== 'string' || typeof value.class !== 'string') return null;
   if (typeof value.level !== 'number') return null;
-  const rulesetKey: CharacterRulesetKey = typeof value.ruleset_key === 'string' && isCharacterRulesetKey(value.ruleset_key)
+  const rawRuleset = typeof value.ruleset_key === 'string' && isCharacterRulesetKey(value.ruleset_key)
     ? value.ruleset_key
-    : 'sagadrive-core';
+    : 'sagatree-core';
+  const rulesetKey: CharacterRulesetKey = rawRuleset === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core';
   const appearance = normalizeCharacterAppearance(isRecord(value.appearance) ? value.appearance : undefined);
-  const profile = isRecord(value.sagadrive_profile) ? (value.sagadrive_profile as unknown as SagaDriveProfileDto) : null;
+  const profileRecord = isRecord(value.sagatree_profile)
+    ? value.sagatree_profile
+    : isRecord(value.sagadrive_profile)
+      ? value.sagadrive_profile
+      : null;
+  const profile = profileRecord ? (profileRecord as unknown as SagaDriveProfileDto) : null;
   if (!profile) return null;
 
   const snapshot: CharacterPresetSnapshot = {
@@ -139,7 +145,7 @@ function normalizeSnapshot(value: unknown): CharacterPresetSnapshot | null {
       charisma: typeof (value.attributes as CharacterAttributesDto | undefined)?.charisma === 'number' ? (value.attributes as CharacterAttributesDto).charisma : 0,
     },
     skills: normalizeSkills(value.skills),
-    sagadrive_profile: profile,
+    sagatree_profile: profile,
     abilities: Array.isArray(value.abilities) ? value.abilities as CharacterPresetSnapshot['abilities'] : [],
     inventory: Array.isArray(value.inventory) ? value.inventory as CharacterPresetSnapshot['inventory'] : [],
   };
@@ -181,7 +187,7 @@ function mapToViewModel(dto: CharacterPresetDto, sourceMissing: boolean): Charac
   return {
     id: dto.id,
     displayName: dto.display_name,
-    rulesetKey: isCharacterRulesetKey(dto.ruleset_key) ? dto.ruleset_key : 'sagadrive-core',
+    rulesetKey: isCharacterRulesetKey(dto.ruleset_key) ? dto.ruleset_key : 'sagatree-core',
     origin: isPresetOrigin(dto.origin) ? dto.origin : 'user',
     sourceCharacterId: dto.source_character_id,
     sourceCharacterMissing: sourceMissing,
@@ -247,7 +253,7 @@ class CharacterPresetService {
 
   async createPresetFromCharacter(input: CreateCharacterPresetInput): Promise<CharacterPresetVm> {
     const userId = await getAuthenticatedUserId();
-    if (input.rulesetKey !== 'sagadrive-core') {
+    if (input.rulesetKey !== 'sagatree-core') {
       throw new Error('Presets sind derzeit nur für SagaTree Core verfügbar.');
     }
     const snapshot = withSafePortraitUrl(input.snapshot);
@@ -268,7 +274,7 @@ class CharacterPresetService {
       .insert({
         owner_user_id: userId,
         display_name: input.displayName.trim() || `${snapshot.name.trim()} Preset`,
-        ruleset_key: 'sagadrive-core',
+        ruleset_key: 'sagatree-core',
         origin: 'user',
         source_character_id: input.sourceCharacterId,
         published: false,

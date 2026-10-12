@@ -18,7 +18,7 @@ import { BASE_SLOT_COUNT } from '../../../domains/character/inventory-v2';
 import {
   ABSTRACT_RESOURCE_LEVELS,
   type AbstractResourceLevel,
-} from '../../../domains/rules/sagadrive/items';
+} from '../../../domains/rules/sagatree/items';
 import { inventoryCarryCapacity } from './inventory-ui-labels';
 
 export interface InventorySummaryBarProps {

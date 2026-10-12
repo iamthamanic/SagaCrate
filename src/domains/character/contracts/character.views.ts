@@ -13,7 +13,7 @@ import type {
 } from '../domain/character.entity';
 import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
 import type { InventoryState } from '../inventory-v2';
-import type { CharacterAbstractResources } from '../../rules/sagadrive/items';
+import type { CharacterAbstractResources } from '../../rules/sagatree/items';
 
 export type CharacterSheetStatus = 'complete' | 'incomplete';
 

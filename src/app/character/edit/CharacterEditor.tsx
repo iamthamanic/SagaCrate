@@ -58,7 +58,7 @@ import {
 import type { InventoryState } from '../../../domains/character/inventory-v2';
 import {
   type CharacterAbstractResources,
-} from '../../../domains/rules/sagadrive/items';
+} from '../../../domains/rules/sagatree/items';
 import { getAuthenticatedUserId } from '../../../lib/authenticatedUser';
 import { takeCharacterEditorBootstrap, clearCharacterEditorBootstrap } from '../shared/characterEditorBootstrap';
 import type { NpcPromotionPlan } from '../../../domains/npc-creature';
@@ -66,11 +66,11 @@ import { promoteNpcCreatureCompactToFull } from '../../../infrastructure/npc-cre
 import { assertValidSnapshot, characterPresetService } from '../../../infrastructure/character/character-preset-service';
 import type { CharacterPresetReleaseMode, CharacterPresetSnapshot } from '../../../domains/character/contracts/character-preset.types';
 import { buildSagaDriveDerivedStatCards } from './map-derived-stat-cards';
-import { getSagaDriveBackgroundTemplate } from '../../../domains/rules/sagadrive/background-templates';
+import { getSagaDriveBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
 import {
   getSagaDriveStartingTemplate,
   validateSagaDriveStartingTemplate,
-} from '../../../domains/rules/sagadrive/starting-templates';
+} from '../../../domains/rules/sagatree/starting-templates';
 import {
   SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS,
   SAGA_DRIVE_ATTRIBUTE_BONUS_CAP,
@@ -86,7 +86,7 @@ import {
   resolveSagaDriveAttributeBuildState,
   type SagaDriveAttributeAdvanceLevel,
   type SagaDriveAttributeAdvances,
-} from '../../../domains/rules/sagadrive/attribute-progression';
+} from '../../../domains/rules/sagatree/attribute-progression';
 import {
   SAGA_DRIVE_SPECIES_TRAIT_BUDGET,
   SAGA_DRIVE_START_FREE_SKILL_POINTS,
@@ -110,7 +110,7 @@ import {
   type SagaDriveAttributeKey,
   type SagaDriveEssenceKey,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
+} from '../../../domains/rules/sagatree/character-creation';
 import {
   SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS,
   backgroundSkillPointsToTrainedSkills,
@@ -126,8 +126,8 @@ import {
   type SagaDriveBackgroundSkillPoints,
   type SagaDriveSkillAdvanceDto,
   type SagaDriveSpecializationRecordDto,
-} from '../../../domains/rules/sagadrive/skill-progression';
-import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagadrive/species-trait-options';
+} from '../../../domains/rules/sagatree/skill-progression';
+import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import { Card, CardContent, CardHeader } from '../../../shared/ui/card';
@@ -285,7 +285,7 @@ export function CharacterEditor() {
   const [savedCharacterId, setSavedCharacterId] = useState<string | null>(null);
   const [persistedLevel, setPersistedLevel] = useState<number | null>(null);
   const [characterLevel, setCharacterLevel] = useState(1);
-  const [ruleset, setRuleset] = useState<CharacterRulesetKey>('sagadrive-core');
+  const [ruleset, setRuleset] = useState<CharacterRulesetKey>('sagatree-core');
   const [characterName, setCharacterName] = useState('');
   const [description, setDescription] = useState('');
   const [characterArchetype, setCharacterArchetype] = useState<SagaDriveArchetypeKey | undefined>();
@@ -605,7 +605,7 @@ export function CharacterEditor() {
       },
       attributes,
       skills: finalSkillRanks,
-      sagadrive_profile: sagaDriveProfile,
+      sagatree_profile: sagaDriveProfile,
       abilities,
       inventory,
       portrait_url: portraitUrl || undefined,
@@ -644,7 +644,7 @@ export function CharacterEditor() {
 
     setCharacterName(payload.name);
     setDescription(payload.description);
-    setRuleset(payload.rulesetKey === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagadrive-core');
+    setRuleset(payload.rulesetKey === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core');
     setCharacterLevel(payload.level);
     setCharacterRace(payload.race);
     setCharacterArchetype(profile.archetype && isSagaDriveArchetypeKey(profile.archetype) ? profile.archetype : undefined);
@@ -744,7 +744,7 @@ export function CharacterEditor() {
         race: snapshot.race,
         attributes: snapshot.attributes,
         skills: snapshot.skills,
-        profile: snapshot.sagadrive_profile,
+        profile: snapshot.sagatree_profile ?? snapshot.sagadrive_profile,
         appearance: snapshot.appearance,
         inventory: snapshot.inventory,
         backgroundStory: snapshot.background_story,
@@ -939,8 +939,10 @@ export function CharacterEditor() {
   };
 
   const handleRulesetChange = (value: string) => {
-    if (!isCharacterRulesetKey(value) || value === ruleset) return;
-    setRuleset(value);
+    if (!isCharacterRulesetKey(value)) return;
+    const next = value === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core';
+    if (next === ruleset) return;
+    setRuleset(next);
     setCharacterArchetype(undefined);
     setEssenceProfile(undefined);
     setArchetypeTrainingSkill(undefined);
@@ -1214,7 +1216,7 @@ export function CharacterEditor() {
         },
         attributes,
         skills: finalSkillRanks,
-        sagadrive_profile: sagaDriveProfile,
+        sagatree_profile: sagaDriveProfile,
         abilities,
         inventory,
         inventory_v2: inventoryV2,

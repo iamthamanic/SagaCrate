@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
-# Apply SagaDrive SQL migrations to the self-host Postgres container (sagadrive-db).
+# Apply SagaTree SQL migrations to the self-host Postgres container (sagatree-db).
 # Documented path: README_SELFHOST + README.md migration order. Not cloud.
+# Legacy container name sagadrive-db still accepted during rename transition.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CONTAINER="${SAGADRIVE_DB_CONTAINER:-sagadrive-db}"
+CONTAINER="${SAGATREE_DB_CONTAINER:-${SAGADRIVE_DB_CONTAINER:-}}"
+if [[ -z "$CONTAINER" ]]; then
+  if docker ps --format '{{.Names}}' | grep -qx 'sagatree-db'; then
+    CONTAINER='sagatree-db'
+  elif docker ps --format '{{.Names}}' | grep -qx 'sagadrive-db'; then
+    CONTAINER='sagadrive-db'
+  else
+    CONTAINER='sagatree-db'
+  fi
+fi
 DB_USER="${POSTGRES_USER:-postgres}"
 DB_NAME="${POSTGRES_DB:-postgres}"
 
@@ -68,6 +78,7 @@ migrations=(
   070_saga_promote_session_outcomes.sql
   071_restore_authenticated_project_session_writes.sql
   072_dornhain_seed_and_character_rls.sql
+  073_sagatree_schema_rename_compat.sql
 )
 
 only="${1:-}"

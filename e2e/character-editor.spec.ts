@@ -397,6 +397,15 @@ test('character editor exposes the SagaTree Core creation flow', async ({ page }
       throw new Error(`Character save failed: ${saveResponse.status()} ${await saveResponse.text()}`);
     }
     const savedBody = await saveResponse.json() as {
+      sagatree_profile?: {
+        archetype?: string;
+        archetypeTrainingSkill?: string;
+        freeSkillRanks?: Record<string, number>;
+        skillProvenanceStatus?: string;
+        background?: { backgroundSkillPoints?: Record<string, number>; specialization?: { name?: string } };
+        skillAdvances?: Array<{ level: number; kind: string; skill: string }>;
+        specializations?: Array<{ skill: string; name: string; source: string; acquiredAtLevel: number }>;
+      };
       sagadrive_profile?: {
         archetype?: string;
         archetypeTrainingSkill?: string;
@@ -407,21 +416,22 @@ test('character editor exposes the SagaTree Core creation flow', async ({ page }
         specializations?: Array<{ skill: string; name: string; source: string; acquiredAtLevel: number }>;
       };
     };
-    expect(savedBody.sagadrive_profile?.skillProvenanceStatus).toBeUndefined();
-    expect(savedBody.sagadrive_profile?.archetype).toBe('fighter');
-    expect(savedBody.sagadrive_profile?.archetypeTrainingSkill).toBe('melee');
-    const freeSum = Object.values(savedBody.sagadrive_profile?.freeSkillRanks ?? {}).reduce((sum, value) => sum + value, 0);
+    const savedProfile = savedBody.sagatree_profile ?? savedBody.sagadrive_profile;
+    expect(savedProfile?.skillProvenanceStatus).toBeUndefined();
+    expect(savedProfile?.archetype).toBe('fighter');
+    expect(savedProfile?.archetypeTrainingSkill).toBe('melee');
+    const freeSum = Object.values(savedProfile?.freeSkillRanks ?? {}).reduce((sum, value) => sum + value, 0);
     expect(freeSum).toBe(7);
-    const backgroundSum = Object.values(savedBody.sagadrive_profile?.background?.backgroundSkillPoints ?? {}).reduce((sum, value) => sum + value, 0);
+    const backgroundSum = Object.values(savedProfile?.background?.backgroundSkillPoints ?? {}).reduce((sum, value) => sum + value, 0);
     expect(backgroundSum).toBe(2);
-    expect(savedBody.sagadrive_profile?.background?.specialization?.name).toBe('Notfallmedizin');
-    expect(savedBody.sagadrive_profile?.skillAdvances).toEqual(
+    expect(savedProfile?.background?.specialization?.name).toBe('Notfallmedizin');
+    expect(savedProfile?.skillAdvances).toEqual(
       expect.arrayContaining([
         { level: 3, kind: 'rank-up', skill: 'medicine' },
         { level: 7, kind: 'learn', skill: 'sleight' },
       ]),
     );
-    expect(savedBody.sagadrive_profile?.specializations).toEqual(
+    expect(savedProfile?.specializations).toEqual(
       expect.arrayContaining([
         { skill: 'athletics', name: 'Verhandeln', source: 'skill-development', acquiredAtLevel: 5 },
       ]),

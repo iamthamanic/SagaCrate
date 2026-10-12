@@ -180,7 +180,7 @@ function parseRequestBody(value: unknown): ParsedRequest | null {
   if (!isRecord(value) || value.action !== 'generate-background' || !isRecord(value.context)) return null;
   const source = value.context;
   const ruleset = source.ruleset;
-  if (ruleset !== 'sagadrive-core' && ruleset !== 'dnd-5.5e') return null;
+  if (ruleset !== 'sagatree-core' && ruleset !== 'dnd-5.5e') return null;
 
   const attributes = parseAttributes(source.attributes);
   const appearance = parseAppearance(source.appearance);

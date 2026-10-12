@@ -2,7 +2,7 @@
  * character.entity — Core character domain value types.
  * Location: src/domains/character/domain/character.entity.ts
  */
-import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagadrive/character-creation';
+import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
 import type { SagaDriveFaceAnchorsManifestV1 } from '../avatar/face-anchor-contract';
 import type { SagaDriveAvatarMorphStateV1 } from '../avatar/morph-contract';
 

@@ -1,6 +1,6 @@
 /**
  * starting-templates validate — fail-closed catalog checks against rules kernel (#463).
- * Location: src/domains/rules/sagadrive/starting-templates/validate.ts
+ * Location: src/domains/rules/sagatree/starting-templates/validate.ts
  */
 import { isValidSagaDriveBaseAttributeDistribution } from '../attribute-progression';
 import { getSagaDriveBackgroundTemplate } from '../background-templates';

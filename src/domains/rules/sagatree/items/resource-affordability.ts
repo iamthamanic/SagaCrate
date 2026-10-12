@@ -1,6 +1,6 @@
 /**
  * sagadrive abstract resources & affordability — §10.3 + issue #32 editor rules.
- * Location: src/domains/rules/sagadrive/items/resource-affordability.ts
+ * Location: src/domains/rules/sagatree/items/resource-affordability.ts
  *
  * UI shows a single current level (0–5). Shape is extensible with optional `base`
  * for a later base/current dual bookkeeping UI without rewrite.

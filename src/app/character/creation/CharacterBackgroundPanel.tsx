@@ -22,17 +22,17 @@ import {
   getBackgroundSpecializationSuggestionNames,
   getSagaDriveBackgroundTemplate,
   getSagaDriveBackgroundTemplatesForWorldProfile,
-} from '../../../domains/rules/sagadrive/background-templates';
+} from '../../../domains/rules/sagatree/background-templates';
 import {
   getSagaDriveAttribute,
   getSagaDriveSkill,
   getSagaDriveSpecializationDescription,
   isSagaDriveSkillKey,
   type SagaDriveSkillKey,
-} from '../../../domains/rules/sagadrive/character-creation';
+} from '../../../domains/rules/sagatree/character-creation';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
-import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagadrive/skill-progression';
-import { SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS } from '../../../domains/rules/sagadrive/skill-progression';
+import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
+import { SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS } from '../../../domains/rules/sagatree/skill-progression';
 import { BackgroundCarousel } from './BackgroundCarousel';
 import {
   adjustBackgroundSkillPoints,

@@ -11,7 +11,7 @@ import {
   machtgradLabelForLevel,
   type SagaDriveCompactStatblockBenchmarks,
   type SagaDriveMachtgrad,
-} from '../rules/sagadrive/npc-creature-power';
+} from '../rules/sagatree/npc-creature-power';
 import type { NpcCreatureDefinition } from './definition';
 
 export interface NpcCreatureDerivedPower {

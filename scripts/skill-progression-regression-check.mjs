@@ -26,11 +26,11 @@ function forbidMatch(content, pattern, label) {
   }
 }
 
-const rules = read('src/domains/rules/sagadrive/skill-progression/index.ts');
-const creation = read('src/domains/rules/sagadrive/character-creation/index.ts');
+const rules = read('src/domains/rules/sagatree/skill-progression/index.ts');
+const creation = read('src/domains/rules/sagatree/character-creation/index.ts');
 const assertPersistence = read('src/domains/character/use-cases/assert-character-persistence.ts');
 const normalize = read('src/domains/character/use-cases/normalize-character.ts');
-const derived = read('src/domains/rules/sagadrive/derived-stats/compute-derived-stats.ts');
+const derived = read('src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts');
 const repository = read('src/infrastructure/character/supabase-character.repository.ts');
 const presetService = read('src/infrastructure/character/character-preset-service.ts');
 const domainCheck = read('scripts/skill-progression-domain-check.mjs');

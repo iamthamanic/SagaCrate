@@ -5,7 +5,7 @@ function read(path) { return readFileSync(new URL(`../${path}`, import.meta.url)
 function requireMatch(content, pattern, label) { if (!pattern.test(content)) { console.error(`Attribute bonus regression check failed: missing ${label}.`); process.exit(1); } }
 function rejectMatch(content, pattern, label) { if (pattern.test(content)) { console.error(`Attribute bonus regression check failed: ${label}.`); process.exit(1); } }
 
-const rules = read('src/domains/rules/sagadrive/attribute-progression/index.ts');
+const rules = read('src/domains/rules/sagatree/attribute-progression/index.ts');
 const editor = read('src/app/character/edit/CharacterEditor.tsx');
 
 requireMatch(rules, /SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET = 15/, '15-point level-one attribute bonus budget');

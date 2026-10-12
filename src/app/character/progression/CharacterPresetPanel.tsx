@@ -12,7 +12,7 @@ import { Label } from '../../../shared/ui/label';
 import { Switch } from '../../../shared/ui/switch';
 import { characterPresetService } from '../../../infrastructure/character/character-preset-service';
 import type { CharacterPresetReleaseMode, CharacterPresetSnapshot, CharacterPresetVm } from '../../../domains/character/contracts/character-preset.types';
-import type { CharacterRulesetKey } from '../../../domains/rules/sagadrive/character-creation';
+import type { CharacterRulesetKey } from '../../../domains/rules/sagatree/character-creation';
 
 type CharacterPresetPanelProps = {
   characterId: string | null;
@@ -66,7 +66,7 @@ export function CharacterPresetPanel({
   }, [characterId]);
 
   const assertCore = (): boolean => {
-    if (ruleset !== 'sagadrive-core') {
+    if (ruleset !== 'sagatree-core') {
       toast.error('Presets sind derzeit nur für SagaTree Core verfügbar.');
       return false;
     }
@@ -89,7 +89,7 @@ export function CharacterPresetPanel({
       const snapshot = buildSnapshot();
       const created = await characterPresetService.createPresetFromCharacter({
         displayName: `${characterName.trim() || snapshot.name} Preset`,
-        rulesetKey: 'sagadrive-core',
+        rulesetKey: 'sagatree-core',
         sourceCharacterId: characterId,
         snapshot,
       });
@@ -208,7 +208,7 @@ export function CharacterPresetPanel({
       )}
 
       {!preset ? (
-        <Button type="button" onClick={() => void handleSaveAsPreset()} disabled={busy || ruleset !== 'sagadrive-core'}>
+        <Button type="button" onClick={() => void handleSaveAsPreset()} disabled={busy || ruleset !== 'sagatree-core'}>
           {busy ? 'Speichert…' : 'Als Preset speichern'}
         </Button>
       ) : (
@@ -239,7 +239,7 @@ export function CharacterPresetPanel({
             <Button
               type="button"
               onClick={() => void handleReleaseVersion()}
-              disabled={busy || hasLevelVersion || ruleset !== 'sagadrive-core'}
+              disabled={busy || hasLevelVersion || ruleset !== 'sagatree-core'}
             >
               {busy ? 'Freigabe…' : `Version freigeben (Level ${characterLevel})`}
             </Button>

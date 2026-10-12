@@ -1,6 +1,6 @@
 /**
  * Combat-profile adjustments applied after level benchmark, before role HP.
- * Location: src/domains/rules/sagadrive/npc-creature-power/profiles.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/profiles.ts
  */
 import type { SagaDriveCombatProfile, SagaDriveProfileAdjustments } from './types';
 

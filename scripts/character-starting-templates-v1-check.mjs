@@ -57,24 +57,24 @@ function read(rel) {
 
 section('1 · files');
 [
-  'src/domains/rules/sagadrive/starting-templates/index.ts',
-  'src/domains/rules/sagadrive/starting-templates/catalog.ts',
-  'src/domains/rules/sagadrive/starting-templates/types.ts',
-  'src/domains/rules/sagadrive/starting-templates/validate.ts',
+  'src/domains/rules/sagatree/starting-templates/index.ts',
+  'src/domains/rules/sagatree/starting-templates/catalog.ts',
+  'src/domains/rules/sagatree/starting-templates/types.ts',
+  'src/domains/rules/sagatree/starting-templates/validate.ts',
   '.qa/design/character-starting-templates-v1.md',
   '.qa/acceptance/character-starting-templates-v1.md',
 ].forEach((rel) => check(existsSync(join(root, rel)), `missing ${rel}`));
 
 section('2 · barrel export');
 {
-  const barrel = read('src/domains/rules/sagadrive/index.ts');
+  const barrel = read('src/domains/rules/sagatree/index.ts');
   check(/starting-templates/.test(barrel), 'sagadrive index exports starting-templates');
 }
 
 section('3 · no forbidden fields in catalog');
 {
-  const catalog = read('src/domains/rules/sagadrive/starting-templates/catalog.ts');
-  const types = read('src/domains/rules/sagadrive/starting-templates/types.ts');
+  const catalog = read('src/domains/rules/sagatree/starting-templates/catalog.ts');
+  const types = read('src/domains/rules/sagatree/starting-templates/types.ts');
   // Structural fields only — comments may mention excluded domains.
   for (const needle of ['race:', 'appearance:', 'inventory:', 'equipment:', 'avatar:', 'portrait:', 'lookId:']) {
     check(!types.includes(needle) && !catalog.includes(needle), `must not declare field ${needle}`);
@@ -87,7 +87,7 @@ section('4 · catalog validates against rules kernel');
   const esbuild = require('esbuild');
   const outfile = join(root, 'node_modules/.cache/character-starting-templates-v1-check/catalog.mjs');
   esbuild.buildSync({
-    entryPoints: [join(root, 'src/domains/rules/sagadrive/starting-templates/index.ts')],
+    entryPoints: [join(root, 'src/domains/rules/sagatree/starting-templates/index.ts')],
     outfile,
     bundle: true,
     format: 'esm',

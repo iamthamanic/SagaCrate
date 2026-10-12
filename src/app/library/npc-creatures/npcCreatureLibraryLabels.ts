@@ -12,7 +12,7 @@ import type {
   SagaDriveCombatProfile,
   SagaDriveCombatRole,
   SagaDriveMachtgrad,
-} from '../../../domains/rules/sagadrive/npc-creature-power';
+} from '../../../domains/rules/sagatree/npc-creature-power';
 
 export const NPC_CREATURE_KIND_LABELS: Record<NpcCreatureKind, string> = {
   npc: 'NPC',

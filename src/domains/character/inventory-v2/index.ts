@@ -44,14 +44,14 @@ export {
 } from './types';
 
 /**
- * Traglast ceiling — owned by rules/sagadrive/items; re-exported so Inventory
+ * Traglast ceiling — owned by rules/sagatree/items; re-exported so Inventory
  * consumers share one formula with derived-stats (load summing stays local).
  */
 export {
   carryCapacity,
   exceedsDoubleCarryCapacity,
   isOverloaded,
-} from '../../rules/sagadrive/items';
+} from '../../rules/sagatree/items';
 
 export {
   calculateTotalLoad,

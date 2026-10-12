@@ -41,7 +41,7 @@ function mustNotInclude(file, needles, label) {
 }
 
 mustInclude(
-  'src/domains/rules/sagadrive/index.ts',
+  'src/domains/rules/sagatree/index.ts',
   ["export * from './npc-creature-power'"],
   'rules barrel',
 );
@@ -73,7 +73,7 @@ const esbuild = join(root, 'node_modules', '.bin', 'esbuild');
 execFileSync(
   esbuild,
   [
-    join(root, 'src/domains/rules/sagadrive/npc-creature-power/index.ts'),
+    join(root, 'src/domains/rules/sagatree/npc-creature-power/index.ts'),
     '--bundle',
     '--format=esm',
     `--outfile=${outfile}`,

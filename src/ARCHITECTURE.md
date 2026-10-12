@@ -8,7 +8,7 @@ SagaTree uses a **Modular Monolith** with explicit layers:
 
 | Layer | Path | May import | Must NOT import |
 |-------|------|------------|-----------------|
-| Rules kernel | `src/domains/rules/sagadrive/*` | stdlib, sibling rule slices | React, UI, Supabase, `app/`, `infrastructure/` |
+| Rules kernel | `src/domains/rules/sagatree/*` | stdlib, sibling rule slices | React, UI, Supabase, `app/`, `infrastructure/` |
 | Character domain | `src/domains/character/*` | rules kernel (public API) | React, UI, Supabase, `shared/ui` |
 | Infrastructure | `src/infrastructure/*` | domains, `lib/supabase` | React, `shared/ui`, `components/`, `app/` |
 | App slices | `src/app/<area>/` | domains, infrastructure, `shared/ui`, other areas **only via `app/<area>` public barrel** | Supabase, other areas' **private** nested files |

@@ -1,6 +1,6 @@
 /**
  * NPC/creature compact-statblock power types (Core §15).
- * Location: src/domains/rules/sagadrive/npc-creature-power/types.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/types.ts
  */
 
 export type SagaDriveNpcLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;

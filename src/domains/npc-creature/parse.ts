@@ -12,7 +12,7 @@ import {
   type SagaDriveCombatProfile,
   type SagaDriveCombatRole,
   type SagaDriveNpcLevel,
-} from '../rules/sagadrive/npc-creature-power';
+} from '../rules/sagatree/npc-creature-power';
 import type {
   NpcCreatureCombatDetails,
   NpcCreatureDefinition,

@@ -3,7 +3,7 @@
  * Location: src/app/character/creation/ArchetypeCarousel.tsx
  */
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { sagaDriveArchetypeOptions, type SagaDriveArchetypeKey } from '../../../domains/rules/sagadrive/character-creation';
+import { sagaDriveArchetypeOptions, type SagaDriveArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
 import { ArchetypeIcon } from './ArchetypeIcon';
 import { RuleHelp } from '../shared/RuleHelp';
 import { Badge } from '../../../shared/ui/badge';

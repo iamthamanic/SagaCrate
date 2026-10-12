@@ -6,12 +6,12 @@ import {
   applySagaDriveAttributeAdvances,
   isValidSagaDriveAttributeBuild,
   type SagaDriveAttributeAdvances,
-} from '../../rules/sagadrive/attribute-progression';
+} from '../../rules/sagatree/attribute-progression';
 import {
   assertSagaDriveSkillPersistence,
   resolveSagaDriveSkillBuildState,
   type SagaDriveSkillRankMap,
-} from '../../rules/sagadrive/skill-progression';
+} from '../../rules/sagatree/skill-progression';
 import type { CharacterAttributesDto } from '../domain/character.entity';
 import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
 

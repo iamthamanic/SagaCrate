@@ -7,8 +7,8 @@ import {
   getSagaDriveSpeciesTraitsForRace,
   sagaDriveRaceOptions,
   type SagaDriveSpeciesTraitKey,
-} from '../../../domains/rules/sagadrive/character-creation';
-import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagadrive/species-trait-options';
+} from '../../../domains/rules/sagatree/character-creation';
+import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
 import type { SagaDriveSpeciesTraitInstanceDto } from '../../../domains/character';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';

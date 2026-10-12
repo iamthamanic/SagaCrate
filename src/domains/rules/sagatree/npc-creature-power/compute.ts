@@ -1,6 +1,6 @@
 /**
  * Compose level → profile → role into compact statblock benchmarks.
- * Location: src/domains/rules/sagadrive/npc-creature-power/compute.ts
+ * Location: src/domains/rules/sagatree/npc-creature-power/compute.ts
  */
 import { levelBenchmark, signatureAbilityBudgetForMachtgrad } from './benchmarks';
 import {

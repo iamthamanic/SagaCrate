@@ -2,10 +2,10 @@
  * characterPreset.types — Versioned character sheet presets (SagaTree Core MVP).
  * Location: src/domains/character/contracts/character-preset.types.ts
  *
- * Skill provenance lives only on sagadrive_profile (freeSkillRanks, backgroundSkillPoints,
+ * Skill provenance lives on sagatree_profile (freeSkillRanks, backgroundSkillPoints,
  * archetypeTrainingSkill, skillAdvances, specializations) — no parallel top-level freeSkillRanks.
  */
-import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagadrive/character-creation';
+import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
 import type {
   AbilityDto,
   CharacterAppearanceDto,
@@ -35,7 +35,9 @@ export interface CharacterPresetSnapshot {
   appearance: CharacterAppearanceDto;
   attributes: CharacterAttributesDto;
   skills: Record<SagaDriveSkillKey, number>;
-  sagadrive_profile: SagaDriveProfileDto;
+  sagatree_profile: SagaDriveProfileDto;
+  /** @deprecated Legacy snapshot key — still accepted on import. */
+  sagadrive_profile?: SagaDriveProfileDto;
   abilities: AbilityDto[];
   inventory: ItemDto[];
   portrait_url?: string;

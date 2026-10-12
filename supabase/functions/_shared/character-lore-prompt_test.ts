@@ -16,8 +16,8 @@ function createContext(ruleset: CharacterLorePromptContext['ruleset']): Characte
     description: 'Eine vorsichtige Reisende mit einer offenen Schuld.',
     characterClass: ruleset === 'dnd-5.5e' ? 'Wizard' : 'Denker',
     raceOrSpecies: ruleset === 'dnd-5.5e' ? 'Elf' : 'Mensch',
-    setting: ruleset === 'sagadrive-core' ? 'Sci-Fi' : undefined,
-    essenceProfile: ruleset === 'sagadrive-core' ? 'Technologisch' : undefined,
+    setting: ruleset === 'sagatree-core' ? 'Sci-Fi' : undefined,
+    essenceProfile: ruleset === 'sagatree-core' ? 'Technologisch' : undefined,
     dndBackground: ruleset === 'dnd-5.5e' ? 'Sage' : undefined,
     level: 4,
     attributes: {
@@ -64,7 +64,7 @@ function createContext(ruleset: CharacterLorePromptContext['ruleset']): Characte
 }
 
 Deno.test('character lore prompt carries the complete character context', () => {
-  const prompt = buildCharacterLorePrompt(createContext('sagadrive-core'), {});
+  const prompt = buildCharacterLorePrompt(createContext('sagatree-core'), {});
 
   assertEquals(prompt.version, CHARACTER_LORE_PROMPT_VERSION);
   assertStringIncludes(prompt.user, 'Mira Voss');
@@ -105,7 +105,7 @@ Deno.test('authorized world lore is isolated as reference context', () => {
 
 Deno.test('existing background requests a separate alternative instead of replacement instructions', () => {
   const existing = 'Mira verließ ihre Heimat nach dem Verschwinden ihres Mentors.';
-  const prompt = buildCharacterLorePrompt(createContext('sagadrive-core'), {}, existing);
+  const prompt = buildCharacterLorePrompt(createContext('sagatree-core'), {}, existing);
 
   assertStringIncludes(prompt.user, 'CURRENT_BACKGROUND');
   assertStringIncludes(prompt.user, existing);

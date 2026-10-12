@@ -15,7 +15,7 @@ import type {
   SagaDriveCombatProfile,
   SagaDriveCombatRole,
   SagaDriveNpcLevel,
-} from '../../domains/rules/sagadrive/npc-creature-power';
+} from '../../domains/rules/sagatree/npc-creature-power';
 import {
   NpcCreatureStatblockPanel,
   NPC_ATTRIBUTE_SHORT_LABELS,

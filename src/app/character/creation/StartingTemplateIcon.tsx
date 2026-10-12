@@ -15,7 +15,7 @@ import {
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagadrive/starting-templates';
+import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 
 const STARTING_TEMPLATE_ICONS: Record<SagaDriveStartingTemplateKey, LucideIcon> = {
   berserker: Axe,
