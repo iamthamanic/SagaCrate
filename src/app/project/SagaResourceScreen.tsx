@@ -24,6 +24,7 @@ import { SagaWorkspaceNav } from './SagaWorkspaceNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
+import { SagaWorldCatalogPanel } from './SagaWorldCatalogPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { useSagaOverview } from './hooks/useSagaOverview';
 import { SagaOverviewHero } from './overview/SagaOverviewHero';
@@ -168,6 +169,7 @@ export function SagaResourceScreen({
       <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
         <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 md:p-6" data-saga-section="world">
           {header}
+          <SagaWorldCatalogPanel sagaPublicId={id} />
           <WorldLookPreviewPanel sagaPublicId={id} onNavigate={onNavigate} />
           <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
             Zurück

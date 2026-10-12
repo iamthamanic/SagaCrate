@@ -224,6 +224,14 @@ function checkSagaPermissionGrants() {
   });
 }
 
+function checkDornhainFullCatalogSeed() {
+  console.log('Dornhain full catalog seed (#618): bindings reveal mix + Welt UI...');
+  execFileSync(process.execPath, ['scripts/dornhain-full-catalog-seed-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSessionRecapPersistHandover() {
   console.log('Session recap persist + handover (#572): table, hydrate, domain, hook...');
   execFileSync(process.execPath, ['scripts/session-recap-persist-handover-check.mjs'], {
@@ -2004,6 +2012,7 @@ checkSagatreeCoreWorkflowsContract();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();
+checkDornhainFullCatalogSeed();
 checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();
