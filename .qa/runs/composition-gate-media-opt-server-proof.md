@@ -1,6 +1,6 @@
 # Composition Gate — media-opt-server-proof
 
-- HEAD_SHA: 8f1bfb652f6c0dd78cee615328b3358d3c633b99
+- HEAD_SHA: e7b893af2847712079ef1b4e2f46b83b2991c7c1
 - BASE_SHA: cf58cc635e7677145ee60c49577f78408e995bb2
 - Date: 2026-10-13
 - Verdict: SKIPPED
@@ -9,7 +9,7 @@
 CI/agent runs isolated Deno proof for server-side raster optimize; no production Edge route or Storage write.
 
 ## Hop chain
-1. `scripts/media-optimizer-server-proof-check.mjs` → Deno test
+1. `scripts/media-optimizer-server-proof-check.mjs` → Deno proof suite (`.proof.ts`)
 2. `optimizeRasterOnServerProof` decode → optional downscale → WebP encode ladder
 3. Metrics + decision doc only — no Storage/Auth hop
 
