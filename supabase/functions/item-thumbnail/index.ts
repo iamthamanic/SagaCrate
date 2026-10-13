@@ -29,6 +29,10 @@ import {
 } from '../_shared/item-thumbnail-meshy.ts';
 import { consumeItemThumbnailRateLimit } from '../_shared/item-thumbnail-rate-limit.ts';
 import {
+  optimizeProviderThumbnailBytes,
+  providerOptimizeFailureMessage,
+} from '../_shared/media-server-raster-optimize.ts';
+import {
   corsHeaders,
   handleOptions,
   jsonResponse as sharedJsonResponse,
@@ -607,22 +611,49 @@ serve(async (request: Request) => {
         if (!imageUrl) throw new Error('Meshy succeeded without image URL');
 
         const downloaded = await downloadMeshyImageBytes(imageUrl);
+        // #647: profile-conform server optimize after AuthZ + SSRF fetch; never persist silent original.
+        const optimized = await optimizeProviderThumbnailBytes(downloaded.bytes);
+        if (!optimized.ok) {
+          const errorMessage = providerOptimizeFailureMessage(optimized);
+          console.error('[item-thumbnail] provider optimize failed', optimized.status, errorMessage);
+          await serviceFetch(
+            config,
+            `/rest/v1/item_thumbnail_jobs?id=eq.${encodeURIComponent(jobId)}`,
+            {
+              method: 'PATCH',
+              body: JSON.stringify({
+                status: 'failed',
+                progress: 0,
+                error_message: errorMessage,
+                updated_at: new Date().toISOString(),
+              }),
+            },
+          );
+          return jsonResponse(request, {
+            status: 'ok',
+            jobId,
+            jobStatus: 'failed',
+            progress: 0,
+            errorMessage,
+          });
+        }
+        const { mime, bytes } = optimized;
         const assetId = crypto.randomUUID();
         const storagePath = buildItemThumbnailStoragePath({
           ownerUserId: userId,
           definitionId,
           worldProfileId: definition.world_profile_id,
           assetId,
-          mime: downloaded.mime,
+          mime,
         });
-        await uploadToStorage(config, storagePath, downloaded.bytes, downloaded.mime);
+        await uploadToStorage(config, storagePath, bytes, mime);
         await insertAsset(config, {
           id: assetId,
           definitionId,
           ownerUserId: userId,
           worldProfileId: definition.world_profile_id,
-          mime: downloaded.mime,
-          byteSize: downloaded.bytes.byteLength,
+          mime,
+          byteSize: bytes.byteLength,
           storagePath,
           origin: 'meshy',
           providerTaskId: job.provider_task_id,
