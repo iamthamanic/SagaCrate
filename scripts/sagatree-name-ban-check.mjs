@@ -27,6 +27,8 @@ function isAllowed(rel) {
   if (rel.startsWith('supabase/migrations/')) return true;
   if (rel === 'scripts/sagatree-name-ban-check.mjs') return true;
   if (rel === 'scripts/character-editor-regression-check.mjs') return true;
+  // Historical 007 filename + legacy docker container name until local compose rename.
+  if (rel === 'scripts/apply-migrations.sh') return true;
   if (rel === '.qa/acceptance/sagatree-eradicate-legacy-ids.md') return true;
   if (rel === '.qa/runs/composition-gate-sagatree-eradicate-legacy-ids.md') return true;
   return false;

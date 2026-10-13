@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # Apply SagaTree SQL migrations to the self-host Postgres container (sagatree-db).
 # Documented path: README_SELFHOST + README.md migration order. Not cloud.
-# Legacy container name sagatree-db still accepted during rename transition.
+# Legacy container name sagadrive-db still accepted until local compose is renamed.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CONTAINER="${SAGATREE_DB_CONTAINER:-${SAGATREE_DB_CONTAINER:-}}"
+CONTAINER="${SAGATREE_DB_CONTAINER:-${SAGADRIVE_DB_CONTAINER:-}}"
 if [[ -z "$CONTAINER" ]]; then
   if docker ps --format '{{.Names}}' | grep -qx 'sagatree-db'; then
     CONTAINER='sagatree-db'
-  elif docker ps --format '{{.Names}}' | grep -qx 'sagatree-db'; then
-    CONTAINER='sagatree-db'
+  elif docker ps --format '{{.Names}}' | grep -qx 'sagadrive-db'; then
+    CONTAINER='sagadrive-db'
   else
     CONTAINER='sagatree-db'
   fi
@@ -31,7 +31,7 @@ migrations=(
   004_project_membership_security.sql
   005_character_ruleset_metadata.sql
   006_character_portrait_storage.sql
-  007_sagatree_character_profile.sql
+  007_sagadrive_character_profile.sql
   008_world_profiles.sql
   009_character_adventure_arcs.sql
   010_characters_v3_columns.sql
@@ -99,6 +99,7 @@ migrations=(
   075_saga_permission_grants.sql
   076_dornhain_full_catalog_seed.sql
   077_dornhain_default_all_accounts.sql
+  079_drop_sagadrive_aliases.sql
 )
 
 only="${1:-}"
