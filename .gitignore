@@ -94,3 +94,6 @@ public/assets/avatars/canonical/*.vrm
 
 # Local daily release-readiness state (OpenClaw/runtime only)
 .qa/release/runtime/
+
+# local Kong expand (#604)
+supabase/config/kong.runtime.yml

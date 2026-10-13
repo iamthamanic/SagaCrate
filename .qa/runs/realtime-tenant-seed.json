@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "externalId": "localhost",
+  "rtContainer": "sagatree-realtime",
+  "dbContainer": "sagadrive-db",
+  "steps": [
+    {
+      "name": "realtime.running",
+      "ok": true,
+      "detail": "status=running"
+    },
+    {
+      "name": "realtime.migrate",
+      "ok": true,
+      "detail": "migrate completed"
+    },
+    {
+      "name": "realtime.tenant_row",
+      "ok": true,
+      "detail": "external_id=localhost already present"
+    },
+    {
+      "name": "realtime.tenant_verify",
+      "ok": true,
+      "detail": "count=1"
+    }
+  ],
+  "at": "2026-10-13T21:46:07.549Z"
+}

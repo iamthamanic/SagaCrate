@@ -1,0 +1,30 @@
+{
+  "feature": "realtime-compose-boot",
+  "issue": 604,
+  "at": "2026-10-13T21:46:54.804Z",
+  "base": "http://localhost:8000",
+  "checks": [
+    {
+      "name": "container.running",
+      "ok": true,
+      "detail": "sagatree-realtime status=running"
+    },
+    {
+      "name": "container.secret_key_base",
+      "ok": true,
+      "detail": "boot past SECRET_KEY_BASE"
+    },
+    {
+      "name": "kong.realtime_route",
+      "ok": true,
+      "detail": "HTTP 403 (expect not 502/503)"
+    },
+    {
+      "name": "ws.subscribe",
+      "ok": true,
+      "detail": "SUBSCRIBED then unsubscribe"
+    }
+  ],
+  "ok": true,
+  "logSnippet": "21:46:40.015 [notice] SYN[sagatree@127.0.0.1] Adding node to scope <Elixir.Extensions.PostgresCdcRls>\n21:46:40.015 [notice] SYN[sagatree@127.0.0.1] Creating tables for scope <Elixir.Extensions.PostgresCdcRls>\n21:46:40.015 [notice] SYN[sagatree@127.0.0.1|registry<Elixir.Extensions.PostgresCdcRls>] Discovering the cluster\n21:46:40.015 [notice] SYN[sagatree@127.0.0.1|pg<Elixir.Extensions.PostgresCdcRls>] Discovering the cluster\n21:46:42.999 [debug] Tzdata polling for update.\n21:46:43.070 [info] tzdata release in place is from a file last modified Fri, 22 Oct 2021 02:20:47 GMT. Release file on server was last modified Wed, 30 Sep 2026 01:06:34 GMT.\n21:46:43.070 [debug] Tzdata downloading new data from https://data.iana.org/time-zones/tzdata-latest.tar.gz\n21:46:43.146 [debug] Tzdata data downloaded. Release version 2026e.\n21:46:43.493 [info] Tzdata has updated the release from 2021e to 2026e\n21:46:43.493 [debug] Tzdata deleting ETS table for version 2021e\n21:46:43.496 [debug] Tzdata deleting ETS table file for version 2021e\n"
+}

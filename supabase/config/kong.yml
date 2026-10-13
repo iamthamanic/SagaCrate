@@ -43,12 +43,15 @@ services:
     plugins:
       - name: cors
 
+  # Upstream Phoenix socket is /socket — strip /realtime/v1 so
+  # /realtime/v1/websocket → /socket/websocket (#604).
   - name: realtime-v1
-    url: http://supabase-realtime:4000
+    url: http://supabase-realtime:4000/socket
     routes:
       - name: realtime-v1-route
+        strip_path: true
         paths:
-          - /realtime/v1
+          - /realtime/v1/
     plugins:
       - name: cors
 
