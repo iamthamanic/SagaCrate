@@ -1,7 +1,6 @@
 # Composition Gate — library-carousel-slash-routes
 
-- HEAD_SHA: WORKTREE
-- WORKTREE: uncommitted scope on `fix/library-carousel-slash-routes` (library carousel layout + `/library/:tab` slash routes)
+- HEAD_SHA: dfa4b71e6b2c250c4d8e2cf14a9dedcb3b8189d4
 - BASE_SHA: dd6f2edf (origin/main tip at branch cut)
 - Date: 2026-10-13
 - Verdict: CLEAR
