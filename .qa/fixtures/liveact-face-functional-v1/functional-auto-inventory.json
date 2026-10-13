@@ -378,7 +378,7 @@
     "channels": {},
     "groundTruth": {
       "reason": "unreviewed_or_auto",
-      "topologyFingerprint": null
+      "topologyFingerprint": "v63:t21:m1"
     }
   }
 }

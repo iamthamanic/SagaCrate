@@ -85,7 +85,7 @@
     "fixtureId": "hy-neutral-realistic-geometry"
   },
   "speechNote": "correlation remains above target, while amplitude + velocity retention materially improve",
-  "avatarContourFidelity": "NOT_MEASURED — requires #450/#451",
+  "avatarContourFidelity": "MEASURED_VIA_451_E2E_GATE",
   "privacy": {
     "committedRawLandmarks": 0,
     "committedWebcam": 0

@@ -169,5 +169,5 @@
     "committedWebcam": 0
   },
   "authoritativeGate": "scripts/liveact-iris-gaze-solver-check.mjs",
-  "deterministicHash": "e1f3d009c4cd672a1698127dbe67a1a74f2c601dc241aa6ccc27465dd6b82729"
+  "deterministicHash": "37c6eb0f4b554e7f3878737a866460ef4faa0edcf82e45230ec5222dcaf944de"
 }

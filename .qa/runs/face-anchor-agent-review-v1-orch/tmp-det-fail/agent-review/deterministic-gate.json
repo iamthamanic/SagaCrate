@@ -1,0 +1,8 @@
+{
+  "pass": false,
+  "anchorCount": 21,
+  "requiredAnchorCount": 21,
+  "violations": [
+    "anatomy_validator_fail"
+  ]
+}

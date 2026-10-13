@@ -7,7 +7,7 @@
   "asset": {
     "modelPath": "public/assets/avatars/species/human-male-quality-20260921-m5-face3.glb",
     "modelSha256": "ea483b38266b0afc09f109a625363b8b8f228b8bad92802a73e72926439f62a2",
-    "anchorsSha256": "2b7e9967aed0577bb3c628bfe1cc5272a7cc184f78b9cdf32793d9fb3b865a96",
+    "anchorsSha256": "d92d878a5fa253931ac34baaf31ecbc40c9ef12869f66454cfeec0c291edefef",
     "topologyFingerprint": "v133002:t215832:m1",
     "cacheBust": "quality5-face3-repro1"
   },

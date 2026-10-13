@@ -1,0 +1,411 @@
+{
+  "contractVersion": "SagaTreeFaceMappingAutoEvalV1",
+  "rows": [
+    {
+      "anchorId": "mouthUpper",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "mouthLower",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "mouthCornerLeft",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "mouthCornerRight",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeLeftInner",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeLeftOuter",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeLeftUpper",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeLeftLower",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeRightInner",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeRightOuter",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeRightUpper",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "eyeRightLower",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyelid_or_skin",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "browLeftInner",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "browLeftOuter",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "browLeftCenter",
+      "manualPresent": true,
+      "autoPresent": false,
+      "screenErrorPx": null,
+      "normalizedFaceError": null,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": false,
+      "meshNodeIdentity": null,
+      "lateralityOk": null,
+      "actualSurfaceClass": null,
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": null,
+      "outlier": false
+    },
+    {
+      "anchorId": "browRightInner",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "browRightOuter",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "browRightCenter",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "eyebrow",
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "noseTip",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "chin",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    },
+    {
+      "anchorId": "forehead",
+      "manualPresent": true,
+      "autoPresent": true,
+      "screenErrorPx": 2.23606797749979,
+      "normalizedFaceError": 0.018633899812498248,
+      "landmarkAvailability": 1,
+      "confidence": 1,
+      "raycastHit": true,
+      "meshNodeIdentity": "HeadMesh",
+      "lateralityOk": null,
+      "actualSurfaceClass": "face_skin",
+      "expectedSurfaceClasses": [
+        "face_skin"
+      ],
+      "surfaceSemanticsOk": true,
+      "outlier": false
+    }
+  ],
+  "summary": {
+    "expectedAnchors": 21,
+    "successfullyMapped": 13,
+    "missing": 8,
+    "raycastMisses": 8,
+    "wrongSurfaceHits": 0,
+    "surfaceMismatchCount": 0,
+    "lrSwaps": 0,
+    "medianErrorPx": 2.23606797749979,
+    "p95ErrorPx": 2.23606797749979,
+    "maxErrorPx": 2.23606797749979,
+    "thresholdStatus": "needs-calibration",
+    "outlierAnchorIds": []
+  }
+}

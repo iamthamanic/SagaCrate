@@ -1,0 +1,20 @@
+{
+  "protocolVersion": "face-anchor-agent-review-v1",
+  "outcome": "human_review_required",
+  "requiredPasses": 5,
+  "completedPasses": 0,
+  "deterministicPass": false,
+  "evidenceManifestSha256": "c65275c028c2042ba02261d11d1321cdbfc4f93b314efaa9349734ee574819e5",
+  "conflictingAnchorIds": [],
+  "reasons": [
+    "deterministic:anatomy_validator_fail",
+    "deterministic_gates_failed",
+    "missing_pass_1",
+    "missing_pass_2",
+    "missing_pass_3",
+    "missing_pass_4",
+    "missing_pass_5",
+    "pass_count_0_of_5"
+  ],
+  "aggregatedAt": "2026-09-30T12:00:00.000Z"
+}

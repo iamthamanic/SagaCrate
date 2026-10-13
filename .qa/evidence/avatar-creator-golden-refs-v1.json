@@ -8,7 +8,7 @@
       "id": "golden-fantasy-adult-elf",
       "setting": "fantasy",
       "speciesId": "elf",
-      "fingerprint": "7ec6127b602c17ee",
+      "fingerprint": "78522b21a4558589",
       "traits": {
         "head": "elf-angular",
         "ears": "elf-long",
@@ -28,7 +28,7 @@
       "id": "golden-scifi-adult-cyborg",
       "setting": "sci-fi",
       "speciesId": "cyborg",
-      "fingerprint": "70b08bb02d6ed0b2",
+      "fingerprint": "165a4e79c3c5b941",
       "traits": {
         "head": "human-balanced",
         "ears": "round",
@@ -49,99 +49,99 @@
   "comboFingerprints": [
     {
       "id": "fantasy-human-0",
-      "fingerprint": "056685bd11747ece"
+      "fingerprint": "57293b239184f294"
     },
     {
       "id": "fantasy-elf-1",
-      "fingerprint": "5385f61e643d3c9b"
+      "fingerprint": "cb35a66223409316"
     },
     {
       "id": "fantasy-dwarf-2",
-      "fingerprint": "947769720aa0a52d"
+      "fingerprint": "8dd09c8ee28a98e7"
     },
     {
       "id": "fantasy-halfling-3",
-      "fingerprint": "e882a6056006dda7"
+      "fingerprint": "db19f23ff0d52188"
     },
     {
       "id": "fantasy-orc-4",
-      "fingerprint": "5cee85970257ca51"
+      "fingerprint": "c761100338301539"
     },
     {
       "id": "fantasy-human-5",
-      "fingerprint": "f4d40302d953e0b3"
+      "fingerprint": "14618bcf768ca180"
     },
     {
       "id": "fantasy-human-6",
-      "fingerprint": "5471797286044ed8"
+      "fingerprint": "1bcf04152d99d8e5"
     },
     {
       "id": "fantasy-elf-7",
-      "fingerprint": "0f13645a7717b346"
+      "fingerprint": "32326e2758d46acf"
     },
     {
       "id": "fantasy-dwarf-8",
-      "fingerprint": "97a1f8fb5099d5d1"
+      "fingerprint": "f195d231a70a5eeb"
     },
     {
       "id": "fantasy-halfling-9",
-      "fingerprint": "f76faca01a5d9c42"
+      "fingerprint": "81fb2a57c4f42d4e"
     },
     {
       "id": "fantasy-orc-10",
-      "fingerprint": "4a3881008dc2c43e"
+      "fingerprint": "424b515b23266739"
     },
     {
       "id": "fantasy-human-11",
-      "fingerprint": "d49a76a686604c5e"
+      "fingerprint": "cc7751ca97523fa0"
     },
     {
       "id": "sci-fi-human-0",
-      "fingerprint": "539020f086947f38"
+      "fingerprint": "027ed0b07c7ea8de"
     },
     {
       "id": "sci-fi-cyborg-1",
-      "fingerprint": "05bbf576a48ae6b4"
+      "fingerprint": "bc0964ea17b8b377"
     },
     {
       "id": "sci-fi-alien-2",
-      "fingerprint": "ee79ae764220bdac"
+      "fingerprint": "36fd38b9e34f05ac"
     },
     {
       "id": "sci-fi-cyborg-3",
-      "fingerprint": "9c73ebffaccf9ae2"
+      "fingerprint": "cb0378720f1cca84"
     },
     {
       "id": "sci-fi-alien-4",
-      "fingerprint": "50854bf3a5509db3"
+      "fingerprint": "99dc3f190cb7447b"
     },
     {
       "id": "sci-fi-human-5",
-      "fingerprint": "acff727c57603d5e"
+      "fingerprint": "a8eab6ca6197e650"
     },
     {
       "id": "sci-fi-human-6",
-      "fingerprint": "875b1d43da0c6cc7"
+      "fingerprint": "f1bbf69949859a80"
     },
     {
       "id": "sci-fi-cyborg-7",
-      "fingerprint": "fe1c36b80c0c0797"
+      "fingerprint": "f99742df525606e7"
     },
     {
       "id": "sci-fi-alien-8",
-      "fingerprint": "7a4c511f467d7e44"
+      "fingerprint": "2deaeed78a285399"
     },
     {
       "id": "sci-fi-cyborg-9",
-      "fingerprint": "d2466c9d4968e290"
+      "fingerprint": "c8e2b2e7e93a517f"
     },
     {
       "id": "sci-fi-alien-10",
-      "fingerprint": "db3f36abafb134b2"
+      "fingerprint": "f5e31d44a4ed60ea"
     },
     {
       "id": "sci-fi-human-11",
-      "fingerprint": "4ddc34909a9a974a"
+      "fingerprint": "bd6f49d398447b3d"
     }
   ]
 }
