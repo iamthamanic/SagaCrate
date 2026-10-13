@@ -1,21 +1,27 @@
 # Composition Gate — negative-authz-suite (#607)
 
-**Verdict:** CLEAR  
-**HEAD:** (see commit after ship)  
-**Date:** 2026-10-14
+- HEAD_SHA: eccbeebc9b066f2a7c59b5d1d4834df876d0f44e
+- BASE_SHA: 0e76d818e51fd2f6a6f0ce7a239671f5ed043bd7
+- Date: 2026-10-14
+- Verdict: CLEAR
 
-## Intent
-Negativ-Berechtigungstests + Edge JWT gate + Local Admin DEV-only + ai-gm session membership.
+## Event
+Anonymous or foreign caller hits Edge/REST deny paths; member JWT still reaches `dm-tools`.
 
-## Auth resolution
-Browser/API → Kong → Edge `main` (`gateEdgeRequestJwt`) → function workers; `ai-gm` → `assertSessionMemberAccess` (PostgREST RLS + project_members).
+## Hop chain
+1. Client → Kong `/functions/v1/*` (apikey ± Bearer)
+2. Edge `main` → `gateEdgeRequestJwt` (VERIFY_JWT default true)
+3. Worker (`dm-tools` / `ai-gm`) only after valid HS256 Bearer
+4. `ai-gm` → `assertSessionMemberAccess` (PostgREST sessions + project_members via caller JWT)
+5. Evidence: `.qa/runs/negative-authz-suite/report.json` + test-gate contract
 
-## Findings
-None blocking. Realtime CDC still local-flake → `BLOCKED_604` when subscribed with 0 events (documented in workflows check).
+## Simulations
 
-## Secure-by-Default
-| Check | Result |
-|-------|--------|
-| B-01 authz | PASS — stranger ai-gm 403; anon edge 401 |
-| Local Admin prod | PASS — `import.meta.env.DEV` |
-| Loopback weak seeds | PASS — compose-harden |
+| Case | Intended | Composed | Result |
+|------|----------|----------|--------|
+| N-actors | GM member allow; stranger deny | membership gate + RLS empty session | pass |
+| Invalid/missing | no Bearer / bad JWT → 401 | edge-jwt-gate | pass |
+| Two consumers / crash | contract-check + workflows edge neg both require deny | shared deny semantics | pass |
+
+## Flags
+none
