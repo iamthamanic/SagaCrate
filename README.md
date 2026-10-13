@@ -299,6 +299,7 @@ SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 
 ## Recent changes
 
+- **2026-10-13** — Bibliothek: Slash-Routen (`/library/player-characters`, `/library/sagas`, …); Karussell-Karten breiter + portrait-/cover-sichere Bildframes
 - **2026-10-12** — Saga-Workspace: Lobby direkt nach Create mit großem Join-Code; Bibliothek-Tab Sagas; Spieler-Charaktere + Lore; local `player` Demo-Login (`074`)
 - **2026-10-11** — Backend-Audit: Variant A (Supabase-Stack optimieren); Realtime/`SECRET_KEY_BASE` & Footprint dokumentiert
 - **2026-10-10** — Adaptive Content-Width: Journey/Session Join folgt Main-Pane (`AdaptiveJourneyColumn`, AU-CONTENT-WIDTH)

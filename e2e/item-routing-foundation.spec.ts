@@ -13,9 +13,9 @@ test('library URL is reload-stable', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await ensureLoggedIn(page);
   await page.getByRole('button', { name: 'Bibliothek' }).first().click();
-  await expect(page).toHaveURL(/\/library$/);
+  await expect(page).toHaveURL(/\/library\/player-characters$/);
   await page.reload();
-  await expect(page).toHaveURL(/\/library$/);
+  await expect(page).toHaveURL(/\/library\/player-characters$/);
   await expect(page.getByRole('button', { name: 'Bibliothek' }).first()).toBeVisible();
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, '01-library-route.png'),

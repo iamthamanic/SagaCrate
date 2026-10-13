@@ -25,6 +25,7 @@ import type { ProjectSummaryVm } from '../../domains/project/contracts/project.t
 import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
 import { useAuth } from '../../lib/auth-context';
 import {
+  parseLibraryTabFromPathname,
   parseLibraryTabParam,
   pathForLibraryTab,
   pathForSagaNew,
@@ -78,8 +79,12 @@ type LibraryTab = LibraryTabId;
 
 function readLibraryTabFromLocation(): LibraryTab {
   if (typeof window === 'undefined') return 'characters';
-  return parseLibraryTabParam(new URLSearchParams(window.location.search).get('tab'))
-    ?? 'characters';
+  // Legacy `?tab=` wins on bare `/library` bookmarks, then slash segment.
+  const fromQuery = parseLibraryTabParam(
+    new URLSearchParams(window.location.search).get('tab'),
+  );
+  if (fromQuery) return fromQuery;
+  return parseLibraryTabFromPathname(window.location.pathname) ?? 'characters';
 }
 
 const SPECIES_DEVELOPMENT_MODE_LABELS = {
@@ -157,12 +162,23 @@ export function Library({
     void refreshCharacters({ force: true });
   }, [refreshCharacters]);
 
-  // Honor ?tab= from deep links (e.g. Dashboard "Alle Sagas" → adventures).
+  // Honor `/library/:tab` (and legacy `?tab=`) from deep links / back-forward.
   useEffect(() => {
     const applyTabFromUrl = () => {
+      // popstate can fire while Library is still mounted after Back leaves
+      // `/library…` — never rewrite non-library destinations.
+      if (parseLibraryTabFromPathname(window.location.pathname) === null) {
+        return;
+      }
       const tab = readLibraryTabFromLocation();
       setActiveTab(tab);
       setVisitedTabs((current) => new Set(current).add(tab));
+      const canonical = pathForLibraryTab(tab);
+      const current = `${window.location.pathname}${window.location.search}`;
+      // Normalize bare `/library` and `?tab=` bookmarks onto slash paths.
+      if (current !== canonical) {
+        window.history.replaceState(null, '', canonical);
+      }
     };
     applyTabFromUrl();
     window.addEventListener('popstate', applyTabFromUrl);
@@ -338,6 +354,9 @@ export function Library({
         imageUrl={coverUrl ?? undefined}
         imageFallback={storyTitle}
         imageAlt={`Saga ${storyTitle}`}
+        imageAspect="landscape"
+        imageObjectFit="contain"
+        imageObjectPosition="center bottom"
         metaChips={chips}
         variant={context.variant}
         isCenter={context.isCenter}
@@ -387,6 +406,9 @@ export function Library({
         imageUrl={coverUrl ?? undefined}
         imageFallback={world.name}
         imageAlt={`Welt ${world.name}`}
+        imageAspect="landscape"
+        imageObjectFit="contain"
+        imageObjectPosition="center bottom"
         metaChips={[
           `Speziesentwicklung: ${SPECIES_DEVELOPMENT_MODE_LABELS[speciesDevelopmentMode]}`,
         ]}
@@ -398,7 +420,7 @@ export function Library({
             <Button
               variant="outline"
               size="sm"
-              className="flex-1"
+              className="h-11 min-h-11 flex-1"
               onClick={() => openEditWorld(world)}
             >
               <Edit className="w-3 h-3 mr-1" />
@@ -407,6 +429,7 @@ export function Library({
             <Button
               variant="outline"
               size="sm"
+              className="h-11 min-h-11"
               aria-label={`${world.name} löschen`}
               onClick={() => void handleDeleteWorld(world)}
             >
@@ -445,6 +468,7 @@ export function Library({
       imageAlt={`Portrait von ${char.name}`}
       imageFallback={char.name}
       imageObjectFit={imageObjectFit}
+      imageObjectPosition={imageObjectFit === 'cover' ? 'center 20%' : undefined}
       variant={context.variant}
       isCenter={context.isCenter}
       onOpen={context.variant === 'list' || context.isCenter ? () => {

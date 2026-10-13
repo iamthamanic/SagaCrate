@@ -28,7 +28,9 @@ export const CENTER_FOCUS_SLIDE_BASIS_CLASS =
 
 /**
  * Library EntityBrowser cover-flow slide basis.
- * Fixed rem slots (same at every breakpoint step) + pl-0; equal tuck is CSS-linear.
+ * Width follows the available main-pane width (`@container` on EntityBrowser):
+ * ~42% of the pane, clamped to 13.5–17rem — wide enough for actions, narrow enough
+ * for portrait cards. Tuck offsets are % of own width, so spacing stays equal.
  */
 export const CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS =
-  'basis-[10rem] pl-0 sm:basis-[10.5rem] md:basis-[11rem] lg:basis-[11.5rem]';
+  'basis-[clamp(13.5rem,42cqw,17rem)] pl-0';

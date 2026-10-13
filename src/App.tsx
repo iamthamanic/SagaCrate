@@ -87,6 +87,7 @@ function AppShell() {
     sagaDefinitionId,
     npcCreatureDefinitionId,
     search,
+    pathname,
     route,
     navigateToView,
     navigateToPath,
@@ -172,7 +173,7 @@ function AppShell() {
         return (
           <LazyView>
             <Library
-              key={search || 'library'}
+              key={pathname.startsWith('/library') ? pathname : search || 'library'}
               onNavigate={handleNavigate}
               onNavigateToItem={navigateToItem}
               onNavigateToLookCreate={navigateToLookCreate}
