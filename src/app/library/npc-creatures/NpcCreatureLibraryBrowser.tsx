@@ -216,7 +216,7 @@ export function NpcCreatureLibraryBrowser({
           type="button"
           variant="secondary"
           size="sm"
-          className="h-11 min-h-11 w-full"
+          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
           onClick={() => handleTemplateToCharacter(definition)}
           data-npc-library-template-to-character
         >
@@ -230,7 +230,7 @@ export function NpcCreatureLibraryBrowser({
           type="button"
           variant="secondary"
           size="sm"
-          className="h-11 min-h-11 w-full"
+          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
           onClick={() => void handleCompactToFull(record)}
           data-npc-library-compact-to-full
         >
@@ -244,7 +244,7 @@ export function NpcCreatureLibraryBrowser({
           type="button"
           variant="secondary"
           size="sm"
-          className="h-11 min-h-11 w-full"
+          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
           onClick={() => handleAssignController(definition)}
           data-npc-library-assign-controller
         >
@@ -313,7 +313,7 @@ export function NpcCreatureLibraryBrowser({
                 type="button"
                 variant="secondary"
                 size="sm"
-                className="h-11 min-h-11 w-full"
+                className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
                 onClick={() => handleSpawnInstance(definition)}
                 data-npc-library-spawn-instance
               >

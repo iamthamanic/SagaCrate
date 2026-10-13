@@ -32,7 +32,7 @@ Make the Saga workspace and session entry usable: Overview must load (apply miss
 ## Regression
 
 - [x] Library → Sagas still lists Dornhain
-- [x] Dashboard → Alle Sagas opens library `?tab=adventures`
+- [x] Dashboard → Alle Sagas opens library `/library/sagas`
 - [x] Session join-by-code path still works
 
 ## Assumptions

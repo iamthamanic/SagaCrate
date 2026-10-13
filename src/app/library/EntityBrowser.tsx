@@ -138,7 +138,7 @@ export function EntityBrowser<T extends { id: string }>({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="@container w-full min-w-0 space-y-3">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1 text-sm text-muted-foreground">{toolbarLeft}</div>
         <div className="flex items-center gap-2">
@@ -169,11 +169,11 @@ export function EntityBrowser<T extends { id: string }>({
       </div>
 
       {viewMode === 'carousel' ? (
-        <div className="relative px-0 py-5 pb-12">
+        <div className="relative px-0 py-5 pb-14">
           <style>{carouselCss}</style>
 
           <Carousel setApi={setApi} opts={emblaOpts} className="w-full">
-            <CarouselContent className={contentClassName}>
+            <CarouselContent className={cn(contentClassName, 'items-start')}>
               {slides.map((item, slideIndex) => {
                 const sourceIndex = loopPack.toSourceIndex(slideIndex);
                 return (

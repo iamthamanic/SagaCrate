@@ -6,6 +6,9 @@
  * user id equals the seeded auth.users row (migration 011) — a valid UUID, so
  * Postgres never rejects it as `invalid input syntax for type uuid`. Offline
  * UI state resolves to the same owner id the seeded session would produce.
+ *
+ * #607: Shortcut + storage session are DEV-only (`import.meta.env.DEV`).
+ * Production builds must not honor admin/1234.
  * Location: src/lib/localAdmin.ts.
  */
 
@@ -24,7 +27,13 @@ export const LOCAL_ADMIN_PASSWORD = '1234';
 /** Seeded email — keep stable; renaming would break existing GoTrue rows. */
 export const LOCAL_ADMIN_EMAIL = 'admin@sagatree.local';
 
+/** Local Admin UI shortcut is Vite DEV only — never production builds. */
+export function isLocalAdminEnabled(): boolean {
+  return import.meta.env.DEV === true;
+}
+
 export function isLocalAdminSession(): boolean {
+  if (!isLocalAdminEnabled()) return false;
   if (typeof window === 'undefined') return false;
   if (window.localStorage.getItem(LOCAL_ADMIN_STORAGE_KEY) === 'true') return true;
   if (window.localStorage.getItem(LEGACY_LOCAL_ADMIN_STORAGE_KEY) === 'true') {
@@ -36,6 +45,11 @@ export function isLocalAdminSession(): boolean {
 
 export function setLocalAdminSession(active: boolean): void {
   if (typeof window === 'undefined') return;
+  if (!isLocalAdminEnabled()) {
+    window.localStorage.removeItem(LOCAL_ADMIN_STORAGE_KEY);
+    window.localStorage.removeItem(LEGACY_LOCAL_ADMIN_STORAGE_KEY);
+    return;
+  }
   if (active) {
     window.localStorage.setItem(LOCAL_ADMIN_STORAGE_KEY, 'true');
   } else {

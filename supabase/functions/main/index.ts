@@ -4,8 +4,12 @@
  *
  * Nginx may strip `/functions/v1`; workers still expect that prefix in pathname.
  * Always forward `/functions/v1/<function-name>/…` to the worker.
+ *
+ * #607: Enforce VERIFY_JWT here — stock edge-runtime JWT checks do not wrap
+ * userWorkers created by this custom main.
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { gateEdgeRequestJwt } from '../_shared/edge-jwt-gate.ts';
 
 declare const EdgeRuntime: {
   userWorkers: {
@@ -50,6 +54,9 @@ console.log('SagaTree edge main dispatcher started');
 
 serve(async (req: Request) => {
   try {
+    const jwtDenied = await gateEdgeRequestJwt(req);
+    if (jwtDenied) return jwtDenied;
+
     const url = new URL(req.url);
     const serviceName = resolveServiceName(url.pathname);
 

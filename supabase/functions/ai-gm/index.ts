@@ -3,6 +3,7 @@ import {
   handleOptions,
   type CorsOptions,
 } from '../_shared/cors.ts';
+import { assertSessionMemberAccess } from '../_shared/session-membership-gate.ts';
 
 const CORS_OPTS: CorsOptions = {
   missingOriginPolicy: 'configured-or-star',
@@ -437,6 +438,15 @@ serve(async (req: Request) => {
       
       const request: GMRequest = body
       const stream = request.stream !== false
+
+      // #607: non-members must not reach Ollama / mutate world state
+      const memberDenied = await assertSessionMemberAccess(req, request.sessionId)
+      if (memberDenied) {
+        return new Response(memberDenied.body, {
+          status: memberDenied.status,
+          headers: { ...headers, 'Content-Type': 'application/json' },
+        })
+      }
       
       // Fetch additional NPC context from Lorekeeper
       if (request.context?.npcs) {

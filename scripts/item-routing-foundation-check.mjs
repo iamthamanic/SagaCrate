@@ -61,6 +61,10 @@ const routes = await import(pathToFileURL(outfile).href);
 const cases = [
   ['/', 'view', 'dashboard'],
   ['/library', 'view', 'library'],
+  ['/library/player-characters', 'view', 'library'],
+  ['/library/sagas', 'view', 'library'],
+  ['/library/items', 'view', 'library'],
+  ['/library/not-a-tab', 'not-found', null],
   ['/items/create', 'item-create', null],
   ['/items/create/new/waffe', 'item-create', 'waffe'],
   ['/items/create/new/ruestung', 'item-create', 'ruestung'],
@@ -90,8 +94,14 @@ for (const [path, kind, extra] of cases) {
   }
 }
 
-if (routes.pathForView('library') !== '/library') {
+if (routes.pathForView('library') !== '/library/player-characters') {
   throw new Error('pathForView(library) mismatch');
+}
+if (routes.pathForLibraryTab('adventures') !== '/library/sagas') {
+  throw new Error('pathForLibraryTab(adventures) mismatch');
+}
+if (routes.pathForLibraryTab('items') !== '/library/items') {
+  throw new Error('pathForLibraryTab(items) mismatch');
 }
 if (routes.pathForView('project-join') !== '/join') {
   throw new Error('alias project-join → /join failed');

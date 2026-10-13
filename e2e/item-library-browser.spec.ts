@@ -80,8 +80,8 @@ test('library items tab lists catalog with search, filters, and create navigatio
   await firstCard.click();
   await expect(page).toHaveURL(new RegExp(`/items/${encodeURIComponent(itemId!)}$`));
   await page.goBack();
-  // Library tabs use ?tab=… (characters stays bare /library).
-  await expect(page).toHaveURL(/\/library(\?tab=items)?$/);
+  // Library tabs use slash paths (`/library/items`).
+  await expect(page).toHaveURL(/\/library\/items$/);
   await openItemsTab(page);
 
   await page.getByRole('button', { name: 'Neues Item erstellen' }).click();

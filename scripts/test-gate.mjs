@@ -224,6 +224,14 @@ function checkComposeHardenDefaults() {
   });
 }
 
+function checkNegativeAuthzSuite() {
+  console.log('Negative authz suite (#607): JWT gate + deny evidence contract...');
+  execFileSync(process.execPath, ['scripts/negative-authz-suite-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2161,6 +2169,7 @@ checkSagaStateColumnPrivileges();
 checkSagatreeCoreWorkflowsContract();
 checkRealtimeComposeBootContract();
 checkComposeHardenDefaults();
+checkNegativeAuthzSuite();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();

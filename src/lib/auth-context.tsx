@@ -11,6 +11,7 @@
 import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { supabase } from './supabase';
 import {
+  isLocalAdminEnabled,
   isLocalAdminSession,
   setLocalAdminSession,
   LOCAL_ADMIN_EMAIL,
@@ -74,6 +75,7 @@ function getStoredLocalAdminUser(): User | null {
 }
 
 function isLocalAdminShortcut(identifier: string, password: string): boolean {
+  if (!isLocalAdminEnabled()) return false;
   const normalized = identifier.trim().toLowerCase();
   return (
     (normalized === LOCAL_ADMIN_USERNAME || normalized === LOCAL_ADMIN_EMAIL) &&
