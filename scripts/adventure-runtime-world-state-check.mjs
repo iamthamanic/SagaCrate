@@ -70,10 +70,10 @@ mustInclude(
 mustInclude(
   'supabase/migrations/050_session_adventure_runtime.sql',
   [
-    'sagatree_resolve_adventure_command',
+    'sagadrive_resolve_adventure_command',
     'adventure_runtime',
     "'adventure'",
-    'sagatree_project_shared_adventure',
+    'sagadrive_project_shared_adventure',
   ],
   'SQL authority',
 );

@@ -79,7 +79,7 @@ mustInclude(
 mustInclude(
   'supabase/migrations/049_session_death_lifecycle.sql',
   [
-    'sagatree_resolve_life_command',
+    'sagadrive_resolve_life_command',
     'lifeByCharacter',
     "'life'",
     'death_save',

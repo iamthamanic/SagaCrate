@@ -37,8 +37,8 @@ function mustNotInclude(file, needles, label) {
 mustInclude(
   'supabase/migrations/043_session_shared_scene_presentation.sql',
   [
-    'sagatree_build_scene_presentation',
-    'sagatree_is_http_url',
+    'sagadrive_build_scene_presentation',
+    'sagadrive_is_http_url',
     'scenePresentation',
     'authoritative',
     'apply_session_runtime_command',

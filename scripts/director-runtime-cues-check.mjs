@@ -59,9 +59,9 @@ mustInclude(
 mustInclude(
   'supabase/migrations/051_session_director_runtime.sql',
   [
-    'sagatree_resolve_cue_command',
+    'sagadrive_resolve_cue_command',
     "'cue'",
-    'sagatree_session_has_director',
+    'sagadrive_session_has_director',
     'automaticMode',
     "'life', 'adventure', 'cue'",
   ],

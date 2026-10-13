@@ -37,7 +37,7 @@ function mustNotInclude(file, needles, label) {
 mustInclude(
   'supabase/migrations/047_session_program_presentation.sql',
   [
-    'sagatree_build_program_presentation',
+    'sagadrive_build_program_presentation',
     'programPresentation',
     "p_kind = 'program'",
     "'program'",

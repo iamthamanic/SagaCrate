@@ -30,7 +30,7 @@ if (!existsSync(join(root, migrationPath))) fail(`missing ${migrationPath}`);
 
 const migration = read(migrationPath);
 requireMatch(migration, /CREATE TABLE IF NOT EXISTS public\.session_recaps/i, 'session_recaps table');
-requireMatch(migration, /sagatree_upsert_session_recap/i, 'upsert recap helper');
+requireMatch(migration, /sagadrive_upsert_session_recap/i, 'upsert recap helper');
 requireMatch(migration, /get_session_recap/i, 'get_session_recap RPC');
 requireMatch(migration, /CREATE OR REPLACE FUNCTION public\.create_project_session/i, 'create_project_session hydrate');
 requireMatch(migration, /adventure_runtime/i, 'hydrate from adventure_runtime');
@@ -98,6 +98,6 @@ const parsed = mod.parsePersistedRecapHighlightLines([
 ]);
 if (parsed[0]?.summary !== 'Persistiert') fail('parse persisted lines');
 
-requireMatch(migration, /sagatree_build_recap_highlight_lines\(\s*COALESCE\(sr\.snapshot/i, 'overview audience-safe snippet');
+requireMatch(migration, /sagadrive_build_recap_highlight_lines\(\s*COALESCE\(sr\.snapshot/i, 'overview audience-safe snippet');
 
 console.log('Session recap persist handover check passed.');

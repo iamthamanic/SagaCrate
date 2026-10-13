@@ -37,11 +37,11 @@ function mustNotInclude(file, needles, label) {
 mustInclude(
   'supabase/migrations/044_session_combat_encounter.sql',
   [
-    'sagatree_resolve_combat_command',
-    'sagatree_resolve_damage_command',
-    'sagatree_resolve_condition_command',
-    'sagatree_strip_forged_encounter_keys',
-    'sagatree_sync_npc_instance_from_participant',
+    'sagadrive_resolve_combat_command',
+    'sagadrive_resolve_damage_command',
+    'sagadrive_resolve_condition_command',
+    'sagadrive_strip_forged_encounter_keys',
+    'sagadrive_sync_npc_instance_from_participant',
     "'{encounter}'",
     'apply_session_runtime_command',
     'spendAction',

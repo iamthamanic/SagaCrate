@@ -48,7 +48,7 @@ mustInclude(
 mustInclude(
   'supabase/migrations/039_public_resource_ids_and_session_numbers.sql',
   [
-    'generate_sagatree_public_id',
+    'generate_sagadrive_public_id',
     'allocate_next_session_number',
     'create_project_session',
     'sessions_project_session_number_uidx',

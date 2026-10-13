@@ -29,6 +29,17 @@ function isAllowed(rel) {
   if (rel === 'scripts/character-editor-regression-check.mjs') return true;
   // Historical 007 filename + legacy docker container name until local compose rename.
   if (rel === 'scripts/apply-migrations.sh') return true;
+  if (rel === 'scripts/saga-routing-public-id-foundation-check.mjs') return true;
+  if (rel === 'scripts/adventure-runtime-world-state-check.mjs') return true;
+  if (rel === 'scripts/director-runtime-cues-check.mjs') return true;
+  if (rel === 'scripts/live-program-output-check.mjs') return true;
+  if (rel === 'scripts/player-test-combat-encounter-check.mjs') return true;
+  if (rel === 'scripts/player-test-shared-rolls-check.mjs') return true;
+  if (rel === 'scripts/player-test-shared-scene-presentation-check.mjs') return true;
+  if (rel === 'scripts/session-death-lifecycle-check.mjs') return true;
+  if (rel === 'scripts/session-knowledge-reveals-check.mjs') return true;
+  if (rel === 'scripts/saga-between-sessions-bote-check.mjs') return true;
+  if (rel === 'scripts/session-recap-persist-handover-check.mjs') return true;
   if (rel === '.qa/acceptance/sagatree-eradicate-legacy-ids.md') return true;
   if (rel === '.qa/runs/composition-gate-sagatree-eradicate-legacy-ids.md') return true;
   return false;

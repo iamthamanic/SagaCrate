@@ -37,10 +37,10 @@ function mustNotInclude(file, needles, label) {
 mustInclude(
   'supabase/migrations/042_session_shared_rolls.sql',
   [
-    'sagatree_resolve_session_check',
-    'sagatree_strip_forged_roll_keys',
-    'sagatree_resolve_probe_grade',
-    'sagatree_roll_d20',
+    'sagadrive_resolve_session_check',
+    'sagadrive_strip_forged_roll_keys',
+    'sagadrive_resolve_probe_grade',
+    'sagadrive_roll_d20',
     'authoritative',
     'useDrive',
     'checkTarget',
