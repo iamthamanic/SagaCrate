@@ -85,13 +85,34 @@ async function getFunctionErrorMessage(error: unknown): Promise<string | undefin
   }
 }
 
+/** Matches look-reference domain aggregate budget (#639). */
+const LOOK_REFERENCE_AGGREGATE_MAX_BYTES = 12 * 1024 * 1024;
+
+function estimateBase64Bytes(b64: string | undefined): number {
+  if (!b64) return 0;
+  return Math.ceil((b64.length * 3) / 4);
+}
+
 /**
  * Analyze references via edge + domain normalize.
+ * Callers should optimize with look-reference profile before Base64 (#639).
  * Does not persist — callers must save only when outcome.ok.
  */
 export async function analyzeLookReferences(
   request: LookReferenceAnalysisRequest,
 ): Promise<LookReferenceAnalysisOutcome> {
+  const aggregateBytes = request.references.reduce(
+    (sum, ref) => sum + estimateBase64Bytes(ref.contentBase64),
+    0,
+  );
+  if (aggregateBytes > LOOK_REFERENCE_AGGREGATE_MAX_BYTES) {
+    return {
+      ok: false,
+      code: 'edge-error',
+      messageDe: `Gesamtgröße der Referenzbilder überschreitet ${(LOOK_REFERENCE_AGGREGATE_MAX_BYTES / (1024 * 1024)).toFixed(0)} MB.`,
+    };
+  }
+
   const domainInputs: LookReferenceAnalysisImageInput[] = request.references.map(
     (ref) => ({
       id: ref.id,

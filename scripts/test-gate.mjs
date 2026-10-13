@@ -536,6 +536,14 @@ function checkMediaOptimizerWorldPin() {
   });
 }
 
+function checkMediaOptimizerLookReference() {
+  console.log('Media optimizer look reference (#639): optimize before Base64 + 12 MiB aggregate...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-look-reference-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2039,6 +2047,7 @@ checkMediaOptimizerLazyWorker();
 checkMediaOptimizerPreviewIntake();
 checkMediaOptimizerCharacterPortrait();
 checkMediaOptimizerWorldPin();
+checkMediaOptimizerLookReference();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
