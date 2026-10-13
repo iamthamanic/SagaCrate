@@ -6,7 +6,7 @@
 
 export const SAGATREE_NATIVE_SAGA_COVER_URLS = {
   // v2: Netflix-style title treatment baked into art (Das Flüstern unter Dornhain)
-  'dornhain.whisper': '/assets/marketplace/dornhain/saga-cover.png?v=2',
+  'dornhain.whisper': '/assets/marketplace/dornhain/saga-cover.png?v=3',
 } as const;
 
 export type SagatreeNativeSagaSlug = keyof typeof SAGATREE_NATIVE_SAGA_COVER_URLS;

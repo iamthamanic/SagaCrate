@@ -10,6 +10,7 @@ import { useAuth } from '../../../lib/auth-context';
 import { projectService } from '../../../infrastructure/project/project-service';
 import { sessionService } from '../../../infrastructure/session/session-service';
 import { characterService } from '../../../infrastructure/character/character-service';
+import { userProfileService } from '../../../infrastructure/user-profile/user-profile-service';
 import {
   subscribeSessionLobbyReady,
   type SessionLobbySubscription,
@@ -24,6 +25,7 @@ import {
   type LobbyPreflightViewModel,
   type LobbyRosterMember,
 } from '../../../domains/session/contracts/session-lobby';
+import { resolveAccountDisplayName } from '../../../domains/user-profile';
 
 type UseSessionLobbyInput = {
   readonly sagaPublicId: string;
@@ -151,12 +153,64 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
           }
         }
 
+        const rosterUserIds = [
+          ...new Set([
+            ...detail.players.map((p) => p.userId),
+            ...(isGm ? [user.id] : []),
+          ]),
+        ];
+        const accountMeta = new Map<
+          string,
+          { displayName: string; avatarUrl: string | null }
+        >();
+        try {
+          const profiles = await userProfileService.getProfilesByUserIds(rosterUserIds);
+          for (const row of profiles) {
+            const label =
+              resolveAccountDisplayName({
+                profileDisplayName: row.displayName,
+                email: row.id === user.id ? user.email : null,
+              }) ?? 'Account';
+            accountMeta.set(row.id, {
+              displayName: label,
+              avatarUrl: row.avatarUrl,
+            });
+          }
+        } catch (err) {
+          console.error('Lobby account profile batch failed:', err);
+        }
+        for (const id of rosterUserIds) {
+          if (!accountMeta.has(id)) {
+            const fallback =
+              id === user.id
+                ? resolveAccountDisplayName({
+                    authDisplayName:
+                      typeof user.user_metadata?.display_name === 'string'
+                        ? user.user_metadata.display_name
+                        : null,
+                    authUsername:
+                      typeof user.user_metadata?.username === 'string'
+                        ? user.user_metadata.username
+                        : null,
+                    email: user.email ?? null,
+                  }) ?? 'Account'
+                : 'Account';
+            accountMeta.set(id, { displayName: fallback, avatarUrl: null });
+          }
+        }
+
         const roster: LobbyRosterMember[] = detail.players.map((p) => {
           const meta = p.characterId ? characterMeta.get(p.characterId) : null;
+          const account = accountMeta.get(p.userId) ?? {
+            displayName: 'Account',
+            avatarUrl: null,
+          };
           const role: SessionRole | 'unknown' =
             p.userId === detail.gmUserId ? 'gamemaster' : 'player';
           return {
             userId: p.userId,
+            accountDisplayName: account.displayName,
+            avatarUrl: account.avatarUrl,
             characterId: p.characterId,
             characterName: meta?.name ?? null,
             characterPublicId: meta?.publicId ?? null,
@@ -168,8 +222,14 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
         });
 
         if (isGm && !detail.players.some((p) => p.userId === user.id)) {
+          const account = accountMeta.get(user.id) ?? {
+            displayName: 'Account',
+            avatarUrl: null,
+          };
           roster.unshift({
             userId: user.id,
+            accountDisplayName: account.displayName,
+            avatarUrl: account.avatarUrl,
             characterId: null,
             characterName: null,
             characterPublicId: null,

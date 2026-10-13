@@ -109,11 +109,30 @@ const ITEM_THUMBNAIL_POLICY: ImageAssetPolicy = {
   allowWebpOutput: true,
 };
 
+/**
+ * Account profile avatar (#682) — smaller than character-portrait; GIF rejected.
+ */
+const USER_AVATAR_POLICY: ImageAssetPolicy = {
+  profileId: 'user-avatar',
+  kind: 'image',
+  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
+  budget: {
+    targetBytes: 400 * 1024,
+    maxUploadBytes: 5 * MiB,
+  },
+  maxEdgePx: 768,
+  minQuality: 48,
+  preserveAlpha: true,
+  gifAnimation: 'reject',
+  allowWebpOutput: true,
+};
+
 const IMAGE_POLICIES: Record<AssetProfileId, ImageAssetPolicy> = {
   'character-portrait': CHARACTER_PORTRAIT_POLICY,
   'map-pin': MAP_PIN_POLICY,
   'look-reference': LOOK_REFERENCE_POLICY,
   'item-thumbnail': ITEM_THUMBNAIL_POLICY,
+  'user-avatar': USER_AVATAR_POLICY,
 };
 
 export function getImageAssetPolicy(profileId: AssetProfileId): ImageAssetPolicy {
@@ -126,6 +145,7 @@ export function listImageAssetPolicies(): readonly ImageAssetPolicy[] {
     MAP_PIN_POLICY,
     LOOK_REFERENCE_POLICY,
     ITEM_THUMBNAIL_POLICY,
+    USER_AVATAR_POLICY,
   ];
 }
 
