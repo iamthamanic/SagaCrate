@@ -1,29 +1,30 @@
 # Composition Gate — media-opt-item-webp-contract
 
-- HEAD_SHA: 79cd648dcef9975c0ac10cd7d7177a8c9598a738
+- HEAD_SHA: 3a8e7625580c5f0ad0d4b0e241046fb9d670a360
 - BASE_SHA: 0a05fb2b6a1a41065d44be486a6dacaa12c31d90
 - Date: 2026-10-13
 - Verdict: SKIPPED
 
 ## Event
-User uploads or Meshy generates an item thumbnail; system accepts PNG/JPEG/WebP with magic-byte validation; Image-to-3D consumes the same asset.
+Client or Meshy pipeline stores/reads an item thumbnail; MIME may be PNG, JPEG, or WebP; Meshy image-to-3D may consume a WebP thumbnail as data URI.
 
 ## Hop chain
-1. Client / Edge validate MIME via magic bytes (PNG/JPEG/WebP)
-2. Storage `item-thumbnails` + `item_thumbnail_assets.mime` check
-3. Optional: `item-model3d` downloads thumbnail → data URI → Meshy image-to-3d
-4. No ACL / RLS policy changes
+1. Domain `ITEM_THUMBNAIL_ALLOWED_MIME` + sniff (client/edge shared)
+2. Edge `item-thumbnail` validate + Storage `item-thumbnails` + DB mime check
+3. Optional: `item-model3d` downloads thumbnail bytes → data URI → Meshy
+
+Cardinality: one asset row per upload; existing PNG/JPEG rows unchanged.
 
 ## Simulations
 
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| N-actors | 1 upload → 1 asset row | unchanged cardinality | pass |
-| Invalid/missing | wrong MIME / fake webp → reject | sniff vs claimed | pass |
-| Two consumers / crash | Meshy uses stored bytes; PNG/JPEG still work | shared sniff helper | pass |
+| N-actors | 1 upload → 1 storage object + 1 row | Unchanged upload path | pass |
+| Invalid/missing | fake webp MIME / wrong magic → reject | sniff + declared MIME mismatch | pass |
+| Two consumers / crash | model3d reads same private object | owner-scoped path; no ACL change | pass |
 
 ## Flags
 none
 
 ## Skip reason
-MIME allowlist expansion on existing single-hop Storage path; no new producer fan-out or AuthZ change.
+MIME allowlist expansion on an existing single-hop Storage path; no new producer fan-out or AuthZ model change.
