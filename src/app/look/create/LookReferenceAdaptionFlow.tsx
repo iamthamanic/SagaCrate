@@ -1,7 +1,8 @@
 /**
- * LookReferenceAdaptionFlow — Upload/classify/analyze visual references (#353).
+ * LookReferenceAdaptionFlow — Upload/classify/analyze visual references (#353/#639).
  * Location: src/app/look/create/LookReferenceAdaptionFlow.tsx
  *
+ * Preview Object URL first, then look-reference optimize before Base64 analysis.
  * Does not save silently — success hands an editable UI draft to the parent.
  */
 import { useEffect, useRef, useState } from 'react';
@@ -14,10 +15,10 @@ import { analyzeLookReferencesForDraft } from '../../../infrastructure/look';
 import { Button } from '../../../shared/ui/button';
 import { uiDraftFromAnalysisDraft, type LookEditorUiDraft } from '../editor/look-editor-draft';
 import {
+  LOOK_ADAPTION_AGGREGATE_MAX_BYTES,
   canAddMoreReferences,
   createAdaptionReferenceId,
-  fileToContentBase64,
-  mimeFromFile,
+  prepareLookReferenceFileForAnalysis,
   validateAdaptionFile,
   type LookAdaptionReference,
 } from './look-reference-adaption';
@@ -57,7 +58,10 @@ export function LookReferenceAdaptionFlow({
   const addFiles = async (fileList: FileList | null) => {
     if (!fileList || fileList.length === 0) return;
     setError(null);
+    setProgressLabel('Vorschau und Optimierung…');
     const next: LookAdaptionReference[] = [...references];
+    let aggregateBytes = next.reduce((sum, r) => sum + Math.ceil((r.contentBase64.length * 3) / 4), 0);
+
     for (const file of Array.from(fileList)) {
       if (!canAddMoreReferences(next.length)) {
         setError(`Maximal ${LOOK_REFERENCE_ANALYSIS_MAX_IMAGES} Bilder.`);
@@ -68,25 +72,63 @@ export function LookReferenceAdaptionFlow({
         setError(validationError);
         continue;
       }
-      const mime = mimeFromFile(file);
-      if (!mime) continue;
-      try {
-        const contentBase64 = await fileToContentBase64(file);
-        next.push({
-          id: createAdaptionReferenceId(),
+
+      // Immediate local preview before encode/Base64.
+      const previewUrl = URL.createObjectURL(file);
+      const provisionalId = createAdaptionReferenceId();
+      setReferences([
+        ...next,
+        {
+          id: provisionalId,
           kind: 'style',
-          mime,
+          mime: 'image/png',
           weight: 1,
           label: file.name,
-          previewUrl: URL.createObjectURL(file),
-          contentBase64,
+          previewUrl,
+          contentBase64: '',
+          fileName: file.name,
+        },
+      ]);
+
+      const projectedAggregate = aggregateBytes + file.size;
+      if (projectedAggregate > LOOK_ADAPTION_AGGREGATE_MAX_BYTES) {
+        URL.revokeObjectURL(previewUrl);
+        setError(
+          `Gesamtgröße der Referenzbilder überschreitet ${(LOOK_ADAPTION_AGGREGATE_MAX_BYTES / (1024 * 1024)).toFixed(0)} MB.`,
+        );
+        setReferences(next);
+        break;
+      }
+
+      try {
+        const prepared = await prepareLookReferenceFileForAnalysis(file, {
+          imageCountInRequest: next.length + 1,
+          aggregateRequestBytes: projectedAggregate,
+        });
+        aggregateBytes += prepared.optimizedByteSize;
+        next.push({
+          id: provisionalId,
+          kind: 'style',
+          mime: prepared.mime,
+          weight: 1,
+          label: file.name,
+          previewUrl,
+          contentBase64: prepared.contentBase64,
           fileName: file.name,
         });
-      } catch {
-        setError('Bild konnte nicht gelesen werden.');
+        setReferences([...next]);
+      } catch (err) {
+        URL.revokeObjectURL(previewUrl);
+        setReferences(next);
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Look-Referenz konnte nicht optimiert werden. Bisherige Referenzen bleiben erhalten.',
+        );
+        break;
       }
     }
-    setReferences(next);
+    setProgressLabel(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -110,9 +152,10 @@ export function LookReferenceAdaptionFlow({
 
   const runAnalysis = async () => {
     if (phase === 'running') return;
+    const readyRefs = references.filter((r) => r.contentBase64.length > 0);
     if (
-      references.length < LOOK_REFERENCE_ANALYSIS_MIN_IMAGES ||
-      references.length > LOOK_REFERENCE_ANALYSIS_MAX_IMAGES
+      readyRefs.length < LOOK_REFERENCE_ANALYSIS_MIN_IMAGES ||
+      readyRefs.length > LOOK_REFERENCE_ANALYSIS_MAX_IMAGES
     ) {
       setError(`Bitte ${LOOK_REFERENCE_ANALYSIS_MIN_IMAGES}–${LOOK_REFERENCE_ANALYSIS_MAX_IMAGES} Bilder wählen.`);
       return;
@@ -123,7 +166,7 @@ export function LookReferenceAdaptionFlow({
     try {
       const outcome = await analyzeLookReferencesForDraft({
         displayNameHint,
-        references: references.map((r) => ({
+        references: readyRefs.map((r) => ({
           id: r.id,
           kind: r.kind,
           mime: r.mime,
