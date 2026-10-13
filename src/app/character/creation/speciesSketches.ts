@@ -21,6 +21,29 @@ export const speciesSketchSources: Record<string, string> = {
   alien: alienSketch,
 };
 
+/** German labels / common aliases → sketch key (race column often stores UI labels). */
+const SPECIES_SKETCH_ALIASES: Record<string, string> = {
+  mensch: 'human',
+  human: 'human',
+  elf: 'elf',
+  elfin: 'elf',
+  zwerg: 'dwarf',
+  zwergin: 'dwarf',
+  dwarf: 'dwarf',
+  halbling: 'halfling',
+  halfling: 'halfling',
+  ork: 'orc',
+  orc: 'orc',
+  cyborg: 'cyborg',
+  alien: 'alien',
+};
+
+export function resolveSpeciesSketchKey(race: string): string {
+  const normalized = race.trim().toLowerCase();
+  return SPECIES_SKETCH_ALIASES[normalized] ?? normalized;
+}
+
 export function getSpeciesSketchUrl(race: string): string {
-  return speciesSketchSources[race.trim().toLowerCase()] ?? humanSketch;
+  const key = resolveSpeciesSketchKey(race);
+  return speciesSketchSources[key] ?? humanSketch;
 }

@@ -184,6 +184,14 @@ function checkProjectMembershipSecurity() {
   });
 }
 
+function checkLocalAuthEmailSagatree() {
+  console.log('Local auth emails (@sagatree.local): seeds + rename migration vs app shortcuts...');
+  execFileSync(process.execPath, ['scripts/local-auth-email-sagatree-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaStateColumnPrivileges() {
   console.log('Saga state column privileges (#569): checking REVOKE + safe selects...');
   execFileSync(process.execPath, ['scripts/saga-state-column-privileges-check.mjs'], {
@@ -2093,6 +2101,7 @@ checkPlayerTestCombatEncounter();
 checkPlayerTestMultiuserE2eSecurity();
 checkPlayerTestInstrumentationRunbook();
 checkProjectMembershipSecurity();
+checkLocalAuthEmailSagatree();
 checkSagaStateColumnPrivileges();
 checkSagatreeCoreWorkflowsContract();
 checkSagaOverviewRpc();

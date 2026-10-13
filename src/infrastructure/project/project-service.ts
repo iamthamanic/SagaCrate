@@ -335,7 +335,7 @@ class ProjectService {
     await this.ensureNativeStarterProject();
 
     const projectSummarySelect =
-      'id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status, saga_id, saga_version_id, saga_definitions(title, origin)';
+      'id, public_id, code, name, description, world_id, world_profile_id, gm_user_id, status, saga_id, saga_version_id, saga_definitions(title, origin, slug)';
 
     const { data: gmProjects, error: gmError } = await supabase
       .from(this.tableName)
@@ -366,7 +366,7 @@ class ProjectService {
       world_profile_id?: string | null;
       saga_id?: string | null;
       saga_version_id?: string | null;
-      saga_definitions?: { title?: string | null; origin?: string | null } | null;
+      saga_definitions?: { title?: string | null; origin?: string | null; slug?: string | null } | null;
     };
     const combined = new Map<string, ProjectSummaryRow>();
 
@@ -380,12 +380,14 @@ class ProjectService {
           def = {
             title: typeof first.title === 'string' ? first.title : null,
             origin: typeof first.origin === 'string' ? first.origin : null,
+            slug: typeof first.slug === 'string' ? first.slug : null,
           };
         }
       } else if (isRecord(row.saga_definitions)) {
         def = {
           title: typeof row.saga_definitions.title === 'string' ? row.saga_definitions.title : null,
           origin: typeof row.saga_definitions.origin === 'string' ? row.saga_definitions.origin : null,
+          slug: typeof row.saga_definitions.slug === 'string' ? row.saga_definitions.slug : null,
         };
       }
       return { ...row, saga_definitions: def };
@@ -443,6 +445,7 @@ class ProjectService {
         sagaId: typeof project.saga_id === 'string' ? project.saga_id : null,
         sagaVersionId: typeof project.saga_version_id === 'string' ? project.saga_version_id : null,
         sagaTitle: def && typeof def.title === 'string' ? def.title : null,
+        sagaSlug: def && typeof def.slug === 'string' ? def.slug : null,
         sagaOrigin,
         gmUserId: project.gm_user_id,
         status: project.status,

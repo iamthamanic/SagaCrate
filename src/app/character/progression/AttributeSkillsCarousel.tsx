@@ -63,6 +63,13 @@ export function AttributeSkillsCarousel({
     handleCardClick,
     scrollPrev,
     scrollNext,
+    carouselCss,
+    emblaOpts,
+    contentClassName,
+    navClass,
+    navButtonClass,
+    getItemClassName,
+    getCardClassName,
   } = useCarouselScrollSync({
     optionsLength: options.length,
     getSelectedIndex: () => options.findIndex((option) => option.key === selectedAttribute),
@@ -74,6 +81,8 @@ export function AttributeSkillsCarousel({
     onSelect,
     onScrollPhaseChange,
     selectOnCenterClick: false,
+    prefix: 'attribute',
+    visualMode: 'focus',
   });
 
   return (
@@ -83,25 +92,10 @@ export function AttributeSkillsCarousel({
       aria-labelledby={labelledBy}
       data-attribute-skills-carousel
     >
-      <style>{`
-        .attribute-carousel-item { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .attribute-carousel-item:not(.is-center) { opacity: 0.62; filter: blur(1px); }
-        .attribute-carousel-item:not(.is-center) > div { transform: scale(0.9); }
-        .attribute-carousel-item.is-center { opacity: 1; filter: blur(0); z-index: 10; }
-        .attribute-carousel-item.is-center > div { transform: scale(1); }
-        .attribute-carousel-nav-buttons {
-          position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-          pointer-events: none; z-index: 20;
-        }
-        .attribute-carousel-nav-button { pointer-events: auto; position: absolute; cursor: pointer; }
-      `}</style>
+      <style>{carouselCss}</style>
 
-      <Carousel
-        setApi={setApi}
-        opts={{ align: 'center', loop: true, skipSnaps: false, dragFree: false, containScroll: 'trimSnaps', duration: 25 }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-1.5">
+      <Carousel setApi={setApi} opts={emblaOpts} className="w-full">
+        <CarouselContent className={contentClassName}>
           {options.map((option, index) => {
             const isCenter = index === current;
             const isSelected = selectedAttribute === option.key;
@@ -109,11 +103,8 @@ export function AttributeSkillsCarousel({
             const AttributeIcon = ATTRIBUTE_ICONS[option.key];
 
             return (
-              <CarouselItem
-                key={option.key}
-                className={`attribute-carousel-item basis-[64%] pl-1.5 sm:basis-[52%] md:basis-[40%] lg:basis-[34%] ${isCenter ? 'is-center' : ''}`}
-              >
-                <div className="w-full transition-all duration-300">
+              <CarouselItem key={option.key} className={getItemClassName(index)}>
+                <div className={getCardClassName()}>
                   <Card
                     role="radio"
                     aria-label={option.label}
@@ -169,12 +160,12 @@ export function AttributeSkillsCarousel({
       </Carousel>
 
       {options.length > 1 ? (
-        <div className="attribute-carousel-nav-buttons">
+        <div className={navClass}>
           <Button
             type="button"
             variant="outline"
             size="icon"
-            className="attribute-carousel-nav-button left-0 top-[28%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:left-2 md:h-11 md:w-11"
+            className={`${navButtonClass} left-0 top-[28%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:left-2 md:h-11 md:w-11`}
             onClick={scrollPrev}
             aria-label="Vorheriges Attribut"
           >
@@ -184,7 +175,7 @@ export function AttributeSkillsCarousel({
             type="button"
             variant="outline"
             size="icon"
-            className="attribute-carousel-nav-button right-0 top-[28%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:right-2 md:h-11 md:w-11"
+            className={`${navButtonClass} right-0 top-[28%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:right-2 md:h-11 md:w-11`}
             onClick={scrollNext}
             aria-label="Nächstes Attribut"
           >

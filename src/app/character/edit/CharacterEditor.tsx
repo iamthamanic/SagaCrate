@@ -827,10 +827,27 @@ export function CharacterEditor() {
       bootstrapAppliedRef.current = true;
       setCharacterName(bootstrap.characterName);
       setCharacterLevel(bootstrap.level);
+      if (bootstrap.raceLabel) {
+        // SpeciesCarousel keys are EN (dwarf/elf/orc); DB/UI labels may be DE (Zwergin/Elfin/Ork).
+        const raceKeyByLabel: Record<string, string> = {
+          mensch: 'human',
+          human: 'human',
+          elf: 'elf',
+          elfin: 'elf',
+          zwerg: 'dwarf',
+          zwergin: 'dwarf',
+          dwarf: 'dwarf',
+          ork: 'orc',
+          orc: 'orc',
+        };
+        const raceKey =
+          raceKeyByLabel[bootstrap.raceLabel.trim().toLowerCase()] ?? bootstrap.raceLabel;
+        applyRacePreset(raceKey, true);
+      }
       clearCharacterEditorBootstrap();
       toast.success(
         bootstrap.classLabel
-          ? `Player-Test-Pregen: ${bootstrap.characterName} (${bootstrap.classLabel}, Stufe ${bootstrap.level})`
+          ? `Player-Test-Pregen: ${bootstrap.characterName} (${bootstrap.raceLabel ? `${bootstrap.raceLabel} · ` : ''}${bootstrap.classLabel}, Stufe ${bootstrap.level})`
           : `Player-Test-Pregen: ${bootstrap.characterName} (Stufe ${bootstrap.level})`,
       );
       return;

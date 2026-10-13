@@ -1,7 +1,5 @@
 /**
- * Shared carousel types for character-editor selection carousels.
+ * Shared carousel types — re-export from shared center-focus carousel kit.
  * Location: src/app/character/shared/carousel.types.ts
  */
-
-/** Embla scroll lifecycle for connector overlays that freeze during motion. */
-export type CarouselScrollPhase = 'scrolling' | 'settled';
+export type { CarouselScrollPhase } from '../../../shared/carousel';

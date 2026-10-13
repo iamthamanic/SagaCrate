@@ -36,6 +36,8 @@ export type CharacterEditorBootstrap =
       characterName: string;
       level: number;
       classLabel?: string;
+      /** Optional DE/EN race label for SpeciesCarousel bootstrap. */
+      raceLabel?: string;
     };
 
 let pendingBootstrap: CharacterEditorBootstrap | null = null;

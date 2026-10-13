@@ -33,6 +33,15 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
     handleCardClick,
     scrollPrev,
     scrollNext,
+    carouselCss,
+    emblaOpts,
+    contentClassName,
+    dotsClass,
+    navClass,
+    navButtonClass,
+    getItemClassName,
+    getCardClassName,
+    getDotClassName,
   } = useCarouselScrollSync({
     optionsLength: options.length,
     getSelectedIndex: () => options.findIndex((option) => option.value === selectedRace),
@@ -43,61 +52,14 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
     shouldEmitSelect: (_index, value) => value !== selectedRace,
     onSelect,
     selectOnCenterClick: false,
+    prefix: 'species',
+    visualMode: 'focus',
   });
 
   return (
     <div className="relative px-0 py-2 md:py-4" role="radiogroup" aria-labelledby={labelledBy}>
       <style>{`
-        .species-carousel-item {
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .species-carousel-item:not(.is-center) {
-          opacity: 0.62;
-          filter: blur(1px);
-        }
-        .species-carousel-item:not(.is-center) > div {
-          transform: scale(0.9);
-        }
-        .species-carousel-item.is-center {
-          opacity: 1;
-          filter: blur(0);
-          z-index: 10;
-        }
-        .species-carousel-item.is-center > div {
-          transform: scale(1);
-        }
-        .species-carousel-dots {
-          display: flex;
-          justify-content: center;
-          gap: 8px;
-          margin-top: 16px;
-        }
-        .species-carousel-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background-color: hsl(var(--primary));
-          opacity: 0.3;
-          transition: opacity 0.3s ease;
-          cursor: pointer;
-        }
-        .species-carousel-dot.active {
-          opacity: 1;
-        }
-        .species-carousel-nav-buttons {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          pointer-events: none;
-          z-index: 20;
-        }
-        .species-carousel-nav-button {
-          pointer-events: auto;
-          position: absolute;
-          cursor: pointer;
-        }
+        ${carouselCss}
         .species-banner-flag-wrap {
           position: relative;
         }
@@ -143,19 +105,8 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
         }
       `}</style>
 
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: 'center',
-          loop: true,
-          skipSnaps: false,
-          dragFree: false,
-          containScroll: 'trimSnaps',
-          duration: 25,
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-1.5">
+      <Carousel setApi={setApi} opts={emblaOpts} className="w-full">
+        <CarouselContent className={contentClassName}>
           {options.map((option, index) => {
             const isCenter = index === current;
             const isSelected = selectedRace === option.value;
@@ -169,11 +120,8 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
               borderTopColor: colorway.border,
             } as React.CSSProperties;
             return (
-              <CarouselItem
-                key={option.value}
-                className={`species-carousel-item basis-[64%] pl-1.5 sm:basis-[52%] md:basis-[40%] lg:basis-[34%] ${isCenter ? 'is-center' : ''}`}
-              >
-                <div className="w-full transition-all duration-300">
+              <CarouselItem key={option.value} className={getItemClassName(index)}>
+                <div className={getCardClassName()}>
                     <Card
                       role="radio"
                       aria-label={option.label}
@@ -232,12 +180,12 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
       </Carousel>
 
       {options.length > 1 && (
-        <div className="species-carousel-nav-buttons">
+        <div className={navClass}>
           <Button
             type="button"
             variant="outline"
             size="icon"
-            className="species-carousel-nav-button left-0 top-[32%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:left-2 md:h-11 md:w-11"
+            className={`${navButtonClass} left-0 top-[32%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:left-2 md:h-11 md:w-11`}
             onClick={scrollPrev}
             aria-label="Vorherige Spezies"
           >
@@ -247,7 +195,7 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
             type="button"
             variant="outline"
             size="icon"
-            className="species-carousel-nav-button right-0 top-[32%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:right-2 md:h-11 md:w-11"
+            className={`${navButtonClass} right-0 top-[32%] h-10 w-10 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm md:right-2 md:h-11 md:w-11`}
             onClick={scrollNext}
             aria-label="Nächste Spezies"
           >
@@ -257,12 +205,12 @@ export function SpeciesCarousel({ selectedRace, onSelect, labelledBy = 'species-
       )}
 
       {options.length > 1 && (
-        <div className="species-carousel-dots">
+        <div className={dotsClass}>
           {options.map((option, index) => (
             <button
               key={option.value}
               type="button"
-              className={`species-carousel-dot ${index === current ? 'active' : ''}`}
+              className={getDotClassName(index)}
               onClick={() => handleCardClick(index)}
               aria-label={`${option.label} anzeigen`}
             />

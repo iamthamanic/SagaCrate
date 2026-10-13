@@ -130,6 +130,8 @@ export interface ProjectSummaryVm {
   sagaId: string | null;
   sagaVersionId: string | null;
   sagaTitle: string | null;
+  /** saga_definitions.slug when joined (native covers, deep links). */
+  sagaSlug: string | null;
   sagaOrigin: 'native' | 'user' | 'private_backfill' | null;
   gmUserId: string;
   status: 'active' | 'paused' | 'completed' | 'archived';

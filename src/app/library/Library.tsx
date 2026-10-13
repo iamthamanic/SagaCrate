@@ -3,9 +3,23 @@ import { Button } from '../../shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui/tabs';
 import { Input } from '../../shared/ui/input';
 import { Plus, Search, User, BookOpen, Edit, Trash2, Loader2, Globe2, Package, Users, Palette } from 'lucide-react';
-import { useCharacterSummaries, CreateCharacterEntryDialog, setCharacterEditorBootstrap } from '../character';
+import {
+  useCharacterSummaries,
+  CreateCharacterEntryDialog,
+  setCharacterEditorBootstrap,
+  getSpeciesSketchUrl,
+} from '../character';
 import type { CharacterSummaryVm } from '../../domains/character';
 import { resolveAvatarSurfaceView } from '../../domains/character/avatar';
+import { sagatreeNativePregenPortraitUrlByName } from '../../domains/character/use-cases/sagatree-native-pregen-portraits';
+import {
+  sagatreeNativeSagaCoverUrl,
+  sagatreeNativeSagaCoverUrlByTitle,
+} from '../../domains/saga/use-cases/sagatree-native-saga-covers';
+import {
+  sagatreeNativeWorldCoverUrlByName,
+  sagatreeNativeWorldCoverUrlFromModules,
+} from '../../domains/world/use-cases/sagatree-native-world-covers';
 import { useProjectSummaries } from '../project';
 import type { ProjectSummaryVm } from '../../domains/project/contracts/project.types';
 import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
@@ -313,11 +327,15 @@ export function Library({
     ];
     if (project.sagaOrigin === 'native') chips.unshift('Native');
     if (showGroupLabel) chips.push(`Gruppe: ${project.name}`);
+    const coverUrl =
+      (project.sagaSlug ? sagatreeNativeSagaCoverUrl(project.sagaSlug) : null)
+      ?? sagatreeNativeSagaCoverUrlByTitle(storyTitle);
 
     return (
       <EntityBrowserCard
         title={storyTitle}
         meta={project.description || 'Keine Beschreibung'}
+        imageUrl={coverUrl ?? undefined}
         imageFallback={storyTitle}
         imageAlt={`Saga ${storyTitle}`}
         metaChips={chips}
@@ -359,10 +377,14 @@ export function Library({
 
   const renderWorld = (world: WorldProfileVm, context: EntityBrowserRenderContext) => {
     const speciesDevelopmentMode = getSpeciesDevelopmentMode(world.modules);
+    const coverUrl =
+      sagatreeNativeWorldCoverUrlFromModules(world.modules)
+      ?? sagatreeNativeWorldCoverUrlByName(world.name);
     return (
       <EntityBrowserCard
         title={world.name}
         meta={world.description || 'Keine Beschreibung'}
+        imageUrl={coverUrl ?? undefined}
         imageFallback={world.name}
         imageAlt={`Welt ${world.name}`}
         metaChips={[
@@ -405,6 +427,11 @@ export function Library({
         portraitUrl: char.portraitUrl,
       },
     });
+    // Prefer owner portrait → Dornhain native pregen art → Spezies-Skizze.
+    const nativePortrait = sagatreeNativePregenPortraitUrlByName(char.name);
+    const imageUrl =
+      surface.portraitUrl ?? nativePortrait ?? getSpeciesSketchUrl(char.race || 'human');
+    const imageObjectFit = surface.portraitUrl || nativePortrait ? 'cover' : 'contain';
     return (
     <EntityBrowserCard
       title={char.name}
@@ -414,9 +441,10 @@ export function Library({
           ? [{ label: 'Unvollständig', variant: 'destructive' }]
           : undefined
       }
-      imageUrl={surface.portraitUrl}
+      imageUrl={imageUrl}
       imageAlt={`Portrait von ${char.name}`}
       imageFallback={char.name}
+      imageObjectFit={imageObjectFit}
       variant={context.variant}
       isCenter={context.isCenter}
       onOpen={context.variant === 'list' || context.isCenter ? () => {
