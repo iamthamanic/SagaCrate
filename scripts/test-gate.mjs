@@ -488,6 +488,14 @@ function checkMediaOptimizerContracts() {
   });
 }
 
+function checkMediaOptimizerFacadeStubs() {
+  console.log('Media optimizer facade stubs (#628): kind dispatch, unsupported stubs, codec-free...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-facade-stubs-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -1985,6 +1993,7 @@ checkItemRoutingFoundation();
 checkSagaRoutingPublicIdFoundation();
 checkLookProfileDomain();
 checkMediaOptimizerContracts();
+checkMediaOptimizerFacadeStubs();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
