@@ -1,6 +1,6 @@
 # Composition Gate — realtime-compose-boot
 
-- HEAD_SHA: a60ef716bdba2febc8583cab7e0951d2bf5003d4
+- HEAD_SHA: 324b22e4ede02f76701b35022dcbe92d08febe6d
 - Date: 2026-10-13
 - Verdict: CLEAR
 
