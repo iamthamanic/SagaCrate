@@ -105,6 +105,7 @@ migrations=(
   082_duplicate_saga_playthrough.sql
   083_world_profiles_public_id.sql
   084_look_profiles_public_id.sql
+  085_fix_function_bodies_sagatree.sql
 )
 
 only="${1:-}"
