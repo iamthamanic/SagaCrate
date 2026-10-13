@@ -1,0 +1,50 @@
+{
+  "ok": true,
+  "suite": "negative-authz-suite",
+  "gateway": "http://localhost:8000",
+  "startedAt": "2026-10-13T23:03:11.217Z",
+  "checks": [
+    {
+      "name": "edge.anon_no_bearer_deny",
+      "pass": true,
+      "detail": "status=401 body={\"error\":\"missing Authorization bearer token\"}"
+    },
+    {
+      "name": "edge.invalid_jwt_deny",
+      "pass": true,
+      "detail": "status=401 body={\"error\":\"invalid jwt header\"}"
+    },
+    {
+      "name": "auth.signup_gm_stranger",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "name": "edge.member_jwt_allow",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "rest.project_create",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "rpc.session_create",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "edge.ai_gm_foreign_session_deny",
+      "pass": true,
+      "detail": "status=403 body={\"error\":\"session not found or access denied\"}"
+    },
+    {
+      "name": "rest.non_member_project_deny",
+      "pass": true,
+      "detail": "status=200 rows=0"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-10-13T23:03:11.504Z"
+}

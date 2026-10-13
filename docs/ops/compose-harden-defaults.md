@@ -13,7 +13,7 @@ Never delete volumes (`docker compose down -v`).
 
 ## Local Admin / weak seeds
 
-Migrations `011_seed_local_admin.sql` and `074_seed_local_player.sql` (`admin`/`player` + `1234`) are **DEV conveniences**. Do not run them on internet-facing hosts; Local Admin UI shortcut is for local Vite only.
+Migrations `011_seed_local_admin.sql` and `074_seed_local_player.sql` (`admin`/`player` + `1234`) are **DEV conveniences**. Do not run them on internet-facing hosts; Local Admin UI shortcut is Vite **DEV-only** (`isLocalAdminEnabled` / #607). Edge JWT gate: see `docs/ops/negative-authz-suite.md`.
 
 ## Kong routes
 
