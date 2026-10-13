@@ -24,7 +24,7 @@ import {
   type LobbyPreflightViewModel,
   type LobbyRosterMember,
 } from '../../../domains/session/contracts/session-lobby';
-import { sagatreeNativeSagaCoverUrlByTitle } from '../../../domains/saga/use-cases/sagatree-native-saga-covers';
+import { sagatreeNativeSagaCoverUrlFromDisplayName } from '../../../domains/saga/use-cases/sagatree-native-saga-covers';
 
 type UseSessionLobbyInput = {
   readonly sagaPublicId: string;
@@ -186,8 +186,8 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
           : null;
 
         const sagaName = project.name ?? null;
-        // Same native cover resolution as Bibliothek (title fallback; slug when known later).
-        const sagaCoverUrl = sagatreeNativeSagaCoverUrlByTitle(sagaName ?? '');
+        // Native pack cover — tolerates group-run display names ("… · Gruppe").
+        const sagaCoverUrl = sagatreeNativeSagaCoverUrlFromDisplayName(sagaName ?? '');
 
         const next = buildLobbyPreflightViewModel({
           summary: {

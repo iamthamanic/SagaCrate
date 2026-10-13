@@ -28,6 +28,10 @@ test.describe('Session Lobby Preflight (#491)', () => {
     await expect(page.locator('[data-session-lobby="v1"]')).toBeVisible();
     await expect(page.locator('[data-session-lobby-join-hero]')).toBeVisible();
     await expect(page.locator('[data-session-lobby-saga-cover-frame]')).toBeVisible();
+    // Dornhain fixture resolves native pack art — not only the fallback letter.
+    const cover = page.locator('[data-session-lobby-saga-cover]');
+    await expect(cover).toBeVisible();
+    await expect(cover).toHaveAttribute('src', /dornhain\/saga-cover\.png/);
     await expectNoHorizontalOverflow(page);
 
     const leave = page.getByRole('button', { name: 'Verlassen' });

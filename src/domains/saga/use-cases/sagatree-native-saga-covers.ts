@@ -31,3 +31,30 @@ export function sagatreeNativeSagaCoverUrlByTitle(title: string): string | null 
   const slug = COVER_BY_TITLE[title.trim().toLowerCase()];
   return slug ? SAGATREE_NATIVE_SAGA_COVER_URLS[slug] : null;
 }
+
+/**
+ * Resolve cover from a project/run display name.
+ * Handles group-run suffixes (e.g. "Das Flüstern unter Dornhain · Gruppe").
+ */
+export function sagatreeNativeSagaCoverUrlFromDisplayName(
+  displayName: string,
+): string | null {
+  const raw = displayName.trim();
+  if (!raw) return null;
+  const direct = sagatreeNativeSagaCoverUrlByTitle(raw);
+  if (direct) return direct;
+
+  const base = raw.split(/\s*[·|]\s*/)[0]?.trim() ?? raw;
+  if (base && base !== raw) {
+    const fromBase = sagatreeNativeSagaCoverUrlByTitle(base);
+    if (fromBase) return fromBase;
+  }
+
+  const normalized = raw.toLowerCase();
+  for (const title of Object.keys(COVER_BY_TITLE)) {
+    if (normalized === title || normalized.startsWith(`${title} `)) {
+      return SAGATREE_NATIVE_SAGA_COVER_URLS[COVER_BY_TITLE[title]!];
+    }
+  }
+  return null;
+}

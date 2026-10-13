@@ -144,11 +144,11 @@ export function SessionLobbyScreen({
 
         {model?.summary.code ? (
           <div
-            className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch"
+            className="flex min-w-0 flex-col gap-3 @[40rem]/main:flex-row @[40rem]/main:items-stretch"
             data-session-lobby-join-hero
           >
             <div
-              className="relative mx-auto aspect-square w-44 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:mx-0 sm:w-52"
+              className="relative mx-auto aspect-square w-40 max-w-full shrink-0 overflow-hidden rounded-lg border border-border bg-muted @[40rem]/main:mx-0 @[40rem]/main:w-48"
               data-session-lobby-saga-cover-frame
             >
               {model.summary.sagaCoverUrl ? (
