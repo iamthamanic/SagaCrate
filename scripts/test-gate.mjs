@@ -587,6 +587,14 @@ function checkMediaOptimizerProviderOutput() {
   });
 }
 
+function checkMediaOptimizerGoldenQa() {
+  console.log('Media optimizer golden QA (#649): fixtures, surfaces, lazy WASM...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-golden-qa-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2095,6 +2103,7 @@ checkMediaOptimizerItemWebpContract();
 checkMediaOptimizerItemIntake();
 checkMediaOptimizerServerProof();
 checkMediaOptimizerProviderOutput();
+checkMediaOptimizerGoldenQa();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
