@@ -70,7 +70,7 @@ Nutzer laden ein Account-Profilbild über den Media-Optimizer hoch; ohne Bild er
 
 ## Composition Gate
 <!-- filled by @composition-gate -->
-- HEAD_SHA: 60022267b8267ec89e1902a59513c516ec39adb0
+- HEAD_SHA: 35df626639ee7a2f9af0ae923c3f0844354c5b5e
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-user-account-avatar.md`
 - Skip reason: n/a
