@@ -30,6 +30,14 @@ import {
   type ObjectUrlRegistry,
 } from './object-url-registry';
 
+export type MediaIntakeSelectOutcome = {
+  readonly status: MediaIntakeStatus;
+  readonly ready: MediaIntakeReadyPayload | null;
+  readonly errorMessage: string | null;
+  readonly previewUrl: string | null;
+  readonly result: MediaOptimizeResult | null;
+};
+
 export type UseMediaOptimizeIntakeResult = {
   readonly status: MediaIntakeStatus;
   /** Immediate Object URL of the selected original (before/during encode). */
@@ -41,12 +49,15 @@ export type UseMediaOptimizeIntakeResult = {
   readonly result: MediaOptimizeResult | null;
   readonly ready: MediaIntakeReadyPayload | null;
   readonly sourceFile: File | null;
-  /** Select a file: preview Object URL first, then optimize. */
-  readonly selectFile: (file: File, options?: Partial<MediaIntakeOptions>) => Promise<void>;
+  /** Select a file: preview Object URL first, then optimize. Returns a completion snapshot (avoids stale React state). */
+  readonly selectFile: (
+    file: File,
+    options?: Partial<MediaIntakeOptions>,
+  ) => Promise<MediaIntakeSelectOutcome>;
   /** Abort in-flight optimize/upload; bumps generation so stale completions are ignored. */
   readonly abort: () => void;
   /** Re-run optimize on the last selected file after failed/aborted. */
-  readonly retry: () => Promise<void>;
+  readonly retry: () => Promise<MediaIntakeSelectOutcome | null>;
   /**
    * Run an existing authorized upload/analysis pipeline with the ready blob.
    * On failure, previous remote assets are untouched (this hook never writes Storage).
@@ -142,7 +153,11 @@ export function useMediaOptimizeIntake(
   }, [clearUrls]);
 
   const runOptimize = useCallback(
-    async (file: File, options: MediaIntakeOptions, generation: IntakeGeneration) => {
+    async (
+      file: File,
+      options: MediaIntakeOptions,
+      generation: IntakeGeneration,
+    ): Promise<MediaIntakeSelectOutcome> => {
       const registry = ensureRegistry();
       registry.revokeAll();
       const url = registry.create(file);
@@ -154,10 +169,18 @@ export function useMediaOptimizeIntake(
       setSourceFile(file);
       sourceFileRef.current = file;
 
+      const staleOutcome = (): MediaIntakeSelectOutcome => ({
+        status: 'aborted',
+        ready: null,
+        errorMessage: 'Vorgang abgebrochen.',
+        previewUrl: url,
+        result: null,
+      });
+
       // Yield so consumers paint the Object URL before encode starts.
       await Promise.resolve();
       if (!shouldApplyCompletion(generationRef.current, generation, disposedRef.current)) {
-        return;
+        return staleOutcome();
       }
 
       setStatus('optimizing');
@@ -184,19 +207,26 @@ export function useMediaOptimizeIntake(
         });
       } catch (err) {
         if (!shouldApplyCompletion(generationRef.current, generation, disposedRef.current)) {
-          return;
+          return staleOutcome();
         }
         const message =
           err instanceof Error ? err.message : 'Medienoptimierung fehlgeschlagen.';
-        setStatus(controller.signal.aborted ? 'aborted' : 'failed');
+        const failStatus = controller.signal.aborted ? 'aborted' : 'failed';
+        setStatus(failStatus);
         setErrorMessage(message);
         setResult(null);
         setReady(null);
-        return;
+        return {
+          status: failStatus,
+          ready: null,
+          errorMessage: message,
+          previewUrl: url,
+          result: null,
+        };
       }
 
       if (!shouldApplyCompletion(generationRef.current, generation, disposedRef.current)) {
-        return;
+        return staleOutcome();
       }
 
       setResult(optimizeResult);
@@ -206,26 +236,47 @@ export function useMediaOptimizeIntake(
       if (nextStatus === 'ready') {
         const payload = buildUploadPayload(file, optimizeResult, optimizedBytes);
         if (!payload) {
+          const message =
+            'Optimierung lieferte kein gültiges Upload-Payload (kein stilles Original).';
           setStatus('failed');
-          setErrorMessage(
-            'Optimierung lieferte kein gültiges Upload-Payload (kein stilles Original).',
-          );
+          setErrorMessage(message);
           setReady(null);
-          return;
+          return {
+            status: 'failed',
+            ready: null,
+            errorMessage: message,
+            previewUrl: url,
+            result: optimizeResult,
+          };
         }
         setReady(payload);
         setErrorMessage(null);
-        return;
+        return {
+          status: 'ready',
+          ready: payload,
+          errorMessage: null,
+          previewUrl: url,
+          result: optimizeResult,
+        };
       }
 
       setReady(null);
+      let message: string;
       if ('message' in optimizeResult && typeof optimizeResult.message === 'string') {
-        setErrorMessage(optimizeResult.message);
+        message = optimizeResult.message;
       } else if (nextStatus === 'aborted') {
-        setErrorMessage('Medienoptimierung abgebrochen.');
+        message = 'Medienoptimierung abgebrochen.';
       } else {
-        setErrorMessage('Medienoptimierung fehlgeschlagen.');
+        message = 'Medienoptimierung fehlgeschlagen.';
       }
+      setErrorMessage(message);
+      return {
+        status: nextStatus,
+        ready: null,
+        errorMessage: message,
+        previewUrl: url,
+        result: optimizeResult,
+      };
     },
     [ensureRegistry],
   );
@@ -240,7 +291,7 @@ export function useMediaOptimizeIntake(
       };
       lastOptionsRef.current = merged;
       const generation = bumpGeneration();
-      await runOptimize(file, merged, generation);
+      return runOptimize(file, merged, generation);
     },
     [bumpGeneration, config.kind, config.profileId, runOptimize],
   );
@@ -254,9 +305,9 @@ export function useMediaOptimizeIntake(
 
   const retry = useCallback(async () => {
     const file = sourceFileRef.current;
-    if (!file || !mediaIntakeCanRetry(status)) return;
+    if (!file || !mediaIntakeCanRetry(status)) return null;
     const generation = bumpGeneration();
-    await runOptimize(file, lastOptionsRef.current, generation);
+    return runOptimize(file, lastOptionsRef.current, generation);
   }, [bumpGeneration, runOptimize, status]);
 
   const upload = useCallback(

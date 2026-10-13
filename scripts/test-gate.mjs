@@ -520,6 +520,14 @@ function checkMediaOptimizerPreviewIntake() {
   });
 }
 
+function checkMediaOptimizerCharacterPortrait() {
+  console.log('Media optimizer character portrait (#636): intake + canvas + service prepare...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-character-portrait-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2021,6 +2029,7 @@ checkMediaOptimizerFacadeStubs();
 checkMediaOptimizerImageEngine();
 checkMediaOptimizerLazyWorker();
 checkMediaOptimizerPreviewIntake();
+checkMediaOptimizerCharacterPortrait();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();

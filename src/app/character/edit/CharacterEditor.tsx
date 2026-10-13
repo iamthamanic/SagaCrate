@@ -351,6 +351,12 @@ export function CharacterEditor() {
     importComposition,
     modularGenerateResult,
     uploading,
+    portraitPreviewUrl,
+    portraitIntakeStatus,
+    portraitIntakeStatusLabelDe,
+    portraitIntakeCanRetry,
+    retryPortraitOptimize,
+    abortPortraitOptimize,
     fileInputRef,
     avatarCanvasRef,
     portraitCaptureRef,
@@ -1483,7 +1489,42 @@ export function CharacterEditor() {
               <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Start-Fertigkeiten</span><span className="font-semibold">{totalStartSkillPoints} / 10</span></div>
               <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Inventarlast</span><span className={overloaded ? 'font-semibold text-destructive' : 'font-semibold'}>{inventoryLoad} / {carryCapacity}</span></div>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"><Button variant="outline" onClick={handleGeneratePortrait} disabled={uploading}><Camera className="mr-2 h-4 w-4" />Portrait erzeugen</Button><Button variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}><Upload className="mr-2 h-4 w-4" />Portrait hochladen</Button><input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" /></div>
-              {portraitUrl && <div className="flex items-center gap-3 rounded-lg border border-border p-2"><img src={portraitUrl} alt="Portrait-Fallback" className="h-14 w-14 rounded-md object-cover" /><div className="min-w-0 flex-1"><p className="text-sm font-medium">Portrait</p><p className="truncate text-xs text-muted-foreground">Fallback für kompakte Ansichten</p></div><Button size="sm" variant="ghost" onClick={handleRemoveImage} aria-label="Portrait entfernen"><X className="h-4 w-4" /></Button></div>}
+              <div
+                className="space-y-2"
+                aria-live="polite"
+                aria-busy={uploading || portraitIntakeStatus === 'optimizing' || portraitIntakeStatus === 'previewing'}
+              >
+                {(portraitPreviewUrl || portraitUrl) ? (
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-2">
+                    <img
+                      src={portraitPreviewUrl || portraitUrl}
+                      alt={portraitPreviewUrl ? 'Portrait-Vorschau' : 'Portrait-Fallback'}
+                      className="h-14 w-14 rounded-md object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium">Portrait</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {portraitIntakeStatus === 'idle' || portraitIntakeStatus === 'complete'
+                          ? 'Fallback für kompakte Ansichten'
+                          : portraitIntakeStatusLabelDe}
+                      </p>
+                    </div>
+                    {portraitIntakeCanRetry ? (
+                      <Button size="sm" variant="outline" onClick={() => void retryPortraitOptimize()} disabled={uploading} aria-label="Portrait-Optimierung erneut versuchen">
+                        Erneut
+                      </Button>
+                    ) : null}
+                    {(portraitIntakeStatus === 'optimizing' || portraitIntakeStatus === 'previewing' || portraitIntakeStatus === 'uploading') ? (
+                      <Button size="sm" variant="ghost" onClick={abortPortraitOptimize} aria-label="Portrait-Optimierung abbrechen">
+                        Abbrechen
+                      </Button>
+                    ) : null}
+                    {portraitUrl && portraitIntakeStatus !== 'optimizing' && portraitIntakeStatus !== 'previewing' ? (
+                      <Button size="sm" variant="ghost" onClick={handleRemoveImage} aria-label="Portrait entfernen"><X className="h-4 w-4" /></Button>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
             </CardContent>
           </Card>
 
