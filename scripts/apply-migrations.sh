@@ -100,6 +100,7 @@ migrations=(
   076_dornhain_full_catalog_seed.sql
   077_dornhain_default_all_accounts.sql
   079_drop_sagadrive_aliases.sql
+  080_rename_local_auth_emails_sagatree.sql
 )
 
 only="${1:-}"

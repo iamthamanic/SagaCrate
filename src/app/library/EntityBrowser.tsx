@@ -1,14 +1,21 @@
 /**
- * EntityBrowser — shared browse shell for the Library entity tabs (Charaktere, später Abenteuer/Welten).
- * Renders a Scriptony-style carousel (center-focus, dots, chevron navigation) or a compact list view,
- * persists the chosen view mode per storageKey in localStorage and falls back safely
- * (desktop = list, mobile = carousel) when localStorage is unavailable (private mode).
+ * EntityBrowser — shared browse shell for Library entity tabs (Charaktere, Welten, Sagas).
+ * Uses shared center-focus Embla kit (cover-flow, loop via slide expansion, center glow).
  * Location: src/app/library/EntityBrowser.tsx
  */
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, List } from 'lucide-react';
 import { Button } from '../../shared/ui/button';
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '../../shared/ui/carousel';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '../../shared/ui/carousel';
+import {
+  CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
+  expandSlidesForEmblaLoop,
+  useCenterFocusCarousel,
+} from '../../shared/carousel';
 import { cn } from '../../shared/ui/utils';
 
 export type EntityBrowserViewMode = 'carousel' | 'list';
@@ -68,60 +75,66 @@ export function EntityBrowser<T extends { id: string }>({
   emptyState,
 }: EntityBrowserProps<T>) {
   const [viewMode, setViewMode] = useState<EntityBrowserViewMode>(() => loadInitialViewMode(storageKey));
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const hasInitialized = useRef(false);
+
+  // Embla turns loop off when slides don't fill the viewport — duplicate until scrollable.
+  const loopPackRef = useRef(expandSlidesForEmblaLoop(items));
+  const prevItemsKeyRef = useRef('');
+  const itemsKey = items.map(getId).join('|');
+  if (prevItemsKeyRef.current !== itemsKey) {
+    prevItemsKeyRef.current = itemsKey;
+    loopPackRef.current = expandSlidesForEmblaLoop(items);
+  }
+  const loopPack = loopPackRef.current;
+  const slides = loopPack.slides;
+
+  const {
+    setApi,
+    current,
+    scrollPrev,
+    scrollNext,
+    scrollToIndex,
+    handleCardClick,
+    carouselCss,
+    emblaOpts,
+    dotsClass,
+    dotClass,
+    navClass,
+    navButtonClass,
+    getItemClassName,
+    getCardClassName,
+    contentClassName,
+  } = useCenterFocusCarousel({
+    itemCount: slides.length,
+    enabled: viewMode === 'carousel',
+    prefix: 'entity-browser',
+    visualMode: 'coverflow',
+    slideBasisClassName: CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
+  });
+
+  const sourceCurrent = loopPack.toSourceIndex(current);
 
   useEffect(() => {
     try {
       window.localStorage.setItem(storageKey, viewMode);
     } catch {
-      // Private mode / storage disabled: keep in-memory preference only.
+      // Private mode / storage disabled.
     }
   }, [storageKey, viewMode]);
-
-  useEffect(() => {
-    if (!api) return;
-
-    if (!hasInitialized.current) {
-      const timeout = window.setTimeout(() => {
-        api.scrollTo(0, true);
-        hasInitialized.current = true;
-      }, 100);
-      return () => window.clearTimeout(timeout);
-    }
-
-    const updateState = () => setCurrent(api.selectedScrollSnap());
-    updateState();
-    api.on('select', updateState);
-    api.on('reInit', updateState);
-
-    return () => {
-      api.off('select', updateState);
-    };
-  }, [api]);
-
-  useEffect(() => {
-    if (api && hasInitialized.current) {
-      const timeout = window.setTimeout(() => api.scrollTo(0, true), 100);
-      return () => window.clearTimeout(timeout);
-    }
-  }, [items.length, api]);
 
   if (items.length === 0 && emptyState) {
     return <>{emptyState}</>;
   }
 
-  const activateItem = (item: T, index: number) => {
+  const scrollToSource = (sourceIndex: number) => {
+    scrollToIndex(loopPack.nearestSlideIndex(sourceIndex, current));
+  };
+
+  const activateItem = (item: T, slideIndex: number) => {
     if (viewMode === 'list') {
       onOpenItem?.(item);
       return;
     }
-    if (index === current) {
-      onOpenItem?.(item);
-    } else {
-      api?.scrollTo(index);
-    }
+    handleCardClick(slideIndex, () => onOpenItem?.(item));
   };
 
   return (
@@ -156,70 +169,59 @@ export function EntityBrowser<T extends { id: string }>({
       </div>
 
       {viewMode === 'carousel' ? (
-        <div className="relative py-3 pb-12">
-          <style>{`
-            .entity-browser-carousel-item { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-            .entity-browser-carousel-item:not(.is-center) { opacity: 0.5; filter: blur(2px); }
-            .entity-browser-carousel-item:not(.is-center) > div { transform: scale(0.94); }
-            .entity-browser-carousel-item.is-center { opacity: 1; filter: blur(0); z-index: 10; }
-            .entity-browser-carousel-item.is-center > div { transform: scale(1); }
-            .entity-browser-nav { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1000; }
-            .entity-browser-nav > * { pointer-events: auto; }
-          `}</style>
+        <div className="relative px-0 py-5 pb-12">
+          <style>{carouselCss}</style>
 
-          <Carousel
-            setApi={setApi}
-            opts={{
-              align: 'center',
-              loop: items.length > 1,
-              skipSnaps: false,
-              dragFree: false,
-              containScroll: 'trimSnaps',
-              duration: 25,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className={items.length === 1 ? '' : '-ml-4 md:-ml-0'}>
-              {items.map((item, index) => (
-                <CarouselItem
-                  key={getId(item)}
-                  className={cn(
-                    items.length === 1 ? '' : 'pl-4 md:pl-0 basis-[85%] sm:basis-[70%] md:basis-[38%] lg:basis-[36%]',
-                    'entity-browser-carousel-item',
-                    index === current && 'is-center',
-                  )}
-                >
-                  <div className="flex justify-center transition-all duration-300">
-                    <div className="w-full">
+          <Carousel setApi={setApi} opts={emblaOpts} className="w-full">
+            <CarouselContent className={contentClassName}>
+              {slides.map((item, slideIndex) => {
+                const sourceIndex = loopPack.toSourceIndex(slideIndex);
+                return (
+                  <CarouselItem
+                    key={`${getId(item)}__${slideIndex}`}
+                    className={getItemClassName(slideIndex)}
+                  >
+                    <div
+                      className={getCardClassName()}
+                      onClick={() => handleCardClick(slideIndex, () => onOpenItem?.(item))}
+                    >
                       {renderItem(item, {
                         variant: 'carousel',
-                        isCenter: index === current,
-                        onActivate: () => activateItem(item, index),
+                        isCenter: sourceIndex === sourceCurrent && slideIndex === current,
+                        onActivate: () => activateItem(item, slideIndex),
                       })}
                     </div>
-                  </div>
-                </CarouselItem>
-              ))}
+                  </CarouselItem>
+                );
+              })}
             </CarouselContent>
           </Carousel>
 
           {items.length > 1 && (
-            <div className="entity-browser-nav">
+            <div className={navClass}>
               <Button
+                type="button"
                 variant="outline"
                 size="icon"
-                className="absolute top-[30%] left-1 md:left-4 h-10 w-10 md:h-12 md:w-12 rounded-full bg-background/95 backdrop-blur-sm hover:bg-background shadow-xl border-2 transition-transform hover:scale-110"
+                className={cn(
+                  navButtonClass,
+                  'left-1 top-[42%] h-10 w-10 -translate-y-1/2 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm transition-transform hover:scale-110 md:left-4 md:h-12 md:w-12',
+                )}
                 aria-label="Vorheriges Element"
-                onClick={() => api?.scrollPrev()}
+                onClick={scrollPrev}
               >
                 <ChevronLeft className="size-5 md:size-6" />
               </Button>
               <Button
+                type="button"
                 variant="outline"
                 size="icon"
-                className="absolute top-[30%] right-1 md:right-4 h-10 w-10 md:h-12 md:w-12 rounded-full bg-background/95 backdrop-blur-sm hover:bg-background shadow-xl border-2 transition-transform hover:scale-110"
+                className={cn(
+                  navButtonClass,
+                  'right-1 top-[42%] h-10 w-10 -translate-y-1/2 rounded-full border-2 bg-background/95 shadow-xl backdrop-blur-sm transition-transform hover:scale-110 md:right-4 md:h-12 md:w-12',
+                )}
                 aria-label="Nächstes Element"
-                onClick={() => api?.scrollNext()}
+                onClick={scrollNext}
               >
                 <ChevronRight className="size-5 md:size-6" />
               </Button>
@@ -227,17 +229,14 @@ export function EntityBrowser<T extends { id: string }>({
           )}
 
           {items.length > 1 && (
-            <div className="mt-4 flex justify-center gap-2">
-              {items.map((item, index) => (
+            <div className={dotsClass}>
+              {items.map((item, sourceIndex) => (
                 <button
                   key={getId(item)}
                   type="button"
-                  aria-label={`Zu Element ${index + 1} springen`}
-                  className={cn(
-                    'h-2 w-2 rounded-full p-0 transition-opacity',
-                    index === current ? 'bg-primary opacity-100' : 'bg-primary opacity-30',
-                  )}
-                  onClick={() => api?.scrollTo(index)}
+                  aria-label={`Zu Element ${sourceIndex + 1} springen`}
+                  className={cn(dotClass, sourceIndex === sourceCurrent && 'active')}
+                  onClick={() => scrollToSource(sourceIndex)}
                 />
               ))}
             </div>

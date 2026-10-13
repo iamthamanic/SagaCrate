@@ -6,28 +6,39 @@
 --
 -- Shortcut in the app: username `player` / password `1234` → this email.
 -- Fixed UUID stays in sync with src/lib/localPlayer.ts LOCAL_PLAYER_USER_ID.
+-- Canonical email: player@sagatree.local (must match LOCAL_PLAYER_EMAIL).
+-- Legacy player@sagadrive.local is still recognized on re-apply / pre-080 volumes.
 --
 -- Idempotent: existing player row with a divergent id is normalized; missing
 -- row is created.
 
 do $$
 declare
-  v_seed_id  uuid := '00000000-0000-4000-8000-000000000002';
-  v_email    text := 'player@sagadrive.local';
-  v_password text := '1234';
-  v_existing uuid;
+  v_seed_id       uuid := '00000000-0000-4000-8000-000000000002';
+  v_email         text := 'player@sagatree.local';
+  v_legacy_email  text := 'player@sagadrive.local';
+  v_password      text := '1234';
+  v_existing      uuid;
 begin
-  select id into v_existing from auth.users where lower(email) = v_email;
+  select id into v_existing from auth.users where id = v_seed_id;
+  if v_existing is null then
+    select id into v_existing
+    from auth.users
+    where lower(email) in (lower(v_email), lower(v_legacy_email))
+    limit 1;
+  end if;
 
   if v_existing = v_seed_id then
     update auth.users set
+      email              = v_email,
       encrypted_password = crypt(v_password, gen_salt('bf', 10)),
       email_confirmed_at = coalesce(email_confirmed_at, now()),
       raw_app_meta_data  = '{"provider":"email","providers":["email"]}'::jsonb,
       raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player","display_name":"Player"}'::jsonb,
+      email_change       = '',
       updated_at         = now()
     where id = v_seed_id;
-    raise notice '074: player already seeded; password refreshed.';
+    raise notice '074: player already seeded; email/password refreshed.';
   elsif v_existing is not null then
     update public.characters      set owner_user_id = v_seed_id where owner_user_id = v_existing;
     update public.projects        set gm_user_id    = v_seed_id where gm_user_id    = v_existing;
@@ -44,10 +55,12 @@ begin
 
     update auth.users set
       id                 = v_seed_id,
+      email              = v_email,
       encrypted_password = crypt(v_password, gen_salt('bf', 10)),
       email_confirmed_at = coalesce(email_confirmed_at, now()),
       raw_app_meta_data  = '{"provider":"email","providers":["email"]}'::jsonb,
       raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player","display_name":"Player"}'::jsonb,
+      email_change       = '',
       updated_at         = now()
     where id = v_existing;
     raise notice '074: normalized player user % -> %', v_existing, v_seed_id;
@@ -86,5 +99,12 @@ begin
       jsonb_build_object('sub', v_seed_id::text, 'email', v_email),
       now(), now(), now()
     );
+  else
+    update auth.identities set
+      provider_id = v_email,
+      identity_data = coalesce(identity_data, '{}'::jsonb)
+        || jsonb_build_object('sub', v_seed_id::text, 'email', v_email),
+      updated_at = now()
+    where user_id = v_seed_id and provider = 'email';
   end if;
 end $$;

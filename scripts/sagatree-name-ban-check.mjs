@@ -44,6 +44,7 @@ function isAllowed(rel) {
   if (rel === 'scripts/saga-simulation-live-ops-check.mjs') return true;
   if (rel === 'scripts/sagatree-brand-phase-b-check.mjs') return true;
   if (rel === 'scripts/sagatree-brand-phase-a-check.mjs') return true;
+  if (rel === 'scripts/local-auth-email-sagatree-check.mjs') return true;
   if (rel === '.qa/acceptance/sagatree-eradicate-legacy-ids.md') return true;
   if (rel === '.qa/runs/composition-gate-sagatree-eradicate-legacy-ids.md') return true;
   return false;

@@ -7,6 +7,7 @@
  */
 export { useCharacters, useCharacterSummaries } from './list';
 export { CreateCharacterEntryDialog } from './creation/CreateCharacterEntryDialog';
+export { getSpeciesSketchUrl } from './creation/speciesSketches';
 export {
   setCharacterEditorBootstrap,
   takeCharacterEditorBootstrap,
