@@ -65,6 +65,10 @@
             if (id.includes('node_modules/@mediapipe')) {
               return 'mediapipe-vision';
             }
+            // Keep jSquash WebP WASM out of the critical app/vendor path (#632).
+            if (id.includes('node_modules/@jsquash')) {
+              return 'jsquash-webp';
+            }
             if (id.includes('node_modules')) {
               return 'vendor';
             }
