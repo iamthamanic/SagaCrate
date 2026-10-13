@@ -496,6 +496,14 @@ function checkMediaOptimizerFacadeStubs() {
   });
 }
 
+function checkMediaOptimizerImageEngine() {
+  console.log('Media optimizer image engine (#630): WebP budget ladder, policy, jsquash dep...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-image-engine-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -1994,6 +2002,7 @@ checkSagaRoutingPublicIdFoundation();
 checkLookProfileDomain();
 checkMediaOptimizerContracts();
 checkMediaOptimizerFacadeStubs();
+checkMediaOptimizerImageEngine();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();

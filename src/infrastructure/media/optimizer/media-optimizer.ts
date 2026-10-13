@@ -27,6 +27,11 @@ export type OptimizeMediaRequest = {
   readonly hasAnimation?: boolean;
   readonly hasAlpha?: boolean;
   readonly signal?: AbortSignal;
+  /** Image payload for the WebP engine (#630); ignored by stub engines. */
+  readonly bytes?: Blob | ArrayBuffer | Uint8Array;
+  readonly imageCountInRequest?: number;
+  readonly aggregateRequestBytes?: number;
+  readonly onOptimizedBytes?: (bytes: Uint8Array) => void;
 };
 
 function toInputMeta(request: OptimizeMediaRequest): MediaOptimizeInputMeta {
@@ -79,7 +84,14 @@ export async function optimizeMedia(
   switch (request.kind) {
     case 'image': {
       const { optimizeImage } = await import('./engines/image/index');
-      result = await optimizeImage({ input, signal: request.signal });
+      result = await optimizeImage({
+        input,
+        signal: request.signal,
+        bytes: request.bytes,
+        imageCountInRequest: request.imageCountInRequest,
+        aggregateRequestBytes: request.aggregateRequestBytes,
+        onOptimizedBytes: request.onOptimizedBytes,
+      });
       break;
     }
     case 'video': {

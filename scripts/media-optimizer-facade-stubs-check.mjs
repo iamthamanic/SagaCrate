@@ -62,11 +62,21 @@ const optDir = join(root, 'src/infrastructure/media/optimizer');
 for (const file of walkFiles(optDir)) {
   const text = readFileSync(file, 'utf8');
   const rel = file.slice(root.length + 1);
-  check(!/@jsquash\/webp/.test(text), `${rel}: no @jsquash/webp yet`);
+  const isImageEngine = rel.includes('/engines/image/');
+  // Image engine (#630) may reference @jsquash/webp lazily; facade + stubs must not.
+  if (!isImageEngine) {
+    check(!/@jsquash\/webp/.test(text), `${rel}: no @jsquash/webp in facade/stubs`);
+  }
   check(!/ffmpeg/i.test(text), `${rel}: no ffmpeg`);
   check(!/\bany\b/.test(text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')), `${rel}: no any`);
   check(!/\bas\s+unknown\b/.test(text), `${rel}: no as unknown`);
 }
+check(
+  !/@jsquash\/webp/.test(
+    readFileSync(join(root, 'src/infrastructure/media/optimizer/media-optimizer.ts'), 'utf8'),
+  ),
+  'facade source codec-free',
+);
 
 check(
   /await import\('\.\/engines\/image\/index'\)/.test(
@@ -100,14 +110,20 @@ execFileSync(
     '--bundle',
     '--format=esm',
     '--platform=neutral',
+    '--external:@jsquash/webp',
     `--outfile=${join(outdir, 'optimizer.mjs')}`,
   ],
   { stdio: 'inherit' },
 );
 
 const bundled = readFileSync(join(outdir, 'optimizer.mjs'), 'utf8');
-check(!/@jsquash/.test(bundled), 'facade bundle has no jsquash');
 check(!/ffmpeg/i.test(bundled), 'facade bundle has no ffmpeg');
+check(
+  !/from\s+['"]@jsquash\/webp['"]/.test(
+    readFileSync(join(root, 'src/infrastructure/media/optimizer/media-optimizer.ts'), 'utf8'),
+  ),
+  'facade has no static jsquash import',
+);
 
 const { optimizeMedia } = await import(pathToFileURL(join(outdir, 'optimizer.mjs')).href);
 
