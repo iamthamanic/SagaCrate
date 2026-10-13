@@ -112,10 +112,11 @@ services:
     networks:
       - sagatree-network
 
-  # Realtime WebSocket
+  # Realtime WebSocket (Phoenix) — requires SECRET_KEY_BASE / DB_ENC_KEY (#604)
   supabase-realtime:
     image: supabase/realtime:v2.25.15
     container_name: sagatree-realtime
+    restart: unless-stopped
     environment:
       DB_HOST: supabase-db
       DB_PORT: 5432
@@ -123,11 +124,25 @@ services:
       DB_USER: postgres
       DB_PASSWORD: ${POSTGRES_PASSWORD:-your-super-secret-password}
       DB_SSL: "off"
+      DB_IP_VERSION: IPv4
       PORT: 4000
       JWT_SECRET: ${JWT_SECRET:-your-jwt-secret}
+      API_JWT_SECRET: ${API_JWT_SECRET:-your-jwt-secret}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE — openssl rand -base64 64}
+      DB_ENC_KEY: ${DB_ENC_KEY:?set DB_ENC_KEY — openssl rand -hex 8}
+      APP_NAME: ${FLY_APP_NAME:-sagatree}
+      FLY_APP_NAME: ${FLY_APP_NAME:-sagatree}
+      # Must be a known Realtime region atom (nil crashes Nodes.region_nodes/1).
+      FLY_REGION: ${FLY_REGION:-us-east-1}
+      REGION: ${FLY_REGION:-us-east-1}
       REPLICATION_MODE: RLS
       REPLICATION_POLL_INTERVAL: 100
       SECURE_CHANNELS: "true"
+      SEED_SELF_HOST: ${REALTIME_SEED_SELF_HOST:-true}
+      # Host header for local Kong is `localhost` — tenant external_id must match.
+      SELF_HOST_TENANT_NAME: ${REALTIME_SELF_HOST_TENANT:-localhost}
+      ERL_AFLAGS: "-proto_dist inet_tcp"
+      DNS_NODES: "''"
     depends_on:
       supabase-db:
         condition: service_healthy

@@ -208,6 +208,14 @@ function checkSagatreeCoreWorkflowsContract() {
   });
 }
 
+function checkRealtimeComposeBootContract() {
+  console.log('Realtime compose boot (#604): checking SECRET_KEY_BASE / Kong /socket wiring...');
+  execFileSync(process.execPath, ['scripts/realtime-compose-boot-contract-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2143,6 +2151,7 @@ checkProjectMembershipSecurity();
 checkLocalAuthEmailSagatree();
 checkSagaStateColumnPrivileges();
 checkSagatreeCoreWorkflowsContract();
+checkRealtimeComposeBootContract();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();
