@@ -17,7 +17,6 @@ import { persistMigratedInventory } from '../inventory/inventory-persistence';
 import { getLookProfile } from '../look';
 import { projectService } from '../project/project-service';
 import { characterAdventureArcService } from './character-adventure-arc-service';
-import { optimizeMedia } from '../media/optimizer';
 import { supabaseCharacterRepository } from './supabase-character.repository';
 
 function invalidateCharacterListCaches(): void {
@@ -41,6 +40,8 @@ export async function prepareCharacterPortraitFile(
   file: File,
   signal?: AbortSignal,
 ): Promise<File> {
+  // Lazy import keeps the WebP Worker out of the service module graph until prepare runs.
+  const { optimizeMedia } = await import('../media/optimizer');
   let optimizedBytes: Uint8Array | undefined;
   const result = await optimizeMedia({
     kind: 'image',

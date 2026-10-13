@@ -52,6 +52,10 @@
         '@': path.resolve(__dirname, './src'),
       },
     },
+    // Module workers + manualChunks (jsquash-webp) cannot use IIFE (#636 build).
+    worker: {
+      format: 'es',
+    },
     build: {
       target: 'esnext',
       outDir: 'build',
