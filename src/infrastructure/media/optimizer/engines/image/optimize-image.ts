@@ -9,7 +9,11 @@ import {
   normalizeImageMime,
 } from '../../../../../domains/media';
 import { blobToImageData, scaleImageData } from './raster-decode';
-import { encodeWebpUnderBudget } from './webp-budget';
+import {
+  assertImageInputByteLimit,
+  assertImagePixelLimit,
+} from './resource-limits';
+import { encodeWebpWithWorkerFallback } from './webp-worker-client';
 import type { ImageEngineRequest } from './types';
 
 function abortedResult(request: ImageEngineRequest): MediaOptimizeResult {
@@ -56,6 +60,29 @@ export async function runOptimizeImage(
       input,
       code: 'invalid-input',
       message: 'Bildbytes fehlen für die Image-Engine.',
+    };
+  }
+
+  const inputLimit = assertImageInputByteLimit(input.byteSize);
+  if (inputLimit.ok === false) {
+    if (inputLimit.code === 'over-max-upload') {
+      return {
+        status: 'over-budget',
+        kind: 'image',
+        profileId: input.profileId,
+        input,
+        code: 'over-max-upload',
+        message: inputLimit.message,
+        attemptedByteSize: input.byteSize,
+      };
+    }
+    return {
+      status: 'failed',
+      kind: 'image',
+      profileId: input.profileId,
+      input,
+      code: 'invalid-input',
+      message: inputLimit.message,
     };
   }
 
@@ -162,10 +189,31 @@ export async function runOptimizeImage(
     };
   }
 
+  const pixelLimit = assertImagePixelLimit(imageData.width, imageData.height);
+  if (pixelLimit.ok === false) {
+    if (pixelLimit.code === 'over-max-upload') {
+      return {
+        status: 'over-budget',
+        kind: 'image',
+        profileId: input.profileId,
+        input,
+        code: 'over-max-upload',
+        message: pixelLimit.message,
+        attemptedByteSize: input.byteSize,
+      };
+    }
+    return {
+      status: 'failed',
+      kind: 'image',
+      profileId: input.profileId,
+      input,
+      code: 'invalid-input',
+      message: pixelLimit.message,
+    };
+  }
+
   // Optional max-edge pre-scale before budget ladder
-  if (
-    Math.max(imageData.width, imageData.height) > policy.maxEdgePx
-  ) {
+  if (Math.max(imageData.width, imageData.height) > policy.maxEdgePx) {
     const edge = policy.maxEdgePx;
     const scale = edge / Math.max(imageData.width, imageData.height);
     const nw = Math.max(1, Math.floor(imageData.width * scale));
@@ -173,14 +221,8 @@ export async function runOptimizeImage(
     imageData = await scaleImageData(imageData, nw, nh);
   }
 
-  const { encode } = await import('@jsquash/webp');
-  const budgeted = await encodeWebpUnderBudget({
+  const budgeted = await encodeWebpWithWorkerFallback({
     imageData,
-    encode: async (data, opts) => {
-      const buf = await encode(data, opts);
-      return buf as ArrayBuffer;
-    },
-    scaleImageData,
     targetBytes: policy.budget.targetBytes,
     maxUploadBytes: policy.budget.maxUploadBytes,
     maxOutputBytes: input.byteSize,

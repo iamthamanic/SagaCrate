@@ -504,6 +504,14 @@ function checkMediaOptimizerImageEngine() {
   });
 }
 
+function checkMediaOptimizerLazyWorker() {
+  console.log('Media optimizer lazy worker (#632): worker URL, abort, resource limits, chunk...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-lazy-worker-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2003,6 +2011,7 @@ checkLookProfileDomain();
 checkMediaOptimizerContracts();
 checkMediaOptimizerFacadeStubs();
 checkMediaOptimizerImageEngine();
+checkMediaOptimizerLazyWorker();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();

@@ -19,6 +19,16 @@ export type {
   WebpEncodeFn,
   ScaleImageDataFn,
 } from './webp-budget';
+export {
+  encodeWebpWithWorkerFallback,
+  isImageWorkerSupported,
+} from './webp-worker-client';
+export {
+  IMAGE_ENGINE_MAX_INPUT_BYTES,
+  IMAGE_ENGINE_MAX_PIXELS,
+  assertImageInputByteLimit,
+  assertImagePixelLimit,
+} from './resource-limits';
 
 export async function optimizeImage(
   request: ImageEngineRequest,

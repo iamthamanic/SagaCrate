@@ -38,14 +38,26 @@ const optimizeSrc = readFileSync(
   join(root, 'src/infrastructure/media/optimizer/engines/image/optimize-image.ts'),
   'utf8',
 );
+const workerClientSrc = readFileSync(
+  join(root, 'src/infrastructure/media/optimizer/engines/image/webp-worker-client.ts'),
+  'utf8',
+);
+const workerSrc = readFileSync(
+  join(root, 'src/infrastructure/media/optimizer/engines/image/image.worker.ts'),
+  'utf8',
+);
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 
 check(Boolean(pkg.dependencies?.['@jsquash/webp']), '@jsquash/webp in package.json');
 check(/encodeWebpUnderBudget/.test(budgetSrc), 'budget ladder exported');
 check(/lossless/.test(budgetSrc) && /quality/.test(budgetSrc) && /scale/.test(budgetSrc), 'ladder steps');
 check(/maxOutputBytes/.test(budgetSrc), 'kein Dateiwachstum guard param');
-check(/@jsquash\/webp/.test(optimizeSrc), 'jsquash lazy in optimize-image');
+check(
+  /@jsquash\/webp/.test(workerClientSrc) || /@jsquash\/webp/.test(workerSrc),
+  'jsquash lazy in worker path',
+);
 check(!/from ['"]@jsquash\/webp['"]/.test(imageIndex), 'index has no static jsquash import');
+check(/encodeWebpWithWorkerFallback/.test(optimizeSrc), 'optimize uses worker client');
 check(/allowWebpOutput/.test(optimizeSrc), 'respects allowWebpOutput');
 check(/over-budget/.test(optimizeSrc), 'over-budget path');
 check(/unchanged/.test(optimizeSrc), 'unchanged path');
