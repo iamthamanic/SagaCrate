@@ -9,9 +9,9 @@ import type {
   CharacterRulesetKey,
   EmotionProfileDto,
   ItemDto,
-  SagaDriveSkillKey,
+  SagaTreeSkillKey,
 } from '../../domains/character/domain/character.entity';
-import type { SagaDriveProfileDto } from '../../domains/character/domain/sagadrive-profile.entity';
+import type { SagaTreeProfileDto } from '../../domains/character/domain/sagatree-profile.entity';
 
 export interface CharacterDto {
   id: string;
@@ -37,7 +37,7 @@ export interface CharacterDto {
   token_url?: string;
   attributes: CharacterAttributeStorageDto;
   derived_stats?: Record<string, unknown>;
-  skills?: Partial<Record<SagaDriveSkillKey, number>>;
+  skills?: Partial<Record<SagaTreeSkillKey, number>>;
   proficiencies?: string[];
   languages?: string[];
   hp_current?: number;
@@ -48,9 +48,7 @@ export interface CharacterDto {
   resources?: Record<string, unknown>;
   conditions?: string[];
   /** Canonical SagaTree Core profile column (073+). */
-  sagatree_profile?: Partial<SagaDriveProfileDto> | null;
-  /** Legacy alias column — kept in sync by DB trigger during rename transition. */
-  sagadrive_profile?: Partial<SagaDriveProfileDto> | null;
+  sagatree_profile?: Partial<SagaTreeProfileDto> | null;
   personality_traits?: string[];
   ideals?: string[];
   bonds?: string[];
@@ -61,7 +59,7 @@ export interface CharacterDto {
   inventory_v2?: unknown | null;
   inventory_schema_version?: 1 | 2;
   emotion_profiles: EmotionProfileDto[];
-  /** complete | incomplete — drafts may skip full SagaDrive build asserts. */
+  /** complete | incomplete — drafts may skip full SagaTree build asserts. */
   sheet_status?: 'complete' | 'incomplete';
   is_marketplace_item?: boolean;
   downloads_count?: number;

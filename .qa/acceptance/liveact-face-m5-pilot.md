@@ -13,7 +13,7 @@ m5 erhält über einen reproduzierbaren QtMeshEditor-FaceRig-CLI-Pass automatisi
 
 ## Happy Path
 1. Given m5 baseline GLB, when `scripts/liveact-face-authoring-qtmesh.mjs` mit `--input/--output/--run-dir` läuft, then FaceRig schreibt Kandidat-GLB + `qtmesh-report.json` unter `assets/species-3d/human/runs/quality-20260921-m5-face1/`.
-2. Given Kandidat-GLB, when `scripts/liveact-face-asset-check.mjs --profile core-v1` gegen Baseline läuft, then Khronos + SagaDrive PASS und `face-inventory.json` existiert.
+2. Given Kandidat-GLB, when `scripts/liveact-face-asset-check.mjs --profile core-v1` gegen Baseline läuft, then Khronos + SagaTree PASS und `face-inventory.json` existiert.
 3. Given PASS, when Publish verdrahtet, then `species-template-models-v1.ts` zeigt auf den Face-fähigen m5 und Capability Inspector meldet Core Avatar ✓.
 4. Given Adapter-Unit-Tests, when `npm run test-gate`, then Fake-`qtmesh` deckt Args/JSON/Errors/targetNames/exit codes ohne Netzwerk/Qt/CMake.
 

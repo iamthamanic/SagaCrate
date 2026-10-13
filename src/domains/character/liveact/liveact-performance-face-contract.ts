@@ -1,5 +1,5 @@
 /**
- * SagaDrive Performance Face V2 — character-side Premium face capability (#450).
+ * SagaTree Performance Face V2 — character-side Premium face capability (#450).
  * Location: src/domains/character/liveact/liveact-performance-face-contract.ts
  *
  * Parallel to LiveAct Caps V1 / Face Asset V1. Never stores owner, calib, or landmarks.
@@ -8,11 +8,11 @@
 
 import type { LiveActGazeDrivePath } from './liveact-gaze-path';
 
-export const SAGADRIVE_PERFORMANCE_FACE_CONTRACT = 'SagaDrivePerformanceFaceV2' as const;
+export const SAGATREE_PERFORMANCE_FACE_CONTRACT = 'SagaTreePerformanceFaceV2' as const;
 export const PERFORMANCE_FACE_VALIDATOR_VERSION = 'performance-face-validator-v1' as const;
-export const PERFORMANCE_FACE_MANIFEST_VERSION = 'SagaDrivePerformanceFaceManifestV1' as const;
-export const PERFORMANCE_FACE_AUTHORING_SPEC = 'sagadrive-performance-face-authoring-v1' as const;
-export const LIVEACT_ACTIVE_CAPABILITY_CONTRACT = 'SagaDriveLiveActActiveCapabilityV2' as const;
+export const PERFORMANCE_FACE_MANIFEST_VERSION = 'SagaTreePerformanceFaceManifestV1' as const;
+export const PERFORMANCE_FACE_AUTHORING_SPEC = 'sagatree-performance-face-authoring-v1' as const;
+export const LIVEACT_ACTIVE_CAPABILITY_CONTRACT = 'SagaTreeLiveActActiveCapabilityV2' as const;
 
 /** Display → Animated Humanoid → LiveAct Standard → LiveAct Premium. */
 export const PERFORMANCE_FACE_CAPABILITY_LEVELS = [0, 1, 2, 3] as const;
@@ -89,7 +89,7 @@ export interface PerformanceFaceCorrectiveCapabilityV1 {
 }
 
 export interface PerformanceFaceValidationReportV1 {
-  contractVersion: typeof SAGADRIVE_PERFORMANCE_FACE_CONTRACT;
+  contractVersion: typeof SAGATREE_PERFORMANCE_FACE_CONTRACT;
   validatorVersion: typeof PERFORMANCE_FACE_VALIDATOR_VERSION;
   capabilityLevel: PerformanceFaceCapabilityLevel;
   standardEligible: boolean;

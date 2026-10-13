@@ -16,7 +16,7 @@
 
 | Happy Path / Edge | Evidence |
 |---|---|
-| §7.4 docs define action + 4 grades + precedence | `docs/sagadrive core rules.md` |
+| §7.4 docs define action + 4 grades + precedence | `docs/sagatree core rules.md` |
 | Forbidden outputs + §2.3 success-at-cost | kernel `CREATE_OPPORTUNITY_FORBIDDEN_OUTPUTS` + docs |
 | Kernel tests: precedence, success, crit-success, crit-failure | `combat-create-opportunity-check.mjs` |
 | §2.5 anti-stack / no 3d20 | `selectApplicableOpportunitySources` + `foldNamedAdvantageSources` |

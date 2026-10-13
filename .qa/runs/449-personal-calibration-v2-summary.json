@@ -1,7 +1,7 @@
 {
-  "contractVersion": "SagaDriveLiveActCalibrationProfileV2",
+  "contractVersion": "SagaTreeLiveActCalibrationProfileV2",
   "ab": {
-    "contractVersion": "SagaDriveLiveActCalibrationProfileV2",
+    "contractVersion": "SagaTreeLiveActCalibrationProfileV2",
     "policyVersion": "liveact-personal-calibration-policy-v1",
     "choreographyDurationMs": 34500,
     "v1": {
@@ -33,7 +33,7 @@
     }
   },
   "evidence": {
-    "contractVersion": "SagaDriveLiveActCalibrationProfileV2",
+    "contractVersion": "SagaTreeLiveActCalibrationProfileV2",
     "policyVersion": "liveact-personal-calibration-policy-v1",
     "choreographyDurationMs": 34500,
     "v1": {
@@ -77,5 +77,5 @@
       "CE-20": "skip/N/A/fingerprint → V1 or recalibrate"
     }
   },
-  "deterministicHash": "589f50b9f5680d9619666a14e2b4bef8630bc120b4e28d5695f554b6bc2dddad"
+  "deterministicHash": "899e8881358c9c178c691a2e724784485c70f0f75ec406217f6ac50f20d23152"
 }

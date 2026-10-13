@@ -54,7 +54,7 @@ export interface HybridFaceAbCleanControlRow {
 }
 
 export interface HybridFaceAbReportV1 {
-  readonly contractVersion: 'SagaDriveLiveActHybridFaceAbReportV1';
+  readonly contractVersion: 'SagaTreeLiveActHybridFaceAbReportV1';
   readonly fixtureVersion: 'hybrid-face-v1';
   readonly controlsEvaluated: readonly LiveActHybridFaceControlId[];
   readonly v1: HybridFaceAbPathErrors;
@@ -391,7 +391,7 @@ export function runHybridFaceAbBenchmark(): HybridFaceAbReportV1 {
   void LIVEACT_HYBRID_FACE_CONTROL_IDS;
 
   return {
-    contractVersion: 'SagaDriveLiveActHybridFaceAbReportV1',
+    contractVersion: 'SagaTreeLiveActHybridFaceAbReportV1',
     fixtureVersion: 'hybrid-face-v1',
     controlsEvaluated: EVAL_CONTROLS,
     v1: { path: 'v1', medianAbsError: v1Median, errors: v1Errors },

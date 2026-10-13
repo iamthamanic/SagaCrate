@@ -6,7 +6,7 @@
  * Pure math — no React / Three.js. Guides are metadata only (no new runtime anchors).
  */
 
-import type { SagaDriveFaceAnchorId } from './face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from './face-anchor-contract';
 
 export interface FaceMappingGuidePoint2 {
   readonly x: number;
@@ -34,8 +34,8 @@ export interface FaceMappingGuidePathV1 {
 const DEFAULT_SAMPLES_PER_SEGMENT = 8;
 
 function pick(
-  screen: Partial<Record<SagaDriveFaceAnchorId, FaceMappingGuidePoint2>>,
-  id: SagaDriveFaceAnchorId,
+  screen: Partial<Record<SagaTreeFaceAnchorId, FaceMappingGuidePoint2>>,
+  id: SagaTreeFaceAnchorId,
 ): FaceMappingGuidePoint2 | null {
   return screen[id] ?? null;
 }
@@ -128,7 +128,7 @@ export function buildOpenTripleGuide(
  * Nose / chin / forehead intentionally omitted (markers only).
  */
 export function buildFaceMappingGuidePaths(
-  screen: Partial<Record<SagaDriveFaceAnchorId, FaceMappingGuidePoint2>>,
+  screen: Partial<Record<SagaTreeFaceAnchorId, FaceMappingGuidePoint2>>,
   samplesPerSegment = DEFAULT_SAMPLES_PER_SEGMENT,
 ): readonly FaceMappingGuidePathV1[] {
   const paths: FaceMappingGuidePathV1[] = [];
@@ -217,7 +217,7 @@ export function buildFaceMappingGuidePaths(
 }
 
 /** Feature / body-part group for detail card (PDF: which Körperteil). */
-export function resolveFaceMappingFeatureGroupDe(anchorId: SagaDriveFaceAnchorId): string {
+export function resolveFaceMappingFeatureGroupDe(anchorId: SagaTreeFaceAnchorId): string {
   if (anchorId.startsWith('eyeLeft')) return 'Linkes Auge';
   if (anchorId.startsWith('eyeRight')) return 'Rechtes Auge';
   if (anchorId.startsWith('browLeft')) return 'Linke Braue';

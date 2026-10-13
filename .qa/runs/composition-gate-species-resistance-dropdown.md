@@ -6,10 +6,10 @@
 - Verdict: CLEAR
 
 ## Event
-User selects the SagaDrive species trait `Enge Resistenz`, chooses one Core hazard type from the dropdown, and saves the character.
+User selects the SagaTree species trait `Enge Resistenz`, chooses one Core hazard type from the dropdown, and saves the character.
 
 ## Hop chain
-`SpeciesTraitsPanel` renders the fixed Core hazard catalog from `speciesResistanceHazards.ts` and writes the selected stable hazard key through `onTraitDetailChange` → `CharacterEditor` stores that key in `speciesTraitDetails['narrow-resistance']` and requires a non-empty detail for the selected trait → `handleSaveCharacter` copies the structured trait details into `sagadrive_profile` → `characterService.createCharacter` normalizes and persists the profile in the existing `characters.sagadrive_profile` JSONB field → `mapToViewModel` restores the structured species-trait detail on read.
+`SpeciesTraitsPanel` renders the fixed Core hazard catalog from `speciesResistanceHazards.ts` and writes the selected stable hazard key through `onTraitDetailChange` → `CharacterEditor` stores that key in `speciesTraitDetails['narrow-resistance']` and requires a non-empty detail for the selected trait → `handleSaveCharacter` copies the structured trait details into `sagatree_profile` → `characterService.createCharacter` normalizes and persists the profile in the existing `characters.sagatree_profile` JSONB field → `mapToViewModel` restores the structured species-trait detail on read.
 
 No new database column, queue, worker, webhook or external side effect is introduced.
 

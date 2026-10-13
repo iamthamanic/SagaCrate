@@ -5,7 +5,7 @@
  * Distances are dimensionless ratios (not raw pixels). MediaPipe Face Landmarker indices.
  */
 
-import type { SagaDriveFaceAnchorId } from '../avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../avatar/face-anchor-contract';
 import type { LiveActFaceLandmark2d } from './liveact-face-diagnostics';
 
 /** Canonical MediaPipe Face Landmarker indices for metric pairs. */
@@ -62,7 +62,7 @@ function mid(a: LiveActFaceLandmark2d, b: LiveActFaceLandmark2d): LiveActFaceLan
 }
 
 /** Maps deformed mesh anchor ids → MediaPipe landmark slots for shared metric math (#400). */
-const FACE_ANCHOR_TO_LANDMARK_INDEX: Partial<Record<SagaDriveFaceAnchorId, number>> = {
+const FACE_ANCHOR_TO_LANDMARK_INDEX: Partial<Record<SagaTreeFaceAnchorId, number>> = {
   mouthUpper: LIVEACT_FACE_METRIC_LANDMARK_INDICES.upperLip,
   mouthLower: LIVEACT_FACE_METRIC_LANDMARK_INDICES.lowerLip,
   mouthCornerLeft: LIVEACT_FACE_METRIC_LANDMARK_INDICES.mouthLeft,
@@ -84,7 +84,7 @@ const FACE_ANCHOR_TO_LANDMARK_INDEX: Partial<Record<SagaDriveFaceAnchorId, numbe
  * Reuses {@link computeLiveActFaceMetrics} — same ratios as camera overlay (#398).
  */
 export function buildLiveActFaceLandmarksFromAnchorScreenPoints(
-  points: Readonly<Partial<Record<SagaDriveFaceAnchorId, LiveActFaceLandmark2d>>>,
+  points: Readonly<Partial<Record<SagaTreeFaceAnchorId, LiveActFaceLandmark2d>>>,
 ): readonly LiveActFaceLandmark2d[] {
   const landmarks: LiveActFaceLandmark2d[] = Array.from({ length: 478 }, () => ({
     x: Number.NaN,
@@ -92,7 +92,7 @@ export function buildLiveActFaceLandmarksFromAnchorScreenPoints(
   }));
   for (const [anchorId, landmarkIndex] of Object.entries(FACE_ANCHOR_TO_LANDMARK_INDEX)) {
     if (landmarkIndex == null) continue;
-    const p = points[anchorId as SagaDriveFaceAnchorId];
+    const p = points[anchorId as SagaTreeFaceAnchorId];
     if (!p) continue;
     landmarks[landmarkIndex] = { x: p.x, y: p.y };
   }

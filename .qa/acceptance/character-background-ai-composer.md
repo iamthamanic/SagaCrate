@@ -4,12 +4,12 @@
 Der BG-Tab des CharacterEditors wird zu einem Character-Lore-Composer: Hintergrundgeschichte kann aus allen relevanten Charakterparametern generiert werden. Optional kann ein autorisierter Projekt-/Welt-Kontext verwendet werden. Parallel werden Persoenlichkeitsmerkmale, Ideale, Bindungen und Schwaechen als kombinierbare Bausteine editierbar. Teure Provider-Aufrufe werden pro authentifiziertem User persistent und instanzuebergreifend begrenzt.
 
 ## Preconditions
-- Bestehender CharacterEditor, Regeln fuer SagaDrive Core und Dungeons & Dragons 5.5e, Gold/Cyan-Interaction-Hierarchie und Character-Service bleiben die Basis.
+- Bestehender CharacterEditor, Regeln fuer SagaTree Core und Dungeons & Dragons 5.5e, Gold/Cyan-Interaction-Hierarchie und Character-Service bleiben die Basis.
 - Prompt-Templates werden versioniert im Repository gespeichert und serverseitig zusammengesetzt.
 - Der LLM-Zugriff erfolgt nur serverseitig. Client-Code kennt keine API-Keys oder Service-Role-Keys.
 - Provider-Schnittstelle ist OpenAI-kompatibel oder Ollama; konkrete Credentials/Modelle werden per Environment konfiguriert.
 - D&D 5.5e bleibt ohne zugeordnete Welt settingneutral. Keine Forgotten-Realms-Annahme.
-- SagaDrive Core nutzt die ausgewaehlten Genre-/Setting-Parameter als Lore-Rahmen.
+- SagaTree Core nutzt die ausgewaehlten Genre-/Setting-Parameter als Lore-Rahmen.
 - User hat die rueckwaertskompatible Migration von `ideals`, `bonds`, `flaws` von Einzeltext auf mehrere Textbausteine freigegeben.
 
 ## Architecture
@@ -27,7 +27,7 @@ Der BG-Tab des CharacterEditors wird zu einem Character-Lore-Composer: Hintergru
 - [x] Solange das Story-Feld leer ist, werden 10 charakterabhaengige Beispieltexte in Grau angezeigt und alle 5 Sekunden mit einer kurzen Ueberblendung gewechselt; `Beispiel uebernehmen` uebernimmt den aktuell sichtbaren Text in das Story-Feld.
 - [x] Der Generation-Context beruecksichtigt alle nicht-leeren Character-Parameter: Name, Beschreibung, Regelset, Archetyp/Klasse, Rasse/Spezies, Setting, Essenzprofil, D&D-Hintergrund, Level, sechs Stats, Skills/Faehigkeiten, Inventar, Aussehen sowie die vier Trait-Gruppen. Notes werden bewusst nicht an das LLM gesendet.
 - [x] Persoenlichkeitsmerkmale, Ideale, Bindungen und Schwaechen verwenden denselben Baustein-Editor: ausgewaehlte Werte erscheinen als entfernbare Chips, `+` oeffnet passende Vorschlaege und ein eigener Custom-Block kann hinzugefuegt werden.
-- [x] Vorschlaege und Beispiele reagieren auf das aktive Regelset und relevante Charakterparameter; D&D 5.5e und SagaDrive Core erhalten getrennte semantische Pools.
+- [x] Vorschlaege und Beispiele reagieren auf das aktive Regelset und relevante Charakterparameter; D&D 5.5e und SagaTree Core erhalten getrennte semantische Pools.
 - [x] Im standalone CharacterEditor kann der User im BG-Tab optional ein sichtbares Projekt als `Kampagnen-Lore` waehlen. Dann werden `projectId` und die verknuepfte `worldId` in den Generation-Context aufgenommen; `Kein Projekt` bleibt setting-neutral.
 - [x] Ein Generieren-Klick konsumiert vor dem Provider-Aufruf genau einen atomaren persistenten Quota-Slot fuer die verifizierte User-ID. Das Kontingent gilt gemeinsam ueber mehrere Edge-Runtime-Instanzen.
 
@@ -94,7 +94,7 @@ Der BG-Tab des CharacterEditors wird zu einem Character-Lore-Composer: Hintergru
 - Browser Artifact `character-editor-browser-evidence`, Artifact ID `9576116633`, 10 Dateien, Upload PASS.
 
 ## Screenshots
-- `.qa/evidence/feat-character-studio-avatar/02-info-sagadrive-core.png`
+- `.qa/evidence/feat-character-studio-avatar/02-info-sagatree-core.png`
 - `.qa/evidence/feat-character-studio-avatar/03-info-dnd-5-5e.png`
 - `.qa/evidence/feat-character-studio-avatar/04-bg-project-context.png`
 - `.qa/evidence/feat-character-studio-avatar/05-bg-generate-status.png`

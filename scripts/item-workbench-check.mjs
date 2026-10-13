@@ -185,7 +185,7 @@ section('6 · UX contract strings / a11y hooks');
 section('7 · original asset (no watermarked reference path)');
 {
   const art = read('src/assets/items/workbench-line-art.svg');
-  check(/Original SagaDrive workbench/.test(art), 'asset marked original');
+  check(/Original SagaTree workbench/.test(art), 'asset marked original');
   check(!/watermark/i.test(art), 'no watermark content');
   check(!/shutterstock|getty|adobe stock/i.test(art), 'no stock attribution');
 }

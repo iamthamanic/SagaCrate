@@ -37,8 +37,8 @@ check(!/from ['"]react['"]/.test(domain), 'domain no React');
 check(/export \{[\s\S]*resolveAvatarSource/.test(index), 'barrel resolve');
 check(/evaluateAvatarSourceSwitch/.test(index), 'barrel switch');
 
-check(/source\?: 'sagadrive' \| 'import' \| 'meshy'/.test(entity), 'DTO source field');
-check(/source: input\.source \?\? 'sagadrive'/.test(presets), 'preset writes source');
+check(/source\?: 'sagatree' \| 'import' \| 'meshy'/.test(entity), 'DTO source field');
+check(/source: input\.source \?\? 'sagatree'/.test(presets), 'preset writes source');
 check(/LEGACY_AVATAR_PROVIDER/.test(presets), 'preset uses legacy const');
 
 check(/data-avatar-source-card/.test(selector), 'card attrs');
@@ -61,22 +61,22 @@ check(/window\.confirm/.test(editor), 'dirty confirm');
 
 // pure replicas
 function resolveAvatarSource(input) {
-  const sources = ['sagadrive', 'import', 'meshy'];
+  const sources = ['sagatree', 'import', 'meshy'];
   if (sources.includes(input.source)) return input.source;
-  if (input.provider === 'm3-character-studio') return 'sagadrive';
+  if (input.provider === 'm3-character-studio') return 'sagatree';
   if (typeof input.modelUrl === 'string' && input.modelUrl.trim()) return 'import';
-  return 'sagadrive';
+  return 'sagatree';
 }
-check(resolveAvatarSource({ provider: 'm3-character-studio' }) === 'sagadrive', 'legacy→sagadrive');
+check(resolveAvatarSource({ provider: 'm3-character-studio' }) === 'sagatree', 'legacy→sagatree');
 check(resolveAvatarSource({ modelUrl: 'https://x/a.glb' }) === 'import', 'model→import');
 check(resolveAvatarSource({ source: 'meshy' }) === 'meshy', 'explicit meshy');
-check(resolveAvatarSource({}) === 'sagadrive', 'default sagadrive');
+check(resolveAvatarSource({}) === 'sagatree', 'default sagatree');
 
 function evaluateSwitch(from, to, dirty) {
   if (from === to) return false;
-  return from === 'sagadrive' && dirty && to !== 'sagadrive';
+  return from === 'sagatree' && dirty && to !== 'sagatree';
 }
-check(evaluateSwitch('sagadrive', 'import', true) === true, 'dirty needs confirm');
-check(evaluateSwitch('sagadrive', 'import', false) === false, 'clean no confirm');
+check(evaluateSwitch('sagatree', 'import', true) === true, 'dirty needs confirm');
+check(evaluateSwitch('sagatree', 'import', false) === false, 'clean no confirm');
 
 console.log('avatar-source-selector-check PASS');

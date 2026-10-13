@@ -35,10 +35,10 @@ import {
   CarouselItem,
 } from '../../../shared/ui/carousel';
 import {
-  getSagaDriveSkill,
-  type SagaDriveSkillKey,
+  getSagaTreeSkill,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
-import type { SagaDriveBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
+import type { SagaTreeBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 import { useCarouselScrollSync } from '../../../app/character/shared/useCarouselScrollSync';
 import { RuleHelp } from '../shared/RuleHelp';
@@ -46,11 +46,11 @@ import { RuleHelp } from '../shared/RuleHelp';
 export type BackgroundCarouselSelection = string | null;
 
 type BackgroundCarouselOption =
-  | { kind: 'template'; id: string; template: SagaDriveBackgroundTemplate }
+  | { kind: 'template'; id: string; template: SagaTreeBackgroundTemplate }
   | { kind: 'custom'; id: null };
 
 interface BackgroundCarouselProps {
-  templates: readonly SagaDriveBackgroundTemplate[];
+  templates: readonly SagaTreeBackgroundTemplate[];
   selectedId: string | null | undefined;
   onSelect: (value: BackgroundCarouselSelection) => void;
   labelledBy?: string;
@@ -77,7 +77,7 @@ const BACKGROUND_FRAMEWORK_ICON_BY_ID: Readonly<Record<string, LucideIcon>> = {
   'law-institutions': Scale,
 };
 
-function buildOptions(templates: readonly SagaDriveBackgroundTemplate[]): BackgroundCarouselOption[] {
+function buildOptions(templates: readonly SagaTreeBackgroundTemplate[]): BackgroundCarouselOption[] {
   return [
     ...templates.map((template) => ({ kind: 'template' as const, id: template.id, template })),
     { kind: 'custom', id: null },
@@ -89,8 +89,8 @@ function optionMatches(option: BackgroundCarouselOption, selectedId: string | nu
   return option.id === selectedId;
 }
 
-function skillLabels(skills: readonly SagaDriveSkillKey[]): string {
-  return skills.map((skill) => getSagaDriveSkill(skill).label).join(' · ');
+function skillLabels(skills: readonly SagaTreeSkillKey[]): string {
+  return skills.map((skill) => getSagaTreeSkill(skill).label).join(' · ');
 }
 
 export function BackgroundCarousel({
@@ -211,7 +211,7 @@ export function BackgroundCarousel({
                         <div className="flex flex-wrap gap-1.5 pt-0.5">
                           {option.kind === 'template'
                             ? option.template.skillPool.map((skill) => (
-                              <Badge key={skill} variant="outline">{getSagaDriveSkill(skill).label}</Badge>
+                              <Badge key={skill} variant="outline">{getSagaTreeSkill(skill).label}</Badge>
                             ))
                             : <Badge variant="secondary">Volle Freiheit</Badge>}
                         </div>

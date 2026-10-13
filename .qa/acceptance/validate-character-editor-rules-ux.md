@@ -6,7 +6,7 @@
 Der Character Editor wird als praktische Regelabbildung geprüft: Legal-Builds speichern, I1–I8 werden vor dem Speichern abgefangen, Save/Reload und Lore/Notizen bleiben deterministisch, Core-Begriff `Gebunden` bleibt sichtbar.
 
 ## Preconditions
-- Regelquelle: `docs/sagadrive core rules.md` (§3.3, §4.2/§4.4/§4.5, §5.2, §13.1) + Domain #20.
+- Regelquelle: `docs/sagatree core rules.md` (§3.3, §4.2/§4.4/§4.5, §5.2, §13.1) + Domain #20.
 - Branch `chore/21-validate-character-editor-rules-ux` aus main.
 - Keine Core-Doc-Edits in diesem Issue.
 
@@ -24,7 +24,7 @@ Der Character Editor wird als praktische Regelabbildung geprüft: Legal-Builds s
 
 ## Regression
 - [x] Bestehende `e2e/character-editor.spec.ts` weiter grün (helpers extracted; mega-spec retained)
-- [x] Keine Änderung an `docs/sagadrive core rules.md`
+- [x] Keine Änderung an `docs/sagatree core rules.md`
 
 ## Screenshots
 | Step | Filename |

@@ -24,7 +24,7 @@ export function CharacterAbilitiesPanel({ abilities }: CharacterAbilitiesPanelPr
           <p className="text-sm text-muted-foreground">Fähigkeiten entstehen aus Archetyp, Essenz und späteren Entwicklungswahlen. Sie werden nicht frei als Werteblöcke erfunden.</p>
         </div>
         <RuleHelp label="Fähigkeiten">
-          Jede SagaDrive-Fähigkeit definiert Quelle, Rang, Aktivierungsart, Auslöser, Ziel, Reichweite, Effekt, Dauer, Ressource oder Nutzungsbegrenzung und Skalierung. Auf Stufe 1 wird zunächst die Kernfähigkeit des Primärarchetyps vergeben.
+          Jede SagaTree-Fähigkeit definiert Quelle, Rang, Aktivierungsart, Auslöser, Ziel, Reichweite, Effekt, Dauer, Ressource oder Nutzungsbegrenzung und Skalierung. Auf Stufe 1 wird zunächst die Kernfähigkeit des Primärarchetyps vergeben.
         </RuleHelp>
       </div>
 

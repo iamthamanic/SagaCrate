@@ -7,7 +7,7 @@
 
 ## Event
 
-Workbench editor uploads a validated GLB or confirms Meshy Image-to-3D from a persisted thumbnail; result materializes into SagaDrive `item-models` storage and binds via logical `model3d:{uuid}` — never durable Meshy URLs. Library/Inventory continue to resolve thumbnails only.
+Workbench editor uploads a validated GLB or confirms Meshy Image-to-3D from a persisted thumbnail; result materializes into SagaTree `item-models` storage and binds via logical `model3d:{uuid}` — never durable Meshy URLs. Library/Inventory continue to resolve thumbnails only.
 
 ## Hop chain
 

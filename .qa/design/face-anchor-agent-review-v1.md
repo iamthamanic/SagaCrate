@@ -4,7 +4,7 @@
 Separate mapping **source** from **review status**. Keep human review. Add a second Ground-Truth path `agent_reviewed` only when deterministic gates + multi-view screenshot evidence + five independent visual passes unanimously PASS (no majority voting).
 
 ## Contracts
-- `SagaDriveFaceMappingAuthoringV1` — `reviewStatus`: `unreviewed | agent_reviewed | human_reviewed`
+- `SagaTreeFaceMappingAuthoringV1` — `reviewStatus`: `unreviewed | agent_reviewed | human_reviewed`
 - `face-anchor-agent-review-v1` — evidence, passes, aggregator, provenance
 
 ## Evidence layout

@@ -31,7 +31,7 @@ check(/AVATAR_SAFE_CUSTOM_ANCHORS_V2/.test(domain), 'safe anchors');
 check(/custom-creature/.test(domain), 'custom-creature profile');
 check(!/from ['"]react['"]/.test(domain), 'no react');
 check(!/three/i.test(domain.split('\n').filter((l) => l.includes('import')).join('\n')), 'no three import');
-check(/SagaDriveHumanoidRigV1/.test(v1), 'v1 preserved');
+check(/SagaTreeHumanoidRigV1/.test(v1), 'v1 preserved');
 check(/resolveAvatarRigCapabilitiesV2/.test(index), 'barrel export');
 check(/RIG_CAPABILITY_CONTRACT_V2_VERSION/.test(index), 'barrel version');
 

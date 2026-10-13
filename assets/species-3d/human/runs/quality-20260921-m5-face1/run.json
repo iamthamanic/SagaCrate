@@ -6,7 +6,7 @@
     "repository": "fernandotonon/QtMeshEditor",
     "commit": "8720dc91bd7426908b9218673fbd74d544dd908c",
     "license": "MIT",
-    "bin": ".cache/sagadrive-tools/qtmesh/bin/qtmesh",
+    "bin": ".cache/sagatree-tools/qtmesh/bin/qtmesh",
     "binSource": "cache",
     "install": {
       "tool": "qtmesh",
@@ -92,7 +92,7 @@
       "numErrors": 0,
       "numWarnings": 4
     },
-    "sagaDrive": {
+    "sagaTree": {
       "pass": true,
       "errors": [],
       "missingRequired": [],
@@ -109,7 +109,7 @@
     "semanticQa": {
       "pass": true,
       "profileVersion": "liveact-face-semantic-profile-v1",
-      "contractVersion": "SagaDriveLiveActFaceSemanticQaV1",
+      "contractVersion": "SagaTreeLiveActFaceSemanticQaV1",
       "violationCount": 0
     }
   },

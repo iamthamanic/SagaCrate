@@ -7,7 +7,7 @@ Design ready for implementation. Depends on merged #421. No #423 repair work and
 Structural and Semantic QA can prove that morph targets exist and that delta energy lands in roughly the expected region, but they do not prove that the morph actually performs the promised facial function. A plausible-but-wrong morph can therefore pass while e.g. `jawOpen` barely changes mouth opening or `eyeBlinkLeft` closes both eyes.
 
 ## Goal
-Add an offline, browser-independent Functional Face QA stage based on reviewed `SagaDriveFaceAnchorsV1` ground truth. For each required core channel, compare neutral anchor geometry against the single morph at weight 1.0 and assert the intended function with versioned, normalized metrics.
+Add an offline, browser-independent Functional Face QA stage based on reviewed `SagaTreeFaceAnchorsV1` ground truth. For each required core channel, compare neutral anchor geometry against the single morph at weight 1.0 and assert the intended function with versioned, normalized metrics.
 
 ## Confirmed decisions
 1. Generic humanoid QA only; no m5/f5 filename- or asset-specific thresholds.
@@ -139,7 +139,7 @@ Forward protrusion is not a V1 blocker.
 Constants live in a versioned functional profile and are generic across humanoid assets.
 
 Suggested identity:
-- Contract: `SagaDriveLiveActFaceFunctionalQaV1`
+- Contract: `SagaTreeLiveActFaceFunctionalQaV1`
 - Profile: `liveact-face-functional-profile-v1`
 
 Threshold changes require a profile-version bump plus cross-asset evidence. Never add filename/model-specific exceptions to make m5/f5 pass; #423 repairs the morphs instead.

@@ -64,7 +64,7 @@ function walkFiles(dir, acc = []) {
 const CHILD_GATES = [
   'item-routing-foundation-check', // #133
   'item-domain-taxonomy-check', // #134
-  'sagadrive-item-rules-kernel-check', // #135
+  'sagatree-item-rules-kernel-check', // #135
   'item-definition-persistence-check', // #136
   'item-standard-packs-check', // #137
   'item-library-browser-check', // #138
@@ -106,7 +106,7 @@ requireMatch(
 section('B · Docs: Item Epic terms');
 const itemsDoc = read('docs/items.md');
 const inventoryDoc = read('docs/inventory-v2.md');
-const coreRules = read('docs/sagadrive core rules.md');
+const coreRules = read('docs/sagatree core rules.md');
 const readme = read('README.md');
 
 const itemsPhrases = [

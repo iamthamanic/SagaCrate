@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Damage, Healing & Dying Validation (#23, Epic #18)
+ * SagaTree Damage, Healing & Dying Validation (#23, Epic #18)
  *
  * Deterministic validation of §8 (damage, healing, dying) plus §16.4 difficulty
  * modules, over the shared core probe (scripts/lib/core-probe.mjs).
@@ -368,7 +368,7 @@ const DIFFICULTY_LEVELS = DIFFICULTIES;
 
 function buildReport(rows, findings, bands) {
   const lines = [];
-  lines.push('# SagaDrive Damage, Healing & Dying Validation Report (#23)');
+  lines.push('# SagaTree Damage, Healing & Dying Validation Report (#23)');
   lines.push('');
   lines.push('Exact damage distributions (§8.1/§8.2), protection matrix (§8.3), dying state machine (§8.5), massive damage (§8.6), recovery (§8.8), difficulty modules (§16.4).');
   lines.push('');

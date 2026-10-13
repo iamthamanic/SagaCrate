@@ -1,4 +1,4 @@
--- SagaDrive Database Schema for Supabase
+-- SagaTree Database Schema for Supabase
 -- Run this in your Supabase SQL Editor
 
 -- Enable UUID extension

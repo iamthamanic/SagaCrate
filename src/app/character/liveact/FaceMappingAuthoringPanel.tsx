@@ -11,7 +11,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import type { SagaDriveFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
 import type { FaceMappingAutoAnchorOutcome } from '../../../domains/character/avatar/face-mapping-auto-v1';
 import {
   FACE_MAPPING_ANCHOR_LABEL_DE,
@@ -19,7 +19,7 @@ import {
   resolveFaceMappingMarkerStatus,
   validateFaceMappingDraft,
   type FaceMappingMarkerStatus,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from '../../../domains/character/avatar/face-mapping-draft-v1';
 import { Button } from '../../../shared/ui/button';
 import { FaceMappingDetailCard } from './FaceMappingDetailCard';
@@ -48,18 +48,18 @@ export interface FaceMappingAutoCoordV1 {
 }
 
 interface FaceMappingAuthoringPanelProps {
-  draft: SagaDriveFaceMappingDraftV1;
+  draft: SagaTreeFaceMappingDraftV1;
   missMessage: string | null;
   autoBusy?: boolean;
   autoStatusMessage?: string | null;
   /** Current draft → screen projection (updates with camera). */
-  manualCoords?: Readonly<Partial<Record<SagaDriveFaceAnchorId, FaceMappingManualCoordV1>>>;
+  manualCoords?: Readonly<Partial<Record<SagaTreeFaceAnchorId, FaceMappingManualCoordV1>>>;
   /** Last Auto Mapping session proposals (kept for compare even after apply). */
-  autoCoords?: Readonly<Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>>>;
+  autoCoords?: Readonly<Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>>>;
   /** 3D overlay compare mode. */
   overlayViewMode?: FaceMappingOverlayViewMode;
   onOverlayViewModeChange?: (mode: FaceMappingOverlayViewMode) => void;
-  onSelect: (anchorId: SagaDriveFaceAnchorId) => void;
+  onSelect: (anchorId: SagaTreeFaceAnchorId) => void;
   onClearSelected: () => void;
   onReset: () => void;
   onCancel: () => void;
@@ -76,7 +76,7 @@ interface FaceMappingAuthoringPanelProps {
   getAutoExportJson?: () => string | null;
   /** Optional authoring provenance for fallback display (source per anchor). */
   getAuthoringMeta?: () => Readonly<
-    Partial<Record<SagaDriveFaceAnchorId, { source: string; confidence?: number; reviewed?: boolean }>>
+    Partial<Record<SagaTreeFaceAnchorId, { source: string; confidence?: number; reviewed?: boolean }>>
   >;
 }
 
@@ -216,11 +216,11 @@ export function FaceMappingAuthoringPanel({
   const gtCopyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Derive reviewed marker IDs from provenance so rows show "reviewed", not only "gesetzt".
-  let reviewedAnchorIds: ReadonlySet<SagaDriveFaceAnchorId> | undefined;
+  let reviewedAnchorIds: ReadonlySet<SagaTreeFaceAnchorId> | undefined;
   if (getAuthoringMeta) {
     const meta = getAuthoringMeta();
-    const ids = new Set<SagaDriveFaceAnchorId>();
-    for (const id of Object.keys(meta) as SagaDriveFaceAnchorId[]) {
+    const ids = new Set<SagaTreeFaceAnchorId>();
+    for (const id of Object.keys(meta) as SagaTreeFaceAnchorId[]) {
       if (meta[id]?.reviewed === true) ids.add(id);
     }
     reviewedAnchorIds = ids;

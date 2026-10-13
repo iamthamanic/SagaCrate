@@ -7,7 +7,7 @@ Character Presets MVP: users can save validated character sheet snapshots as ver
 
 ## Preconditions
 - User is authenticated (Supabase session / local-admin path as elsewhere)
-- SagaDrive Core ruleset only for preset save/release
+- SagaTree Core ruleset only for preset save/release
 - Character sheet must pass the same validation as editor Speichern (all green) before preset save or version release
 - Migration `012_character_presets` applied (or local schema equivalent) for persistence
 
@@ -15,7 +15,7 @@ Character Presets MVP: users can save validated character sheet snapshots as ver
 - [x] Every „Charakter erstellen“ / „Neuer Charakter“ entry opens a dialog with two large cards: „Eigenen Charakter erstellen“ and „Preset wählen“
 - [x] „Eigenen Charakter erstellen“ opens CharacterEditor empty (no preset bootstrap)
 - [x] With 0 own presets, Preset card shows clickable empty-state copy about Einstellungen → Preset
-- [x] With own presets, Preset path lists user presets plus stub section „SagaDrive-Presets bald“; picking a Level version opens a **new** editor character hydrated from that snapshot (portrait + sheet), name prefilled from preset display name (editable)
+- [x] With own presets, Preset path lists user presets plus stub section „SagaTree-Presets bald“; picking a Level version opens a **new** editor character hydrated from that snapshot (portrait + sheet), name prefilled from preset display name (editable)
 - [x] Editor top-level tab „Einstellungen“ replaces former „Statistik“; subtabs Statistik | Preset
 - [x] First „Als Preset speichern“ creates preset `{CharacterName} Preset` with one version = current character level (snapshot copy)
 - [x] Later „Version freigeben“ appends a version for current level if that level is not already present
@@ -27,7 +27,7 @@ Character Presets MVP: users can save validated character sheet snapshots as ver
 - [x] Unsaved character: Preset subtab guides to Speichern first; no crash
 - [x] Release blocked when editor validation would fail (same messages as Speichern)
 - [x] Release blocked if a version for that level already exists (no overwrite)
-- [x] Non–SagaDrive-Core ruleset: preset actions unavailable / fail closed
+- [x] Non–SagaTree-Core ruleset: preset actions unavailable / fail closed
 - [x] Marketplace controls disabled „Coming soon“; `published` stays false
 - [x] Owner isolation: users only read/write own presets (RLS)
 
@@ -39,7 +39,7 @@ Character Presets MVP: users can save validated character sheet snapshots as ver
 
 ## Assumptions
 - Editor save uses update when `savedCharacterId` is set (needed for auto-release level delta); first save remains create
-- `release_mode` (`manual` | `auto`) stored on the character’s `sagadrive_profile`
+- `release_mode` (`manual` | `auto`) stored on the character’s `sagatree_profile`
 - Preset versions are append-only JSONB on `character_presets`; system/marketplace presets are data-model + UI stubs only
 - UI language: German; stack: existing Radix/Tailwind (not DaisyUI) per AGENTS.md
 
@@ -68,7 +68,7 @@ AGENTS.md has no formal F-xx/B-xx Secure-by-Default table; apply practical owner
 - Migration `013_character_presets_rls_hardening.sql`: source ownership + origin=user client writes.
 - Types/service: `characterPreset.types.ts`, `characterPreset.service.ts` with exported `assertValidSnapshot`, create/release/rename/duplicate/delete, `maybeAutoReleaseVersion`, safe portrait URLs.
 - UI: `CreateCharacterEntryDialog` (Dashboard + Bibliothek create CTAs); `CharacterPresetPanel` under Einstellungen → Preset; Statistik moved to Einstellungen subtab.
-- Editor: bootstrap from preset snapshot (assert + URL sanitize); save uses update when `savedCharacterId` set; `presetReleaseMode` on `sagadrive_profile`; auto-release after level-up save.
+- Editor: bootstrap from preset snapshot (assert + URL sanitize); save uses update when `savedCharacterId` set; `presetReleaseMode` on `sagatree_profile`; auto-release after level-up save.
 - Regression: `scripts/character-presets-regression-check.mjs` wired into `test-gate.mjs`; character-editor regression + e2e updated for Einstellungen/chooser.
 - Verify-UI gap: screenshots 03/05 (version pick + post-save list) need a shared valid-sheet Playwright fixture; documented in `e2e/character-presets-smoke.spec.ts`.
 - Known limitations: no Bibliothek load-by-id for existing characters (pre-existing); system/marketplace stubs only; migrations 012+013 must be applied to backend.

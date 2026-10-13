@@ -11,7 +11,7 @@ Library promotion CTAs produce an `NpcPromotionPlan` (template→character or co
 
 ## Hop chain
 
-NpcCreatureLibraryBrowser (classify + plan) → `setCharacterEditorBootstrap({ kind: 'npc-promotion', plan })` / sessionStorage `sagadrive:npc-promotion` → CharacterEditor hydrate + unresolved banner → (compact-to-full only) `promoteNpcCreatureCompactToFull` → `updateNpcCreatureDefinition` (same id, sheetMode full + fullSheet)
+NpcCreatureLibraryBrowser (classify + plan) → `setCharacterEditorBootstrap({ kind: 'npc-promotion', plan })` / sessionStorage `sagatree:npc-promotion` → CharacterEditor hydrate + unresolved banner → (compact-to-full only) `promoteNpcCreatureCompactToFull` → `updateNpcCreatureDefinition` (same id, sheetMode full + fullSheet)
 
 Parallel hop: Assign dialog → `assignNpcCreatureController` → RPC `assign_npc_creature_controller` → `npc_creature_controller_assignments` row (controller only)
 

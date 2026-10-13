@@ -1,5 +1,5 @@
 {
-  "version": "SagaDriveLiveActFaceInventoryV1",
+  "version": "SagaTreeLiveActFaceInventoryV1",
   "input": "minimal-humanoid-face.glb",
   "profile": "core-v1",
   "profileOk": true,

@@ -19,7 +19,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
-window.__SAGADRIVE_VISUAL__ = async function (url, poses) {
+window.__SAGATREE_VISUAL__ = async function (url, poses) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
   renderer.setSize(512, 512);
   renderer.setClearColor(0x2a2a2a, 1);
@@ -149,10 +149,10 @@ for (const id of ['m5', 'f5']) {
   mkdirSync(outDir, { recursive: true });
   const page = await browser.newPage({ viewport: { width: 512, height: 512 } });
   await page.goto(`http://127.0.0.1:${port}/__harness/index.html`, { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => typeof window.__SAGADRIVE_VISUAL__ === 'function');
+  await page.waitForFunction(() => typeof window.__SAGATREE_VISUAL__ === 'function');
   const url = `/assets/avatars/species/${stem}.vrm`;
   const shots = await page.evaluate(
-    async ({ url, poses }) => window.__SAGADRIVE_VISUAL__(url, poses),
+    async ({ url, poses }) => window.__SAGATREE_VISUAL__(url, poses),
     { url, poses },
   );
   const paths = {};

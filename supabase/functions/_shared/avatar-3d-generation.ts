@@ -206,7 +206,7 @@ export function buildGenerationSettingsJson(input: {
   mappedProviderParams?: Record<string, unknown>;
 }): Record<string, unknown> {
   return {
-    contractVersion: 'SagaDriveAvatar3dGenerationV1',
+    contractVersion: 'SagaTreeAvatar3dGenerationV1',
     providerId: input.providerId,
     providerModel: input.providerModel,
     presetId: input.presetId,

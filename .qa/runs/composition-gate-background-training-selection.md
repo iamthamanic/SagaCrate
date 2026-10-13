@@ -12,7 +12,7 @@ Spieler wählt ein Hintergrund-Framework, trainiert genau 2 von 4 Pool-Skills oh
 `backgroundTemplates.ts` (Pool, kein `recommendedTraining`)
 → `CharacterEditor` setzt `backgroundTraining` auf `['','']`
 → `CharacterBackgroundPanel` (4 Nodes während Auswahl, 2 nach Abschluss, „Auswahl ändern“)
-→ Persistenz konkreter Trainings in `sagadrive_profile.background`
+→ Persistenz konkreter Trainings in `sagatree_profile.background`
 → Reload/Library
 
 ## Simulations

@@ -7,7 +7,7 @@
 
 1. Parse intent (Editierbar vs Freie Form — #267)
 2. Resolve Body Family (or degrade to Freie Form on unusual anatomy)
-3. Materialize SagaDrive Base Body from library
+3. Materialize SagaTree Base Body from library
 4. Identity transfer onto body (#262/#263)
 5. Optional traits from catalog
 6. Attach skinned wearables from catalog (never invent from blob)
@@ -28,7 +28,7 @@
 
 ## Job graph / cost
 
-See `modular-generate-decomposition-v1.ts` → `jobGraph`. Max 1 paid retry per stage; cost confirm required. Provider answers never authoritatively set SagaDrive roles/slots/capabilities.
+See `modular-generate-decomposition-v1.ts` → `jobGraph`. Max 1 paid retry per stage; cost confirm required. Provider answers never authoritatively set SagaTree roles/slots/capabilities.
 
 ## Golden fixtures
 

@@ -1,11 +1,11 @@
 import {
-  getSagaDriveSkill,
-  sagaDriveSkillDefinitions,
-  type SagaDriveSkillKey,
+  getSagaTreeSkill,
+  sagaTreeSkillDefinitions,
+  type SagaTreeSkillKey,
 } from '../character-creation';
 
-export interface SagaDriveBackgroundSpecializationSuggestion {
-  skillId: SagaDriveSkillKey;
+export interface SagaTreeBackgroundSpecializationSuggestion {
+  skillId: SagaTreeSkillKey;
   name: string;
 }
 
@@ -15,14 +15,14 @@ export interface SagaDriveBackgroundSpecializationSuggestion {
  * supplies a four-skill pool and world-facing prompts. Training choices stay neutral
  * and are made by the player; recommendations belong to the Build-Assistent layer.
  */
-export interface SagaDriveBackgroundTemplate {
+export interface SagaTreeBackgroundTemplate {
   id: string;
   name: string;
   description: string;
   playstyle: string;
   examples: readonly string[];
-  skillPool: readonly [SagaDriveSkillKey, SagaDriveSkillKey, SagaDriveSkillKey, SagaDriveSkillKey];
-  specializationSuggestions: readonly SagaDriveBackgroundSpecializationSuggestion[];
+  skillPool: readonly [SagaTreeSkillKey, SagaTreeSkillKey, SagaTreeSkillKey, SagaTreeSkillKey];
+  specializationSuggestions: readonly SagaTreeBackgroundSpecializationSuggestion[];
   milieuSuggestions: readonly string[];
   contactSuggestions: readonly string[];
   complicationSuggestions: readonly string[];
@@ -31,7 +31,7 @@ export interface SagaDriveBackgroundTemplate {
   worldProfileIds?: readonly string[];
 }
 
-export const sagaDriveBackgroundTemplates: readonly SagaDriveBackgroundTemplate[] = [
+export const sagaTreeBackgroundTemplates: readonly SagaTreeBackgroundTemplate[] = [
   {
     id: 'stage-public',
     name: 'Bühne & Öffentlichkeit',
@@ -363,10 +363,10 @@ export const sagaDriveBackgroundTemplates: readonly SagaDriveBackgroundTemplate[
   },
 ];
 
-export function validateSagaDriveBackgroundTemplate(template: SagaDriveBackgroundTemplate): string[] {
+export function validateSagaTreeBackgroundTemplate(template: SagaTreeBackgroundTemplate): string[] {
   const errors: string[] = [];
   const pool = new Set(template.skillPool);
-  const knownSkills = new Set(sagaDriveSkillDefinitions.map((skill) => skill.key));
+  const knownSkills = new Set(sagaTreeSkillDefinitions.map((skill) => skill.key));
 
   if (!template.name.trim()) errors.push('name must not be empty');
   if (!template.description.trim()) errors.push('description must not be empty');
@@ -381,7 +381,7 @@ export function validateSagaDriveBackgroundTemplate(template: SagaDriveBackgroun
   }
   for (const suggestion of template.specializationSuggestions) {
     if (!pool.has(suggestion.skillId)) errors.push(`specialization skill is outside pool: ${suggestion.skillId}`);
-    if (!getSagaDriveSkill(suggestion.skillId).specializations.includes(suggestion.name)) {
+    if (!getSagaTreeSkill(suggestion.skillId).specializations.includes(suggestion.name)) {
       errors.push(`unknown specialization for ${suggestion.skillId}: ${suggestion.name}`);
     }
   }
@@ -394,13 +394,13 @@ export function validateSagaDriveBackgroundTemplate(template: SagaDriveBackgroun
  * curated template suggestions first, then padded from the skill catalog.
  */
 export function getBackgroundSpecializationSuggestionNames(
-  template: SagaDriveBackgroundTemplate | undefined,
-  skillId: SagaDriveSkillKey,
+  template: SagaTreeBackgroundTemplate | undefined,
+  skillId: SagaTreeSkillKey,
   limit = 5,
 ): string[] {
   const curated =
     template?.specializationSuggestions.filter((entry) => entry.skillId === skillId).map((entry) => entry.name) ?? [];
-  const catalog = getSagaDriveSkill(skillId).specializations;
+  const catalog = getSagaTreeSkill(skillId).specializations;
   const merged: string[] = [];
   for (const name of [...curated, ...catalog]) {
     if (merged.includes(name)) continue;
@@ -410,8 +410,8 @@ export function getBackgroundSpecializationSuggestionNames(
   return merged;
 }
 
-export function validateSagaDriveBackgroundTemplateCatalog(
-  templates: readonly SagaDriveBackgroundTemplate[] = sagaDriveBackgroundTemplates,
+export function validateSagaTreeBackgroundTemplateCatalog(
+  templates: readonly SagaTreeBackgroundTemplate[] = sagaTreeBackgroundTemplates,
 ): string[] {
   const errors: string[] = [];
   const ids = new Set<string>();
@@ -422,20 +422,20 @@ export function validateSagaDriveBackgroundTemplateCatalog(
     if (names.has(template.name)) errors.push(`duplicate framework name: ${template.name}`);
     ids.add(template.id);
     names.add(template.name);
-    for (const error of validateSagaDriveBackgroundTemplate(template)) errors.push(`${template.id}: ${error}`);
+    for (const error of validateSagaTreeBackgroundTemplate(template)) errors.push(`${template.id}: ${error}`);
   }
   return errors;
 }
 
-const catalogErrors = validateSagaDriveBackgroundTemplateCatalog();
-if (catalogErrors.length > 0) throw new Error(`Invalid SagaDrive background framework catalog: ${catalogErrors.join('; ')}`);
+const catalogErrors = validateSagaTreeBackgroundTemplateCatalog();
+if (catalogErrors.length > 0) throw new Error(`Invalid SagaTree background framework catalog: ${catalogErrors.join('; ')}`);
 
-export function getSagaDriveBackgroundTemplate(id: string | null | undefined): SagaDriveBackgroundTemplate | undefined {
+export function getSagaTreeBackgroundTemplate(id: string | null | undefined): SagaTreeBackgroundTemplate | undefined {
   if (!id) return undefined;
-  return sagaDriveBackgroundTemplates.find((entry) => entry.id === id);
+  return sagaTreeBackgroundTemplates.find((entry) => entry.id === id);
 }
 
-export function getSagaDriveBackgroundTemplatesForWorldProfile(worldProfileId?: string | null): readonly SagaDriveBackgroundTemplate[] {
-  if (!worldProfileId) return sagaDriveBackgroundTemplates;
-  return sagaDriveBackgroundTemplates.filter((template) => !template.worldProfileIds || template.worldProfileIds.includes(worldProfileId));
+export function getSagaTreeBackgroundTemplatesForWorldProfile(worldProfileId?: string | null): readonly SagaTreeBackgroundTemplate[] {
+  if (!worldProfileId) return sagaTreeBackgroundTemplates;
+  return sagaTreeBackgroundTemplates.filter((template) => !template.worldProfileIds || template.worldProfileIds.includes(worldProfileId));
 }

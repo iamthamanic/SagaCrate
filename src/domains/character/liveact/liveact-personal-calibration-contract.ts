@@ -1,5 +1,5 @@
 /**
- * liveact-personal-calibration-contract — SagaDrive Personal Calibration Profile V2 (#449).
+ * liveact-personal-calibration-contract — SagaTree Personal Calibration Profile V2 (#449).
  * Location: src/domains/character/liveact/liveact-personal-calibration-contract.ts
  *
  * Versioned local actor profile. No MediaPipe/React/Three. No raw biometrics.
@@ -16,7 +16,7 @@ import {
 import type { LiveActFaceChannelId } from './liveact-face-contract';
 
 export const LIVEACT_PERSONAL_CALIBRATION_CONTRACT =
-  'SagaDriveLiveActCalibrationProfileV2' as const;
+  'SagaTreeLiveActCalibrationProfileV2' as const;
 
 export const LIVEACT_PERSONAL_CALIBRATION_POLICY_VERSION =
   'liveact-personal-calibration-policy-v1' as const;
@@ -230,7 +230,7 @@ export const LIVEACT_PERSONAL_NOISE_DEADZONE_MULT = 1.5 as const;
 export const LIVEACT_PERSONAL_MAX_SAMPLE_GAP_MS = 100 as const;
 /** Minimum valid frames per phase (skipped phases exempt). */
 export const LIVEACT_PERSONAL_MIN_PHASE_FRAMES = 12 as const;
-export const LIVEACT_PERSONAL_STORAGE_KEY_PREFIX = 'sagadrive.liveact.calibrationProfile.v2:' as const;
+export const LIVEACT_PERSONAL_STORAGE_KEY_PREFIX = 'sagatree.liveact.calibrationProfile.v2:' as const;
 
 /** Draft / unsaved characters must not share a persistent key. */
 export function isLiveActPersonalPersistableCharacterId(characterLocalId: string): boolean {

@@ -36,7 +36,7 @@ const F = {
 
 function svg(label, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="${escapeXml(label)}">
-  <!-- SagaDrive npc-creature icon: ${escapeXml(label)}. Flat vector, transparent bg, ≤6 colors. -->
+  <!-- SagaTree npc-creature icon: ${escapeXml(label)}. Flat vector, transparent bg, ≤6 colors. -->
   <g stroke="${STROKE}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
 ${body}
   </g>

@@ -7,6 +7,6 @@ Active public meshes (only):
 | Male | `/assets/avatars/species/human-male-quality-20260921-m5-face1.vrm?v=quality5-face2-vrm2` |
 | Female | `/assets/avatars/species/human-female-quality-20260921-f5-face1.vrm?v=quality5-face2-vrm2` |
 
-Both use the same QtMeshEditor FaceRig adapter (`FACE-AUTHORING.md`) and pass SagaDrive `core-v1`. Baselines without face morphs remain at `…-m5.glb` / `…-f5.glb`.
+Both use the same QtMeshEditor FaceRig adapter (`FACE-AUTHORING.md`) and pass SagaTree `core-v1`. Baselines without face morphs remain at `…-m5.glb` / `…-f5.glb`.
 
 Wired via `resolveSpeciesTemplateModelUrl` for „M gelesen“ / „W gelesen“.

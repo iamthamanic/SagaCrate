@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Travel / Chase / Vehicles Validation (#29, Epic #18)
+ * SagaTree Travel / Chase / Vehicles Validation (#29, Epic #18)
  *
  * Deterministic validation of Core §10.4 (vehicles & scale), §14.2 (travel),
  * and §14.10 (chases). Covers all 6 mandatory E2 scenarios without RNG.
@@ -772,7 +772,7 @@ function assertIdenticalDistanceLogic(findings) {
 
 function buildReport({ scenarios, findings, crossMode, deadEnds }) {
   const lines = [];
-  lines.push('# SagaDrive Travel / Chase / Vehicles Report (#29)');
+  lines.push('# SagaTree Travel / Chase / Vehicles Report (#29)');
   lines.push('');
   lines.push('Deterministische Prüfung von §10.4 + §14.2 + §14.10 (E2). Kein RNG.');
   lines.push('');

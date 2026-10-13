@@ -7,4 +7,4 @@ PASS including sagatree-brand-phase-a-check
 - [x] App shows SagaTree in login, shell, document title
 - [x] Smoke asserts title + heading
 - [x] No DB/RPC rename
-- [x] SagaDrive Core rules labels left intact
+- [x] SagaTree Core rules labels left intact

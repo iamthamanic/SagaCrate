@@ -5,7 +5,7 @@ Fail-closed cases for Avatar V2 closeout. No paid provider calls in CI.
 | Case | Expect | Notes |
 |------|--------|-------|
 | Cross-owner Artifact | deny | RLS / owner scope; ≥2 owners in tests |
-| Manipulated `extras.sagadrive` | fail-closed | Never authoritative capabilities |
+| Manipulated `extras.sagatree` | fail-closed | Never authoritative capabilities |
 | Provider success → capabilities | strip / pending | Analyzer owns unlock |
 | Free/unsigned provider URL persist | deny | Owner-scoped storage keys only |
 | Asset-key / analysis spoof | fail-closed | Server revalidate |

@@ -6,7 +6,7 @@
 - Verdict: CLEAR
 
 ## Event
-Untrusted morph JSON (or legacy CharacterAvatarDto) is validated into SagaDriveAvatarMorphV1; later editors/export/wearables read the same keys.
+Untrusted morph JSON (or legacy CharacterAvatarDto) is validated into SagaTreeAvatarMorphV1; later editors/export/wearables read the same keys.
 
 ## Hop chain
 Producer (client/API morph payload or legacy avatar DTO)

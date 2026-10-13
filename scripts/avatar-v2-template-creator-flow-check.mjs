@@ -50,7 +50,7 @@ check(/starter_wardrobe\?:/.test(entity), 'DTO starter_wardrobe');
 check(/applySpeciesTemplateIngress/.test(index), 'barrel apply');
 check(/AvatarSpeciesTemplatePicker/.test(editor), 'editor mounts picker');
 check(/applySpeciesTemplate/.test(editor), 'editor apply handler');
-check(/avatarSource === 'sagadrive'/.test(editor), 'picker gated by sagadrive source');
+check(/avatarSource === 'sagatree'/.test(editor), 'picker gated by sagatree source');
 check(/body_family/.test(manifests) && /resolveBaseBodyModelUrl/.test(manifests), 'model url by family');
 
 const outDir = join(root, 'node_modules/.cache/avatar-v2-template-creator-flow-check');

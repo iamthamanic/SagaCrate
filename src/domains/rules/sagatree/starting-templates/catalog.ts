@@ -3,22 +3,22 @@
  * Location: src/domains/rules/sagatree/starting-templates/catalog.ts
  */
 import {
-  createEmptySagaDriveSkillRanks,
-  type SagaDriveSkillKey,
+  createEmptySagaTreeSkillRanks,
+  type SagaTreeSkillKey,
 } from '../character-creation';
-import type { SagaDriveStartingTemplate } from './types';
+import type { SagaTreeStartingTemplate } from './types';
 
 function freeRanks(
-  partial: Partial<Record<SagaDriveSkillKey, number>>,
-): ReturnType<typeof createEmptySagaDriveSkillRanks> {
-  const ranks = createEmptySagaDriveSkillRanks();
-  for (const [key, value] of Object.entries(partial) as [SagaDriveSkillKey, number][]) {
+  partial: Partial<Record<SagaTreeSkillKey, number>>,
+): ReturnType<typeof createEmptySagaTreeSkillRanks> {
+  const ranks = createEmptySagaTreeSkillRanks();
+  for (const [key, value] of Object.entries(partial) as [SagaTreeSkillKey, number][]) {
     ranks[key] = value;
   }
   return ranks;
 }
 
-function bgSpec(skill: SagaDriveSkillKey, name: string) {
+function bgSpec(skill: SagaTreeSkillKey, name: string) {
   return {
     skill,
     name,
@@ -30,7 +30,7 @@ function bgSpec(skill: SagaDriveSkillKey, name: string) {
 /**
  * Canonical V1 catalog — values must match `.qa/design/character-starting-templates-v1.md`.
  */
-export const sagaDriveStartingTemplates: readonly SagaDriveStartingTemplate[] = [
+export const sagaTreeStartingTemplates: readonly SagaTreeStartingTemplate[] = [
   {
     key: 'berserker',
     labelDe: 'Berserker',

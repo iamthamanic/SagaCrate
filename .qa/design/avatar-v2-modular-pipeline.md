@@ -11,13 +11,13 @@
 
 ## 1. Intent
 
-SagaDrive Avatar V2 vereinheitlicht Template-, Import- und Generate-Ingresses unter einem **provider-neutralen Artifact-/Capability-Vertrag**. Quelle und Provider erzeugen keine parallelen UI-/Runtime-Sonderpfade. Verhalten folgt **Capabilities**, **Anatomy**, **Body Compatibility** und **Modularity** — nicht dem Label „Meshy“ oder „Import“.
+SagaTree Avatar V2 vereinheitlicht Template-, Import- und Generate-Ingresses unter einem **provider-neutralen Artifact-/Capability-Vertrag**. Quelle und Provider erzeugen keine parallelen UI-/Runtime-Sonderpfade. Verhalten folgt **Capabilities**, **Anatomy**, **Body Compatibility** und **Modularity** — nicht dem Label „Meshy“ oder „Import“.
 
 ## 2. Glossar (orthogonal — nie vermischen)
 
 | Begriff | Bedeutung | Nicht verwechseln mit |
 |---------|-----------|------------------------|
-| **Source** | Herkunft des Looks: `sagadrive` \| `import` \| `generate` (Legacy `meshy` → `generate`) | Capability-Beweis |
+| **Source** | Herkunft des Looks: `sagatree` \| `import` \| `generate` (Legacy `meshy` → `generate`) | Capability-Beweis |
 | **Provider** | Infrastructure-Adapter (Meshy, Tripo, …) | Domain-Fachmodell |
 | **Anatomy** | `humanoid` \| `custom-creature` \| `unknown` | Species / Body Family |
 | **Body Compatibility** | Fit-Klasse für Wearables: `standard` \| `compact` \| `heavy` \| `custom` \| `unknown` | Morph-Slider |
@@ -43,7 +43,7 @@ Verbote: neue `src/modules`, `src/components`, `src/features`, generische `servi
 - Generate bleibt **provider-neutral** im Domain-Contract (`generation/**`).
 - Meshy ist der aktuelle Adapter; Tripo/weitere Provider ergänzen **ohne** Domain-/UI-Neudesign.
 - Provider-Secrets nur serverseitig; keine freien Provider-URLs in persistierten Contracts.
-- „Provider success“ ≠ SagaDrive-Capabilities (fail-closed).
+- „Provider success“ ≠ SagaTree-Capabilities (fail-closed).
 
 ## 5. Body Families: Standard / Compact / Heavy / Custom
 
@@ -92,7 +92,7 @@ Verbote: neue `src/modules`, `src/components`, `src/features`, generische `servi
 ## 8. UX-Journey (Zielbild)
 
 1. Spieler wählt **Vorlage**, **Mit KI erstellen** oder **3D-Import**.
-2. SagaDrive materialisiert/analysiert ein provider-neutrales Avatar-Artefakt.
+2. SagaTree materialisiert/analysiert ein provider-neutrales Avatar-Artefakt.
 3. Capabilities + Body Compatibility bestimmen Editor-Funktionen.
 4. Humanoide nutzen Standard/Compact/Heavy; Custom Creatures bleiben eigener Körper.
 5. Alle Wege landen im selben Avatar-Editor und derselben Runtime.

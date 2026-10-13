@@ -63,7 +63,7 @@ check(/body_compatibility\?:/.test(entity), 'DTO body_compatibility');
 check(/monolithic/.test(entity), 'DTO modularity monolithic');
 check(/non-humanoid/.test(composition) && /custom-creature/.test(composition), 'legacy anatomy map');
 check(/none['"]\s*\?\s*['"]monolithic/.test(composition) || /modularity === 'none'/.test(composition), 'legacy modularity map');
-check(/SagaDrive Modular Avatar GLB v1/.test(spec), 'spec doc exists');
+check(/SagaTree Modular Avatar GLB v1/.test(spec), 'spec doc exists');
 
 const outDir = join(root, 'node_modules/.cache/avatar-v2-import-original-flow-check');
 mkdirSync(outDir, { recursive: true });
@@ -127,7 +127,7 @@ check(failed === 'failed', 'failed analysis');
 
 const summary = m.buildImportAnalysisSummary({
   analysis: {
-    contractVersion: 'SagaDriveAvatarStructureAnalyzerV2',
+    contractVersion: 'SagaTreeAvatarStructureAnalyzerV2',
     status: 'ready',
     anatomy: 'humanoid',
     modularityKind: 'full',
@@ -151,7 +151,7 @@ const summary = m.buildImportAnalysisSummary({
     authoritative: false,
   },
   compatibility: {
-    contractVersion: 'SagaDriveBodyProfileV1',
+    contractVersion: 'SagaTreeBodyProfileV1',
     status: 'family-compatible',
     recommendedFamily: 'compact',
     scores: [{ familyId: 'compact', score: 0.9 }],

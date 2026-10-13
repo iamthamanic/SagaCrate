@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * sagatree-core-workflows-check — #606 live happy paths on regular sagadrive compose.
+ * sagatree-core-workflows-check — #606 live happy paths on regular sagatree compose.
  * Location: scripts/sagatree-core-workflows-check.mjs
  *
  * Uses Auth/REST/RPC/Storage/Edge only (no SQL seed). Realtime may report BLOCKED_604.
@@ -60,7 +60,7 @@ const users = {
 
 const report = {
   ok: false,
-  stack: 'sagadrive-regular',
+  stack: 'sagatree-regular',
   gateway: base,
   startedAt: new Date().toISOString(),
   checks: [],
@@ -268,7 +268,7 @@ async function main() {
   try {
     let rtLog = '';
     try {
-      rtLog = execSync('docker logs sagadrive-realtime --tail 8 2>&1', {
+      rtLog = execSync('docker logs sagatree-realtime --tail 8 2>&1', {
         encoding: 'utf8',
       });
     } catch (e) {
@@ -278,7 +278,7 @@ async function main() {
     let rtStatus = 'unknown';
     try {
       const st = execSync(
-        "docker inspect -f '{{.State.Status}}' sagadrive-realtime 2>/dev/null || echo missing",
+        "docker inspect -f '{{.State.Status}}' sagatree-realtime 2>/dev/null || echo missing",
         { encoding: 'utf8' },
       ).trim();
       rtStatus = st;
@@ -290,7 +290,7 @@ async function main() {
       report.realtime = {
         status: 'BLOCKED_604',
         containerStatus: rtStatus,
-        detail: 'sagadrive-realtime not healthy; SECRET_KEY_BASE / tenant wiring is #604',
+        detail: 'sagatree-realtime not healthy; SECRET_KEY_BASE / tenant wiring is #604',
         logSnippet: rtLog.split('\n').slice(0, 6).join('\n'),
       };
       record(

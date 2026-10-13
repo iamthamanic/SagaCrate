@@ -60,7 +60,7 @@ section('2 · static wiring / German UI strings');
 
   const bootstrap = read('src/app/character/shared/characterEditorBootstrap.ts');
   check(/npc-promotion/.test(bootstrap), 'bootstrap kind npc-promotion');
-  check(/sagadrive:npc-promotion/.test(bootstrap), 'sessionStorage key');
+  check(/sagatree:npc-promotion/.test(bootstrap), 'sessionStorage key');
 
   const editor = read('src/app/character/edit/CharacterEditor.tsx');
   check(/data-npc-promotion-unresolved/.test(editor), 'unresolved banner hook');

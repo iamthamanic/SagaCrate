@@ -10,7 +10,7 @@ Make the Saga workspace and session entry usable: Overview must load (apply miss
 
 ## Preconditions
 
-- Local stack `sagadrive-db` + Kong running; user logged in as admin or player
+- Local stack `sagatree-db` + Kong running; user logged in as admin or player
 - At least one saga project exists (e.g. Dornhain `SA-E979J`)
 - Migrations through design Phase 0 applied on that DB
 
@@ -63,7 +63,7 @@ Make the Saga workspace and session entry usable: Overview must load (apply miss
 
 ## Implementation Notes
 
-- Files touched: `project-service.ts` (waiting + resolve fallback + code column), `session-service.ts` (code select), `SessionJoin.tsx` (direct lobby), `SessionLobbyScreen.tsx` (primary join code), `SagaWorkspaceNav.tsx` / `routes.ts` (Spieler-Charaktere + lore), `SagaResourceScreen.tsx` + `SagaWorkspaceCatalogSection.tsx` (catalog shells), migrations 041–051 + 061+ applied on `sagadrive-db`
+- Files touched: `project-service.ts` (waiting + resolve fallback + code column), `session-service.ts` (code select), `SessionJoin.tsx` (direct lobby), `SessionLobbyScreen.tsx` (primary join code), `SagaWorkspaceNav.tsx` / `routes.ts` (Spieler-Charaktere + lore), `SagaResourceScreen.tsx` + `SagaWorkspaceCatalogSection.tsx` (catalog shells), migrations 041–051 + 061+ applied on `sagatree-db`
 - Unit tests: typecheck passed (`npm run typecheck`)
 - Known limitations: Welt still Look-preview; NPC/Items/Quests/Lore are empty shells until Phase 2–3; saga character list not yet binding-filtered
 

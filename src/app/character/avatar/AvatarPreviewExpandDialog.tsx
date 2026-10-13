@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { CharacterAvatarDto } from '../../../domains/character/domain/character.entity';
 import type { LiveActCapabilitiesV1 } from '../../../domains/character/liveact';
-import type { SagaDriveFaceAnchorsManifestV1 } from '../../../domains/character/avatar';
+import type { SagaTreeFaceAnchorsManifestV1 } from '../../../domains/character/avatar';
 import type { CharacterStudioRuntime } from '../../../infrastructure/character/avatar/character-studio-runtime';
 import {
   Dialog,
@@ -35,7 +35,7 @@ interface AvatarPreviewExpandDialogProps {
   /** Parent-owned ref so LiveAct can bindOutput to this viewport. */
   studioRuntimeRef: MutableRefObject<CharacterStudioRuntime | null>;
   onRuntimeReadyChange: (ready: boolean) => void;
-  onFaceAnchorsCommitted?: (manifest: SagaDriveFaceAnchorsManifestV1) => void;
+  onFaceAnchorsCommitted?: (manifest: SagaTreeFaceAnchorsManifestV1) => void;
 }
 
 export function AvatarPreviewExpandDialog({

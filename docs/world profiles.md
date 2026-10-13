@@ -1,4 +1,4 @@
-# SagaDrive Weltprofile und Weltmodule
+# SagaTree Weltprofile und Weltmodule
 
 > Stand: 27. August 2026  
 > Status: technische und regelmechanische Grundlage für Weltprofile
@@ -11,7 +11,7 @@ Der bestehende projektgebundene `world`-Prototyp mit Orten, Ereignissen, Fraktio
 
 ## Architektur
 
-SagaDrive trennt:
+SagaTree trennt:
 
 1. **Core** – universelle Grundregeln.
 2. **Weltprofil** – Setting- und Regelkonfiguration für eine Welt.

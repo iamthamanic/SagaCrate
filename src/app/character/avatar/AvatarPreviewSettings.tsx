@@ -49,7 +49,7 @@ interface AvatarPreviewSettingsProps {
   /** Full landmark/anchor dots while Face Overlay is on. */
   faceOverlayFullDetail?: boolean;
   onFaceOverlayFullDetailChange?: (enabled: boolean) => void;
-  /** Loaded model exposes SagaDriveFaceAnchorsV1 sidecar (#400). */
+  /** Loaded model exposes SagaTreeFaceAnchorsV1 sidecar (#400). */
   characterFaceMappingAvailable: boolean;
   metricsEnabled: boolean;
   onMetricsChange: (enabled: boolean) => void;

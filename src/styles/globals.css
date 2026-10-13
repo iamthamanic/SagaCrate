@@ -4,7 +4,7 @@
 :root {
   --font-size: 16px;
   
-  /* SagaDrive CI - Light Mode (Clean White with Teal & Gold) */
+  /* SagaTree CI - Light Mode (Clean White with Teal & Gold) */
   --background: #FFFFFF;           /* Reines Weiß */
   --foreground: #0F172A;           /* Slate-900 für Text */
   --card: #FFFFFF;                 /* Weiß für Cards */
@@ -47,7 +47,7 @@
 }
 
 .dark {
-  /* SagaDrive CI - Dark Mode (Modern Dark with Teal & Gold) */
+  /* SagaTree CI - Dark Mode (Modern Dark with Teal & Gold) */
   --background: #0F172A;           /* Slate-900 */
   --foreground: #F1F5F9;           /* Slate-100 für Text */
   --card: #1E293B;                 /* Slate-800 für Cards */
@@ -413,7 +413,7 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-color: var(--muted-foreground) var(--muted);
 }
 
-/* SagaDrive Theme Enhancements */
+/* SagaTree Theme Enhancements */
 @layer utilities {
   /* Premium card effect with Teal & Gold shimmer */
   .parchment-card {

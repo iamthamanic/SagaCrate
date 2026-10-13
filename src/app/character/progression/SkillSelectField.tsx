@@ -12,10 +12,10 @@ import {
 } from '../../../shared/ui/select';
 import { cn } from '../../../shared/ui/utils';
 import {
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  isSagaDriveSkillKey,
-  type SagaDriveSkillKey,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  isSagaTreeSkillKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import { RuleHelp } from '../shared/RuleHelp';
 import { SkillIcon } from './SkillIcon';
@@ -24,8 +24,8 @@ import { SkillRuleHelpContent } from './skillRuleHelp';
 interface SkillSelectFieldProps {
   value: string;
   onValueChange: (value: string) => void;
-  skillOptions: readonly SagaDriveSkillKey[];
-  disabledSkillKeys?: readonly SagaDriveSkillKey[];
+  skillOptions: readonly SagaTreeSkillKey[];
+  disabledSkillKeys?: readonly SagaTreeSkillKey[];
   placeholder: string;
   ariaLabel: string;
   disabled?: boolean;
@@ -35,11 +35,11 @@ function SkillSelectOption({
   skillKey,
   disabled,
 }: {
-  skillKey: SagaDriveSkillKey;
+  skillKey: SagaTreeSkillKey;
   disabled?: boolean;
 }) {
-  const skill = getSagaDriveSkill(skillKey);
-  const attribute = getSagaDriveAttribute(skill.attribute);
+  const skill = getSagaTreeSkill(skillKey);
+  const attribute = getSagaTreeAttribute(skill.attribute);
 
   return (
     <SelectPrimitive.Item
@@ -76,9 +76,9 @@ export function SkillSelectField({
   ariaLabel,
   disabled = false,
 }: SkillSelectFieldProps) {
-  const selectedSkillKey = isSagaDriveSkillKey(value) ? value : undefined;
+  const selectedSkillKey = isSagaTreeSkillKey(value) ? value : undefined;
   const disabledSet = new Set(disabledSkillKeys);
-  const selectedSkill = selectedSkillKey ? getSagaDriveSkill(selectedSkillKey) : undefined;
+  const selectedSkill = selectedSkillKey ? getSagaTreeSkill(selectedSkillKey) : undefined;
 
   return (
     <div className="flex w-full items-center gap-1">
@@ -100,7 +100,7 @@ export function SkillSelectField({
         </SelectContent>
       </Select>
       {selectedSkillKey ? (
-        <RuleHelp label={getSagaDriveSkill(selectedSkillKey).label}>
+        <RuleHelp label={getSagaTreeSkill(selectedSkillKey).label}>
           <SkillRuleHelpContent skillKey={selectedSkillKey} />
         </RuleHelp>
       ) : (

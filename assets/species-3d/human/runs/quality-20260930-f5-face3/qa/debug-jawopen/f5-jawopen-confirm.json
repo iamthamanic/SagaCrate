@@ -53,9 +53,9 @@
   "facerigArgvHasAnchors": false,
   "facerigArgv": [
     "facerig",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-423/public/assets/avatars/species/human-female-quality-20260921-f5.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-423/public/assets/avatars/species/human-female-quality-20260921-f5.glb",
     "-o",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-423/assets/species-3d/human/runs/quality-20260930-f5-face3/human-female-quality-20260921-f5-face3.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-423/assets/species-3d/human/runs/quality-20260930-f5-face3/human-female-quality-20260921-f5-face3.glb",
     "--json",
     "--max-residual",
     "12"

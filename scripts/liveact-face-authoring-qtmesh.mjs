@@ -122,7 +122,7 @@ async function main() {
     bytes: readFileSync(outputAbs).byteLength,
   };
 
-  const installMetaPath = join(root, '.cache/sagadrive-tools/qtmesh/INSTALL.json');
+  const installMetaPath = join(root, '.cache/sagatree-tools/qtmesh/INSTALL.json');
   let installMeta = null;
   if (existsSync(installMetaPath)) {
     try {
@@ -180,7 +180,7 @@ async function main() {
     },
     validation: {
       khronos: inventory?.khronos || null,
-      sagaDrive: inventory?.sagaDrive || null,
+      sagaTree: inventory?.sagaTree || null,
       ok: validation.ok,
       profile: args.profile || 'core-v1',
       inventoryPath: 'face-inventory.json',
@@ -213,7 +213,7 @@ async function main() {
 
   if (!validation.ok) {
     console.error(
-      `liveact-face-authoring-qtmesh FAIL validation: ${(inventory?.sagaDrive?.errors || []).join(', ')}`,
+      `liveact-face-authoring-qtmesh FAIL validation: ${(inventory?.sagaTree?.errors || []).join(', ')}`,
     );
     process.exit(1);
   }

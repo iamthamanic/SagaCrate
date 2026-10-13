@@ -1,5 +1,5 @@
 /**
- * sagadrive item rule validators — fail-closed parsers for untrusted values.
+ * sagatree item rule validators — fail-closed parsers for untrusted values.
  * Location: src/domains/rules/sagatree/items/validators.ts
  *
  * Domain-pure: no React, no Supabase, no inventory state.
@@ -12,13 +12,13 @@ import {
   ITEM_PROTECTION_VALUES,
   MINIMUM_STRENGTH_VALUES,
   PROTECTION_MINIMUM_STRENGTH,
-  SAGA_DRIVE_CORE_CATALOG_EXTRA_TRAITS,
-  SAGA_DRIVE_WEAPON_TRAIT_NAMES,
+  SAGA_TREE_CORE_CATALOG_EXTRA_TRAITS,
+  SAGA_TREE_WEAPON_TRAIT_NAMES,
   type ItemCost,
   type ItemLoad,
   type ItemProtection,
   type MinimumStrength,
-  type SagaDriveWeaponTraitName,
+  type SagaTreeWeaponTraitName,
 } from './types';
 
 export type ItemRuleParseResult<T> =
@@ -61,8 +61,8 @@ export function parseItemProtection(value: unknown): ItemRuleParseResult<ItemPro
   return { ok: false, error: 'ItemProtection must be 1, 2, or 3' };
 }
 
-export function isSagaDriveWeaponTraitName(value: string): value is SagaDriveWeaponTraitName {
-  return (SAGA_DRIVE_WEAPON_TRAIT_NAMES as readonly string[]).includes(value);
+export function isSagaTreeWeaponTraitName(value: string): value is SagaTreeWeaponTraitName {
+  return (SAGA_TREE_WEAPON_TRAIT_NAMES as readonly string[]).includes(value);
 }
 
 /** True for `Durchdringung X` with X ≥ 1. */
@@ -82,15 +82,15 @@ export function parseDurchdringungPoints(value: string): number | null {
  * §10.1 weapon trait (named or parameterized Durchdringung).
  * Does not invent numeric bonuses for free-form trait strings.
  */
-export function isSagaDriveWeaponTrait(value: string): boolean {
-  return isSagaDriveWeaponTraitName(value) || isDurchdringungTrait(value);
+export function isSagaTreeWeaponTrait(value: string): boolean {
+  return isSagaTreeWeaponTraitName(value) || isDurchdringungTrait(value);
 }
 
 /** Traits accepted by Core catalog entries (weapon traits + shield extras). */
-export function isSagaDriveCoreCatalogTrait(value: string): boolean {
+export function isSagaTreeCoreCatalogTrait(value: string): boolean {
   return (
-    isSagaDriveWeaponTrait(value) ||
-    (SAGA_DRIVE_CORE_CATALOG_EXTRA_TRAITS as readonly string[]).includes(value)
+    isSagaTreeWeaponTrait(value) ||
+    (SAGA_TREE_CORE_CATALOG_EXTRA_TRAITS as readonly string[]).includes(value)
   );
 }
 
@@ -200,7 +200,7 @@ export function validateCoreCatalogTraits(traits: readonly string[] | undefined)
     return { ok: true, value: [] };
   }
   for (const trait of traits) {
-    if (!isSagaDriveCoreCatalogTrait(trait)) {
+    if (!isSagaTreeCoreCatalogTrait(trait)) {
       return { ok: false, error: `unknown Core catalog trait ${JSON.stringify(trait)}` };
     }
   }

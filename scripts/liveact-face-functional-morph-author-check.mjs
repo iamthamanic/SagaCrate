@@ -606,7 +606,7 @@ async function main() {
     'Milestone 5 supports jaw/blink/brow/smile L+R/pucker',
   );
   check(
-    FACE_FUNCTIONAL_MORPH_AUTHOR_CONTRACT_VERSION.startsWith('SagaDrive'),
+    FACE_FUNCTIONAL_MORPH_AUTHOR_CONTRACT_VERSION.startsWith('SagaTree'),
     'author contract version present',
   );
 

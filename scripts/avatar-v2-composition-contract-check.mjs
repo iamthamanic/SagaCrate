@@ -59,7 +59,7 @@ const c = await import(outfile);
 
 check(c.toAvatarV2Source('meshy') === 'generate', 'meshy → generate');
 check(c.toAvatarV2Source('import') === 'import', 'import stays');
-check(c.toAvatarV2Source('sagadrive') === 'sagadrive', 'sagadrive stays');
+check(c.toAvatarV2Source('sagatree') === 'sagatree', 'sagatree stays');
 
 const parsedBad = c.parseAvatarV2CompositionFields({
   anatomy: 'dragon',
@@ -96,22 +96,22 @@ c.assertSpeciesOrthogonalToBodyFamily(legacyMeshy);
 const saga = c.compositionFromCharacterAvatarDto({
   schema_version: 1,
   provider: 'm3-character-studio',
-  source: 'sagadrive',
+  source: 'sagatree',
   preset: 'fantasy-human',
   model_format: 'vrm',
   traits: { hair: 'short' },
   colors: { hair: '#000', skin: '#fff' },
   body: { height: 50, size: 50 },
 });
-check(saga.anatomy === 'humanoid', 'sagadrive catalog → humanoid');
-check(saga.modularity === 'modular-parts', 'sagadrive modular baseline');
+check(saga.anatomy === 'humanoid', 'sagatree catalog → humanoid');
+check(saga.modularity === 'modular-parts', 'sagatree modular baseline');
 check(saga.capabilities.length === 0, 'still no caps without analysis');
 
 const withAnalysis = c.compositionFromCharacterAvatarDto(saga, ['rigged', 'humanoid']);
 check(withAnalysis.capabilities.includes('humanoid'), 'analysis caps applied');
 
 check(
-  c.AVATAR_V2_COMPOSITION_CONTRACT_VERSION === 'SagaDriveAvatarCompositionV2',
+  c.AVATAR_V2_COMPOSITION_CONTRACT_VERSION === 'SagaTreeAvatarCompositionV2',
   'version const',
 );
 

@@ -13,7 +13,7 @@ import {
   type AvatarTraitGroupId,
   type BaseBodyTraitSocket,
   type BaseTraitSelection,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from '../../../domains/character/avatar';
 import { TraitCardPicker, useTraitApplyController } from './TraitCardPicker';
 import { AvatarFitRangeNotice } from './AvatarFitRangeNotice';
@@ -21,7 +21,7 @@ import { AvatarFitRangeNotice } from './AvatarFitRangeNotice';
 interface AvatarTraitPanelsProps {
   selection: BaseTraitSelection;
   onBaseTraitChange: (groupId: AvatarTraitGroupId, traitId: string) => void;
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
 }
 
 function socketForGroup(groupId: AvatarTraitGroupId): BaseBodyTraitSocket {

@@ -17,4 +17,4 @@ CLEAR
 - HEAD ancestor: evidence committed on feature branch with script
 
 ## Out of scope
-Realtime WS hop until #604 boots `sagadrive-realtime`
+Realtime WS hop until #604 boots `sagatree-realtime`

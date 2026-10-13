@@ -27,5 +27,5 @@
 ## Verdict: CLEAR
 
 ## Notes
-- `docs/sagadrive core rules.md` unverändert; alle Abweichungen leben als deklarierte Profildaten.
+- `docs/sagatree core rules.md` unverändert; alle Abweichungen leben als deklarierte Profildaten.
 - **Datei-Historie / Kollisions-Fix:** Dieses Proof lag zunächst unter `composition-gate-world-profiles-modules.md` und kollidierte dort mit dem historischen UI-Proof des Weltprofil-Editors (`species-development`-Module, gemergt via #45, `c0dae15`). Der historische Proof wurde an seinem ursprünglichen Pfad wiederhergestellt; dieses Validation-Proof liegt jetzt unter dem korrekten Ticketslug `composition-gate-validate-world-profiles-modules.md` (Slug-Konvention analog #19–#26).

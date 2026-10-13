@@ -8,9 +8,9 @@ import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../../shared/ui/tooltip';
 import {
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  type SagaDriveSkillKey,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import { SkillIcon } from './SkillIcon';
 
@@ -24,7 +24,7 @@ function rankLabel(rank: number): string {
 }
 
 interface AttributeSkillNodeProps {
-  skillKey: SagaDriveSkillKey;
+  skillKey: SagaTreeSkillKey;
   finalRank: number;
   backgroundValue: number;
   inBackgroundPool: boolean;
@@ -35,7 +35,7 @@ interface AttributeSkillNodeProps {
   canDecreaseFree: boolean;
   canIncreaseFree: boolean;
   onSelect: () => void;
-  onHoverChange: (skill: SagaDriveSkillKey | null) => void;
+  onHoverChange: (skill: SagaTreeSkillKey | null) => void;
   onChangeFreeRank: (delta: -1 | 1) => void;
 }
 
@@ -54,8 +54,8 @@ export function AttributeSkillNode({
   onHoverChange,
   onChangeFreeRank,
 }: AttributeSkillNodeProps) {
-  const skill = getSagaDriveSkill(skillKey);
-  const attribute = getSagaDriveAttribute(skill.attribute);
+  const skill = getSagaTreeSkill(skillKey);
+  const attribute = getSagaTreeAttribute(skill.attribute);
 
   return (
     <div className="min-w-0" data-attribute-skill-node={skillKey}>

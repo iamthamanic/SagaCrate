@@ -17,15 +17,15 @@ import {
   type AvatarMorphFaceKey,
   type AvatarMorphParamMeta,
   type BaseBodySpeciesId,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from '../../../domains/character/avatar';
 import { Button } from '../../../shared/ui/button';
 import { Label } from '../../../shared/ui/label';
 import { Slider } from '../../../shared/ui/slider';
 
 interface AvatarMorphEditorPanelsProps {
-  morph: SagaDriveAvatarMorphStateV1;
-  onMorphChange: (next: SagaDriveAvatarMorphStateV1) => void;
+  morph: SagaTreeAvatarMorphStateV1;
+  onMorphChange: (next: SagaTreeAvatarMorphStateV1) => void;
   capabilities: readonly AvatarMorphCapabilityFlag[];
   disabled?: boolean;
 }
@@ -91,7 +91,7 @@ export function AvatarMorphEditorPanels({
   const bodyEnabled = capabilities.includes('morph-body-v1');
   const faceEnabled = capabilities.includes('morph-face-v1');
 
-  const publish = (next: SagaDriveAvatarMorphStateV1) => {
+  const publish = (next: SagaTreeAvatarMorphStateV1) => {
     setDraft(next);
     if (debounceRef.current != null) window.clearTimeout(debounceRef.current);
     debounceRef.current = window.setTimeout(() => {

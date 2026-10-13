@@ -1,6 +1,6 @@
 /**
  * character-avatar-meshy Edge Function — provider-routed avatar 3D generation.
- * Meshy is the first adapter; settings come from SagaDrive presets/capabilities.
+ * Meshy is the first adapter; settings come from SagaTree presets/capabilities.
  * Provider success does not set capabilities (#6). MESHY key never leaves the server.
  * Location: supabase/functions/character-avatar-meshy/index.ts
  */

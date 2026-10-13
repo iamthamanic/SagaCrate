@@ -5,17 +5,17 @@
 - Verdict: CLEAR
 
 ## Event
-Authenticated character create/update persists SagaTree Core profile under `sagatree_profile` / `sagatree-core` while legacy `sagadrive_*` aliases remain readable; native saga forbid trigger and public-id generators keep working under both names.
+Authenticated character create/update persists SagaTree Core profile under `sagatree_profile` / `sagatree-core` while legacy `sagatree_*` aliases remain readable; native saga forbid trigger and public-id generators keep working under both names.
 
 ## Hop chain
-CharacterEditor → supabase-character.repository (sagatree_profile write) → PostgREST → characters + sync trigger → sagadrive_profile mirror; sheet-complete guard reads COALESCE(sagatree, sagadrive); SQL helpers sagatree_* with sagadrive_* wrappers; ensure_native_starter unchanged.
+CharacterEditor → supabase-character.repository (sagatree_profile write) → PostgREST → characters + sync trigger → sagatree_profile mirror; sheet-complete guard reads COALESCE(sagatree, sagatree); SQL helpers sagatree_* with sagatree_* wrappers; ensure_native_starter unchanged.
 
 ## Simulations
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
 | N-actors | Owner-only character writes; RLS unchanged | same policies + column grants on sagatree_profile | pass |
-| Invalid/missing | Legacy preset JSON with only sagadrive_profile still imports | normalizeSnapshot dual-read | pass |
-| Two consumers / crash | Re-apply 073 idempotent; docker script finds sagatree-db or sagadrive-db | IF NOT EXISTS + container fallback | pass |
+| Invalid/missing | Legacy preset JSON with only sagatree_profile still imports | normalizeSnapshot dual-read | pass |
+| Two consumers / crash | Re-apply 073 idempotent; docker script finds sagatree-db or sagatree-db | IF NOT EXISTS + container fallback | pass |
 
 ## Flags
 | Tag | Severity | Hops | Why | Fix |

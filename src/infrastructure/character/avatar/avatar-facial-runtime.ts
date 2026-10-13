@@ -2,7 +2,7 @@
  * avatar-facial-runtime — VRM expression adapter for blink/emotion/viseme (#11).
  * Location: src/infrastructure/character/avatar/avatar-facial-runtime.ts
  *
- * Maps canonical SagaDrive facial keys onto VRM0/VRM1 expression names.
+ * Maps canonical SagaTree facial keys onto VRM0/VRM1 expression names.
  * Transient weights only — never written into appearance.avatar.
  */
 

@@ -6,18 +6,18 @@ import { supabase } from '../../lib/supabase';
 import { getAuthenticatedUserId } from '../../lib/authenticatedUser';
 import { raceWithTimeoutReject, SUPABASE_QUERY_TIMEOUT_MS } from '../../lib/networkTimeout';
 import { normalizeCharacterAppearance, normalizeSafeUrl } from '../../domains/character/use-cases/avatar-presets';
-import { assertValidSagaDriveCharacterPersistence } from '../../domains/character';
+import { assertValidSagaTreeCharacterPersistence } from '../../domains/character';
 import {
-  SAGA_DRIVE_SPECIES_TRAIT_BUDGET,
-  createEmptySagaDriveSkillRanks,
-  getSagaDriveSpeciesTraitCost,
+  SAGA_TREE_SPECIES_TRAIT_BUDGET,
+  createEmptySagaTreeSkillRanks,
+  getSagaTreeSpeciesTraitCost,
   isCharacterRulesetKey,
-  isSagaDriveEssenceKey,
-  sagaDriveSkillDefinitions,
+  isSagaTreeEssenceKey,
+  sagaTreeSkillDefinitions,
   type CharacterRulesetKey,
-  type SagaDriveSkillKey,
+  type SagaTreeSkillKey,
 } from '../../domains/rules/sagatree/character-creation';
-import type { CharacterAttributesDto, CharacterGenderReading, SagaDriveProfileDto } from '../../domains/character';
+import type { CharacterAttributesDto, CharacterGenderReading, SagaTreeProfileDto } from '../../domains/character';
 import type {
   CharacterPresetDto,
   CharacterPresetOrigin,
@@ -42,10 +42,10 @@ function isGenderReading(value: unknown): value is CharacterGenderReading {
   return value === 'masculine-read' || value === 'feminine-read' || value === 'diverse';
 }
 
-function normalizeSkills(value: unknown): Record<SagaDriveSkillKey, number> {
-  const result = createEmptySagaDriveSkillRanks();
+function normalizeSkills(value: unknown): Record<SagaTreeSkillKey, number> {
+  const result = createEmptySagaTreeSkillRanks();
   if (!isRecord(value)) return result;
-  for (const skill of sagaDriveSkillDefinitions) {
+  for (const skill of sagaTreeSkillDefinitions) {
     const rank = value[skill.key];
     if (typeof rank === 'number' && Number.isFinite(rank)) {
       result[skill.key] = Math.max(0, Math.min(5, Math.round(rank)));
@@ -73,11 +73,11 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
     throw new Error('Preset-Level muss zwischen 1 und 20 liegen.');
   }
 
-  const profile = snapshot.sagatree_profile ?? snapshot.sagadrive_profile;
+  const profile = snapshot.sagatree_profile;
   if (!profile) {
     throw new Error('Preset-Snapshot braucht ein SagaTree-Profil.');
   }
-  if (!isSagaDriveEssenceKey(profile.essence)) {
+  if (!isSagaTreeEssenceKey(profile.essence)) {
     throw new Error('Preset-Snapshot braucht eine Essenz.');
   }
 
@@ -90,8 +90,8 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
   }
 
   const traitKeys = (profile.speciesTraitInstances ?? []).map((instance) => instance.trait);
-  if (getSagaDriveSpeciesTraitCost(traitKeys) !== SAGA_DRIVE_SPECIES_TRAIT_BUDGET) {
-    throw new Error(`Preset-Snapshot: Speziesmerkmale müssen genau ${SAGA_DRIVE_SPECIES_TRAIT_BUDGET} Punkte ergeben.`);
+  if (getSagaTreeSpeciesTraitCost(traitKeys) !== SAGA_TREE_SPECIES_TRAIT_BUDGET) {
+    throw new Error(`Preset-Snapshot: Speziesmerkmale müssen genau ${SAGA_TREE_SPECIES_TRAIT_BUDGET} Punkte ergeben.`);
   }
   if (snapshot.race === 'alien' && !profile.speciesProfile?.name?.trim()) {
     throw new Error('Preset-Snapshot: Alien-Speziesprofil braucht einen Namen.');
@@ -100,7 +100,7 @@ export function assertValidSnapshot(snapshot: CharacterPresetSnapshot): void {
     throw new Error('Preset-Snapshot: baseAttributes fehlen.');
   }
 
-  assertValidSagaDriveCharacterPersistence(snapshot.attributes, snapshot.skills, profile, level);
+  assertValidSagaTreeCharacterPersistence(snapshot.attributes, snapshot.skills, profile, level);
 }
 
 function withSafePortraitUrl(snapshot: CharacterPresetSnapshot): CharacterPresetSnapshot {
@@ -119,12 +119,8 @@ function normalizeSnapshot(value: unknown): CharacterPresetSnapshot | null {
     : 'sagatree-core';
   const rulesetKey: CharacterRulesetKey = rawRuleset === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core';
   const appearance = normalizeCharacterAppearance(isRecord(value.appearance) ? value.appearance : undefined);
-  const profileRecord = isRecord(value.sagatree_profile)
-    ? value.sagatree_profile
-    : isRecord(value.sagadrive_profile)
-      ? value.sagadrive_profile
-      : null;
-  const profile = profileRecord ? (profileRecord as unknown as SagaDriveProfileDto) : null;
+  const profileRecord = isRecord(value.sagatree_profile) ? value.sagatree_profile : null;
+  const profile = profileRecord ? (profileRecord as unknown as SagaTreeProfileDto) : null;
   if (!profile) return null;
 
   const snapshot: CharacterPresetSnapshot = {

@@ -2,7 +2,7 @@
  * LiveActCharacterFaceOverlay — mesh-bound face debug over avatar viewport (#400).
  * Location: src/app/character/liveact/LiveActCharacterFaceOverlay.tsx
  *
- * Samples deformed SagaDriveFaceAnchorsV1 via the viewport's CharacterStudioRuntime
+ * Samples deformed SagaTreeFaceAnchorsV1 via the viewport's CharacterStudioRuntime
  * (same camera + GL canvas as Face Mapping). Shared liveAct handle is fallback only.
  * Full Detail draws every projected anchor with a short id label.
  */

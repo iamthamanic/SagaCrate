@@ -15,8 +15,8 @@ import {
   type NpcCreatureSheetMode,
 } from '../../../domains/npc-creature';
 import type {
-  SagaDriveCombatRole,
-  SagaDriveMachtgrad,
+  SagaTreeCombatRole,
+  SagaTreeMachtgrad,
 } from '../../../domains/rules/sagatree/npc-creature-power';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
@@ -43,8 +43,8 @@ const KIND_OPTIONS: readonly { value: NpcCreatureLibraryKindFilter; label: strin
   { value: 'creature', label: 'Kreaturen' },
 ];
 
-const COMBAT_ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
-const MACHTGRADE: readonly SagaDriveMachtgrad[] = [
+const COMBAT_ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
+const MACHTGRADE: readonly SagaTreeMachtgrad[] = [
   'gering',
   'mittel',
   'hoch',
@@ -221,7 +221,7 @@ export function NpcCreatureLibraryFiltersBar({
               ...filters,
               machtgrade: toggleValue(
                 filters.machtgrade,
-                value as SagaDriveMachtgrad,
+                value as SagaTreeMachtgrad,
               ),
             })
           }
@@ -244,7 +244,7 @@ export function NpcCreatureLibraryFiltersBar({
               ...filters,
               combatRoles: toggleValue(
                 filters.combatRoles,
-                value as SagaDriveCombatRole,
+                value as SagaTreeCombatRole,
               ),
             })
           }

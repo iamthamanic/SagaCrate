@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Analog End-to-End Playtest Validation (#31, Epic #18)
+ * SagaTree Analog End-to-End Playtest Validation (#31, Epic #18)
  *
  * Deterministic Phase-G1 paper-play ledger. Simulates three complete analog
  * sessions (A/B/C) without Rule Engine or app assistance, measures rule pauses,

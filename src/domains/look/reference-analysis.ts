@@ -27,12 +27,12 @@ export type LookReferenceAnalysisMime =
 export const LOOK_REFERENCE_ANALYSIS_MIN_IMAGES = 1;
 export const LOOK_REFERENCE_ANALYSIS_MAX_IMAGES = 10;
 
-const KNOBS_REF_ID = 'ref.sagadrive-knobs-v1';
-const KNOBS_URI_PREFIX = 'sagadrive:look-knobs-v1:';
-const PALETTE_REF_ID = 'ref.sagadrive-palette-v1';
-const PALETTE_URI_PREFIX = 'sagadrive:look-palette-v1:';
-const META_REF_ID = 'ref.sagadrive-analysis-meta-v1';
-const META_URI_PREFIX = 'sagadrive:look-analysis-meta-v1:';
+const KNOBS_REF_ID = 'ref.sagatree-knobs-v1';
+const KNOBS_URI_PREFIX = 'sagatree:look-knobs-v1:';
+const PALETTE_REF_ID = 'ref.sagatree-palette-v1';
+const PALETTE_URI_PREFIX = 'sagatree:look-palette-v1:';
+const META_REF_ID = 'ref.sagatree-analysis-meta-v1';
+const META_URI_PREFIX = 'sagatree:look-analysis-meta-v1:';
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
@@ -433,13 +433,13 @@ export function buildLookProfileWriteDraftFromAnalysis(
       id: KNOBS_REF_ID,
       kind: 'style',
       uri: `${KNOBS_URI_PREFIX}${encodeURIComponent(JSON.stringify(knobsPayload))}`,
-      label: 'SagaDrive Look-Regler',
+      label: 'SagaTree Look-Regler',
     },
     {
       id: PALETTE_REF_ID,
       kind: 'style',
       uri: `${PALETTE_URI_PREFIX}${encodeURIComponent(JSON.stringify(palettePayload))}`,
-      label: 'SagaDrive Palette',
+      label: 'SagaTree Palette',
     },
     {
       id: META_REF_ID,

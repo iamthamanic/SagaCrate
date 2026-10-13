@@ -51,7 +51,7 @@ export const PHASE10_PRIMARY_METRICS = [
   'combat_round_duration',
   'subjective_immersion_flow',
   'would_play_next_session_again',
-  'what_would_you_miss_without_sagadrive',
+  'what_would_you_miss_without_sagatree',
 ] as const;
 
 export type Phase10PrimaryMetric = (typeof PHASE10_PRIMARY_METRICS)[number];

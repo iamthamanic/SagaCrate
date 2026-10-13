@@ -15,7 +15,7 @@ gekennzeichnet — nie stillschweigend erzwungen.
    Auto-Rig optional (#265), Capabilities nur nach Analyzer.
 3. Keep-Seed → Editor: `bodyFamily=custom`, `allowHumanoidMorph=false`,
    Morph-Evidence leer (fail-closed).
-4. Optional: „Auf SagaDrive-Körper übertragen“ mit Warnung
+4. Optional: „Auf SagaTree-Körper übertragen“ mit Warnung
    **humanoide Interpretation**.
 
 ## Domain

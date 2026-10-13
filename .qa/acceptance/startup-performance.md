@@ -25,7 +25,7 @@ Die App startet zu langsam (Ladebildschirm, leeres Dashboard, schwerer Erst-Load
 ## Regression
 - [ ] E2E Smoke: Dashboard-Button sichtbar (bestehende 15 s Timeout)
 - [ ] Character Editor E2E: Editor öffnet und Hintergrund-Karussell erreichbar
-- [ ] AuthGate zeigt weiterhin animiertes SagaDrive-Logo während kurzem Auth-Check
+- [ ] AuthGate zeigt weiterhin animiertes SagaTree-Logo während kurzem Auth-Check
 
 ## Security Coverage
 - F-03: Keine neuen user-controlled HTML-Pfade; Lazy-Load ändert Auth nicht

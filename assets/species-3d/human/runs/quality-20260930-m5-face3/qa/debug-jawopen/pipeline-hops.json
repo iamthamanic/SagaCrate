@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDrive423JawOpenDebugPipelineV1",
+  "contractVersion": "SagaTree423JawOpenDebugPipelineV1",
   "asset": "m5",
   "channel": "jawOpen",
   "hops": [
@@ -9,7 +9,7 @@
       "output": "face-anchors.json (21 bindings)",
       "file": "assets/species-3d/human/runs/quality-20260930-m5-face3/face-anchors.json",
       "expected": "consumed by FaceRig as driver markers",
-      "actual": "NEVER passed to qtmesh facerig argv — SagaDrive adapter has no --anchors flag",
+      "actual": "NEVER passed to qtmesh facerig argv — SagaTree adapter has no --anchors flag",
       "evidence": "scripts/lib/liveact-face-authoring-qtmesh.mjs buildFacerigArgv → [facerig, input, -o, output, --json, --max-residual]"
     },
     {

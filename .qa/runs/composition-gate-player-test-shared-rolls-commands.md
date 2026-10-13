@@ -11,7 +11,7 @@ Player/GM submits a standard check → server resolves dice+grade authoritativel
 ## Hop chain
 1. **Producer (UI):** Player Panel `requestCheck` → `applyCommand({ kind: 'roll', inputs-only })`
 2. **Transport:** `apply_session_runtime_command` RPC (revision + membership)
-3. **Resolver:** `sagadrive_resolve_session_check` (strip forged → character modifiers → RNG → grade → optional Drive)
+3. **Resolver:** `sagatree_resolve_session_check` (strip forged → character modifiers → RNG → grade → optional Drive)
 4. **Consumers:** `session_events` audit row + `world_state.shared.lastRoll` via realtime snapshot refresh (#297)
 
 ## Simulations

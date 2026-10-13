@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Powers, Essences & Ranks Validation (#25, Epic #18)
+ * SagaTree Powers, Essences & Ranks Validation (#25, Epic #18)
  *
  * Deterministic validation of the §12 unified power model over Ranks I–V and
  * all five essences, on top of the shared probe core (core-probe.mjs):
@@ -331,7 +331,7 @@ auditSecondaryAndMultiArchetype();
 auditRankGates();
 
 const lines = [];
-lines.push('# SagaDrive Powers, Essences & Ranks Report (#25)');
+lines.push('# SagaTree Powers, Essences & Ranks Report (#25)');
 lines.push('');
 lines.push('Deterministische Prüfung des §12-Kraftmodells über Ränge I–V und alle fünf Essenzen (§12.6 Budget, §12.2 Aktivierung, §12.4 Aufrechterhaltung, §12.5 Gegenwirkung, §12.3 Begrenzungen).');
 lines.push('');

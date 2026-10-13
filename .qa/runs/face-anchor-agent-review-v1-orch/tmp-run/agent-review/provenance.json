@@ -1,0 +1,40 @@
+{
+  "protocolVersion": "face-anchor-agent-review-v1",
+  "candidateModelPath": "assets/species-3d/human/runs/fixture/candidate.glb",
+  "modelSha256": "357e5d6fafa34d27360fec24b4326d3534905e33c6acdee60198fb078b7b79e5",
+  "topologyFingerprint": "v1:t1000:m50",
+  "anchorsSha256": "53f8b498bcb62a4dfb5e40c77bc2834e007b0b4e1435f91c64abc234957e9109",
+  "evidenceManifestSha256": "c65275c028c2042ba02261d11d1321cdbfc4f93b314efaa9349734ee574819e5",
+  "requiredPasses": 5,
+  "completedPasses": 5,
+  "passResults": [
+    {
+      "passIndex": 1,
+      "reviewerId": "agent-pass-1",
+      "reviewedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "passIndex": 2,
+      "reviewerId": "agent-pass-2",
+      "reviewedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "passIndex": 3,
+      "reviewerId": "agent-pass-3",
+      "reviewedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "passIndex": 4,
+      "reviewerId": "agent-pass-4",
+      "reviewedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "passIndex": 5,
+      "reviewerId": "agent-pass-5",
+      "reviewedAt": "2026-09-30T12:00:00.000Z"
+    }
+  ],
+  "aggregationOutcome": "agent_reviewed",
+  "finalReviewStatus": "agent_reviewed",
+  "aggregatedAt": "2026-09-30T12:00:00.000Z"
+}

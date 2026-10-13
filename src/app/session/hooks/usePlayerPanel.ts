@@ -7,7 +7,7 @@ import {
   buildPlayerPanelModel,
   type PlayerPanelModel,
 } from '../../../domains/session/contracts/player-panel';
-import type { SagaDriveSkillKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeSkillKey } from '../../../domains/rules/sagatree/character-creation';
 import type { RollMode } from '../../../domains/session/contracts/shared-rolls';
 import type { CharacterVm } from '../../../domains/character';
 import { assertUrlCharacterMatchesMembership } from '../../../domains/session/contracts/player-character-assignment';
@@ -27,7 +27,7 @@ export interface UsePlayerPanelResult {
   sessionId: string | null;
   isBootstrapping: boolean;
   resync: () => Promise<void>;
-  requestCheck: (skill: SagaDriveSkillKey, options?: RequestCheckOptions) => Promise<boolean>;
+  requestCheck: (skill: SagaTreeSkillKey, options?: RequestCheckOptions) => Promise<boolean>;
 }
 
 export function usePlayerPanel(input: {
@@ -109,7 +109,7 @@ export function usePlayerPanel(input: {
   });
 
   const requestCheck = async (
-    skill: SagaDriveSkillKey,
+    skill: SagaTreeSkillKey,
     options?: RequestCheckOptions,
   ): Promise<boolean> => {
     if (!model.canAttemptCheck) return false;

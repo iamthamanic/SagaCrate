@@ -1,0 +1,13 @@
+{
+  "protocolVersion": "face-anchor-agent-review-v1",
+  "outcome": "human_review_required",
+  "requiredPasses": 5,
+  "completedPasses": 0,
+  "deterministicPass": true,
+  "evidenceManifestSha256": "307f4743d76e662f9549a2c16abd6d097ea2f80d7f72d23f2a8ae69397aa3aea",
+  "conflictingAnchorIds": [],
+  "reasons": [
+    "evidence_model_sha_stale"
+  ],
+  "aggregatedAt": "2026-09-30T12:00:00.000Z"
+}

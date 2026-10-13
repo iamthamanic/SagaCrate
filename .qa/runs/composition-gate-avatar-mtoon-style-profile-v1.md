@@ -6,7 +6,7 @@
 - Verdict: CLEAR
 
 ## Event
-Avatar model materials are styled via a single SagaDriveMToonProfileV1 consumed by CharacterStudioRuntime (and portrait capture).
+Avatar model materials are styled via a single SagaTreeMToonProfileV1 consumed by CharacterStudioRuntime (and portrait capture).
 
 ## Hop chain
 Producer (loaded VRM/GLB materials)

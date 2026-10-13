@@ -33,7 +33,7 @@ import { inspectCanonicalHumanVrm } from './lib/saga-human-canonical-v1/inspect-
 import { FULL_V1_CHANNELS, validateLiveActFaceAsset } from './lib/liveact-face-asset-validate.mjs';
 import { packAvatarVrm1 } from './lib/avatar-vrm-pack.mjs';
 import { bindingForVertex } from './lib/liveact-face-anchor-heuristic.mjs';
-import { FACE_ANCHORS_CONTRACT_VERSION, SAGA_DRIVE_FACE_ANCHOR_IDS } from './lib/liveact-face-anchor-ids.mjs';
+import { FACE_ANCHORS_CONTRACT_VERSION, SAGA_TREE_FACE_ANCHOR_IDS } from './lib/liveact-face-anchor-ids.mjs';
 import { validateFaceAnchorsManifestFile } from './lib/liveact-face-anchor-validate.mjs';
 import {
   createAutoUnreviewedFaceMappingAuthoring,
@@ -96,7 +96,7 @@ async function main() {
     eyebrows: bytes('eyebrows:texture'),
   };
   mkdirSync(BUILD_DIR, { recursive: true });
-  const generator = `SagaDrive ${ID} (MakeHuman CC0 data)`;
+  const generator = `SagaTree ${ID} (MakeHuman CC0 data)`;
   const basePath = join(BUILD_DIR, `${ID}-base.glb`);
   const facePath = join(BUILD_DIR, `${ID}-face.glb`);
   const baseGlb = await writeCanonicalHumanGlb({ assembled, textures, includeMorphs: false, generator });
@@ -115,12 +115,12 @@ async function main() {
     gazeOwner: 'bones',
   });
   const inv = validation.inventory;
-  if (!inv.structuralPass) throw new Error(`face asset gate failed: ${inv.sagaDrive.errors.join(', ')}`);
+  if (!inv.structuralPass) throw new Error(`face asset gate failed: ${inv.sagaTree.errors.join(', ')}`);
   log(`face gate OK: ${inv.supportedChannels.length} usable channels, gaze ${inv.gazeMode} (${inv.gazeModeSource})`);
 
   const rigRel = `${ASSET_REL}/rig.json`;
   writeJson(rigRel, {
-    contractVersion: 'SagaDriveHumanoidRigV1',
+    contractVersion: 'SagaTreeHumanoidRigV1',
     bones: canonicalHumanoidRigBones(),
     nonHumanoidJoints: ['jaw'],
     note: 'Joint nodes are named by VRM humanoid id; jaw is skinned but morph-owned (never a humanoid bone).',
@@ -162,7 +162,7 @@ async function main() {
     ?.listPrimitives()[0];
   if (!bodyPrim) throw new Error('packed VRM has no Body primitive');
   const anchors = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     if (assembled.landmarks[id] == null) throw new Error(`face landmark ${id} missing`);
     anchors[id] = bindingForVertex('Body', 0, bodyPrim, assembled.landmarks[id]);
   }
@@ -211,7 +211,7 @@ async function main() {
       khronosErrors: inv.khronos.numErrors,
       khronosWarnings: inv.khronos.numWarnings,
       usableChannels: inv.supportedChannels.length,
-      missingRequired: inv.sagaDrive.missingRequired,
+      missingRequired: inv.sagaTree.missingRequired,
       gazeMode: inv.gazeMode,
       gazeModeSource: inv.gazeModeSource,
     },

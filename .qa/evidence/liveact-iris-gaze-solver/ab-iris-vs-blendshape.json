@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActIrisGazeAbReportV1",
+  "contractVersion": "SagaTreeLiveActIrisGazeAbReportV1",
   "fixtureVersion": "iris-sphere-v1",
   "blendshapeBaseline": {
     "medianAngularErrorDeg": 0.8317952606018411,

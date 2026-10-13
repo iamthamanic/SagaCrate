@@ -1,12 +1,12 @@
 # Feature: validate-enemy-encounter-boss-balance
 
-<!-- Acceptance: Issue #24 (Epic #18), Validierungsplan C4, `docs/sagadrive core rules.md` §6, §7, §8, §15 -->
+<!-- Acceptance: Issue #24 (Epic #18), Validierungsplan C4, `docs/sagatree core rules.md` §6, §7, §8, §15 -->
 
 ## Intent
 Die Gegnerbänder, Schergen-, Elite- und Bossmodifikatoren sowie die Bedrohungspunkte werden gegen unterschiedliche Gruppengrößen und Stufenbereiche geprüft, damit Begegnungen planbar bleiben und insbesondere Bosse weder zusammenbrechen noch durch zusätzliche Aktionen unfair eskalieren.
 
 ## Preconditions
-- SagaDrive lokal-only; Regelquellen: `docs/sagadrive core rules.md` §15.2 (Standardgegner-Tabelle), §15.3 (Typ-Modifikatoren), §15.4 (Bedrohungspunkte/Budgets), §6 (abgeleitete Werte), §7 (Kampf), §8 (Schaden/Sterben).
+- SagaTree lokal-only; Regelquellen: `docs/sagatree core rules.md` §15.2 (Standardgegner-Tabelle), §15.3 (Typ-Modifikatoren), §15.4 (Bedrohungspunkte/Budgets), §6 (abgeleitete Werte), §7 (Kampf), §8 (Schaden/Sterben).
 - Validierungsplan C4: Gruppen 3–6, Ränge Novize–Legende, Typen Scherge/Standard/Elite/Boss, Begegnungen Routine/Standard/Schwer/Extrem.
 - #19/#22/#23 abgeschlossen (PR #61–63); Probe- und Schadensmodelle kommen aus `scripts/lib/core-probe.mjs` bzw. werden konsistent zu `validate-damage-healing-dying.mjs` implementiert.
 - Deterministische Simulations-Engine `scripts/validate-enemy-encounter-boss-balance.mjs` (exakte Wahrscheinlichkeiten für Wurf-Auflösung, erwartungswertbasierte Attrition; kein Zufall).

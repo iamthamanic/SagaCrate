@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Gear / Resources / Load Validation (#32, Epic #18)
+ * SagaTree Gear / Resources / Load Validation (#32, Epic #18)
  *
  * Deterministic scenarios for §5.7 tools, §10.1 weapon traits, §6.7/§10.2 Traglast,
  * and §10.3 / #32 affordability. Also asserts editor wiring markers.
@@ -144,19 +144,19 @@ for (const level of [0, 1, 2, 3, 4, 5]) {
 record('resources:level-6-invalid', !rules.isAbstractResourceLevel(6), '6 invalid');
 
 const parsed = rules.parseCharacterAbstractResources({
-  sagadriveAbstract: { current: 4, base: 5 },
+  sagatreeAbstract: { current: 4, base: 5 },
 });
 record(
   'resources:parse-extensible',
   parsed.current === 4 && parsed.base === 5,
-  'JSONB sagadriveAbstract supports current+base',
+  'JSONB sagatreeAbstract supports current+base',
 );
 
 const serialized = rules.serializeCharacterAbstractResources({ current: 2 });
 record(
   'resources:serialize',
-  serialized.sagadriveAbstract?.current === 2,
-  'serialize writes sagadriveAbstract.current',
+  serialized.sagatreeAbstract?.current === 2,
+  'serialize writes sagatreeAbstract.current',
 );
 
 const free = rules.resolveAffordability(1, 3);

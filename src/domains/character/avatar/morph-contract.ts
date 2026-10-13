@@ -1,5 +1,5 @@
 /**
- * SagaDrive Avatar Morph Contract v1 — pure domain (no Three / React).
+ * SagaTree Avatar Morph Contract v1 — pure domain (no Three / React).
  * Location: src/domains/character/avatar/morph-contract.ts
  *
  * Single source of body/face morph keys, ranges, defaults, DE UI metadata,
@@ -9,7 +9,7 @@
 
 import type { CharacterAvatarDto } from '../domain/character.entity';
 
-export const MORPH_CONTRACT_VERSION = 'SagaDriveAvatarMorphV1' as const;
+export const MORPH_CONTRACT_VERSION = 'SagaTreeAvatarMorphV1' as const;
 
 export const AVATAR_MORPH_BODY_KEYS = [
   'height',
@@ -75,7 +75,7 @@ export interface AvatarMorphTraitSlotsV1 {
   cybernetics: readonly string[];
 }
 
-export interface SagaDriveAvatarMorphStateV1 {
+export interface SagaTreeAvatarMorphStateV1 {
   contractVersion: typeof MORPH_CONTRACT_VERSION;
   body: AvatarMorphBodyValues;
   face: AvatarMorphFaceValues;
@@ -89,7 +89,7 @@ export interface AvatarMorphCapabilities {
 
 export interface AvatarMorphValidationResult {
   ok: boolean;
-  state: SagaDriveAvatarMorphStateV1;
+  state: SagaTreeAvatarMorphStateV1;
   /** Unknown keys that were ignored (fail-safe). */
   ignoredKeys: readonly string[];
   /** Human-readable DE reasons when values were clamped/rejected. */
@@ -177,7 +177,7 @@ function zeroFace(): AvatarMorphFaceValues {
   return out;
 }
 
-export function createDefaultAvatarMorphState(): SagaDriveAvatarMorphStateV1 {
+export function createDefaultAvatarMorphState(): SagaTreeAvatarMorphStateV1 {
   return {
     contractVersion: MORPH_CONTRACT_VERSION,
     body: zeroBody(),
@@ -407,7 +407,7 @@ export function validateAvatarMorphInput(input: unknown): AvatarMorphValidationR
 export function mergeAvatarMorphPresets(
   baseInput: unknown,
   overlayInput: unknown,
-): SagaDriveAvatarMorphStateV1 {
+): SagaTreeAvatarMorphStateV1 {
   const base = validateAvatarMorphInput(baseInput).state;
   const overlayResult = validateAvatarMorphInput(overlayInput);
   const overlay = overlayResult.state;
@@ -479,7 +479,7 @@ export function mergeAvatarMorphPresets(
  */
 export function migrateCharacterAvatarDtoToMorph(
   avatar: CharacterAvatarDto | null | undefined,
-): SagaDriveAvatarMorphStateV1 {
+): SagaTreeAvatarMorphStateV1 {
   const state = createDefaultAvatarMorphState();
   if (!avatar) return state;
 
@@ -527,7 +527,7 @@ export function withAvatarMorphState(
 }
 
 /**
- * Resolve morph capabilities for SagaDrive-owned avatars.
+ * Resolve morph capabilities for SagaTree-owned avatars.
  * Import/Meshy may lack morph targets — callers pass evidence flags, not client claims.
  */
 export function resolveAvatarMorphCapabilities(input: {

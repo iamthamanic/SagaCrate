@@ -66,7 +66,7 @@ check(/LIVEACT_DENSE_FACE_FEATURES_CONTRACT/.test(read('src/domains/character/li
 check(/subscribeDenseFaceFeatures/.test(read('src/infrastructure/character/liveact/liveact-engine.ts')), 'engine side-channel');
 check(/denseFeatures/.test(read('src/infrastructure/character/liveact/mediapipe-face-source.ts')), 'source emits dense side-channel');
 check(
-  /MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1/.test(
+  /MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1/.test(
     read('src/infrastructure/character/liveact/mediapipe-dense-semantic-points-v1.ts'),
   ),
   'reuses #421 anchor map',
@@ -119,8 +119,8 @@ await build({
 
 const mod = await import(outfile + `?t=${Date.now()}`);
 
-check(mod.LIVEACT_DENSE_FACE_FEATURES_CONTRACT === 'SagaDriveLiveActDenseFaceFeaturesV1', 'contract id');
-check(mod.LIVEACT_DENSE_SEMANTIC_GEOMETRY_CONTRACT === 'SagaDriveLiveActDenseSemanticGeometryV1', 'geometry id');
+check(mod.LIVEACT_DENSE_FACE_FEATURES_CONTRACT === 'SagaTreeLiveActDenseFaceFeaturesV1', 'contract id');
+check(mod.LIVEACT_DENSE_SEMANTIC_GEOMETRY_CONTRACT === 'SagaTreeLiveActDenseSemanticGeometryV1', 'geometry id');
 check(Array.isArray(mod.DENSE_SEMANTIC_POINT_IDS) && mod.DENSE_SEMANTIC_POINT_IDS.length >= 30, 'semantic points');
 
 const INVAR_TOL = 0.04;

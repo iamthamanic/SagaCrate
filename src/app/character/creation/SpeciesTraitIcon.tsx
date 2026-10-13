@@ -1,5 +1,5 @@
 /**
- * SpeciesTraitIcon — Lucide icon for each SagaDrive species trait option.
+ * SpeciesTraitIcon — Lucide icon for each SagaTree species trait option.
  * Location: src/app/character/creation/SpeciesTraitIcon.tsx
  */
 import {
@@ -19,9 +19,9 @@ import {
   Waves,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveSpeciesTraitKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeSpeciesTraitKey } from '../../../domains/rules/sagatree/character-creation';
 
-const SPECIES_TRAIT_ICONS: Record<SagaDriveSpeciesTraitKey, LucideIcon> = {
+const SPECIES_TRAIT_ICONS: Record<SagaTreeSpeciesTraitKey, LucideIcon> = {
   'sharpened-sense': Ear,
   'natural-weapon': Swords,
   'narrow-resistance': ShieldHalf,
@@ -39,7 +39,7 @@ const SPECIES_TRAIT_ICONS: Record<SagaDriveSpeciesTraitKey, LucideIcon> = {
 };
 
 type SpeciesTraitIconProps = {
-  traitKey: SagaDriveSpeciesTraitKey;
+  traitKey: SagaTreeSpeciesTraitKey;
   className?: string;
 };
 

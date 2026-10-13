@@ -8,12 +8,12 @@
 Proof rebased onto main merge commit (57dd772) for push-range mode: the Quality Gates run on main evaluates the merge Range 6a0753f..57dd772, so BASE_SHA must equal the push-before SHA. Content unchanged from the PR proof (ba7246a/811ce2c).
 
 ## Event
-Character creation changes a user-owned SagaDrive character profile. This slice adds optional `backgroundTemplateId` metadata while keeping the concrete background pool, trainings and specialization as the persisted source of truth. No new external side effect, worker, webhook or cross-user write is introduced.
+Character creation changes a user-owned SagaTree character profile. This slice adds optional `backgroundTemplateId` metadata while keeping the concrete background pool, trainings and specialization as the persisted source of truth. No new external side effect, worker, webhook or cross-user write is introduced.
 
 ## Hop chain
 1. `CharacterEditor` owns the competency/background state and validates the 2+1+7 start allocation.
 2. `CharacterBackgroundPanel` and `CharacterSkillsPanel` edit only local character-creation state.
-3. `characterService.createCharacter` writes the existing `sagadrive_profile` JSONB payload through the existing owner-scoped character path.
+3. `characterService.createCharacter` writes the existing `sagatree_profile` JSONB payload through the existing owner-scoped character path.
 4. `characterService` normalizes `backgroundTemplateId`; unknown or missing IDs degrade to `null` while concrete background values are preserved.
 5. Existing Supabase character ownership/RLS and storage paths remain unchanged.
 
@@ -30,6 +30,6 @@ The UI and persistence normalizer consume the same stable template ID, but saved
 ## Flags
 - No new database table, migration or RLS policy.
 - No new network endpoint or external side effect.
-- Service change is normalization-only around existing `sagadrive_profile` JSONB.
+- Service change is normalization-only around existing `sagatree_profile` JSONB.
 - Existing character records without template metadata remain readable.
 - Test Gate on code SHA `ba7246a8d14372a78b790cf0b3f1f78baeb5705d` completed successfully in Quality Gates run 33244002179 before this proof-only commit.

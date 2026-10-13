@@ -20,7 +20,7 @@ scripts/avatar-custom-import-check.mjs             |   6 +-
 ```
 
 ## Event
-Player uploads GLB/VRM → SagaDrive analyzes → player keeps original → shared capability editor.
+Player uploads GLB/VRM → SagaTree analyzes → player keeps original → shared capability editor.
 
 ## Producer→Consumer
 uploadAndAnalyzeCharacterAvatarModel (draft is_active=false) → keepOriginalImportedAvatar (activate) → CharacterEditor importComposition/morphEvidence → useAvatarEditorSurfaces

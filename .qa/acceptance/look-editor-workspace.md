@@ -9,7 +9,7 @@ Canonical Look Editor under Bibliothek › Looks. Manages LookProfile metadata a
 ## Happy Path
 
 - [x] Desktop 3-column AdaptiveLiveStage (nav / preview stub / inspector); phone stacks nav+preview+bottom inspector
-- [x] V1 inspectors: Character, Lighting, PostFX in SagaDrive terms; Advanced note only under „Erweitert“
+- [x] V1 inspectors: Character, Lighting, PostFX in SagaTree terms; Advanced note only under „Erweitert“
 - [x] Dirty / Save / Reset / Duplicate / Version laden / conflict+archived read-only messaging; topbar actions keyboard-focusable (min-h-11)
 - [x] Single authoring screen (`LookEditorWorkspace`); create/edit routes are thin mounts
 - [x] Touched files: zero type escape hatches; `look-editor-workspace-check` + test-gate wiring

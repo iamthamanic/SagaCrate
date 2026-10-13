@@ -1,11 +1,11 @@
 /**
- * derived-stats types — UI-independent SagaDrive derived stat computation contracts.
+ * derived-stats types — UI-independent SagaTree derived stat computation contracts.
  * Location: src/domains/rules/sagatree/derived-stats/types.ts
  */
-import type { SagaDriveAttributeKey, SagaDriveSkillKey } from '../character-creation';
+import type { SagaTreeAttributeKey, SagaTreeSkillKey } from '../character-creation';
 
-export type DerivedStatAttributeMap = Record<SagaDriveAttributeKey, number>;
-export type DerivedStatSkillRankMap = Record<SagaDriveSkillKey, number>;
+export type DerivedStatAttributeMap = Record<SagaTreeAttributeKey, number>;
+export type DerivedStatSkillRankMap = Record<SagaTreeSkillKey, number>;
 
 export interface DerivedStatTermComputation {
   label: string;
@@ -25,7 +25,7 @@ export interface DerivedStatComputation {
   terms: DerivedStatTermComputation[];
 }
 
-export interface ComputeSagaDriveDerivedStatsInput {
+export interface ComputeSagaTreeDerivedStatsInput {
   attributes: DerivedStatAttributeMap;
   finalSkillRanks: DerivedStatSkillRankMap;
   /** Global EB for non-skill-bound formulas (health, resistances). */

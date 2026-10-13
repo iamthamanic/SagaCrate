@@ -1,7 +1,7 @@
 {
-  "contractVersion": "SagaDriveLiveActHybridFaceV1",
+  "contractVersion": "SagaTreeLiveActHybridFaceV1",
   "ab": {
-    "contractVersion": "SagaDriveLiveActHybridFaceAbReportV1",
+    "contractVersion": "SagaTreeLiveActHybridFaceAbReportV1",
     "fixtureVersion": "hybrid-face-v1",
     "controlsEvaluated": [
       "mouthSmileLeft",
@@ -488,14 +488,14 @@
       "hybridMaxUnintended": 0,
       "notWorse": true
     },
-    "avatarContourFidelity": "NOT_MEASURED — requires #450/#451",
+    "avatarContourFidelity": "MEASURED_VIA_451_E2E_GATE",
     "method": {
       "minMedianImprovement": 0.05,
       "nonDegradationTol": 0.02
     }
   },
   "evidence": {
-    "contractVersion": "SagaDriveLiveActHybridFaceAbReportV1",
+    "contractVersion": "SagaTreeLiveActHybridFaceAbReportV1",
     "fixtureVersion": "hybrid-face-v1",
     "orientationAuthority": "anatomical",
     "mirrorPoint": "once-after-hybrid",
@@ -581,7 +581,7 @@
       "fixtureId": "hy-neutral-realistic-geometry"
     },
     "speechNote": "correlation remains above target, while amplitude + velocity retention materially improve",
-    "avatarContourFidelity": "NOT_MEASURED — requires #450/#451",
+    "avatarContourFidelity": "MEASURED_VIA_451_E2E_GATE",
     "privacy": {
       "committedRawLandmarks": 0,
       "committedWebcam": 0
@@ -601,6 +601,6 @@
     ]
   },
   "authoritativeGate": "scripts/liveact-hybrid-mouth-face-solver-check.mjs",
-  "deterministicHash": "dc842c70a3d12ff794fde7caff2a0a8c50c933ac5bc875f971787587add5d7d7",
+  "deterministicHash": "73119e50fe1c5aab64ffe37ea32cbfe4bae1c14cb97781c89c3f0ed82196fcd0",
   "maxNeutralLeak": 0.0035700000000000003
 }

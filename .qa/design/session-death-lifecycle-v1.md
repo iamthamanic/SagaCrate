@@ -1,7 +1,7 @@
 # Design — session-death-lifecycle v1 (#373)
 
 ## Hop line
-GM/Player UI → `useDeathLifecycle` / damage command → pure `session-death-lifecycle` + SQL `sagadrive_resolve_*` → `shared.lifeByCharacter` + `life` session events → Player Panel / Encounter conditions converge on reload.
+GM/Player UI → `useDeathLifecycle` / damage command → pure `session-death-lifecycle` + SQL `sagatree_resolve_*` → `shared.lifeByCharacter` + `life` session events → Player Panel / Encounter conditions converge on reload.
 
 ## Stage ownership
 - HP mutation: existing damage path (#300)

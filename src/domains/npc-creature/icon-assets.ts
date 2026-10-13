@@ -1,5 +1,5 @@
 /**
- * Static SagaDrive NPC/creature icons (public SVG) — path helpers + prompt template.
+ * Static SagaTree NPC/creature icons (public SVG) — path helpers + prompt template.
  * Parallel to items `icon-assets.ts`.
  *
  * HARD WORKFLOW (do not skip):
@@ -21,7 +21,7 @@ export const NPC_CREATURE_ICON_PUBLIC_DIR = '/assets/npc-creatures';
 export const NPC_CREATURE_ICON_SOURCE_DIR = 'assets/npc-creature-icon-sources';
 export const NPC_CREATURE_ICON_OUTPUT_DIR = 'public/assets/npc-creatures';
 export const NPC_CREATURE_ICON_MANIFEST_PATH = 'assets/npc-creature-icons.manifest.json';
-/** Shared style refs with item icons (same SagaDrive flat look). */
+/** Shared style refs with item icons (same SagaTree flat look). */
 export const NPC_CREATURE_ICON_STYLE_REFS = [
   'assets/item-icon-style-refs/style-ref-sword.png',
   'assets/item-icon-style-refs/style-ref-potion.png',
@@ -54,7 +54,7 @@ export interface NpcCreatureIconPromptInput {
   iconPrompt: string;
 }
 
-const NPC_CREATURE_ICON_STYLE_TEMPLATE = `RPG character or creature portrait icon for SagaDrive.
+const NPC_CREATURE_ICON_STYLE_TEMPLATE = `RPG character or creature portrait icon for SagaTree.
 
 Single isolated subject (one NPC or one creature).
 Centered composition — bust for humanoids, head/bust for animals.
@@ -88,7 +88,7 @@ Designed specifically so the image can be cleanly converted into vector SVG.
 Subject:
 {{SUBJECT_DESCRIPTION}}
 
-Maintain the exact same SagaDrive inventory icon style as the item icons (style references) and existing npc-creature pack PNGs (black background portraits).`;
+Maintain the exact same SagaTree inventory icon style as the item icons (style references) and existing npc-creature pack PNGs (black background portraits).`;
 
 /** Shared style template used by Cursor Agent image generation. */
 export function getNpcCreatureIconStyleTemplate(): string {

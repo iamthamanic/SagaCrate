@@ -8,7 +8,7 @@
  *     --input public/.../m5-face1.glb \
  *     --inventory assets/.../face-inventory.json \
  *     --out .qa/runs/packed-m5.vrm \
- *     [--rig path/to/SagaDriveHumanoidRigV1.json]
+ *     [--rig path/to/SagaTreeHumanoidRigV1.json]
  */
 import process from 'node:process';
 import { packAvatarVrm1 } from './lib/avatar-vrm-pack.mjs';

@@ -1,9 +1,9 @@
-# Feature: Add Looks to the SagaDrive Library
+# Feature: Add Looks to the SagaTree Library
 
 <!-- seeded by ecc-runner from issue #343 on 2026-09-27 — refined in implement -->
 
 ## Intent
-Ergänze die SagaDrive-Bibliothek um den Bereich „Looks“. Nutzer können ihre gespeicherten LookProfiles visuell durchsuchen und, abhängig von Berechtigungen, erstellen, duplizieren, bearbeiten oder archivieren. Die Bibliothek ist der einzige kanonische Einstieg für Look-Authoring.
+Ergänze die SagaTree-Bibliothek um den Bereich „Looks“. Nutzer können ihre gespeicherten LookProfiles visuell durchsuchen und, abhängig von Berechtigungen, erstellen, duplizieren, bearbeiten oder archivieren. Die Bibliothek ist der einzige kanonische Einstieg für Look-Authoring.
 
 ## Happy Path
 - [x] `Bibliothek > Looks` ist über die vorhandene App-Navigation/History-Routing erreichbar und besitzt Loading-, Empty-, Error- und Success-State.

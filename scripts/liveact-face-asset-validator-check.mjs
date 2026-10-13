@@ -139,7 +139,7 @@ const ok = await validateLiveActFaceAsset({
 });
 check(ok.ok === true, 'core-ok passes');
 check(ok.inventory.khronos.pass === true, 'khronos pass on valid');
-check(ok.inventory.sagaDrive.pass === true, 'sagaDrive pass');
+check(ok.inventory.sagaTree.pass === true, 'sagaTree pass');
 check(ok.inventory.supportedChannels.includes('jawOpen'), 'inventory lists jawOpen');
 check(typeof ok.inventory.byteCount === 'number', 'byteCount');
 check(typeof ok.inventory.triangleCount === 'number', 'triangleCount');
@@ -154,7 +154,7 @@ const missing = await validateLiveActFaceAsset({
   profile: 'core-v1',
 });
 check(missing.ok === false, 'missing core morph fails');
-check(missing.inventory.sagaDrive.errors.includes('missing_required_morphs'), 'missing error');
+check(missing.inventory.sagaTree.errors.includes('missing_required_morphs'), 'missing error');
 
 const empty = await validateLiveActFaceAsset({
   inputPath: emptyMorphPath,
@@ -177,7 +177,7 @@ const strip = await validateLiveActFaceAsset({
 });
 check(strip.ok === false, 'material regression fails');
 check(
-  strip.inventory.sagaDrive.preservationErrors.includes('material_count_regressed'),
+  strip.inventory.sagaTree.preservationErrors.includes('material_count_regressed'),
   'preservation material',
 );
 

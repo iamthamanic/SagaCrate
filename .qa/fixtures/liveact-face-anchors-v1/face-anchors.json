@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveFaceAnchorsV1",
+  "contractVersion": "SagaTreeFaceAnchorsV1",
   "anchors": {
     "mouthUpper": {
       "nodeIdentity": "FaceMesh",

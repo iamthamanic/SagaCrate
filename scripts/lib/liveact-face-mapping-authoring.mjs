@@ -1,5 +1,5 @@
 /**
- * liveact-face-mapping-authoring — offline mirror of SagaDriveFaceMappingAuthoringV1 (#419 + agent review).
+ * liveact-face-mapping-authoring — offline mirror of SagaTreeFaceMappingAuthoringV1 (#419 + agent review).
  * Location: scripts/lib/liveact-face-mapping-authoring.mjs
  *
  * Keep in sync with src/domains/character/avatar/face-mapping-authoring-contract.ts.
@@ -13,7 +13,7 @@ import { verifyCompletedAgentReviewLedger } from './face-anchor-agent-review-orc
 
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 
-export const FACE_MAPPING_AUTHORING_CONTRACT_VERSION = 'SagaDriveFaceMappingAuthoringV1';
+export const FACE_MAPPING_AUTHORING_CONTRACT_VERSION = 'SagaTreeFaceMappingAuthoringV1';
 
 export const FACE_MAPPING_AUTHORING_SOURCES = ['auto', 'manual', 'manual_override'];
 

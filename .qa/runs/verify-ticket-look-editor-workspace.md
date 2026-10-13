@@ -16,7 +16,7 @@ PASS
 ## Acceptance match
 All Happy Path + Edge Cases in `.qa/acceptance/look-editor-workspace.md` checked against diff:
 - AdaptiveLiveStage 3-column + phone bottom inspector
-- Character/Lighting/PostFX SagaDrive knobs; Advanced note under Erweitert
+- Character/Lighting/PostFX SagaTree knobs; Advanced note under Erweitert
 - Dirty/save/reset/duplicate/version laden; archived read-only; conflict errors from service
 - Thin create/edit routes; single `LookEditorWorkspace`
 - Preview stub pending #345
@@ -26,7 +26,7 @@ In: `src/app/look/editor/**`, LookCreate/Edit screens, App wiring, check script,
 Boy Scout (typecheck blocker on touched App path): `session-entry-routing.ts` liveView union includes `viewer`.
 
 ## Security
-Mutations via look-service only; no provider raw write API; knobs URI is SagaDrive-owned style reference.
+Mutations via look-service only; no provider raw write API; knobs URI is SagaTree-owned style reference.
 
 ## Gaps
 none

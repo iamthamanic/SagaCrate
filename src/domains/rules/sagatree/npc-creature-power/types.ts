@@ -3,13 +3,13 @@
  * Location: src/domains/rules/sagatree/npc-creature-power/types.ts
  */
 
-export type SagaDriveNpcLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
+export type SagaTreeNpcLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
-export type SagaDriveMachtgrad = 'gering' | 'mittel' | 'hoch' | 'extrem' | 'legendaer';
+export type SagaTreeMachtgrad = 'gering' | 'mittel' | 'hoch' | 'extrem' | 'legendaer';
 
-export type SagaDriveCombatRole = 'standard' | 'elite' | 'boss';
+export type SagaTreeCombatRole = 'standard' | 'elite' | 'boss';
 
-export type SagaDriveCombatProfile =
+export type SagaTreeCombatProfile =
   | 'noncombat'
   | 'balanced'
   | 'tough'
@@ -18,33 +18,33 @@ export type SagaDriveCombatProfile =
   | 'ranged'
   | 'control_support';
 
-export type SagaDriveDamageStep = {
+export type SagaTreeDamageStep = {
   dice: number;
   sides: number;
   flat: number;
   label: string;
 };
 
-export type SagaDriveResistanceSlots = {
+export type SagaTreeResistanceSlots = {
   high: number;
   normal: number;
   low: number;
 };
 
-export type SagaDriveLevelBenchmark = {
-  level: SagaDriveNpcLevel;
-  machtgrad: SagaDriveMachtgrad;
+export type SagaTreeLevelBenchmark = {
+  level: SagaTreeNpcLevel;
+  machtgrad: SagaTreeMachtgrad;
   experienceBonus: number;
   primarySkillRank: number;
   primaryModifier: number;
   defense: number;
-  resistances: SagaDriveResistanceSlots;
+  resistances: SagaTreeResistanceSlots;
   health: number;
-  baseDamage: SagaDriveDamageStep;
+  baseDamage: SagaTreeDamageStep;
   attributeDefaults: readonly [number, number, number, number, number, number];
 };
 
-export type SagaDriveProfileAdjustments = {
+export type SagaTreeProfileAdjustments = {
   healthMultiplier: number;
   defenseDelta: number;
   primaryAttackDelta: number;
@@ -61,8 +61,8 @@ export type SagaDriveProfileAdjustments = {
   combatSignatureRequired: boolean;
 };
 
-export type SagaDriveCombatRoleRules = {
-  role: SagaDriveCombatRole;
+export type SagaTreeCombatRoleRules = {
+  role: SagaTreeCombatRole;
   healthMultiplier: number;
   threatUnitsSameLevel: number;
   impulsesPerRound: number;
@@ -71,31 +71,31 @@ export type SagaDriveCombatRoleRules = {
   minImpulseOptions: number;
 };
 
-export type SagaDriveCompactStatblockInput = {
+export type SagaTreeCompactStatblockInput = {
   level: number;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole: SagaDriveCombatRole;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole: SagaTreeCombatRole;
   /** Base movement in meters before profile shifts (default 9). */
   baseMovementMeters?: number;
   /** When true, impulses are unavailable (Kampfunfähig). */
   incapacitated?: boolean;
 };
 
-export type SagaDriveCompactStatblockBenchmarks = {
-  level: SagaDriveNpcLevel;
-  machtgrad: SagaDriveMachtgrad;
+export type SagaTreeCompactStatblockBenchmarks = {
+  level: SagaTreeNpcLevel;
+  machtgrad: SagaTreeMachtgrad;
   machtgradLabel: string;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole: SagaDriveCombatRole;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole: SagaTreeCombatRole;
   experienceBonus: number;
   primarySkillRank: number;
   primaryModifier: number;
   defense: number;
-  resistances: SagaDriveResistanceSlots;
+  resistances: SagaTreeResistanceSlots;
   baseHealth: number;
   health: number;
-  baseDamage: SagaDriveDamageStep;
-  primaryDamage: SagaDriveDamageStep;
+  baseDamage: SagaTreeDamageStep;
+  primaryDamage: SagaTreeDamageStep;
   attributeDefaults: readonly [number, number, number, number, number, number];
   movementMeters: number;
   threatUnitsSameLevel: number;

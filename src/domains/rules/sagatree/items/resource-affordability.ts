@@ -1,5 +1,5 @@
 /**
- * sagadrive abstract resources & affordability — §10.3 + issue #32 editor rules.
+ * sagatree abstract resources & affordability — §10.3 + issue #32 editor rules.
  * Location: src/domains/rules/sagatree/items/resource-affordability.ts
  *
  * UI shows a single current level (0–5). Shape is extensible with optional `base`
@@ -16,8 +16,8 @@ export type AbstractResourceLevel = (typeof ABSTRACT_RESOURCE_LEVELS)[number];
 /** Default character abstract resources when unset (§10.3 / #32 decision 5a). */
 export const DEFAULT_ABSTRACT_RESOURCE_LEVEL: AbstractResourceLevel = 3;
 
-/** Key inside `characters.resources` JSONB for the SagaDrive abstract pool. */
-export const RESOURCES_JSONB_KEY = 'sagadriveAbstract';
+/** Key inside `characters.resources` JSONB for the SagaTree abstract pool. */
+export const RESOURCES_JSONB_KEY = 'sagatreeAbstract';
 
 /**
  * Character abstract resources.
@@ -64,7 +64,7 @@ export function createDefaultAbstractResources(): CharacterAbstractResources {
 
 /**
  * Parses JSONB / DTO bags into a typed resources object.
- * Accepts: bare number, `{ current }`, or `{ sagadriveAbstract: { current, base? } }`.
+ * Accepts: bare number, `{ current }`, or `{ sagatreeAbstract: { current, base? } }`.
  */
 export function parseCharacterAbstractResources(raw: unknown): CharacterAbstractResources {
   if (raw == null) return createDefaultAbstractResources();

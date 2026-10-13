@@ -11,10 +11,10 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CACHE="${SAGADRIVE_QTMESH_CACHE:-$ROOT/.cache/sagadrive-tools/qtmesh}"
+CACHE="${SAGATREE_QTMESH_CACHE:-$ROOT/.cache/sagatree-tools/qtmesh}"
 PINNED_COMMIT="8720dc91bd7426908b9218673fbd74d544dd908c"
 # First published macOS release after the pinned commit (includes targetNames fix #1045).
-RELEASE_TAG="${SAGADRIVE_QTMESH_RELEASE:-3.40.0}"
+RELEASE_TAG="${SAGATREE_QTMESH_RELEASE:-3.40.0}"
 REPO="fernandotonon/QtMeshEditor"
 
 mkdir -p "$CACHE/downloads" "$CACHE/bin"
@@ -80,7 +80,7 @@ case "$uname_s" in
     if [[ ! -f "$DEB_PATH" ]]; then
       if ! download "https://github.com/${REPO}/releases/download/${RELEASE_TAG}/${DEB_NAME}" "$DEB_PATH"; then
         echo "bootstrap-qtmesh-facerig FAIL: could not download Linux package for ${RELEASE_TAG}" >&2
-        echo "Set SAGADRIVE_QTMESH_BIN to a local qtmesh built from commit ${PINNED_COMMIT}." >&2
+        echo "Set SAGATREE_QTMESH_BIN to a local qtmesh built from commit ${PINNED_COMMIT}." >&2
         exit 1
       fi
     fi
@@ -102,7 +102,7 @@ case "$uname_s" in
     ;;
   *)
     echo "bootstrap-qtmesh-facerig FAIL: unsupported platform $uname_s" >&2
-    echo "Build QtMeshEditor from commit ${PINNED_COMMIT} and set SAGADRIVE_QTMESH_BIN." >&2
+    echo "Build QtMeshEditor from commit ${PINNED_COMMIT} and set SAGATREE_QTMESH_BIN." >&2
     exit 1
     ;;
 esac

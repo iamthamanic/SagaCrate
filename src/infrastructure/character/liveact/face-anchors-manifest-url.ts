@@ -17,7 +17,7 @@ function modelStemFromPathname(pathname: string): string | null {
 }
 
 /**
- * Candidate URLs for SagaDriveFaceAnchorsV1 next to a GLB/VRM.
+ * Candidate URLs for SagaTreeFaceAnchorsV1 next to a GLB/VRM.
  * Order: `{stem}-face-anchors.json`, then `face-anchors.json`.
  * Cache-bust query from the model URL is copied onto every candidate.
  */

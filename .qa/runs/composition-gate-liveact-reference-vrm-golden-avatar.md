@@ -5,7 +5,7 @@
 
 ## Path
 
-Human Vorlage select → model URL (SagaDrive species path XOR Golden Reference allowlisted path) → CharacterStudioRuntime VRM loader → VrmLiveActAvatarOutput → LiveAct engine ← MediaPipe.
+Human Vorlage select → model URL (SagaTree species path XOR Golden Reference allowlisted path) → CharacterStudioRuntime VRM loader → VrmLiveActAvatarOutput → LiveAct engine ← MediaPipe.
 
 ## Simulations
 

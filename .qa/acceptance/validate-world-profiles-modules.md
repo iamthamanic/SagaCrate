@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #30 (Epic #18), Type: chore, Labels: P2, Validierung
-- Regeln: `docs/sagadrive core rules.md` §4.7 (20 Pflichtfelder Weltprofil), §16.1 (Modulvertrag), §16.2 (Regelpriorität 4-stufig), §16.3 (Deaktivierung), §16.4 (Härtegrade), §16.5 (Magie-/Technologiestufen 0–4 unabhängig), §17 Schritt 1
-- Validierungsplan: `docs/sagadrive core validation.md` F1
+- Regeln: `docs/sagatree core rules.md` §4.7 (20 Pflichtfelder Weltprofil), §16.1 (Modulvertrag), §16.2 (Regelpriorität 4-stufig), §16.3 (Deaktivierung), §16.4 (Härtegrade), §16.5 (Magie-/Technologiestufen 0–4 unabhängig), §17 Schritt 1
+- Validierungsplan: `docs/sagatree core validation.md` F1
 
 ## Preconditions
 - Engines #19–#26 existieren (die Profil-Engine referenziert deren Invarianten als Basis-Verhalten).

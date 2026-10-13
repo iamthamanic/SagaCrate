@@ -1,10 +1,10 @@
 {
-  "contractVersion": "SagaDriveFaceMappingAuthoringV1",
+  "contractVersion": "SagaTreeFaceMappingAuthoringV1",
   "source": "auto",
   "reviewed": false,
   "reviewStatus": "unreviewed",
   "asset": {
-    "modelPath": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/.qa/fixtures/liveact-face-anchors-v1/minimal-face.glb"
+    "modelPath": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/.qa/fixtures/liveact-face-anchors-v1/minimal-face.glb"
   },
   "note": "Bootstrap-minimal face anchors (unreviewed auto)."
 }

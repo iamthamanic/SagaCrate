@@ -10,7 +10,7 @@ import type { AvatarEquipmentVisual } from './equipment-visual-contract';
 import type { CanonicalBodyFamilyId } from './canonical-body-families-v1';
 import type { BaseBodySpeciesId } from './base-body-contract';
 import { getBaseBodySpeciesPreset } from './base-body-contract';
-import type { SagaDriveAvatarMorphStateV1 } from './morph-contract';
+import type { SagaTreeAvatarMorphStateV1 } from './morph-contract';
 import {
   createSpeciesTemplateV1,
   listSpeciesTemplateIds,
@@ -24,7 +24,7 @@ import {
 } from './starter-wardrobe-manifest-v1';
 
 export const SPECIES_TEMPLATE_INGRESS_CONTRACT_VERSION =
-  'SagaDriveSpeciesTemplateIngressV1' as const;
+  'SagaTreeSpeciesTemplateIngressV1' as const;
 
 /** Default basic outfit for „Vorlage anpassen“ — underwear + shirt/pants/boots. */
 export const DEFAULT_TEMPLATE_BASIC_OUTFIT_IDS: readonly StarterWearableId[] = [
@@ -55,7 +55,7 @@ export interface SpeciesTemplateEditorSeedV1 {
   labelDe: string;
   bodyFamily: CanonicalBodyFamilyId;
   baseBodyAssetId: string;
-  morphState: SagaDriveAvatarMorphStateV1;
+  morphState: SagaTreeAvatarMorphStateV1;
   traits: Readonly<{
     head: string;
     ears: string;

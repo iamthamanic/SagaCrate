@@ -8,7 +8,7 @@
 GM confirms promote of a recap consequence into saga draft knowledgeFacts (author) or world promotedLore (world owner); ledger idempotency; session_events audit.
 
 ## Hop chain
-SessionRecapPromoteActions → sessionOutcomePromotionService → promote_session_outcome_to_saga|world RPC → sagadrive_find_session_consequence → saga_definition_versions.payload / world_profiles.modules → session_outcome_promotions + append_session_event.
+SessionRecapPromoteActions → sessionOutcomePromotionService → promote_session_outcome_to_saga|world RPC → sagatree_find_session_consequence → saga_definition_versions.payload / world_profiles.modules → session_outcome_promotions + append_session_event.
 
 ## Simulations
 | Case | Intended | Composed | Result |

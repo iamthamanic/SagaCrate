@@ -34,7 +34,7 @@ check(/listBodyConversionFamilyOptions/.test(domain), 'options');
 check(/resolveIdentityTransferDecision/.test(domain), 'uses spike decision');
 check(!/from ['"]react['"]/.test(domain), 'no react');
 check(/planBodyConversion/.test(index), 'barrel');
-check(/Auf SagaDrive-Körper übertragen/.test(panel), 'CTA');
+check(/Auf SagaTree-Körper übertragen/.test(panel), 'CTA');
 check(/data-avatar-conversion-family/.test(panel), 'family test id');
 check(/Empfohlen/.test(panel), 'recommended copy');
 check(/humanoide Interpretation/i.test(panel), 'custom warn');

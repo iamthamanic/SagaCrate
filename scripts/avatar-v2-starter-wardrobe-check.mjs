@@ -130,7 +130,7 @@ const outOfRange = m.resolveStarterWearableFit({
   wearableId: 'basic-shirt',
   bodyFamily: 'standard',
   morph: {
-    contractVersion: 'SagaDriveAvatarMorphV1',
+    contractVersion: 'SagaTreeAvatarMorphV1',
     body: morphBody,
     face: {},
     colors: { skin: '#F5E6D3', eyes: '#3A2F28', hair: '#000000' },

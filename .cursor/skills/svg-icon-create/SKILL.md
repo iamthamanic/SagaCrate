@@ -1,7 +1,7 @@
 ---
 name: svg-icon-create
 description: >-
-  Create SagaDrive pack-quality static SVG icons via Cursor GenerateImage → PNG
+  Create SagaTree pack-quality static SVG icons via Cursor GenerateImage → PNG
   → VTracer (never hand-authored geometry). Use when the user says svg-icon-create,
   asks for an item/NPC/creature icon, inventory icon, “mach mir ein Icon/Bild von …”,
   or any public/assets/items|npc-creatures/*.svg.
@@ -9,14 +9,14 @@ description: >-
 
 # svg-icon-create
 
-Create **one** SagaDrive inventory / NPC / creature icon in **pack style**
+Create **one** SagaTree inventory / NPC / creature icon in **pack style**
 (same quality as existing sword / potion / wolf / goblin SVGs).
 
 **Hard ban:** Do **not** hand-write flat geometric SVG markup. Do **not** invent
 paths/circles/rects as the icon. That look is rejected — only the raster→vector
 pipeline below is allowed.
 
-Invoking this skill (or asking for an icon / “Bild von X” in SagaDrive) **is**
+Invoking this skill (or asking for an icon / “Bild von X” in SagaTree) **is**
 an explicit image request → you **must** call Cursor `GenerateImage`.
 
 ## When invoked
@@ -46,7 +46,7 @@ Public URLs: `/assets/items/{slug}.svg` or `/assets/npc-creatures/{slug}.svg`.
 
 ## Prompt construction (mandatory)
 
-Work from the SagaDrive repo root (`sagadrive/`).
+Work from the SagaTree repo root (`sagatree/`).
 
 **Items** — `src/domains/items/icon-assets.ts`:
 

@@ -7,7 +7,7 @@
  */
 
 export const FACE_FUNCTIONAL_MORPH_AUTHOR_CONTRACT_VERSION =
-  'SagaDriveLiveActFaceFunctionalMorphAuthorV1';
+  'SagaTreeLiveActFaceFunctionalMorphAuthorV1';
 export const FACE_FUNCTIONAL_MORPH_AUTHOR_PROFILE_VERSION =
   'liveact-face-functional-morph-author-profile-v1';
 

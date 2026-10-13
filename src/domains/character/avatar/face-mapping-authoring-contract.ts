@@ -1,13 +1,13 @@
 /**
- * SagaDriveFaceMappingAuthoringV1 — provenance / review metadata for face anchors (#419 + agent review).
+ * SagaTreeFaceMappingAuthoringV1 — provenance / review metadata for face anchors (#419 + agent review).
  * Location: src/domains/character/avatar/face-mapping-authoring-contract.ts
  *
- * Separate from SagaDriveFaceAnchorsV1 runtime bindings.
+ * Separate from SagaTreeFaceAnchorsV1 runtime bindings.
  * Mapping `source` (how anchors were produced) ≠ `reviewStatus` (who accepted GT).
  * Pure domain — no React / Three.js.
  */
 
-export const FACE_MAPPING_AUTHORING_CONTRACT_VERSION = 'SagaDriveFaceMappingAuthoringV1' as const;
+export const FACE_MAPPING_AUTHORING_CONTRACT_VERSION = 'SagaTreeFaceMappingAuthoringV1' as const;
 
 export const FACE_MAPPING_AUTHORING_SOURCES = ['auto', 'manual', 'manual_override'] as const;
 
@@ -58,7 +58,7 @@ export interface FaceMappingAgentReviewProvenanceV1 {
   readonly ledgerDir: string;
 }
 
-export interface SagaDriveFaceMappingAuthoringV1 {
+export interface SagaTreeFaceMappingAuthoringV1 {
   readonly contractVersion: typeof FACE_MAPPING_AUTHORING_CONTRACT_VERSION;
   /** How the anchors were produced (auto / human authoring). Never use `manual` to fake agent review. */
   readonly source: FaceMappingAuthoringSource;
@@ -150,7 +150,7 @@ export function isFaceMappingReviewStatus(value: string): value is FaceMappingRe
  * Never upgrades unreviewed → agent_reviewed.
  */
 export function resolveFaceMappingReviewStatus(
-  authoring: SagaDriveFaceMappingAuthoringV1 | null | undefined,
+  authoring: SagaTreeFaceMappingAuthoringV1 | null | undefined,
 ): FaceMappingReviewStatus {
   if (!authoring) return 'unreviewed';
   if (authoring.reviewStatus && isFaceMappingReviewStatus(authoring.reviewStatus)) {
@@ -186,7 +186,7 @@ function isValidAgentReviewProvenance(value: unknown): value is FaceMappingAgent
  * JSON-only `reviewed:true` without reviewStatus/provenance is not agent GT.
  */
 export function isReviewedFaceMappingGroundTruth(
-  authoring: SagaDriveFaceMappingAuthoringV1 | null | undefined,
+  authoring: SagaTreeFaceMappingAuthoringV1 | null | undefined,
 ): boolean {
   if (!authoring) return false;
   if (authoring.contractVersion !== FACE_MAPPING_AUTHORING_CONTRACT_VERSION) return false;
@@ -219,7 +219,7 @@ export function isReviewedFaceMappingGroundTruth(
  * Refuse applying agent review when existing GT is human_reviewed.
  */
 export function canApplyAgentReviewToAuthoring(
-  existing: SagaDriveFaceMappingAuthoringV1 | null | undefined,
+  existing: SagaTreeFaceMappingAuthoringV1 | null | undefined,
 ): { ok: true } | { ok: false; reason: 'human_reviewed_immutable' } {
   if (!existing) return { ok: true };
   if (resolveFaceMappingReviewStatus(existing) === 'human_reviewed') {
@@ -354,7 +354,7 @@ export function createAutoUnreviewedFaceMappingAuthoring(input: {
   topologyFingerprint?: string;
   cacheBust?: string;
   note?: string;
-}): SagaDriveFaceMappingAuthoringV1 {
+}): SagaTreeFaceMappingAuthoringV1 {
   return {
     contractVersion: FACE_MAPPING_AUTHORING_CONTRACT_VERSION,
     source: 'auto',
@@ -383,7 +383,7 @@ export function createAgentReviewedFaceMappingAuthoring(input: {
   ledgerDir: string;
   cacheBust?: string;
   note?: string;
-}): SagaDriveFaceMappingAuthoringV1 {
+}): SagaTreeFaceMappingAuthoringV1 {
   return {
     contractVersion: FACE_MAPPING_AUTHORING_CONTRACT_VERSION,
     source: 'auto',

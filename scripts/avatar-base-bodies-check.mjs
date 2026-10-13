@@ -28,7 +28,7 @@ const index = read('src/domains/character/avatar/index.ts');
 const morph = read('src/domains/character/avatar/morph-contract.ts');
 
 check(/BASE_BODY_CONTRACT_VERSION/.test(contract), 'base body contract version');
-check(/createSagaDriveBaseBodyManifestV1/.test(contract), 'manifest factory');
+check(/createSagaTreeBaseBodyManifestV1/.test(contract), 'manifest factory');
 check(/BASE_BODY_SPECIES_PRESETS/.test(contract), 'species presets');
 check(/resolveBaseBodyMorphCapabilities/.test(contract), 'capability resolver');
 check(/buildBaseBodyMorphFixtureCases/.test(contract), 'fixture cases');
@@ -38,14 +38,14 @@ check(/ears/.test(contract) && /horns/.test(contract) && /cybernetics/.test(cont
 check(!/from ['"]three['"]/.test(contract), 'domain has no Three');
 
 check(/isAllowlistedBaseBodyPath/.test(catalog), 'allowlist');
-check(/allowlistedCanonicalBodyPaths|sd_body_standard_v1|sagadrive-base-humanoid-v1/.test(catalog), 'allowlisted paths');
+check(/allowlistedCanonicalBodyPaths|sd_body_standard_v1|sagatree-base-humanoid-v1/.test(catalog), 'allowlisted paths');
 check(/evaluateBaseBodyMorphReadiness/.test(catalog), 'readiness helper');
 
 check(/data-testid="base-body-morph-fixture"/.test(fixture), 'fixture test id');
 check(/data-testid="base-body-fixture-toggle"/.test(fixture), 'fixture collapse toggle');
 check(/useState\(false\)/.test(fixture), 'fixture collapsed by default');
 check(/BaseBodyMorphFixture/.test(editor), 'editor mounts fixture in DEV');
-check(/export \{[\s\S]*createSagaDriveBaseBodyManifestV1/.test(index), 'barrel export');
+check(/export \{[\s\S]*createSagaTreeBaseBodyManifestV1/.test(index), 'barrel export');
 
 // --- pure replicas ---
 const BODY = ['height','headSize','shoulderWidth','chest','waist','hips','armLength','legLength','build','muscularity'];
@@ -100,7 +100,7 @@ check(caseCount === 48, `fixture case count formula => ${caseCount}`);
 function cacheOk(a, m, r, asset, morphV, rigV) {
   return a === asset && m === morphV && r === rigV;
 }
-check(cacheOk('v1', 'SagaDriveAvatarMorphV1', 'SagaDriveHumanoidRigV1', 'v1', 'SagaDriveAvatarMorphV1', 'SagaDriveHumanoidRigV1'), 'cache compatible');
-check(!cacheOk('v1', 'SagaDriveAvatarMorphV1', 'SagaDriveHumanoidRigV1', 'v2', 'SagaDriveAvatarMorphV1', 'SagaDriveHumanoidRigV1'), 'asset bump invalidates');
+check(cacheOk('v1', 'SagaTreeAvatarMorphV1', 'SagaTreeHumanoidRigV1', 'v1', 'SagaTreeAvatarMorphV1', 'SagaTreeHumanoidRigV1'), 'cache compatible');
+check(!cacheOk('v1', 'SagaTreeAvatarMorphV1', 'SagaTreeHumanoidRigV1', 'v2', 'SagaTreeAvatarMorphV1', 'SagaTreeHumanoidRigV1'), 'asset bump invalidates');
 
 console.log('avatar-base-bodies-check PASS');

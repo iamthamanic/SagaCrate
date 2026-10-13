@@ -2,7 +2,7 @@
 
 ## Intent
 Visible product brand is **SagaTree** (login, shell, document title, package name).
-Do **not** rename SagaDrive Core rules IDs, DB RPCs, or story-domain „Saga“.
+Do **not** rename SagaTree Core rules IDs, DB RPCs, or story-domain „Saga“.
 
 ## Checks
 - [ ] `scripts/sagatree-brand-phase-a-check.mjs` PASS
@@ -12,5 +12,5 @@ Do **not** rename SagaDrive Core rules IDs, DB RPCs, or story-domain „Saga“.
 - [ ] Zero type escape hatches on touched shell files
 
 ## Out of scope (later phases)
-- SagaDrive Core editor copy (Phase B)
+- SagaTree Core editor copy (Phase B)
 - Contract version strings / DB rename (Phase C–E)

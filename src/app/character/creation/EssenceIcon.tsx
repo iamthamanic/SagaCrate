@@ -1,5 +1,5 @@
 /**
- * EssenceIcon — Lucide icon for each SagaDrive primary essence option.
+ * EssenceIcon — Lucide icon for each SagaTree primary essence option.
  * Location: src/app/character/creation/EssenceIcon.tsx
  */
 import {
@@ -10,9 +10,9 @@ import {
   PersonStanding,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 
-const ESSENCE_ICONS: Record<SagaDriveEssenceKey, LucideIcon> = {
+const ESSENCE_ICONS: Record<SagaTreeEssenceKey, LucideIcon> = {
   physical: PersonStanding,
   mental: Brain,
   spiritual: Ghost,
@@ -21,7 +21,7 @@ const ESSENCE_ICONS: Record<SagaDriveEssenceKey, LucideIcon> = {
 };
 
 type EssenceIconProps = {
-  essenceKey: SagaDriveEssenceKey;
+  essenceKey: SagaTreeEssenceKey;
   className?: string;
 };
 

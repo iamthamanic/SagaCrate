@@ -10,7 +10,7 @@ import {
   MORPH_CONTRACT_VERSION,
   type AvatarMorphBodyKey,
   type AvatarMorphParamKey,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from './morph-contract';
 import { RIG_CONTRACT_VERSION } from './rig-contract';
 import {
@@ -62,7 +62,7 @@ const PRIMARY_FIT_KEYS: readonly AvatarMorphBodyKey[] = [
 ];
 
 function morphValue(
-  morph: SagaDriveAvatarMorphStateV1,
+  morph: SagaTreeAvatarMorphStateV1,
   key: AvatarMorphParamKey,
 ): number {
   if (key in morph.body) {
@@ -98,7 +98,7 @@ export function createDefaultTraitFitRange(input: {
  * Out-of-range without clamp → incompatible.
  */
 export function resolveAvatarFitCompatibility(input: {
-  morph: SagaDriveAvatarMorphStateV1;
+  morph: SagaTreeAvatarMorphStateV1;
   fit: AvatarFitRangeV1;
   expectedAssetVersion?: string;
   expectedRigVersion?: string;
@@ -160,9 +160,9 @@ export function resolveAvatarFitCompatibility(input: {
 
 /** Clamp morph into fit bounds only when allowClamp is true. */
 export function clampMorphToFitRange(
-  morph: SagaDriveAvatarMorphStateV1,
+  morph: SagaTreeAvatarMorphStateV1,
   fit: AvatarFitRangeV1,
-): SagaDriveAvatarMorphStateV1 {
+): SagaTreeAvatarMorphStateV1 {
   if (!fit.allowClamp) return morph;
   const body = { ...morph.body };
   const face = { ...morph.face };

@@ -1,15 +1,15 @@
 /**
- * liveact-iris-gaze-contract — SagaDrive Iris Gaze V1 (#446).
+ * liveact-iris-gaze-contract — SagaTree Iris Gaze V1 (#446).
  * Location: src/domains/character/liveact/liveact-iris-gaze-contract.ts
  *
  * Provider-neutral per-eye geometric gaze. No provider landmark indices. No raw iris points.
- * Does not inflate SagaDriveLiveActFrameV1. Not Personal Calibration V2 (#449).
+ * Does not inflate SagaTreeLiveActFrameV1. Not Personal Calibration V2 (#449).
  */
 
-export const LIVEACT_IRIS_GAZE_CONTRACT = 'SagaDriveLiveActIrisGazeV1' as const;
+export const LIVEACT_IRIS_GAZE_CONTRACT = 'SagaTreeLiveActIrisGazeV1' as const;
 
 export const LIVEACT_IRIS_EYE_GEOMETRY_CONTRACT =
-  'SagaDriveLiveActIrisEyeGeometryV1' as const;
+  'SagaTreeLiveActIrisEyeGeometryV1' as const;
 
 /** Degrees of eye rotation corresponding to normalized gaze ±1. */
 export const LIVEACT_IRIS_GAZE_MAX_YAW_DEG = 35 as const;

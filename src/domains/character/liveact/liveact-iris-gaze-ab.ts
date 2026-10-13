@@ -48,7 +48,7 @@ export interface IrisGazeAbPathErrors {
 }
 
 export interface IrisGazeAbReportV1 {
-  readonly contractVersion: 'SagaDriveLiveActIrisGazeAbReportV1';
+  readonly contractVersion: 'SagaTreeLiveActIrisGazeAbReportV1';
   readonly fixtureVersion: 'iris-sphere-v1';
   readonly fixtureIds: readonly LiveActIrisGazeFixtureId[];
   readonly iris: IrisGazeAbPathErrors;
@@ -316,7 +316,7 @@ export function runIrisGazeAbBenchmark(): IrisGazeAbReportV1 {
       iris.p95Deg <= blendshape.p95Deg + 1e-9);
 
   return {
-    contractVersion: 'SagaDriveLiveActIrisGazeAbReportV1',
+    contractVersion: 'SagaTreeLiveActIrisGazeAbReportV1',
     fixtureVersion: 'iris-sphere-v1',
     fixtureIds: [...LIVEACT_IRIS_GAZE_FIXTURE_IDS],
     iris,

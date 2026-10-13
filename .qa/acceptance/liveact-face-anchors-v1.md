@@ -1,12 +1,12 @@
-# Feature: LiveAct 3/10: SagaDriveFaceAnchorsV1 als semantischen Mesh-Contract einführen
+# Feature: LiveAct 3/10: SagaTreeFaceAnchorsV1 als semantischen Mesh-Contract einführen
 
-<!-- #399 — sagadrive-face-anchors-v1 -->
+<!-- #399 — sagatree-face-anchors-v1 -->
 
 ## Intent
-Führe einen provider-neutralen `SagaDriveFaceAnchorsV1`-Contract ein, damit Character-Debugging und spätere Semantic-QA echte Punkte auf der Avatar-Oberfläche verwenden statt Billboard-/Head-Bone-Schätzungen.
+Führe einen provider-neutralen `SagaTreeFaceAnchorsV1`-Contract ein, damit Character-Debugging und spätere Semantic-QA echte Punkte auf der Avatar-Oberfläche verwenden statt Billboard-/Head-Bone-Schätzungen.
 
 ## Happy Path
-- [x] `SagaDriveFaceAnchorsV1` definiert mouth upper/lower/corners, eye inner/outer/upper/lower L/R, brow inner/outer/center L/R, noseTip, chin, forehead (21 ids).
+- [x] `SagaTreeFaceAnchorsV1` definiert mouth upper/lower/corners, eye inner/outer/upper/lower L/R, brow inner/outer/center L/R, noseTip, chin, forehead (21 ids).
 - [x] Runtime evaluiert Anker aus deformierter Mesh-Oberfläche (morph + skinning); kein Billboard-/Head-Fallback.
 - [x] Authoring/validation erkennt stale node/primitive/triangle deterministisch (`liveact-face-anchor-validate.mjs`).
 - [x] m5/f5 Pfade dokumentiert; Author-CLI erzeugt Manifeste ohne Provider-Namen im Domain-Layer.

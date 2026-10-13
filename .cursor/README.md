@@ -1,6 +1,6 @@
 # `.cursor/` — Agent config (AgentShield)
 
-Project-local Cursor / ECC agent settings for SagaDrive.
+Project-local Cursor / ECC agent settings for SagaTree.
 
 | Path | Purpose |
 |------|---------|

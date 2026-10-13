@@ -2,17 +2,17 @@
 
 **Status:** Binding for #254 / Epic #248  
 **Slug:** `avatar-v2-asset-authoring-pipeline`  
-**Contract:** `SagaDriveAssetAuthoringV1`
+**Contract:** `SagaTreeAssetAuthoringV1`
 
 ## Intent
 
-Reproduzierbarer Workflow **Generate → Select → Normalize → Validate → Publish** für kanonische SagaDrive-Assets (Base Bodies, Species Templates, Wearables, Traits, Props). **Provider-neutral** — Meshy ist der aktuelle Adapter; Tripo (oder andere) ergänzen denselben Generation Contract **ohne** Domain-/UI-Neudesign.
+Reproduzierbarer Workflow **Generate → Select → Normalize → Validate → Publish** für kanonische SagaTree-Assets (Base Bodies, Species Templates, Wearables, Traits, Props). **Provider-neutral** — Meshy ist der aktuelle Adapter; Tripo (oder andere) ergänzen denselben Generation Contract **ohne** Domain-/UI-Neudesign.
 
 ## Workflow
 
-1. **Generate** — Aufruf nur über `SagaDriveAvatar3dGenerationV1` / Adapter-Facade (keine hardcoded Meshy-Fachlogik in Domain).
+1. **Generate** — Aufruf nur über `SagaTreeAvatar3dGenerationV1` / Adapter-Facade (keine hardcoded Meshy-Fachlogik in Domain).
 2. **Select** — mehrere Kandidaten regelbasiert gegen Golden-Kriterien scoren (`selectAssetAuthoringCandidate`); kein Chat-/User-Gate im Runner.
-3. **Normalize** — Pose/Scale/Units + Modular GLB extras (`SagaDriveModularAvatarGlbV1`) wo Kind es verlangt.
+3. **Normalize** — Pose/Scale/Units + Modular GLB extras (`SagaTreeModularAvatarGlbV1`) wo Kind es verlangt.
 4. **Validate** — Pose, Modular-Contract, Rig/Morph/Material-Hints, Style-Tags (adult stylized, MToon, no-chibi).
 5. **Publish** — Manifest mit Provider/Model/Prompt/References/Settings/Provenance/Version/Checksum; Remote-Output vor Publish erneut validieren.
 
@@ -20,7 +20,7 @@ Reproduzierbarer Workflow **Generate → Select → Normalize → Validate → P
 
 Kanonisch: [`docs/character-visual-styleguide.md`](character-visual-styleguide.md)
 
-- Adult stylized game look, SagaDrive MToon
+- Adult stylized game look, SagaTree MToon
 - Richtung: **Palworld × Overwatch, soft-real** (leichte Real-Anatomie, kein Photoreal, kein Chibi)
 - Golden refs: `assets/species-3d/human/golden/human-{male|female}-style-ref.png`
 - Style-Tag: `palworld-overwatch-soft-real` (legacy alias still accepted: `palworld-korra-direction`)

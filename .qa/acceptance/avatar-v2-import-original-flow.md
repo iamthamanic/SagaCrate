@@ -14,7 +14,7 @@ Macht sicheren GLB/VRM-Import zu einem vollständigen Avatar-V2-Vertical-Slice: 
 - [ ] Upload→Analyze→Original behalten→gemeinsamer Editor funktioniert E2E für Humanoid und Custom Fixture
 - [ ] UI zeigt verständliche Anatomy/Modularity/Family-/Capability-Zustände ohne interne Ticket-/Providerbegriffe
 - [ ] Fehler/limited/baked/custom States sind mobile/keyboard zugänglich und erhalten vorherigen Avatar
-- [ ] Import-Hilfe verweist auf den provider-neutralen SagaDrive GLB v1 Standard
+- [ ] Import-Hilfe verweist auf den provider-neutralen SagaTree GLB v1 Standard
 - [ ] Touched files: zero type escape hatches (typed-strict / Boy Scout)
 
 ## Edge Cases

@@ -6,7 +6,7 @@
 Im Character Editor (Parameter → Attribute) werden die Attribut-Gruppen nicht mehr als lange vertikale Stacks gezeigt, sondern als swipebares Karussell (wie Hintergrund / Essenz). Unter der aktiven Attribut-Karte erscheinen die zugehörigen Fertigkeiten als verbundene Skill-Nodes (Icon, Name, Attribut-Hint via CircleHelp, Ränge, Provenance, +/- freie Punkte). Die rechte Formel-Detailleiste bleibt.
 
 ## Preconditions
-- Character Editor mit SagaDrive Core ist geöffnet.
+- Character Editor mit SagaTree Core ist geöffnet.
 - Parameter → Attribute Sub-Tab ist aktiv.
 - Skill-Progression-Regeln und Persistenz (freie Ränge, Hintergrund, Archetyp, Advances) sind unverändert.
 

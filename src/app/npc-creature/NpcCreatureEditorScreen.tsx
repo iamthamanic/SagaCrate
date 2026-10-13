@@ -12,9 +12,9 @@ import {
   type NpcCreatureKind,
 } from '../../domains/npc-creature';
 import type {
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
-  SagaDriveNpcLevel,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
+  SagaTreeNpcLevel,
 } from '../../domains/rules/sagatree/npc-creature-power';
 import {
   NpcCreatureStatblockPanel,
@@ -42,7 +42,7 @@ import {
   type NpcCreatureEditorDraft,
 } from './useNpcCreatureEditor';
 
-const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
+const COMBAT_PROFILES: readonly SagaTreeCombatProfile[] = [
   'noncombat',
   'balanced',
   'tough',
@@ -52,8 +52,8 @@ const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
   'control_support',
 ];
 
-const COMBAT_ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
-const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaDriveNpcLevel);
+const COMBAT_ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
+const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaTreeNpcLevel);
 const DESKTOP_MQ = '(min-width: 1024px)';
 
 export interface NpcCreatureEditorScreenProps {
@@ -243,7 +243,7 @@ function EditorFormFields({
             <Select
               value={String(draft.level)}
               onValueChange={(value) =>
-                updateDraft({ level: Number(value) as SagaDriveNpcLevel })
+                updateDraft({ level: Number(value) as SagaTreeNpcLevel })
               }
             >
               <SelectTrigger id="npc-edit-level" className="h-11 min-h-11" data-npc-edit-level aria-label="Stufe">
@@ -266,7 +266,7 @@ function EditorFormFields({
             <Select
               value={draft.combatProfile}
               onValueChange={(value) =>
-                updateDraft({ combatProfile: value as SagaDriveCombatProfile })
+                updateDraft({ combatProfile: value as SagaTreeCombatProfile })
               }
             >
               <SelectTrigger id="npc-edit-profile" className="h-11 min-h-11" aria-label="Kampfprofil">
@@ -288,7 +288,7 @@ function EditorFormFields({
             <Select
               value={draft.combatRole}
               onValueChange={(value) =>
-                updateDraft({ combatRole: value as SagaDriveCombatRole })
+                updateDraft({ combatRole: value as SagaTreeCombatRole })
               }
             >
               <SelectTrigger id="npc-edit-role" className="h-11 min-h-11" aria-label="Kampfrolle">

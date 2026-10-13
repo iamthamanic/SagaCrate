@@ -7,8 +7,8 @@
 
 import {
   machtgradForLevel,
-  type SagaDriveCombatRole,
-  type SagaDriveMachtgrad,
+  type SagaTreeCombatRole,
+  type SagaTreeMachtgrad,
 } from '../rules/sagatree/npc-creature-power';
 import type { NpcCreatureDefinition } from './definition';
 import type { NpcCreatureCatalogRecord } from './policy';
@@ -44,8 +44,8 @@ export function librarySourceOf(definition: NpcCreatureDefinition): LibraryNpcCr
 export interface NpcCreatureLibraryFilters {
   kind: NpcCreatureLibraryKindFilter;
   categories: readonly NpcCreatureCategory[];
-  machtgrade: readonly SagaDriveMachtgrad[];
-  combatRoles: readonly SagaDriveCombatRole[];
+  machtgrade: readonly SagaTreeMachtgrad[];
+  combatRoles: readonly SagaTreeCombatRole[];
   sheetModes: readonly NpcCreatureSheetMode[];
   sources: readonly LibraryNpcCreatureSource[];
 }

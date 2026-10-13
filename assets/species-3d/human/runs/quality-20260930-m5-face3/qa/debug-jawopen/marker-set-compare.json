@@ -41,12 +41,12 @@
     "browRightInner",
     "browRightOuter"
   ],
-  "sagaDrivePassesAnchorsToFacerig": false,
+  "sagaTreePassesAnchorsToFacerig": false,
   "facerigArgvEvidence": [
     "facerig",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-423/public/assets/avatars/species/human-male-quality-20260921-m5.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-423/public/assets/avatars/species/human-male-quality-20260921-m5.glb",
     "-o",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-423/assets/species-3d/human/runs/quality-20260930-m5-face3/human-male-quality-20260921-m5-face3.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-423/assets/species-3d/human/runs/quality-20260930-m5-face3/human-male-quality-20260921-m5-face3.glb",
     "--json",
     "--max-residual",
     "12"

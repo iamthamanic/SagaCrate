@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Combat & Action Economy Validation (#22, Epic #18)
+ * SagaTree Combat & Action Economy Validation (#22, Epic #18)
  *
  * Deterministic play-through of the C1 mandatory combat scenarios from
- * "docs/sagadrive core validation.md", validating action economy, reaction
+ * "docs/sagatree core validation.md", validating action economy, reaction
  * logic, cover/range modifiers, and maneuver resistances against
- * "docs/sagadrive core rules.md" §6 (derived values), §7 (combat), §9 (conditions).
+ * "docs/sagatree core rules.md" §6 (derived values), §7 (combat), §9 (conditions).
  *
  * Every scenario resolves via the shared core probe model (scripts/lib/core-probe.mjs)
  * so the combat curves stay consistent with the #19 probability matrix.
@@ -549,7 +549,7 @@ function runScenarios() {
 
 function buildReport(rows, findings, bands) {
   const lines = [];
-  lines.push('# SagaDrive Combat & Action Economy Validation Report (#22)');
+  lines.push('# SagaTree Combat & Action Economy Validation Report (#22)');
   lines.push('');
   lines.push('Deterministic play-through of the C1 mandatory scenarios across bands I / III / V.');
   lines.push('');

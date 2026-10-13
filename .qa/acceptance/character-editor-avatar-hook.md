@@ -54,5 +54,5 @@ Avatar-/Appearance-/Meshy-State (~18 useState) aus `CharacterEditor.tsx` in `use
 - Added `src/app/character/edit/useCharacterAvatarEditor.ts` owning Appearance + Avatar-V2 + Meshy/Upload state, surfaces hooks, hydrate/Meshy/import/species-template handlers, portrait capture.
 - `CharacterEditor.tsx` consumes the hook; avatar-cluster `useState` removed from the editor.
 - Avatar + presets regression scripts read CharacterEditor + hook file so moved identifiers still gate.
-- `sagaDriveDirty` lives in the hook; inventory still marks dirty via exposed setter.
+- `sagaTreeDirty` lives in the hook; inventory still marks dirty via exposed setter.
 

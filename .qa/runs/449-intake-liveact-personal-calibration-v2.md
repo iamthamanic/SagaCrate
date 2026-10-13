@@ -100,7 +100,7 @@ Allowed: derived scalars (neutral / range / noise / crosstalk / capability / con
 
 ## 5. Proposed Profile V2 boundary (not implemented)
 
-**Name:** `SagaDriveLiveActCalibrationProfileV2`
+**Name:** `SagaTreeLiveActCalibrationProfileV2`
 
 ```text
 contractVersion

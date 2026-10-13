@@ -1,4 +1,4 @@
-# SagaDrive All Core Skills Report (#28)
+# SagaTree All Core Skills Report (#28)
 
 Deterministische Prüfung aller 18 universellen Core-Fertigkeiten (§5.1–§5.8): Zuständigkeiten, Spezialisierung +2, Fachhandlungen, alternative Attribute, Caps/Training und Pflichtabgrenzungen. Kein RNG.
 
@@ -84,7 +84,7 @@ Hinweis: Issue #28 nennt „Steuern“; Core §5.1 und Domain verwenden **Fortbe
 
 - **18 Core-Skills:** Athletik, Akrobatik, Fingerfertigkeit, Heimlichkeit, Nahkampf, Fernkampf, Aufmerksamkeit, Menschenkenntnis, Überleben, Ermitteln, Wissen, Technik, Medizin, Fortbewegungsmittel, Überzeugen, Täuschen, Einschüchtern, Auftreten
 - **Steuern-Alias:** Steuern → Fortbewegungsmittel (key driving); Core §5.1 unverändert
-- **sagaDriveSkillDefinitions:** 18/18 synced with Core §5.1
+- **sagaTreeSkillDefinitions:** 18/18 synced with Core §5.1
 - **Spec-Leiter & Caps:** 1@1 / 2@3 / 3@5; Caps 3/4/4/5/5; Spec/Fach ohne Training abgelehnt
 - **mechanisches Schloss knacken:** korrekt Fingerfertigkeit; Technik+Geschicklichkeit ersetzt Nachbar nicht dauerhaft
 - **§3.6 Bypass-Schutz:** existierende Fertigkeit → kein reiner Attributscheck; sonst erlaubt

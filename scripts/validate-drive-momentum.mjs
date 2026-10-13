@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Drive & Momentum Validation (#26, Epic #18)
+ * SagaTree Drive & Momentum Validation (#26, Epic #18)
  *
  * Deterministic validation of §2.10 Drive + §2.11 Momentum + §2.12/§16.3
  * deactivation, over the shared probe core:
@@ -249,7 +249,7 @@ function auditDeactivationDependencies() {
 
 function buildReport(matrixRows, variantResults, dependencyAudit, findings) {
   const out = [];
-  out.push('# SagaDrive Drive & Momentum Report (#26)');
+  out.push('# SagaTree Drive & Momentum Report (#26)');
   out.push('');
   out.push('Deterministische Prüfung von §2.10/§2.11/§2.12 + §16.3. Kein RNG.');
   out.push('');

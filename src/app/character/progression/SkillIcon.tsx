@@ -1,5 +1,5 @@
 /**
- * SkillIcon — Lucide icon for each SagaDrive skill option in selects and lists.
+ * SkillIcon — Lucide icon for each SagaTree skill option in selects and lists.
  * Location: src/app/character/progression/SkillIcon.tsx
  */
 import {
@@ -23,9 +23,9 @@ import {
   Zap,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveSkillKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeSkillKey } from '../../../domains/rules/sagatree/character-creation';
 
-const SKILL_ICONS: Record<SagaDriveSkillKey, LucideIcon> = {
+const SKILL_ICONS: Record<SagaTreeSkillKey, LucideIcon> = {
   athletics: Dumbbell,
   acrobatics: Zap,
   sleight: Hand,
@@ -47,7 +47,7 @@ const SKILL_ICONS: Record<SagaDriveSkillKey, LucideIcon> = {
 };
 
 type SkillIconProps = {
-  skillKey: SagaDriveSkillKey;
+  skillKey: SagaTreeSkillKey;
   className?: string;
 };
 

@@ -495,7 +495,7 @@ const jsonOnlyOrch = await runFaceAnchorAgentReviewOrchestration({
   runDir: emptyRun,
   evidenceManifest: { protocolVersion: 'wrong' },
   deterministicInput: allPassDeterministicInput(),
-  anchorsJson: { contractVersion: 'SagaDriveFaceAnchorsV1', anchors: {} },
+  anchorsJson: { contractVersion: 'SagaTreeFaceAnchorsV1', anchors: {} },
   modelSha256: modelSha,
   anchorsSha256: anchorsSha,
   topologyFingerprint: topo,

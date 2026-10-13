@@ -13,7 +13,7 @@ Character abstract resources (0–5) and inventory add affordability decisions p
 ## Hop chain
 1. UI (`InventorySummaryBar` / affordability dialog) mutates `CharacterAbstractResources.current`
 2. `CharacterEditor` save → `UpdateCharacterDto.abstractResources`
-3. `serializeCharacterAbstractResources` → `characters.resources` JSONB (`sagadriveAbstract`)
+3. `serializeCharacterAbstractResources` → `characters.resources` JSONB (`sagatreeAbstract`)
 4. `parseCharacterAbstractResources` → `CharacterVm.abstractResources` → editor hydrate
 5. Catalog add: `resolveAffordability` → optional −1 on purchase → same persist path
 

@@ -11,7 +11,7 @@ import {
   type ProbeMode,
   type ProbeOutcome,
 } from '../../rules/sagatree/probe';
-import { isSagaDriveSkillKey, type SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
+import { isSagaTreeSkillKey, type SagaTreeSkillKey } from '../../rules/sagatree/character-creation';
 
 /** Client-forged result keys — server must strip before resolve. */
 export const FORGED_ROLL_RESULT_KEYS = [
@@ -35,7 +35,7 @@ export const FORGED_ROLL_RESULT_KEYS = [
 export type RollMode = Exclude<ProbeMode, 'safety'>;
 
 export interface SharedRollCommandInput {
-  skill: SagaDriveSkillKey;
+  skill: SagaTreeSkillKey;
   characterPublicId: string | null;
   characterId: string | null;
   mode: RollMode;
@@ -81,7 +81,7 @@ export function parseSharedRollCommandInput(
 ): SharedRollCommandInput {
   const sanitized = stripForgedRollResultKeys(payload);
   const skillRaw = sanitized.skill;
-  if (typeof skillRaw !== 'string' || !isSagaDriveSkillKey(skillRaw)) {
+  if (typeof skillRaw !== 'string' || !isSagaTreeSkillKey(skillRaw)) {
     throw new Error('Ungültige Fertigkeit für Session-Check.');
   }
   const modeRaw = typeof sanitized.mode === 'string' ? sanitized.mode : 'normal';

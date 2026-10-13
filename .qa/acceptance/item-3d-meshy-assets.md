@@ -15,7 +15,7 @@ Workbench optional `model3d` asset: validated GLB upload or explicit Meshy Image
 ## Happy Path
 
 - [ ] Workbench `3D` section supports optional validated GLB upload (≤50 MB) and explicit Meshy Image-to-3D from persisted thumbnail with reload-stable job status and lazy 3D preview.
-- [ ] 3D results materialize into owner-/world-scoped SagaDrive storage; ItemDefinition binds only via logical `model3d` asset key / manifest — never durable provider URLs.
+- [ ] 3D results materialize into owner-/world-scoped SagaTree storage; ItemDefinition binds only via logical `model3d` asset key / manifest — never durable provider URLs.
 - [ ] Cardinality: exactly one Image-to-3D job per confirmed Generate/Retry click (submit lock + disabled while active).
 - [ ] Secrets, MIME/magic/GLB structure validation, remote download host/size/timeout limits, and rate/cost guards are server-side; missing Meshy key → upload-only / `not-configured`.
 - [ ] Replace/Remove/WebGL failure keep prior valid model or empty state; Library/Inventory never mount 3D as thumbnail substitute.

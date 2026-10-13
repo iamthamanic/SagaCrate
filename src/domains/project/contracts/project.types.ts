@@ -15,7 +15,7 @@ export interface ProjectDto {
   name: string;
   description: string | null;
   world_id: string | null;
-  /** SagaDrive world profile binding (inventory/NPC catalogs). */
+  /** SagaTree world profile binding (inventory/NPC catalogs). */
   world_profile_id?: string | null;
   /** Optional saga default LookProfile id (#348). */
   default_look_profile_id?: string | null;

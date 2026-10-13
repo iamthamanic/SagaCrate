@@ -3,7 +3,7 @@
 <!-- seeded for GitHub issue #13 / avatar-order-03 -->
 
 ## Intent
-SagaDrive übernimmt M3-CharacterStudio-Konzepte als kleinen, source-neutralen Core ohne Wallet/NFT/Web3. Pure Domain-Verträge unter `src/domains/character/avatar/**` kapseln Trait-Lifecycle; Three.js-Adapter bleiben in Infrastructure.
+SagaTree übernimmt M3-CharacterStudio-Konzepte als kleinen, source-neutralen Core ohne Wallet/NFT/Web3. Pure Domain-Verträge unter `src/domains/character/avatar/**` kapseln Trait-Lifecycle; Three.js-Adapter bleiben in Infrastructure.
 
 ## Preconditions
 - Issues #2 und #3 sind geschlossen (VRM-Runtime + Race-Assetkatalog vorhanden).
@@ -25,7 +25,7 @@ SagaDrive übernimmt M3-CharacterStudio-Konzepte als kleinen, source-neutralen C
 - [ ] Trait replace während async load → stale result verworfen.
 - [ ] Doppeltes Remove desselben Trait-Ids ist no-op (kein Double-Dispose).
 - [ ] Unbekannte Trait-Gruppe / leeres Manifest → fail-closed mit typisiertem Error-Status.
-- [ ] Upstream-M3-API-Unterschiede: SagaDrive public Domain-Contract bleibt stabil (Adapter-lokal).
+- [ ] Upstream-M3-API-Unterschiede: SagaTree public Domain-Contract bleibt stabil (Adapter-lokal).
 
 ## Scope
 In: Domain-Verträge, Lifecycle-Port, Infrastructure-Adapter + deterministische Checks/Tests, MIT-Attribution.

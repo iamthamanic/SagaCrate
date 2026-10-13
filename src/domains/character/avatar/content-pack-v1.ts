@@ -1,5 +1,5 @@
 /**
- * SagaDrive Avatar Content Pack v1 — curated Fantasy/Sci-Fi creator assets.
+ * SagaTree Avatar Content Pack v1 — curated Fantasy/Sci-Fi creator assets.
  * Location: src/domains/character/avatar/content-pack-v1.ts
  *
  * Metadata only (no React / Three / remote URLs). Trait ids remain logical;
@@ -17,7 +17,7 @@ import { RIG_CONTRACT_VERSION } from './rig-contract';
 import type { AvatarTraitGroupId } from './trait-layers';
 import type { BaseBodyTraitSocket } from './base-body-contract';
 
-export const CONTENT_PACK_VERSION = 'SagaDriveAvatarContentPackV1' as const;
+export const CONTENT_PACK_VERSION = 'SagaTreeAvatarContentPackV1' as const;
 
 export type ContentPackSetting = 'fantasy' | 'sci-fi' | 'neutral';
 
@@ -56,8 +56,8 @@ export interface ContentPackAssetV1 {
 
 const LICENSE_SAGA: ContentPackLicense = {
   spdx: 'CC0-1.0',
-  attribution: 'SagaDrive Content Pack v1',
-  provenance: 'sagadrive-first-party',
+  attribution: 'SagaTree Content Pack v1',
+  provenance: 'sagatree-first-party',
 };
 
 function socketForGroup(groupId: AvatarTraitGroupId): BaseBodyTraitSocket {

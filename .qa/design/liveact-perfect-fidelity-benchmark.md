@@ -34,9 +34,9 @@ RAW → MAPPED → SMOOTHED → CALIBRATED → RETARGETED → APPLIED
 Aligned by `sequence`. Missing stages are recorded as missing — never filled from prior samples.
 
 ## Contracts
-- Fidelity: `SagaDriveLiveActPerfectFidelityV1`
-- Capture: `SagaDriveLiveActFidelityCaptureV1`
-- Report: `SagaDriveLiveActFidelityReportV1`
+- Fidelity: `SagaTreeLiveActPerfectFidelityV1`
+- Capture: `SagaTreeLiveActFidelityCaptureV1`
+- Report: `SagaTreeLiveActFidelityReportV1`
 - Targets: versioned stretch set inside PerfectFidelity contract (not industry standards)
 
 ## Metric statuses
@@ -73,4 +73,4 @@ Existing `liveact-facial-fidelity-v2-check.mjs` remains gaze-exclusivity / chann
 
 ## Non-goals
 Dense solver, iris runtime, hybrid mouth solver, temporal solver, personal cal V2,
-new morphs, retarget tuning, neural models, inflating `SagaDriveLiveActFrameV1` with landmarks.
+new morphs, retarget tuning, neural models, inflating `SagaTreeLiveActFrameV1` with landmarks.

@@ -2,19 +2,19 @@
  * normalize-character — Pure normalization for character domain payloads.
  * Location: src/domains/character/use-cases/normalize-character.ts
  */
-import { getSagaDriveBackgroundTemplate } from '../../rules/sagatree/background-templates';
+import { getSagaTreeBackgroundTemplate } from '../../rules/sagatree/background-templates';
 import {
-  createEmptySagaDriveSkillRanks,
-  isSagaDriveArchetypeKey,
-  isSagaDriveEssenceKey,
-  isSagaDriveSkillKey,
-  isSagaDriveSpeciesTraitKey,
-  sagaDriveSkillDefinitions,
-  type SagaDriveSkillKey,
+  createEmptySagaTreeSkillRanks,
+  isSagaTreeArchetypeKey,
+  isSagaTreeEssenceKey,
+  isSagaTreeSkillKey,
+  isSagaTreeSpeciesTraitKey,
+  sagaTreeSkillDefinitions,
+  type SagaTreeSkillKey,
 } from '../../rules/sagatree/character-creation';
 import {
-  normalizeSagaDriveAttributeAdvances,
-  type SagaDriveAttributeAdvances,
+  normalizeSagaTreeAttributeAdvances,
+  type SagaTreeAttributeAdvances,
 } from '../../rules/sagatree/attribute-progression';
 import {
   backgroundSkillPointsToTrainedSkills,
@@ -24,8 +24,8 @@ import {
   normalizeSpecializationRecords,
 } from '../../rules/sagatree/skill-progression';
 import {
-  getSagaDriveSpeciesTraitOptionCatalog,
-  normalizeSagaDriveSpeciesTraitOptionKey,
+  getSagaTreeSpeciesTraitOptionCatalog,
+  normalizeSagaTreeSpeciesTraitOptionKey,
 } from '../../rules/sagatree/species-trait-options';
 import type {
   CharacterAttributesDto,
@@ -33,13 +33,13 @@ import type {
   ItemDto,
 } from '../domain/character.entity';
 import type {
-  SagaDriveAttributeAdvancesDto,
-  SagaDriveBackgroundDto,
-  SagaDriveProfileDto,
-  SagaDriveSpeciesProfileDto,
-  SagaDriveSpeciesTraitDetailsDto,
-  SagaDriveSpeciesTraitInstanceDto,
-} from '../domain/sagadrive-profile.entity';
+  SagaTreeAttributeAdvancesDto,
+  SagaTreeBackgroundDto,
+  SagaTreeProfileDto,
+  SagaTreeSpeciesProfileDto,
+  SagaTreeSpeciesTraitDetailsDto,
+  SagaTreeSpeciesTraitInstanceDto,
+} from '../domain/sagatree-profile.entity';
 
 const DEFAULT_ATTRIBUTES: CharacterAttributesDto = { strength: 4, dexterity: 3, endurance: 3, mind: 2, perception: 2, charisma: 1 };
 
@@ -62,31 +62,31 @@ export function normalizeAttributes(value?: CharacterAttributeStorageDto): Chara
   };
 }
 
-export function normalizeSkills(value?: Partial<Record<SagaDriveSkillKey, number>>): Record<SagaDriveSkillKey, number> {
-  const result = createEmptySagaDriveSkillRanks();
-  for (const skill of sagaDriveSkillDefinitions) {
+export function normalizeSkills(value?: Partial<Record<SagaTreeSkillKey, number>>): Record<SagaTreeSkillKey, number> {
+  const result = createEmptySagaTreeSkillRanks();
+  for (const skill of sagaTreeSkillDefinitions) {
     const rank = value?.[skill.key];
     if (typeof rank === 'number') result[skill.key] = clampInteger(rank, 0, 5);
   }
   return result;
 }
 
-function createEmptyBackground(): SagaDriveBackgroundDto {
+function createEmptyBackground(): SagaTreeBackgroundDto {
   return { name: '', skillPool: [], trainedSkills: [], milieuAccess: '', contact: '', complication: '', communication: '' };
 }
 
-function createDefaultSagaDriveProfile(): SagaDriveProfileDto {
+function createDefaultSagaTreeProfile(): SagaTreeProfileDto {
   return { speciesTraitInstances: [], backgroundTemplateId: null, background: createEmptyBackground(), drive: 3, momentum: 0 };
 }
 
-function normalizeSagaDriveBackground(value?: Partial<SagaDriveBackgroundDto>): SagaDriveBackgroundDto {
-  const skillPool = Array.isArray(value?.skillPool) ? value.skillPool.filter(isSagaDriveSkillKey).slice(0, 4) : [];
+function normalizeSagaTreeBackground(value?: Partial<SagaTreeBackgroundDto>): SagaTreeBackgroundDto {
+  const skillPool = Array.isArray(value?.skillPool) ? value.skillPool.filter(isSagaTreeSkillKey).slice(0, 4) : [];
   const explicitBackgroundSkillPoints = normalizeBackgroundSkillPoints(value?.backgroundSkillPoints, skillPool);
   const hasExplicitBackgroundPoints = Object.keys(explicitBackgroundSkillPoints).length > 0;
   const trainedSkills = hasExplicitBackgroundPoints
     ? backgroundSkillPointsToTrainedSkills(explicitBackgroundSkillPoints)
     : [];
-  const specialization = value?.specialization && isSagaDriveSkillKey(value.specialization.skill) && typeof value.specialization.name === 'string'
+  const specialization = value?.specialization && isSagaTreeSkillKey(value.specialization.skill) && typeof value.specialization.name === 'string'
     ? {
         skill: value.specialization.skill,
         name: value.specialization.name.trim(),
@@ -113,14 +113,14 @@ function normalizeSagaDriveBackground(value?: Partial<SagaDriveBackgroundDto>): 
 
 export function normalizeBackgroundTemplateId(value: unknown): string | null {
   if (typeof value !== 'string') return null;
-  return getSagaDriveBackgroundTemplate(value) ? value : null;
+  return getSagaTreeBackgroundTemplate(value) ? value : null;
 }
 
-function normalizeSpeciesTraitDetails(value: unknown): SagaDriveSpeciesTraitDetailsDto {
+function normalizeSpeciesTraitDetails(value: unknown): SagaTreeSpeciesTraitDetailsDto {
   if (!isRecord(value)) return {};
-  const result: SagaDriveSpeciesTraitDetailsDto = {};
+  const result: SagaTreeSpeciesTraitDetailsDto = {};
   for (const [key, detail] of Object.entries(value)) {
-    if (!isSagaDriveSpeciesTraitKey(key) || typeof detail !== 'string') continue;
+    if (!isSagaTreeSpeciesTraitKey(key) || typeof detail !== 'string') continue;
     const normalized = detail.trim();
     if (normalized) result[key] = normalized;
   }
@@ -130,15 +130,15 @@ function normalizeSpeciesTraitDetails(value: unknown): SagaDriveSpeciesTraitDeta
 export function normalizeLegacySpeciesTraitInstances(
   traits: unknown,
   details: unknown,
-): SagaDriveSpeciesTraitInstanceDto[] {
+): SagaTreeSpeciesTraitInstanceDto[] {
   if (!Array.isArray(traits)) return [];
   const normalizedDetails = normalizeSpeciesTraitDetails(details);
-  const result: SagaDriveSpeciesTraitInstanceDto[] = [];
+  const result: SagaTreeSpeciesTraitInstanceDto[] = [];
 
   for (const trait of traits) {
-    if (!isSagaDriveSpeciesTraitKey(trait)) continue;
+    if (!isSagaTreeSpeciesTraitKey(trait)) continue;
     const detail = normalizedDetails[trait];
-    const option = detail ? normalizeSagaDriveSpeciesTraitOptionKey(trait, detail) : undefined;
+    const option = detail ? normalizeSagaTreeSpeciesTraitOptionKey(trait, detail) : undefined;
     result.push({
       trait,
       ...(option ? { option } : detail ? { legacyDetail: detail } : {}),
@@ -154,15 +154,15 @@ export function normalizeSpeciesTraitInstances(
   value: unknown,
   legacyTraits: unknown,
   legacyDetails: unknown,
-): SagaDriveSpeciesTraitInstanceDto[] {
-  const candidates: SagaDriveSpeciesTraitInstanceDto[] = [];
+): SagaTreeSpeciesTraitInstanceDto[] {
+  const candidates: SagaTreeSpeciesTraitInstanceDto[] = [];
 
   if (Array.isArray(value)) {
     for (const entry of value) {
-      if (!isRecord(entry) || typeof entry.trait !== 'string' || !isSagaDriveSpeciesTraitKey(entry.trait)) continue;
+      if (!isRecord(entry) || typeof entry.trait !== 'string' || !isSagaTreeSpeciesTraitKey(entry.trait)) continue;
       const trait = entry.trait;
       const rawOption = typeof entry.option === 'string' ? entry.option : '';
-      const option = rawOption ? normalizeSagaDriveSpeciesTraitOptionKey(trait, rawOption) : undefined;
+      const option = rawOption ? normalizeSagaTreeSpeciesTraitOptionKey(trait, rawOption) : undefined;
       const legacyDetail = typeof entry.legacyDetail === 'string' ? entry.legacyDetail.trim() : '';
       candidates.push({
         trait,
@@ -175,9 +175,9 @@ export function normalizeSpeciesTraitInstances(
     candidates.push(...normalizeLegacySpeciesTraitInstances(legacyTraits, legacyDetails));
   }
 
-  const result: SagaDriveSpeciesTraitInstanceDto[] = [];
+  const result: SagaTreeSpeciesTraitInstanceDto[] = [];
   for (const candidate of candidates) {
-    const repeatable = Boolean(getSagaDriveSpeciesTraitOptionCatalog(candidate.trait));
+    const repeatable = Boolean(getSagaTreeSpeciesTraitOptionCatalog(candidate.trait));
     if (!repeatable && result.some((entry) => entry.trait === candidate.trait)) continue;
     if (candidate.option && result.some((entry) => entry.trait === candidate.trait && entry.option === candidate.option)) continue;
     if (!candidate.option && !candidate.legacyDetail && repeatable && result.some((entry) => entry.trait === candidate.trait && !entry.option && !entry.legacyDetail)) continue;
@@ -186,7 +186,7 @@ export function normalizeSpeciesTraitInstances(
   return result;
 }
 
-export function normalizeSpeciesProfile(value: unknown): SagaDriveSpeciesProfileDto | undefined {
+export function normalizeSpeciesProfile(value: unknown): SagaTreeSpeciesProfileDto | undefined {
   if (!isRecord(value)) return undefined;
   const name = typeof value.name === 'string' ? value.name.trim() : '';
   if (!name) return undefined;
@@ -213,24 +213,24 @@ function normalizePresetReleaseMode(value: unknown): 'manual' | 'auto' | undefin
   return undefined;
 }
 
-export function normalizeSagaDriveProfile(value?: Partial<SagaDriveProfileDto> | null): SagaDriveProfileDto {
-  if (!value) return createDefaultSagaDriveProfile();
+export function normalizeSagaTreeProfile(value?: Partial<SagaTreeProfileDto> | null): SagaTreeProfileDto {
+  if (!value) return createDefaultSagaTreeProfile();
   const baseAttributes = normalizeOptionalBaseAttributes(value.baseAttributes);
-  const attributeAdvances = normalizeSagaDriveAttributeAdvances(value.attributeAdvances) as SagaDriveAttributeAdvancesDto;
+  const attributeAdvances = normalizeSagaTreeAttributeAdvances(value.attributeAdvances) as SagaTreeAttributeAdvancesDto;
   const presetReleaseMode = normalizePresetReleaseMode(value.presetReleaseMode);
-  const background = normalizeSagaDriveBackground(value.background);
+  const background = normalizeSagaTreeBackground(value.background);
   const freeSkillRanks = normalizeFreeSkillRanks(value.freeSkillRanks);
   const skillAdvances = normalizeSkillAdvances(value.skillAdvances);
   const specializations = normalizeSpecializationRecords(value.specializations);
-  const hasFreeSkillRanks = sagaDriveSkillDefinitions.some((skill) => (freeSkillRanks[skill.key] ?? 0) > 0);
+  const hasFreeSkillRanks = sagaTreeSkillDefinitions.some((skill) => (freeSkillRanks[skill.key] ?? 0) > 0);
   return {
-    archetype: value.archetype && isSagaDriveArchetypeKey(value.archetype) ? value.archetype : undefined,
-    essence: value.essence && isSagaDriveEssenceKey(value.essence) ? value.essence : undefined,
+    archetype: value.archetype && isSagaTreeArchetypeKey(value.archetype) ? value.archetype : undefined,
+    essence: value.essence && isSagaTreeEssenceKey(value.essence) ? value.essence : undefined,
     speciesTraitInstances: normalizeSpeciesTraitInstances(value.speciesTraitInstances, value.speciesTraits, value.speciesTraitDetails),
     speciesProfile: normalizeSpeciesProfile(value.speciesProfile),
     backgroundTemplateId: normalizeBackgroundTemplateId(value.backgroundTemplateId),
     background,
-    archetypeTrainingSkill: value.archetypeTrainingSkill && isSagaDriveSkillKey(value.archetypeTrainingSkill) ? value.archetypeTrainingSkill : undefined,
+    archetypeTrainingSkill: value.archetypeTrainingSkill && isSagaTreeSkillKey(value.archetypeTrainingSkill) ? value.archetypeTrainingSkill : undefined,
     ...(hasFreeSkillRanks ? { freeSkillRanks } : {}),
     ...(skillAdvances.length > 0 ? { skillAdvances } : {}),
     ...(specializations.length > 0 ? { specializations } : {}),
@@ -266,6 +266,6 @@ export function normalizeTextBlocks(value: unknown): string[] {
   return [];
 }
 
-export { isValidSagaDriveAttributeBuild } from '../../rules/sagatree/attribute-progression';
-export { normalizeSagaDriveAttributeAdvances };
-export type { SagaDriveAttributeAdvances };
+export { isValidSagaTreeAttributeBuild } from '../../rules/sagatree/attribute-progression';
+export { normalizeSagaTreeAttributeAdvances };
+export type { SagaTreeAttributeAdvances };

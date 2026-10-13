@@ -67,7 +67,7 @@ import {
 } from '../../../shared/ui/select';
 import { Textarea } from '../../../shared/ui/textarea';
 
-const STORAGE_KEY = 'sagadrive:meshy-avatar-job';
+const STORAGE_KEY = 'sagatree:meshy-avatar-job';
 
 /** Avatar text/image-to-3d backends wired today — others may appear once implemented. */
 const AVATAR_3D_GENERATION_PROVIDERS = new Set<string>(AVATAR_3D_GENERATION_PROVIDER_IDS);

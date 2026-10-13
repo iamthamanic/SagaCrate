@@ -3,15 +3,15 @@
  * Location: src/domains/rules/sagatree/npc-creature-power/benchmarks.ts
  */
 import { machtgradForLevel } from './machtgrad';
-import { SAGADRIVE_NPC_DAMAGE_STEPS } from './damage-steps';
+import { SAGATREE_NPC_DAMAGE_STEPS } from './damage-steps';
 import type {
-  SagaDriveLevelBenchmark,
-  SagaDriveMachtgrad,
-  SagaDriveNpcLevel,
+  SagaTreeLevelBenchmark,
+  SagaTreeMachtgrad,
+  SagaTreeNpcLevel,
 } from './types';
 
 const ATTRIBUTE_DEFAULTS: Record<
-  SagaDriveMachtgrad,
+  SagaTreeMachtgrad,
   readonly [number, number, number, number, number, number]
 > = {
   gering: [3, 2, 2, 1, 1, 0],
@@ -21,7 +21,7 @@ const ATTRIBUTE_DEFAULTS: Record<
   legendaer: [5, 4, 3, 2, 1, 0],
 };
 
-function primarySkillRank(level: SagaDriveNpcLevel): number {
+function primarySkillRank(level: SagaTreeNpcLevel): number {
   // Spec table: pairs of levels share ranks with stepped growth.
   if (level <= 2) return 2;
   if (level <= 4) return 3;
@@ -35,7 +35,7 @@ function primarySkillRank(level: SagaDriveNpcLevel): number {
   return 5;
 }
 
-function resistanceSlots(level: SagaDriveNpcLevel): { high: number; normal: number; low: number } {
+function resistanceSlots(level: SagaTreeNpcLevel): { high: number; normal: number; low: number } {
   if (level <= 4) return { high: 14, normal: 13, low: 11 };
   if (level <= 8) return { high: 15, normal: 14, low: 12 };
   if (level <= 12) return { high: 17, normal: 16, low: 13 };
@@ -43,7 +43,7 @@ function resistanceSlots(level: SagaDriveNpcLevel): { high: number; normal: numb
   return { high: 20, normal: 19, low: 15 };
 }
 
-function baseDamageIndex(level: SagaDriveNpcLevel): number {
+function baseDamageIndex(level: SagaTreeNpcLevel): number {
   if (level <= 4) return 1; // d6+1
   if (level <= 8) return 2; // d8+1
   if (level <= 12) return 3; // d8+2
@@ -51,7 +51,7 @@ function baseDamageIndex(level: SagaDriveNpcLevel): number {
   return 5; // d10+3
 }
 
-function buildLevel(level: SagaDriveNpcLevel): SagaDriveLevelBenchmark {
+function buildLevel(level: SagaTreeNpcLevel): SagaTreeLevelBenchmark {
   const machtgrad = machtgradForLevel(level);
   const experienceBonus = 1 + Math.floor((level - 1) / 4);
   const primaryModifier = 6 + Math.floor((level - 1) / 2);
@@ -66,17 +66,17 @@ function buildLevel(level: SagaDriveNpcLevel): SagaDriveLevelBenchmark {
     defense,
     resistances: resistanceSlots(level),
     health,
-    baseDamage: SAGADRIVE_NPC_DAMAGE_STEPS[baseDamageIndex(level)]!,
+    baseDamage: SAGATREE_NPC_DAMAGE_STEPS[baseDamageIndex(level)]!,
     attributeDefaults: ATTRIBUTE_DEFAULTS[machtgrad],
   };
 }
 
-export const SAGADRIVE_NPC_LEVEL_BENCHMARKS: readonly SagaDriveLevelBenchmark[] = Object.freeze(
-  Array.from({ length: 20 }, (_, index) => buildLevel((index + 1) as SagaDriveNpcLevel)),
+export const SAGATREE_NPC_LEVEL_BENCHMARKS: readonly SagaTreeLevelBenchmark[] = Object.freeze(
+  Array.from({ length: 20 }, (_, index) => buildLevel((index + 1) as SagaTreeNpcLevel)),
 );
 
-export function levelBenchmark(level: number): SagaDriveLevelBenchmark {
-  const row = SAGADRIVE_NPC_LEVEL_BENCHMARKS[level - 1];
+export function levelBenchmark(level: number): SagaTreeLevelBenchmark {
+  const row = SAGATREE_NPC_LEVEL_BENCHMARKS[level - 1];
   if (!row) {
     throw new Error(`Kein Benchmark für Stufe ${String(level)}`);
   }
@@ -84,7 +84,7 @@ export function levelBenchmark(level: number): SagaDriveLevelBenchmark {
 }
 
 /** Signature ability count guideline by Machtgrad (Standard baseline). */
-export function signatureAbilityBudgetForMachtgrad(machtgrad: SagaDriveMachtgrad): number {
+export function signatureAbilityBudgetForMachtgrad(machtgrad: SagaTreeMachtgrad): number {
   switch (machtgrad) {
     case 'gering':
       return 1;

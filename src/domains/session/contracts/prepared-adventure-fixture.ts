@@ -21,7 +21,7 @@ export const PREPARED_ADVENTURE_HEALING_POTION_ID = 'builtin.fantasy.healing-pot
  * Voice/Video stays outside the app for the player test — Discord or Google Meet.
  */
 export const VOICE_VIDEO_EXTERNAL_NOTE =
-  'Voice und Video laufen extern über Discord oder Google Meet — SagaDrive stellt in dieser Player-Test-Stufe kein In-App-A/V bereit.' as const;
+  'Voice und Video laufen extern über Discord oder Google Meet — SagaTree stellt in dieser Player-Test-Stufe kein In-App-A/V bereit.' as const;
 
 export type PreparedAdventureBeatKind =
   | 'exploration'

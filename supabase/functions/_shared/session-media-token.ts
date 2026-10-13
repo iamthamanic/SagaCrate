@@ -16,7 +16,7 @@ export type EdgeMediaGrant = {
 };
 
 export function deriveMediaRoomId(sessionId: string): string {
-  return `sagadrive-session-${sessionId.trim()}`;
+  return `sagatree-session-${sessionId.trim()}`;
 }
 
 export function resolveEdgeMediaGrant(input: {

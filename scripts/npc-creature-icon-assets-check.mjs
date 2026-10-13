@@ -103,7 +103,7 @@ section('5 · all public npc-creature SVGs sanitize cleanly');
       // Hand-authored @svg-icon-create templates are forbidden for NPC icons —
       // they break style parity with Cursor PNG → VTracer pack art.
       check(
-        !/SagaDrive (NPC\/creature|item) icon:/i.test(raw),
+        !/SagaTree (NPC\/creature|item) icon:/i.test(raw),
         `${file}: hand-authored SVG comment — use Cursor PNG → VTracer`,
       );
       check(

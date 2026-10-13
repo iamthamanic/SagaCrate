@@ -2,7 +2,7 @@
 
 ## Contract / Solver
 
-- [x] `SagaDriveLiveActHybridFaceV1` with semantic controls + confidence + source
+- [x] `SagaTreeLiveActHybridFaceV1` with semantic controls + confidence + source
 - [x] No raw landmarks / mesh indices in contract
 - [x] Explicit fusion rules for smile / pucker / funnel / press / lips / cheek / nose / jaw
 - [x] Fusion decision order: disagreement before under/over correction

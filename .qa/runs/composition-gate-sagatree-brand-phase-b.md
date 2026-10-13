@@ -5,7 +5,7 @@
 - Verdict: CLEAR
 
 ## Event
-User-facing SagaTree Core brand + README pitch/carousel; lore prompt branding. Internal key `sagadrive-core` unchanged.
+User-facing SagaTree Core brand + README pitch/carousel; lore prompt branding. Internal key `sagatree-core` unchanged.
 
 ## Hop chain
 character-creation label → CharacterEditor UI → Edge character-lore-prompt → README/e2e/phase-b contract (+ screenshot carousel docs).
@@ -14,7 +14,7 @@ character-creation label → CharacterEditor UI → Edge character-lore-prompt �
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
 | N-actors | GM/player see SagaTree Core; lore framed as SagaTree | label + prompt | pass |
-| Invalid/missing | SagaDrive Core label/README section absent | phase-b contract | pass |
+| Invalid/missing | SagaTree Core label/README section absent | phase-b contract | pass |
 | Two consumers / crash | test-gate + e2e assert SagaTree Core | same label | pass |
 
 ## Flags

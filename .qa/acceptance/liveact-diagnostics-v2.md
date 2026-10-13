@@ -36,7 +36,7 @@ Out: Overlay-UI, Retarget-Tuning, Assets, Anchors, VRM-Packager
 - [ ] LiveAct Frame-Drive Verhalten unverändert (nur Instrumentation)
 
 ## Implementation Notes
-- Domain: `liveact-diagnostics-v2.ts` (SagaDriveLiveActDiagnosticsV2)
+- Domain: `liveact-diagnostics-v2.ts` (SagaTreeLiveActDiagnosticsV2)
 - Engine instruments RAW/MAPPED/SMOOTHED/CALIBRATED/RETARGETED/APPLIED in `processSample`
 - Output port `getAppliedDiagnostics()` on GLB + VRM adapters
 - Hook: `diagnosticsV2Ref` via `subscribeDiagnosticsV2`

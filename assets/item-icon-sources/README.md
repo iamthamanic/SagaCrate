@@ -1,4 +1,4 @@
-# SagaDrive item-icon sources (PNG)
+# SagaTree item-icon sources (PNG)
 
 Intermediate rasters from Cursor image generation.
 

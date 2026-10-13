@@ -1,37 +1,37 @@
 /**
- * SagaDrive base-body catalog — allowlisted morphable humanoid family assets (#255).
+ * SagaTree base-body catalog — allowlisted morphable humanoid family assets (#255).
  * Location: src/infrastructure/character/avatar/base-body-catalog.ts
  *
  * Does not load meshes; resolves allowlisted paths and declared morph targets only.
  * Canonical families: standard / compact / heavy. Legacy path aliases to standard.
  */
 import {
-  createSagaDriveBaseBodyManifestV1,
+  createSagaTreeBaseBodyManifestV1,
   listRequiredMorphTargetNames,
   resolveBaseBodyMorphCapabilities,
   type BaseBodyMorphCapabilityReport,
-  type SagaDriveBaseBodyManifestV1,
+  type SagaTreeBaseBodyManifestV1,
 } from '../../../domains/character/avatar/base-body-contract';
 import {
   allowlistedCanonicalBodyPaths,
   createCanonicalBodyFamilyManifest,
   resolveCanonicalBodyFamilyId,
-  toSagaDriveBaseBodyManifest,
+  toSagaTreeBaseBodyManifest,
   type CanonicalBodyFamilyId,
 } from '../../../domains/character/avatar/canonical-body-families-v1';
 import { normalizeSafeUrl } from '../../../domains/character/use-cases/avatar-presets';
 
 const ALLOWLISTED_BASE_BODY_PATHS = new Set(allowlistedCanonicalBodyPaths());
 
-export function getSagaDriveBaseBodyManifest(
+export function getSagaTreeBaseBodyManifest(
   familyId: CanonicalBodyFamilyId = 'standard',
-): SagaDriveBaseBodyManifestV1 {
-  return toSagaDriveBaseBodyManifest(createCanonicalBodyFamilyManifest(familyId));
+): SagaTreeBaseBodyManifestV1 {
+  return toSagaTreeBaseBodyManifest(createCanonicalBodyFamilyManifest(familyId));
 }
 
-/** @deprecated Prefer getSagaDriveBaseBodyManifest('standard') — kept for call sites. */
-export function getLegacySagaDriveBaseBodyManifest(): SagaDriveBaseBodyManifestV1 {
-  return createSagaDriveBaseBodyManifestV1();
+/** @deprecated Prefer getSagaTreeBaseBodyManifest('standard') — kept for call sites. */
+export function getLegacySagaTreeBaseBodyManifest(): SagaTreeBaseBodyManifestV1 {
+  return createSagaTreeBaseBodyManifestV1();
 }
 
 export function isAllowlistedBaseBodyPath(path: string): boolean {
@@ -54,7 +54,7 @@ export function resolveBaseBodyModelUrl(
     | undefined,
   familyId: CanonicalBodyFamilyId = 'standard',
 ): string | undefined {
-  const manifest = getSagaDriveBaseBodyManifest(familyId);
+  const manifest = getSagaTreeBaseBodyManifest(familyId);
   if (!isAllowlistedBaseBodyPath(manifest.selfHostedPath)) return undefined;
   if (!assetBaseUrl) return undefined;
 
@@ -77,7 +77,7 @@ export function evaluateBaseBodyMorphReadiness(
   familyId: CanonicalBodyFamilyId = 'standard',
 ): BaseBodyMorphCapabilityReport {
   return resolveBaseBodyMorphCapabilities({
-    manifest: getSagaDriveBaseBodyManifest(familyId),
+    manifest: getSagaTreeBaseBodyManifest(familyId),
     presentMorphTargetNames,
   });
 }
@@ -86,5 +86,5 @@ export function evaluateBaseBodyMorphReadiness(
 export function simulateCompleteMorphTargetEvidence(
   familyId: CanonicalBodyFamilyId = 'standard',
 ): readonly string[] {
-  return listRequiredMorphTargetNames(getSagaDriveBaseBodyManifest(familyId).morphTargets);
+  return listRequiredMorphTargetNames(getSagaTreeBaseBodyManifest(familyId).morphTargets);
 }

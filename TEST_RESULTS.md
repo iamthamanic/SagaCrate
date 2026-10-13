@@ -1,4 +1,4 @@
-# SagaDrive E2E Test Results
+# SagaTree E2E Test Results
 
 **Test Date:** 05.04.2026 21:47
 **Status:** ✅ ALL TESTS PASSED
@@ -82,13 +82,13 @@
 
 1. **Start Services:**
    ```bash
-   cd /data/.openclaw/workspace/sagadrive-selfhost
+   cd /data/.openclaw/workspace/sagatree-selfhost
    ./setup.sh
    ```
 
 2. **Load LLM Model:**
    ```bash
-   docker exec -it sagadrive-ollama ollama pull llama3.2
+   docker exec -it sagatree-ollama ollama pull llama3.2
    ```
 
 3. **Test Endpoints:**

@@ -5,12 +5,12 @@
 ## Intent
 Der Hintergrund-Flow im Character Editor soll dieselben vier Hintergrund-Fertigkeiten nicht mehrfach als Pool, Training und Spezialisierung darstellen. Stattdessen werden die vier Fertigkeiten als ein zusammenhängendes Node-System gezeigt, in dem Auswahl, `Hintergrund +1`, Standardattribut und Spezialisierung direkt am jeweiligen Skill sichtbar werden.
 
-`Essenz` bleibt als Charakteridentität getrennt und erhält keine mechanische Verbindung zu Attributen oder Fertigkeiten, weil SagaDrive Core Essenzen keine automatischen Attributs- oder Fertigkeitsboni geben.
+`Essenz` bleibt als Charakteridentität getrennt und erhält keine mechanische Verbindung zu Attributen oder Fertigkeiten, weil SagaTree Core Essenzen keine automatischen Attributs- oder Fertigkeitsboni geben.
 
 Roadmap: nicht vorhanden — Scope aus aktuellem Chat, Core Rules und bestehendem Background-Kompetenzsystem.
 
 ## Preconditions
-- Character Editor läuft mit SagaDrive Core.
+- Character Editor läuft mit SagaTree Core.
 - Ein Background-Template oder der Custom-Hintergrund kann ausgewählt werden.
 - Ein Hintergrund besteht aus vier unterschiedlichen Pool-Fertigkeiten, zwei Trainings und einer Spezialisierung auf einer trainierten Fertigkeit.
 - Bestehende Persistenz und Regeln bleiben unverändert.

@@ -4,7 +4,7 @@
 
 **Single root-cause class:**
 
-> FaceRig never consumes reviewed SagaDrive anchors; `MARKER_SIM=2` regenerates deterministic ICT-template morphs (byte-identical to face1) whose `jawOpen` deltas do **not** open the mouth at reviewed lip/chin anchors.
+> FaceRig never consumes reviewed SagaTree anchors; `MARKER_SIM=2` regenerates deterministic ICT-template morphs (byte-identical to face1) whose `jawOpen` deltas do **not** open the mouth at reviewed lip/chin anchors.
 
 **Publish:** forbidden. **#424:** not started. **GT:** unchanged.
 

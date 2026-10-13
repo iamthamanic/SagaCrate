@@ -4,7 +4,7 @@
 Remove `src/modules/rulesets/**` entirely; consumers use domains/infrastructure/app APIs only.
 
 ## Happy Path
-- [x] Pure SagaDrive rule barrels deleted; imports point at `domains/rules/sagadrive/*`
+- [x] Pure SagaTree rule barrels deleted; imports point at `domains/rules/sagatree/*`
 - [x] Catalog types in `domains/rules/ruleset-catalog`
 - [x] Persistence in `infrastructure/rulesets/ruleset-service.ts`
 - [x] Hooks + RulesetsTest under `app/rulesets/**`

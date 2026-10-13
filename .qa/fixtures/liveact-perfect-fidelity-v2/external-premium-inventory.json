@@ -1,6 +1,6 @@
 {
   "id": "external-premium-fixture",
-  "contractVersion": "SagaDrivePerformanceFaceV2",
+  "contractVersion": "SagaTreePerformanceFaceV2",
   "presentTargetNames": [
     "eyeBlinkLeft",
     "eyeBlinkRight",

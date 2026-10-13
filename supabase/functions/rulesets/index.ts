@@ -118,7 +118,7 @@ interface Item {
 const rulesets = new Map<string, Ruleset>()
 
 // ===========================================
-// D&D 5e SRD (SagaDrive Primary)
+// D&D 5e SRD (SagaTree Primary)
 // ===========================================
 
 const dnd5eSRD: Ruleset = {
@@ -316,7 +316,7 @@ const dnd5eSRD: Ruleset = {
   isCustom: false,
 }
 
-// Pathfinder 2e (SagaDrive Primary)
+// Pathfinder 2e (SagaTree Primary)
 const pathfinder2e: Ruleset = {
   id: 'pf2e-core',
   name: 'Pathfinder 2nd Edition',

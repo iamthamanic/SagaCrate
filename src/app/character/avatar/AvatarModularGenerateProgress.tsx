@@ -1,5 +1,5 @@
 /**
- * AvatarModularGenerateProgress — SagaDrive stage list for Editierbar generate (#269).
+ * AvatarModularGenerateProgress — SagaTree stage list for Editierbar generate (#269).
  * Location: src/app/character/avatar/AvatarModularGenerateProgress.tsx
  *
  * Shows job-graph steps without provider internals.

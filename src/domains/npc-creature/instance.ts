@@ -17,9 +17,9 @@ import type {
   NpcCreatureSheetMode,
 } from './taxonomy';
 import type {
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
-  SagaDriveNpcLevel,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
+  SagaTreeNpcLevel,
 } from '../rules/sagatree/npc-creature-power';
 
 /** Generic encounter fodder vs unique campaign figure. */
@@ -34,9 +34,9 @@ export interface NpcCreatureDefinitionSnapshot {
   kind: NpcCreatureKind;
   category: NpcCreatureCategory;
   sheetMode: NpcCreatureSheetMode;
-  level: SagaDriveNpcLevel;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole: SagaDriveCombatRole;
+  level: SagaTreeNpcLevel;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole: SagaTreeCombatRole;
   tags: readonly string[];
   iconKey?: string;
   portraitAssetKey?: string;

@@ -168,7 +168,7 @@ check(
 
 // ── C · Docs contain key phrases (13 points) ────────────────────────────────
 section('C · Docs: 13 Inventory-v2 points');
-const coreRules = read('docs/sagadrive core rules.md');
+const coreRules = read('docs/sagatree core rules.md');
 const readme = read('README.md');
 const inventoryDoc = existsSync(join(root, 'docs/inventory-v2.md'))
   ? read('docs/inventory-v2.md')

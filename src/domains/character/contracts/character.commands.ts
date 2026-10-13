@@ -8,9 +8,9 @@ import type {
   CharacterAttributesDto,
   CharacterRulesetKey,
   ItemDto,
-  SagaDriveSkillKey,
+  SagaTreeSkillKey,
 } from '../domain/character.entity';
-import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
+import type { SagaTreeProfileDto } from '../domain/sagatree-profile.entity';
 import type { InventoryState } from '../inventory-v2';
 import type { CharacterAbstractResources } from '../../rules/sagatree/items';
 import type { CharacterSheetStatus } from './character.views';
@@ -33,10 +33,8 @@ export interface CreateCharacterDto {
   flaws?: string[];
   appearance?: Partial<CharacterAppearanceDto>;
   attributes?: Partial<CharacterAttributesDto>;
-  skills?: Partial<Record<SagaDriveSkillKey, number>>;
-  sagatree_profile?: SagaDriveProfileDto;
-  /** @deprecated Prefer sagatree_profile — still accepted during rename transition. */
-  sagadrive_profile?: SagaDriveProfileDto;
+  skills?: Partial<Record<SagaTreeSkillKey, number>>;
+  sagatree_profile?: SagaTreeProfileDto;
   abilities?: AbilityDto[];
   inventory?: ItemDto[];
   inventory_v2?: InventoryState;
@@ -62,10 +60,8 @@ export interface UpdateCharacterDto {
   flaws?: string[];
   appearance?: Partial<CharacterAppearanceDto>;
   attributes?: Partial<CharacterAttributesDto>;
-  skills?: Partial<Record<SagaDriveSkillKey, number>>;
-  sagatree_profile?: SagaDriveProfileDto;
-  /** @deprecated Prefer sagatree_profile — still accepted during rename transition. */
-  sagadrive_profile?: SagaDriveProfileDto;
+  skills?: Partial<Record<SagaTreeSkillKey, number>>;
+  sagatree_profile?: SagaTreeProfileDto;
   abilities?: AbilityDto[];
   inventory?: ItemDto[];
   /** Writing inventory_v2 always sets schema version 2; the marker is not caller-controlled. */

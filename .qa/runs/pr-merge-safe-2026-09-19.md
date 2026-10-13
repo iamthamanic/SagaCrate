@@ -4,7 +4,7 @@
 review (no merge)
 
 ## PR
-- URL: https://github.com/iamthamanic/sagadrive/pull/246
+- URL: https://github.com/iamthamanic/sagatree/pull/246
 - Head: `feat/provider-agnostic-avatar-3d`
 - Base: `main`
 - Head SHA (at report write): see latest `git rev-parse` / gh pr view

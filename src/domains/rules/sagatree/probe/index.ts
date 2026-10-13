@@ -1,5 +1,5 @@
 /**
- * probe — SagaDrive core check resolution (§2.2 / §2.5 / §2.10) for the rules kernel.
+ * probe — SagaTree core check resolution (§2.2 / §2.5 / §2.10) for the rules kernel.
  * Location: src/domains/rules/sagatree/probe/index.ts
  * Hides: d20 mode folding, critical margins, Drive keep-better comparison.
  * Never imports React or Supabase.

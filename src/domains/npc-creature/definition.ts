@@ -7,9 +7,9 @@
  */
 
 import type {
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
-  SagaDriveNpcLevel,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
+  SagaTreeNpcLevel,
 } from '../rules/sagatree/npc-creature-power';
 import type {
   NpcCreatureCategory,
@@ -31,9 +31,9 @@ export interface NpcCreatureDefinition {
   kind: NpcCreatureKind;
   category: NpcCreatureCategory;
   sheetMode: NpcCreatureSheetMode;
-  level: SagaDriveNpcLevel;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole: SagaDriveCombatRole;
+  level: SagaTreeNpcLevel;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole: SagaTreeCombatRole;
   /** Free-form tags; empty/omitted is fine. */
   tags: readonly string[];
   /**

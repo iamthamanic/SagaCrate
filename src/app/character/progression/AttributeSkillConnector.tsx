@@ -4,13 +4,13 @@
  * Location: src/app/character/progression/AttributeSkillConnector.tsx
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { SagaDriveSkillKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeSkillKey } from '../../../domains/rules/sagatree/character-creation';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 
 interface AttributeSkillConnectorProps {
-  skills: readonly SagaDriveSkillKey[];
-  rankedSkills: readonly SagaDriveSkillKey[];
-  activeSkill: SagaDriveSkillKey | null;
+  skills: readonly SagaTreeSkillKey[];
+  rankedSkills: readonly SagaTreeSkillKey[];
+  activeSkill: SagaTreeSkillKey | null;
   scrollPhase: CarouselScrollPhase;
   onStandstill: () => void;
 }

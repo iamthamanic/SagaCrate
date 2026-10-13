@@ -1,15 +1,15 @@
 import { Plus, X } from 'lucide-react';
 import { type ReactNode } from 'react';
 import {
-  SAGA_DRIVE_SPECIES_TRAIT_BUDGET,
+  SAGA_TREE_SPECIES_TRAIT_BUDGET,
   getCharacterCreationOptionLabel,
-  getSagaDriveSpeciesTraitCost,
-  getSagaDriveSpeciesTraitsForRace,
-  sagaDriveRaceOptions,
-  type SagaDriveSpeciesTraitKey,
+  getSagaTreeSpeciesTraitCost,
+  getSagaTreeSpeciesTraitsForRace,
+  sagaTreeRaceOptions,
+  type SagaTreeSpeciesTraitKey,
 } from '../../../domains/rules/sagatree/character-creation';
-import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
-import type { SagaDriveSpeciesTraitInstanceDto } from '../../../domains/character';
+import { getSagaTreeSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
+import type { SagaTreeSpeciesTraitInstanceDto } from '../../../domains/character';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import { Input } from '../../../shared/ui/input';
@@ -39,7 +39,7 @@ function getWeitereAuswahlBlockedReason(args: {
   }
   if (args.budgetBlocked) {
     return [
-      `Weitere Auswahl braucht ${args.traitCost} ${args.traitCost === 1 ? 'Punkt' : 'Punkte'}, aber das Startbudget ist mit ${args.usedPoints} / ${SAGA_DRIVE_SPECIES_TRAIT_BUDGET} bereits ausgeschöpft.`,
+      `Weitere Auswahl braucht ${args.traitCost} ${args.traitCost === 1 ? 'Punkt' : 'Punkte'}, aber das Startbudget ist mit ${args.usedPoints} / ${SAGA_TREE_SPECIES_TRAIT_BUDGET} bereits ausgeschöpft.`,
       WORLD_SPECIES_DEVELOPMENT_HINT,
     ].join(' ');
   }
@@ -79,11 +79,11 @@ function DisabledActionHint({
 
 type SpeciesTraitsPanelProps = {
   species: string;
-  traitInstances: SagaDriveSpeciesTraitInstanceDto[];
+  traitInstances: SagaTreeSpeciesTraitInstanceDto[];
   speciesProfileName: string;
   speciesBodyDescription: string;
   validationAttempted?: boolean;
-  onTraitInstancesChange: (instances: SagaDriveSpeciesTraitInstanceDto[]) => void;
+  onTraitInstancesChange: (instances: SagaTreeSpeciesTraitInstanceDto[]) => void;
   onSpeciesProfileNameChange: (value: string) => void;
   onSpeciesBodyDescriptionChange: (value: string) => void;
 };
@@ -98,15 +98,15 @@ export function SpeciesTraitsPanel({
   onSpeciesProfileNameChange,
   onSpeciesBodyDescriptionChange,
 }: SpeciesTraitsPanelProps) {
-  const traits = getSagaDriveSpeciesTraitsForRace(species);
-  const usedPoints = getSagaDriveSpeciesTraitCost(traitInstances.map((instance) => instance.trait));
-  const speciesLabel = getCharacterCreationOptionLabel(sagaDriveRaceOptions, species);
-  const budgetComplete = usedPoints === SAGA_DRIVE_SPECIES_TRAIT_BUDGET;
+  const traits = getSagaTreeSpeciesTraitsForRace(species);
+  const usedPoints = getSagaTreeSpeciesTraitCost(traitInstances.map((instance) => instance.trait));
+  const speciesLabel = getCharacterCreationOptionLabel(sagaTreeRaceOptions, species);
+  const budgetComplete = usedPoints === SAGA_TREE_SPECIES_TRAIT_BUDGET;
 
-  const addTraitInstance = (traitKey: SagaDriveSpeciesTraitKey, cost: number) => {
-    const catalog = getSagaDriveSpeciesTraitOptionCatalog(traitKey);
+  const addTraitInstance = (traitKey: SagaTreeSpeciesTraitKey, cost: number) => {
+    const catalog = getSagaTreeSpeciesTraitOptionCatalog(traitKey);
     const existing = traitInstances.filter((instance) => instance.trait === traitKey);
-    if (usedPoints + cost > SAGA_DRIVE_SPECIES_TRAIT_BUDGET) return;
+    if (usedPoints + cost > SAGA_TREE_SPECIES_TRAIT_BUDGET) return;
     if (!catalog && existing.length > 0) return;
     if (catalog && existing.some((instance) => !instance.option)) return;
     if (catalog && existing.length >= catalog.options.length) return;
@@ -120,7 +120,7 @@ export function SpeciesTraitsPanel({
     onTraitInstancesChange(traitInstances.filter((_, currentIndex) => currentIndex !== index));
   };
 
-  const updateTraitOption = (index: number, option: NonNullable<SagaDriveSpeciesTraitInstanceDto['option']>) => {
+  const updateTraitOption = (index: number, option: NonNullable<SagaTreeSpeciesTraitInstanceDto['option']>) => {
     onTraitInstancesChange(traitInstances.map((instance, currentIndex) => (
       currentIndex === index
         ? { trait: instance.trait, option, source: instance.source, acquiredAtLevel: instance.acquiredAtLevel }
@@ -134,14 +134,14 @@ export function SpeciesTraitsPanel({
         <div>
           <h3 className="font-semibold">Speziesmerkmale</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            {speciesLabel} kann nur die unten aufgeführten Speziesmerkmale wählen. Verteile genau {SAGA_DRIVE_SPECIES_TRAIT_BUDGET} Punkte.
+            {speciesLabel} kann nur die unten aufgeführten Speziesmerkmale wählen. Verteile genau {SAGA_TREE_SPECIES_TRAIT_BUDGET} Punkte.
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             Merkmale mit Auswahlkatalog sind mehrfach wählbar, aber jede Unteroption nur einmal. Die Speziespunkte steigen nicht automatisch mit der Charakterstufe.
           </p>
         </div>
         <Badge variant={budgetComplete ? 'default' : validationAttempted ? 'destructive' : 'outline'}>
-          {usedPoints} / {SAGA_DRIVE_SPECIES_TRAIT_BUDGET}
+          {usedPoints} / {SAGA_TREE_SPECIES_TRAIT_BUDGET}
         </Badge>
       </div>
 
@@ -176,14 +176,14 @@ export function SpeciesTraitsPanel({
 
       <div className="grid gap-2 sm:grid-cols-2">
         {traits.map((trait) => {
-          const catalog = getSagaDriveSpeciesTraitOptionCatalog(trait.key);
+          const catalog = getSagaTreeSpeciesTraitOptionCatalog(trait.key);
           const repeatable = Boolean(catalog);
           const entries = traitInstances
             .map((instance, index) => ({ instance, index }))
             .filter(({ instance }) => instance.trait === trait.key);
           const selected = entries.length > 0;
           const unavailable = trait.available === false;
-          const budgetBlocked = usedPoints + trait.cost > SAGA_DRIVE_SPECIES_TRAIT_BUDGET;
+          const budgetBlocked = usedPoints + trait.cost > SAGA_TREE_SPECIES_TRAIT_BUDGET;
           const unresolvedInstance = entries.some(({ instance }) => catalog && !instance.option);
           const allOptionsUsed = Boolean(catalog && entries.length >= catalog.options.length);
           const canAdd = !unavailable && !budgetBlocked && !unresolvedInstance && !allOptionsUsed;
@@ -343,7 +343,7 @@ export function SpeciesTraitsPanel({
 
       {validationAttempted && !budgetComplete && (
         <p className="text-sm text-destructive">
-          Für einen vollständigen Charakter müssen Speziesmerkmale im Wert von genau {SAGA_DRIVE_SPECIES_TRAIT_BUDGET} Punkten gewählt werden.
+          Für einen vollständigen Charakter müssen Speziesmerkmale im Wert von genau {SAGA_TREE_SPECIES_TRAIT_BUDGET} Punkten gewählt werden.
         </p>
       )}
     </section>
@@ -351,7 +351,7 @@ export function SpeciesTraitsPanel({
 }
 
 type TraitCardHeaderProps = {
-  traitKey: SagaDriveSpeciesTraitKey;
+  traitKey: SagaTreeSpeciesTraitKey;
   label: string;
   cost: 1 | 2 | 3;
   selected: boolean;

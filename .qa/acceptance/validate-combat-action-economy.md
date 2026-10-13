@@ -1,12 +1,12 @@
 # Feature: validate-combat-action-economy
 
-<!-- Acceptance: Issue #22 (Epic #18), Validierungsplan C1, `docs/sagadrive core rules.md` §2, §6, §7, §9 -->
+<!-- Acceptance: Issue #22 (Epic #18), Validierungsplan C1, `docs/sagatree core rules.md` §2, §6, §7, §9 -->
 
 ## Intent
 Der direkte Kampf wird als vollständiger Ablauf geprüft, damit Initiative, Hauptaktion, Bewegung, Reaktion, Sicht, Deckung, Reichweite und Manöver zusammen vorhersehbar funktionieren und keine dominante Standardaktion oder Regel-Lücke entsteht.
 
 ## Preconditions
-- SagaDrive lokal-only; Regelquelle `docs/sagadrive core rules.md` §6 (abgeleitete Werte), §7 (Kampfsystem), §9 (Zustände), §2.5 (Vorteil/Nachteil).
+- SagaTree lokal-only; Regelquelle `docs/sagatree core rules.md` §6 (abgeleitete Werte), §7 (Kampfsystem), §9 (Zustände), §2.5 (Vorteil/Nachteil).
 - Validierungsplan C1 definiert 11 Pflichtszenarien; Testbänder I, III, V (Stufen 1–4, 9–12, 17–20).
 - #19 (Kernwahrscheinlichkeiten) ist abgeschlossen (PR #61); die Probe-Auflösung wird aus `scripts/validate-core-probability.mjs` in `scripts/lib/core-probe.mjs` extrahiert und geteilt (eine Quelle der Wahrheit, keine Parallel-Implementierung).
 - Der Validierungsapparat ist ein deterministisches Node-Script (`scripts/validate-combat-action-economy.mjs`), das die Szenarien als Aktionskosten-State-Machine über die Core-Regeln simuliert.

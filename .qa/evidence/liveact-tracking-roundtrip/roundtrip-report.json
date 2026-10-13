@@ -19,7 +19,7 @@
     "step90Ms": 167
   },
   "avatars": {
-    "sagadrive-human": {
+    "sagatree-human": {
       "url": "/assets/avatars/species/human-male-quality-20260921-m5-face1.vrm",
       "gazeDrivePath": "lookAt",
       "appFramingEyeElevationDeg": {
@@ -7757,7 +7757,7 @@
   ],
   "channelClasses": {
     "browDownLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 3.49,
@@ -7781,7 +7781,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "browDownRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 3.36,
@@ -7805,7 +7805,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "browInnerUp": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.001,
         "mm": 2.7,
@@ -7829,7 +7829,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "browOuterUpLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 4.26,
@@ -7853,7 +7853,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "browOuterUpRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 4.07,
@@ -7877,7 +7877,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "cheekPuff": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 6.32,
@@ -7901,7 +7901,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "cheekSquintLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.1,
@@ -7925,7 +7925,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "cheekSquintRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.16,
@@ -7949,7 +7949,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "eyeBlinkLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.001,
         "mm": 3.61,
@@ -7973,7 +7973,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "eyeBlinkRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.001,
         "mm": 3.68,
@@ -7997,7 +7997,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "eyeLookDownLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8021,7 +8021,7 @@
       "hint": ""
     },
     "eyeLookDownRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8045,7 +8045,7 @@
       "hint": ""
     },
     "eyeLookInLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8069,7 +8069,7 @@
       "hint": ""
     },
     "eyeLookInRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8093,7 +8093,7 @@
       "hint": ""
     },
     "eyeLookOutLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8117,7 +8117,7 @@
       "hint": ""
     },
     "eyeLookOutRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8141,7 +8141,7 @@
       "hint": ""
     },
     "eyeLookUpLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8165,7 +8165,7 @@
       "hint": ""
     },
     "eyeLookUpRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "lookAt",
         "delta": null,
         "mm": 0,
@@ -8189,7 +8189,7 @@
       "hint": ""
     },
     "eyeSquintLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.022,
         "mm": 2.54,
@@ -8213,7 +8213,7 @@
       "hint": "Kandidat liest sich schwächer"
     },
     "eyeSquintRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.014,
         "mm": 2.64,
@@ -8237,7 +8237,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "eyeWideLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 1.4,
@@ -8261,7 +8261,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "eyeWideRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 1.43,
@@ -8285,7 +8285,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "jawForward": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.93,
@@ -8309,7 +8309,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "jawLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.003,
         "mm": 5.12,
@@ -8333,7 +8333,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "jawOpen": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.033,
         "mm": 27.81,
@@ -8357,7 +8357,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "jawRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.34,
@@ -8381,7 +8381,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthClose": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.01,
         "mm": 32.05,
@@ -8405,7 +8405,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthDimpleLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 5.49,
@@ -8429,7 +8429,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthDimpleRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.003,
         "mm": 5.23,
@@ -8453,7 +8453,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthFrownLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 4.51,
@@ -8477,7 +8477,7 @@
       "hint": ""
     },
     "mouthFrownRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 4.51,
@@ -8501,7 +8501,7 @@
       "hint": ""
     },
     "mouthFunnel": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 10.36,
@@ -8525,7 +8525,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.013,
         "mm": 17.21,
@@ -8549,7 +8549,7 @@
       "hint": ""
     },
     "mouthLowerDownLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 3.3,
@@ -8573,7 +8573,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthLowerDownRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 3.35,
@@ -8597,7 +8597,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthPressLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.063,
         "mm": 2.28,
@@ -8621,7 +8621,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthPressRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.024,
         "mm": 2.34,
@@ -8645,7 +8645,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthPucker": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.001,
         "mm": 6.13,
@@ -8669,7 +8669,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.003,
         "mm": 18.44,
@@ -8693,7 +8693,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthRollLower": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.011,
         "mm": 11.57,
@@ -8717,7 +8717,7 @@
       "hint": ""
     },
     "mouthRollUpper": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.001,
         "mm": 5.13,
@@ -8741,7 +8741,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthShrugLower": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.043,
         "mm": 6.58,
@@ -8765,7 +8765,7 @@
       "hint": ""
     },
     "mouthShrugUpper": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5,
@@ -8789,7 +8789,7 @@
       "hint": ""
     },
     "mouthSmileLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0.006,
         "mm": 7.75,
@@ -8813,7 +8813,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthSmileRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 7.94,
@@ -8837,7 +8837,7 @@
       "hint": "Morph + Proxy gut → Webcam-Kette prüfen"
     },
     "mouthStretchLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 5.81,
@@ -8861,7 +8861,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthStretchRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": -0.001,
         "mm": 5.91,
@@ -8885,7 +8885,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "mouthUpperUpLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.55,
@@ -8909,7 +8909,7 @@
       "hint": "Kandidat liest sich schwächer"
     },
     "mouthUpperUpRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 5.38,
@@ -8933,7 +8933,7 @@
       "hint": "Kandidat liest sich schwächer"
     },
     "noseSneerLeft": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 6.11,
@@ -8957,7 +8957,7 @@
       "hint": "Tracker sieht den Morph auf keinem Proxy → Tracking schwach?"
     },
     "noseSneerRight": {
-      "sagadrive-human": {
+      "sagatree-human": {
         "cls": "notDetected",
         "delta": 0,
         "mm": 6.03,
@@ -8984,19 +8984,19 @@
   "verdict": {
     "failures": [],
     "assetWeak": [
-      "sagadrive-human/blinkLeft: eyeBlinkLeft 0.12 vs eyeBlinkRight 0.08",
-      "sagadrive-human/blinkRight: eyeBlinkRight 0.08 vs eyeBlinkLeft 0.12",
-      "sagadrive-human/jawOpen: ΔjawOpen +0.02",
-      "sagadrive-human/smileLeft: mouthSmileLeft 0.01 vs mouthSmileRight 0.01",
-      "sagadrive-human/jawLeft: jawLeft 0.01 vs jawRight 0.00",
-      "sagadrive-human/mouthLeft: mouthLeft 0.01 vs mouthRight 0.00",
+      "sagatree-human/blinkLeft: eyeBlinkLeft 0.12 vs eyeBlinkRight 0.08",
+      "sagatree-human/blinkRight: eyeBlinkRight 0.08 vs eyeBlinkLeft 0.12",
+      "sagatree-human/jawOpen: ΔjawOpen +0.02",
+      "sagatree-human/smileLeft: mouthSmileLeft 0.01 vs mouthSmileRight 0.01",
+      "sagatree-human/jawLeft: jawLeft 0.01 vs jawRight 0.00",
+      "sagatree-human/mouthLeft: mouthLeft 0.01 vs mouthRight 0.00",
       "reference-vrm-arkit52/jawLeft: jawLeft 0.00 vs jawRight 0.00",
       "reference-vrm-arkit52/mouthLeft: mouthLeft 0.00 vs mouthRight 0.00",
       "saga-human-canonical-v1/jawLeft: jawLeft 0.01 vs jawRight 0.00",
       "saga-human-canonical-v1/mouthLeft: mouthLeft 0.21 vs mouthRight 0.00"
     ],
     "assetSide": [
-      "sagadrive-human/jawLeft: RAW jawLeft · MAPPED jawRight · APPLIED jawRight · Morph human-male-quality-20260921-m5_mesh:jawRight · → Bildschirm right (PiP left) · anatomische Kopie: avatar-right (soll avatar-left) · anatomical: Bildschirm left · ASSET-SEITE FALSCH"
+      "sagatree-human/jawLeft: RAW jawLeft · MAPPED jawRight · APPLIED jawRight · Morph human-male-quality-20260921-m5_mesh:jawRight · → Bildschirm right (PiP left) · anatomische Kopie: avatar-right (soll avatar-left) · anatomical: Bildschirm left · ASSET-SEITE FALSCH"
     ]
   },
   "pageErrors": [

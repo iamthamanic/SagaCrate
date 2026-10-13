@@ -18,21 +18,21 @@ import {
   SelectValue,
 } from '../../../shared/ui/select';
 import {
-  getSagaDriveSkill,
-  sagaDriveSkillDefinitions,
-  type SagaDriveSkillKey,
+  getSagaTreeSkill,
+  sagaTreeSkillDefinitions,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import {
-  getSagaDriveSkillAdvanceLevels,
-  getSagaDriveSkillCap,
+  getSagaTreeSkillAdvanceLevels,
+  getSagaTreeSkillCap,
   isValidSkillAdvanceEntry,
   isValidSpecializationForSkillRank,
-  resolveSagaDriveSkillRanksSafe,
-  sanitizeSagaDriveSkillDevelopment,
-  type SagaDriveSkillAdvanceDto,
-  type SagaDriveSkillAdvanceLevel,
-  type SagaDriveSpecializationRecordDto,
-  type SagaDriveStartSkillBuild,
+  resolveSagaTreeSkillRanksSafe,
+  sanitizeSagaTreeSkillDevelopment,
+  type SagaTreeSkillAdvanceDto,
+  type SagaTreeSkillAdvanceLevel,
+  type SagaTreeSpecializationRecordDto,
+  type SagaTreeStartSkillBuild,
 } from '../../../domains/rules/sagatree/skill-progression';
 import { RuleHelp } from '../shared/RuleHelp';
 
@@ -40,23 +40,23 @@ type SlotDecisionKind = 'rank-up' | 'learn' | 'specialization' | '';
 
 interface SlotDraft {
   kind: SlotDecisionKind;
-  skill?: SagaDriveSkillKey;
+  skill?: SagaTreeSkillKey;
   name?: string;
 }
 
 interface SkillProgressionSlotsPanelProps {
   characterLevel: number;
-  startBuild: SagaDriveStartSkillBuild;
-  skillAdvances: SagaDriveSkillAdvanceDto[];
-  specializations: SagaDriveSpecializationRecordDto[];
-  onSkillAdvancesChange: (advances: SagaDriveSkillAdvanceDto[]) => void;
-  onSpecializationsChange: (entries: SagaDriveSpecializationRecordDto[]) => void;
+  startBuild: SagaTreeStartSkillBuild;
+  skillAdvances: SagaTreeSkillAdvanceDto[];
+  specializations: SagaTreeSpecializationRecordDto[];
+  onSkillAdvancesChange: (advances: SagaTreeSkillAdvanceDto[]) => void;
+  onSpecializationsChange: (entries: SagaTreeSpecializationRecordDto[]) => void;
 }
 
 function getPersistedSlotDecision(
   level: number,
-  advances: readonly SagaDriveSkillAdvanceDto[],
-  specializations: readonly SagaDriveSpecializationRecordDto[],
+  advances: readonly SagaTreeSkillAdvanceDto[],
+  specializations: readonly SagaTreeSpecializationRecordDto[],
 ): SlotDraft {
   const advance = advances.find((entry) => entry.level === level);
   if (advance) {
@@ -79,7 +79,7 @@ export function SkillProgressionSlotsPanel({
 }: SkillProgressionSlotsPanelProps) {
   // Local UI drafts for not-yet-complete decisions; never treated as persisted domain state.
   const [draftsByLevel, setDraftsByLevel] = useState<Partial<Record<number, SlotDraft>>>({});
-  const unlockedLevels = getSagaDriveSkillAdvanceLevels(characterLevel);
+  const unlockedLevels = getSagaTreeSkillAdvanceLevels(characterLevel);
 
   const setDraft = (level: number, draft: SlotDraft | undefined) => {
     setDraftsByLevel((current) => {
@@ -92,10 +92,10 @@ export function SkillProgressionSlotsPanel({
 
   /** Commit new development state; domain sanitize prunes dependent invalid later slots. */
   const commitDevelopment = (
-    nextAdvances: SagaDriveSkillAdvanceDto[],
-    nextSpecializations: SagaDriveSpecializationRecordDto[],
+    nextAdvances: SagaTreeSkillAdvanceDto[],
+    nextSpecializations: SagaTreeSpecializationRecordDto[],
   ) => {
-    const sanitized = sanitizeSagaDriveSkillDevelopment(startBuild, nextAdvances, nextSpecializations, characterLevel);
+    const sanitized = sanitizeSagaTreeSkillDevelopment(startBuild, nextAdvances, nextSpecializations, characterLevel);
     onSkillAdvancesChange(sanitized.advances);
     onSpecializationsChange(sanitized.specializations);
   };
@@ -107,9 +107,9 @@ export function SkillProgressionSlotsPanel({
     ),
   });
 
-  const ranksBeforeLevel = (level: number, advances: SagaDriveSkillAdvanceDto[]) => {
+  const ranksBeforeLevel = (level: number, advances: SagaTreeSkillAdvanceDto[]) => {
     const filtered = advances.filter((entry) => entry.level < level);
-    return resolveSagaDriveSkillRanksSafe({ ...startBuild, skillAdvances: filtered }, level - 1);
+    return resolveSagaTreeSkillRanksSafe({ ...startBuild, skillAdvances: filtered }, level - 1);
   };
 
   const clearSlot = (level: number) => {
@@ -118,7 +118,7 @@ export function SkillProgressionSlotsPanel({
     commitDevelopment(advances, specs);
   };
 
-  const chooseKind = (level: SagaDriveSkillAdvanceLevel, kind: SlotDecisionKind, persisted: SlotDraft) => {
+  const chooseKind = (level: SagaTreeSkillAdvanceLevel, kind: SlotDecisionKind, persisted: SlotDraft) => {
     if (!kind) {
       clearSlot(level);
       return;
@@ -139,7 +139,7 @@ export function SkillProgressionSlotsPanel({
     setDraft(level, { kind, skill: persisted.skill, name: persisted.name });
   };
 
-  const chooseSkill = (level: SagaDriveSkillAdvanceLevel, skill: SagaDriveSkillKey, decision: SlotDraft) => {
+  const chooseSkill = (level: SagaTreeSkillAdvanceLevel, skill: SagaTreeSkillKey, decision: SlotDraft) => {
     const kind = decision.kind || 'rank-up';
     if (kind === 'specialization') {
       const trimmedName = decision.name?.trim() ?? '';
@@ -152,7 +152,7 @@ export function SkillProgressionSlotsPanel({
       // immediately, replacing this level's specialization so the domain sanitize
       // validates the new decision right away.
       const { advances, specs } = withoutSlot(level);
-      const ranks = resolveSagaDriveSkillRanksSafe({ ...startBuild, skillAdvances: advances }, level);
+      const ranks = resolveSagaTreeSkillRanksSafe({ ...startBuild, skillAdvances: advances }, level);
       const existingCount = specs.filter((entry) => entry.skill === skill).length;
       if (!isValidSpecializationForSkillRank(ranks[skill], existingCount)) return;
       commitDevelopment(advances, [
@@ -163,18 +163,18 @@ export function SkillProgressionSlotsPanel({
       return;
     }
     const { advances, specs } = withoutSlot(level);
-    const candidate: SagaDriveSkillAdvanceDto = { level, kind, skill };
+    const candidate: SagaTreeSkillAdvanceDto = { level, kind, skill };
     if (!isValidSkillAdvanceEntry(candidate, ranksBeforeLevel(level, advances))) return;
     commitDevelopment([...advances, candidate], specs);
     setDraft(level, undefined);
   };
 
-  const changeSpecName = (level: SagaDriveSkillAdvanceLevel, decision: SlotDraft, name: string) => {
+  const changeSpecName = (level: SagaTreeSkillAdvanceLevel, decision: SlotDraft, name: string) => {
     if (!decision.skill) return;
     setDraft(level, { kind: 'specialization', skill: decision.skill, name });
     if (!name.trim()) return;
     const { advances, specs } = withoutSlot(level);
-    const ranks = resolveSagaDriveSkillRanksSafe({ ...startBuild, skillAdvances: advances }, level);
+    const ranks = resolveSagaTreeSkillRanksSafe({ ...startBuild, skillAdvances: advances }, level);
     const existingCount = specs.filter((entry) => entry.skill === decision.skill).length;
     if (!isValidSpecializationForSkillRank(ranks[decision.skill], existingCount)) return;
     commitDevelopment(advances, [
@@ -200,7 +200,7 @@ export function SkillProgressionSlotsPanel({
           const persisted = getPersistedSlotDecision(level, skillAdvances, specializations);
           const decision = draftsByLevel[level] ?? persisted;
           const ranksBefore = ranksBeforeLevel(level, skillAdvances);
-          const cap = getSagaDriveSkillCap(level);
+          const cap = getSagaTreeSkillCap(level);
 
           return (
             <div key={level} className="space-y-3 rounded-lg border border-border bg-muted/5 p-3">
@@ -237,13 +237,13 @@ export function SkillProgressionSlotsPanel({
                         clearSlot(level);
                         return;
                       }
-                      chooseSkill(level, value as SagaDriveSkillKey, decision);
+                      chooseSkill(level, value as SagaTreeSkillKey, decision);
                     }}
                   >
                     <SelectTrigger className="min-h-11" aria-label={`Level ${level} Fertigkeit`}><SelectValue placeholder="Skill …" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="unset">—</SelectItem>
-                      {sagaDriveSkillDefinitions.map((skill) => {
+                      {sagaTreeSkillDefinitions.map((skill) => {
                         const rank = ranksBefore[skill.key];
                         const rankUpOk = rank >= 1 && rank + 1 <= cap;
                         const learnOk = rank === 0;
@@ -278,9 +278,9 @@ export function SkillProgressionSlotsPanel({
 
               {decision.kind && decision.skill ? (
                 <p className="text-xs text-muted-foreground">
-                  {decision.kind === 'rank-up' && `${getSagaDriveSkill(decision.skill).label}: ${ranksBefore[decision.skill]} → ${ranksBefore[decision.skill] + 1}`}
-                  {decision.kind === 'learn' && `${getSagaDriveSkill(decision.skill).label}: 0 → 1`}
-                  {decision.kind === 'specialization' && decision.name?.trim() ? `Spezialisierung „${decision.name}" auf ${getSagaDriveSkill(decision.skill).label}` : null}
+                  {decision.kind === 'rank-up' && `${getSagaTreeSkill(decision.skill).label}: ${ranksBefore[decision.skill]} → ${ranksBefore[decision.skill] + 1}`}
+                  {decision.kind === 'learn' && `${getSagaTreeSkill(decision.skill).label}: 0 → 1`}
+                  {decision.kind === 'specialization' && decision.name?.trim() ? `Spezialisierung „${decision.name}" auf ${getSagaTreeSkill(decision.skill).label}` : null}
                 </p>
               ) : null}
             </div>

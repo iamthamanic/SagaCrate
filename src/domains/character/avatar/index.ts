@@ -1,5 +1,5 @@
 /**
- * character/avatar domain — public API for SagaDrive avatar core contracts.
+ * character/avatar domain — public API for SagaTree avatar core contracts.
  * Location: src/domains/character/avatar/index.ts
  */
 export type {
@@ -190,8 +190,8 @@ export {
 } from './final-acceptance-matrix-v1';
 export {
   RIG_CONTRACT_VERSION,
-  SAGA_DRIVE_HUMANOID_ANCHORS,
-  SAGA_DRIVE_HUMANOID_BONES,
+  SAGA_TREE_HUMANOID_ANCHORS,
+  SAGA_TREE_HUMANOID_BONES,
   capabilityFlagLabel,
   listMissingHumanoidBones,
   resolveAvatarRigCapabilities,
@@ -200,9 +200,9 @@ export {
   type AvatarRigAnalysisUiStatus,
   type AvatarRigCapabilities,
   type AvatarRigCapabilityFlag,
-  type SagaDriveHumanoidAnchorId,
-  type SagaDriveHumanoidBoneId,
-  type SagaDriveHumanoidRigV1,
+  type SagaTreeHumanoidAnchorId,
+  type SagaTreeHumanoidBoneId,
+  type SagaTreeHumanoidRigV1,
 } from './rig-contract';
 export {
   AVATAR_RIG_CAPABILITY_FLAGS_V2,
@@ -263,7 +263,7 @@ export {
   type AvatarMorphParamMeta,
   type AvatarMorphTraitSlotsV1,
   type AvatarMorphValidationResult,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from './morph-contract';
 export {
   BASE_BODY_ASSET_VERSION,
@@ -276,7 +276,7 @@ export {
   assertMorphFixtureCameraSafe,
   buildBaseBodyMorphFixtureCases,
   createCanonicalMorphTargetMap,
-  createSagaDriveBaseBodyManifestV1,
+  createSagaTreeBaseBodyManifestV1,
   deriveSpeciesMorphState,
   getBaseBodySpeciesPreset,
   isBaseBodyCacheCompatible,
@@ -291,7 +291,7 @@ export {
   type BaseBodySpeciesId,
   type BaseBodySpeciesPresetV1,
   type BaseBodyTraitSocket,
-  type SagaDriveBaseBodyManifestV1,
+  type SagaTreeBaseBodyManifestV1,
 } from './base-body-contract';
 export {
   CANONICAL_BODY_ASSET_IDS,
@@ -305,7 +305,7 @@ export {
   isCanonicalBodyFamilyId,
   listCanonicalBodyFamilyManifests,
   resolveCanonicalBodyFamilyId,
-  toSagaDriveBaseBodyManifest,
+  toSagaTreeBaseBodyManifest,
   type CanonicalBodyAssetId,
   type CanonicalBodyFamilyId,
   type CanonicalBodyFamilyManifestV1,
@@ -316,7 +316,7 @@ export {
   MTOON_MATERIAL_CLASSES,
   MTOON_PROFILE_VERSION,
   classifyMtoonMaterialClass,
-  createSagaDriveMToonProfileV1,
+  createSagaTreeMToonProfileV1,
   listMtoonMaterialClassIds,
   resolveMtoonPerformancePreset,
   resolveMtoonRenderPath,
@@ -328,7 +328,7 @@ export {
   type MtoonPerformanceProfile,
   type MtoonRenderPath,
   type MtoonStyleCompatibility,
-  type SagaDriveMToonProfileV1,
+  type SagaTreeMToonProfileV1,
 } from './mtoon-profile';
 export {
   FIT_RANGE_CONTRACT_VERSION,
@@ -742,20 +742,20 @@ export {
 } from './body-region-mask-v1';
 export {
   FACE_ANCHORS_CONTRACT_VERSION,
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
-  isSagaDriveFaceAnchorId,
+  SAGA_TREE_FACE_ANCHOR_IDS,
+  isSagaTreeFaceAnchorId,
   parseFaceAnchorsManifestV1,
   readFaceAnchorsFromAvatar,
   stableFaceAnchorsManifestJson,
   validateFaceAnchorBarycentric,
   validateFaceAnchorTriangleBinding,
   validateFaceAnchorsManifestV1,
-  type SagaDriveFaceAnchorBarycentric,
-  type SagaDriveFaceAnchorBindingValidationIssue,
-  type SagaDriveFaceAnchorBindingValidationResult,
-  type SagaDriveFaceAnchorId,
-  type SagaDriveFaceAnchorTriangleBinding,
-  type SagaDriveFaceAnchorsManifestV1,
+  type SagaTreeFaceAnchorBarycentric,
+  type SagaTreeFaceAnchorBindingValidationIssue,
+  type SagaTreeFaceAnchorBindingValidationResult,
+  type SagaTreeFaceAnchorId,
+  type SagaTreeFaceAnchorTriangleBinding,
+  type SagaTreeFaceAnchorsManifestV1,
 } from './face-anchor-contract';
 export {
   FACE_MAPPING_AUTHORING_CONTRACT_VERSION,
@@ -776,7 +776,7 @@ export {
   type FaceMappingAuthoringValidationIssue,
   type FaceMappingAuthoringValidationResult,
   type FaceMappingReviewStatus,
-  type SagaDriveFaceMappingAuthoringV1,
+  type SagaTreeFaceMappingAuthoringV1,
 } from './face-mapping-authoring-contract';
 export {
   FACE_ANCHOR_AGENT_REVIEW_CAPTURE_MATRIX,
@@ -821,7 +821,7 @@ export {
   type FaceMappingMarkerGroupId,
   type FaceMappingMarkerGroupV1,
   type FaceMappingMarkerStatus,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from './face-mapping-draft-v1';
 export {
   FACE_MAPPING_GUIDE_KINDS,

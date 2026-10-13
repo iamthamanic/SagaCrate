@@ -138,7 +138,7 @@ function dist3Sq(a, b) {
 /** @typedef {'mouth'|'jaw'|'eyeLeft'|'eyeRight'|'browLeft'|'browRight'|'nose'|'forehead'|'cheek'} QaRegionId */
 
 /**
- * Anatomical bands from SagaDriveFaceAnchorsV1 — avoids whole-midface nearest-centroid → nose/forehead.
+ * Anatomical bands from SagaTreeFaceAnchorsV1 — avoids whole-midface nearest-centroid → nose/forehead.
  * @param {Partial<Record<string, { x: number; y: number; z: number }>>} anchorPositions
  * @returns {{ ok: true; classify: (v: { x: number; y: number; z: number }) => QaRegionId } | { ok: false; missing: string[] }}
  */

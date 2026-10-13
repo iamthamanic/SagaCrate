@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActFaceFunctionalQaDiagnosisV1",
+  "contractVersion": "SagaTreeLiveActFaceFunctionalQaDiagnosisV1",
   "assetId": "m5",
   "candidateGlb": "public/assets/avatars/species/human-male-quality-20260921-m5-face1.glb",
   "modelSha256Prefix": "134f5137",

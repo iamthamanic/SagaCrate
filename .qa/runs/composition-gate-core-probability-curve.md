@@ -6,10 +6,10 @@
 - Verdict: CLEAR
 
 ## Event
-Ein Entwickler führt den Test Gate bzw. `node scripts/validate-core-probability.mjs` aus; die Engine berechnet die exakte Wahrscheinlichkeitsmatrix der SagaDrive-Kernprobe und schreibt den Report nach `.qa/runs/validate-core-probability-report.md`.
+Ein Entwickler führt den Test Gate bzw. `node scripts/validate-core-probability.mjs` aus; die Engine berechnet die exakte Wahrscheinlichkeitsmatrix der SagaTree-Kernprobe und schreibt den Report nach `.qa/runs/validate-core-probability-report.md`.
 
 ## Hop chain
-`docs/sagadrive core rules.md` §2/§3/§5/§2.7 kodieren die Regelkonstanten → `scripts/validate-core-probability.mjs` modelliert die Kernprobe deterministisch (Grade inkl. nat 1/20-Shift, Advantage/Disadvantage als 2d20 keep-high/low, Safety als deterministischer Wert, EB nur bei Training, Caps fail-closed) → Konsistenz-Assertions (Adv ≥ Normal ≥ Dis, ZW-Monotonie, exakte 100 %-Verteilungen, Safety zwischen nat-1 und nat-20) → Report-Artefakt `.qa/runs/validate-core-probability-report.md` → `scripts/test-gate.mjs` (`checkCoreProbabilityValidation()`) verdrahtet den Check als Regression-Schutz.
+`docs/sagatree core rules.md` §2/§3/§5/§2.7 kodieren die Regelkonstanten → `scripts/validate-core-probability.mjs` modelliert die Kernprobe deterministisch (Grade inkl. nat 1/20-Shift, Advantage/Disadvantage als 2d20 keep-high/low, Safety als deterministischer Wert, EB nur bei Training, Caps fail-closed) → Konsistenz-Assertions (Adv ≥ Normal ≥ Dis, ZW-Monotonie, exakte 100 %-Verteilungen, Safety zwischen nat-1 und nat-20) → Report-Artefakt `.qa/runs/validate-core-probability-report.md` → `scripts/test-gate.mjs` (`checkCoreProbabilityValidation()`) verdrahtet den Check als Regression-Schutz.
 
 ## Simulations
 | Case | Intended | Composed | Result |

@@ -20,7 +20,7 @@ import {
 } from './modular-glb-contract-v1';
 import type { AvatarV2BodyFamily } from './composition-contract-v2';
 
-export const ASSET_AUTHORING_CONTRACT_VERSION = 'SagaDriveAssetAuthoringV1' as const;
+export const ASSET_AUTHORING_CONTRACT_VERSION = 'SagaTreeAssetAuthoringV1' as const;
 
 export const ASSET_AUTHORING_KINDS = [
   'base-body',

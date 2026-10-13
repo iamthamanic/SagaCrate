@@ -16,9 +16,9 @@ import {
 } from '../../../domains/npc-creature';
 import {
   normalizeCombatRoleForProfile,
-  type SagaDriveCombatProfile,
-  type SagaDriveCombatRole,
-  type SagaDriveNpcLevel,
+  type SagaTreeCombatProfile,
+  type SagaTreeCombatRole,
+  type SagaTreeNpcLevel,
 } from '../../../domains/rules/sagatree/npc-creature-power';
 import {
   createNpcCreatureDefinition,
@@ -49,7 +49,7 @@ import {
 } from '../../../shared/ui/select';
 import { Textarea } from '../../../shared/ui/textarea';
 
-const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
+const COMBAT_PROFILES: readonly SagaTreeCombatProfile[] = [
   'noncombat',
   'balanced',
   'tough',
@@ -59,8 +59,8 @@ const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
   'control_support',
 ];
 
-const COMBAT_ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
-const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaDriveNpcLevel);
+const COMBAT_ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
+const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaTreeNpcLevel);
 
 export interface WorldNpcCreatureFormDialogProps {
   open: boolean;
@@ -103,9 +103,9 @@ export function WorldNpcCreatureFormDialog({
   const [description, setDescription] = useState('');
   const [kind, setKind] = useState<NpcCreatureKind>('npc');
   const [category, setCategory] = useState<NpcCreatureCategory>('npc');
-  const [level, setLevel] = useState<SagaDriveNpcLevel>(1);
-  const [combatProfile, setCombatProfile] = useState<SagaDriveCombatProfile>('balanced');
-  const [combatRole, setCombatRole] = useState<SagaDriveCombatRole>('standard');
+  const [level, setLevel] = useState<SagaTreeNpcLevel>(1);
+  const [combatProfile, setCombatProfile] = useState<SagaTreeCombatProfile>('balanced');
+  const [combatRole, setCombatRole] = useState<SagaTreeCombatRole>('standard');
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -258,7 +258,7 @@ export function WorldNpcCreatureFormDialog({
               <Label htmlFor="world-npc-level">Stufe</Label>
               <Select
                 value={String(level)}
-                onValueChange={(value) => setLevel(Number(value) as SagaDriveNpcLevel)}
+                onValueChange={(value) => setLevel(Number(value) as SagaTreeNpcLevel)}
               >
                 <SelectTrigger id="world-npc-level" className="min-h-11">
                   <SelectValue />
@@ -276,7 +276,7 @@ export function WorldNpcCreatureFormDialog({
               <Label htmlFor="world-npc-profile">Kampfprofil</Label>
               <Select
                 value={combatProfile}
-                onValueChange={(value) => setCombatProfile(value as SagaDriveCombatProfile)}
+                onValueChange={(value) => setCombatProfile(value as SagaTreeCombatProfile)}
               >
                 <SelectTrigger id="world-npc-profile" className="min-h-11">
                   <SelectValue />
@@ -297,7 +297,7 @@ export function WorldNpcCreatureFormDialog({
               <Label htmlFor="world-npc-role">Kampfrolle</Label>
               <Select
                 value={combatRole}
-                onValueChange={(value) => setCombatRole(value as SagaDriveCombatRole)}
+                onValueChange={(value) => setCombatRole(value as SagaTreeCombatRole)}
               >
                 <SelectTrigger id="world-npc-role" className="min-h-11">
                   <SelectValue />

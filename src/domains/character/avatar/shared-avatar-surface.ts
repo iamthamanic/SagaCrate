@@ -5,7 +5,7 @@
  */
 
 export const SHARED_AVATAR_SURFACE_CONTRACT_VERSION =
-  'SagaDriveSharedAvatarSurfaceV1' as const;
+  'SagaTreeSharedAvatarSurfaceV1' as const;
 
 export const AVATAR_RENDER_MODES = ['portrait', 'compact-3d', 'full-3d'] as const;
 export type AvatarRenderMode = (typeof AVATAR_RENDER_MODES)[number];

@@ -58,7 +58,7 @@ export function deriveCanonicalFaceLandmarks({ Pm, groupOf, chinHeightM, lipCont
 
   /** @type {Record<string, number>} */
   const v = {};
-  // Character left = +X (SagaDriveFaceAnchorsV1 contract). The corner crease faces sideways,
+  // Character left = +X (SagaTreeFaceAnchorsV1 contract). The corner crease faces sideways,
   // so no front-facing filter here (it would skip the true peak and break L/R symmetry).
   v.mouthCornerLeft = pick(morphMagnitude('mouthSmileLeft'), (i) => X(i) > 0, false);
   v.mouthCornerRight = pick(morphMagnitude('mouthSmileRight'), (i) => X(i) < 0, false);

@@ -658,7 +658,7 @@
             "outputScale": 30
           },
           "extras": {
-            "sagaDriveGazeMode": "bones",
+            "sagaTreeGazeMode": "bones",
             "hasLeftEyeBone": true,
             "hasRightEyeBone": true
           }

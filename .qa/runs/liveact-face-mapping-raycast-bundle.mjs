@@ -1,0 +1,136 @@
+// src/infrastructure/character/avatar/face-mapping-raycast.ts
+import * as THREE from "three";
+var _raycaster = new THREE.Raycaster();
+var _pointerNdc = new THREE.Vector2();
+var _a = new THREE.Vector3();
+var _b = new THREE.Vector3();
+var _c = new THREE.Vector3();
+var _pointLocal = new THREE.Vector3();
+var _bary = new THREE.Vector3();
+var EXCLUDE_NAME_RE = /hair|weapon|sword|shield|helper|debug|grid|floor|axis|gizmo|outline|equipment|wearable|prop/i;
+function isFaceMappingExcludedEquipmentAncestorName(name) {
+  const n = name.trim();
+  if (!n) return false;
+  if (n === "saga-rigid-equipment" || n === "saga-skinned-wearables") return true;
+  if (n.startsWith("rigid-") || n.startsWith("skinned-")) return true;
+  return false;
+}
+function isUnderFaceMappingExcludedAncestor(object) {
+  let cur = object;
+  while (cur) {
+    if (cur.userData?.sagatreeExcludeFaceMapping === true) return true;
+    if (cur.userData?.isHelper === true) return true;
+    if (isFaceMappingExcludedEquipmentAncestorName(cur.name)) return true;
+    cur = cur.parent;
+  }
+  return false;
+}
+function isFaceMappingAllowlistedMesh(object) {
+  if (!(object instanceof THREE.Mesh)) return false;
+  if (!object.visible) return false;
+  if (!(object instanceof THREE.SkinnedMesh) && !(object instanceof THREE.Mesh)) return false;
+  const name = object.name.trim();
+  if (!name) return false;
+  if (EXCLUDE_NAME_RE.test(name)) return false;
+  if (isUnderFaceMappingExcludedAncestor(object)) return false;
+  const geom = object.geometry;
+  if (!(geom instanceof THREE.BufferGeometry)) return false;
+  if (!geom.getAttribute("position")) return false;
+  return true;
+}
+function collectFaceMappingRaycastMeshes(root) {
+  const meshes = [];
+  root.traverse((object) => {
+    if (isFaceMappingAllowlistedMesh(object)) meshes.push(object);
+  });
+  return meshes;
+}
+function resolvePrimitiveIndex(geometry, faceIndex) {
+  const groups = geometry.groups;
+  if (!groups || groups.length === 0) return 0;
+  const triStart = faceIndex * 3;
+  for (let i = 0; i < groups.length; i += 1) {
+    const g = groups[i];
+    if (triStart >= g.start && triStart < g.start + g.count) return i;
+  }
+  return 0;
+}
+function normalizeFaceMappingBarycentric(u, v, w) {
+  let uu = Number.isFinite(u) ? Math.max(0, u) : 0;
+  let vv = Number.isFinite(v) ? Math.max(0, v) : 0;
+  let ww = Number.isFinite(w) ? Math.max(0, w) : 0;
+  const sum = uu + vv + ww;
+  if (!(sum > 1e-8)) {
+    return { u: 1 / 3, v: 1 / 3, w: 1 / 3 };
+  }
+  return { u: uu / sum, v: vv / sum, w: ww / sum };
+}
+function hitToCandidate(hit, order) {
+  if (!(hit.object instanceof THREE.Mesh)) return null;
+  if (typeof hit.faceIndex !== "number" || hit.faceIndex < 0 || !hit.face) return null;
+  const mesh = hit.object;
+  const nodeIdentity = mesh.name.trim();
+  if (!nodeIdentity) return null;
+  const geometry = mesh.geometry;
+  if (!(geometry instanceof THREE.BufferGeometry)) return null;
+  if (!geometry.getAttribute("position")) return null;
+  const ia = hit.face.a;
+  const ib = hit.face.b;
+  const ic = hit.face.c;
+  mesh.getVertexPosition(ia, _a);
+  mesh.getVertexPosition(ib, _b);
+  mesh.getVertexPosition(ic, _c);
+  _pointLocal.copy(hit.point);
+  mesh.worldToLocal(_pointLocal);
+  THREE.Triangle.getBarycoord(_pointLocal, _a, _b, _c, _bary);
+  const barycentric = normalizeFaceMappingBarycentric(_bary.x, _bary.y, _bary.z);
+  const triangleIndex = hit.faceIndex;
+  const primitiveIndex = resolvePrimitiveIndex(geometry, triangleIndex);
+  return {
+    order,
+    distance: hit.distance,
+    nodeIdentity,
+    triangleIndex,
+    binding: {
+      nodeIdentity,
+      primitiveIndex,
+      triangleIndex,
+      barycentric
+    },
+    worldPoint: { x: hit.point.x, y: hit.point.y, z: hit.point.z }
+  };
+}
+function listFaceMappingRaycastCandidates(input) {
+  const { camera, root, canvasWidth, canvasHeight, canvasX, canvasY } = input;
+  if (canvasWidth <= 0 || canvasHeight <= 0) return [];
+  _pointerNdc.x = canvasX / canvasWidth * 2 - 1;
+  _pointerNdc.y = -(canvasY / canvasHeight) * 2 + 1;
+  _raycaster.setFromCamera(_pointerNdc, camera);
+  const meshes = collectFaceMappingRaycastMeshes(root);
+  if (meshes.length === 0) return [];
+  const hits = _raycaster.intersectObjects(meshes, false);
+  const out = [];
+  for (let i = 0; i < hits.length; i += 1) {
+    const candidate = hitToCandidate(hits[i], i);
+    if (candidate) out.push(candidate);
+  }
+  return out;
+}
+function raycastFaceMappingPointer(input) {
+  const candidates = listFaceMappingRaycastCandidates(input);
+  if (candidates.length === 0) return null;
+  const selected = input.selectCandidate ? input.selectCandidate(candidates) : candidates[0] ?? null;
+  if (!selected) return null;
+  return {
+    binding: selected.binding,
+    worldPoint: selected.worldPoint
+  };
+}
+export {
+  collectFaceMappingRaycastMeshes,
+  isFaceMappingAllowlistedMesh,
+  isUnderFaceMappingExcludedAncestor,
+  listFaceMappingRaycastCandidates,
+  normalizeFaceMappingBarycentric,
+  raycastFaceMappingPointer
+};

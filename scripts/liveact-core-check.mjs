@@ -90,7 +90,7 @@ await build({
 
 const ft = await import(outfile + `?t=${Date.now()}`);
 check(ft.LIVEACT_FACE_CHANNELS.length === 52, 'runtime channel count 52');
-check(ft.LIVEACT_CONTRACT_VERSION === 'SagaDriveLiveActFrameV1', 'contract version');
+check(ft.LIVEACT_CONTRACT_VERSION === 'SagaTreeLiveActFrameV1', 'contract version');
 
 const neutral = ft.createNeutralLiveActFaceChannels();
 check(neutral._neutral === 1, 'neutral base');

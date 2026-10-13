@@ -20,19 +20,19 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../../shared/ui/tooltip';
 import {
   getBackgroundSpecializationSuggestionNames,
-  getSagaDriveBackgroundTemplate,
-  getSagaDriveBackgroundTemplatesForWorldProfile,
+  getSagaTreeBackgroundTemplate,
+  getSagaTreeBackgroundTemplatesForWorldProfile,
 } from '../../../domains/rules/sagatree/background-templates';
 import {
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  getSagaDriveSpecializationDescription,
-  isSagaDriveSkillKey,
-  type SagaDriveSkillKey,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  getSagaTreeSpecializationDescription,
+  isSagaTreeSkillKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
-import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
-import { SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS } from '../../../domains/rules/sagatree/skill-progression';
+import type { SagaTreeBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
+import { SAGA_TREE_START_BACKGROUND_SKILL_POINTS } from '../../../domains/rules/sagatree/skill-progression';
 import { BackgroundCarousel } from './BackgroundCarousel';
 import {
   adjustBackgroundSkillPoints,
@@ -112,15 +112,15 @@ function SpecializationSelectOptionHelp({ label, description }: { label: string;
   );
 }
 
-type SkillSlot = SagaDriveSkillKey | '';
+type SkillSlot = SagaTreeSkillKey | '';
 
 interface CharacterBackgroundPanelProps {
   backgroundTemplateId: string | null | undefined;
   worldProfileId?: string | null;
   backgroundName: string;
   skillPool: readonly SkillSlot[];
-  backgroundSkillPoints: SagaDriveBackgroundSkillPoints;
-  onBackgroundSkillPointsChange: (points: SagaDriveBackgroundSkillPoints) => void;
+  backgroundSkillPoints: SagaTreeBackgroundSkillPoints;
+  onBackgroundSkillPointsChange: (points: SagaTreeBackgroundSkillPoints) => void;
   specializationSkill: SkillSlot;
   specializationName: string;
   milieuAccess: string;
@@ -133,7 +133,7 @@ interface CharacterBackgroundPanelProps {
   onPoolSkillChange: (index: number, value: string) => void;
   onSpecializationSkillChange: (skill: SkillSlot) => void;
   onSpecializationNameChange: (value: string) => void;
-  onSpecializationApply?: (skill: SagaDriveSkillKey, name: string) => void;
+  onSpecializationApply?: (skill: SagaTreeSkillKey, name: string) => void;
   onMilieuAccessChange: (value: string) => void;
   onContactChange: (value: string) => void;
   onComplicationChange: (value: string) => void;
@@ -154,18 +154,18 @@ function SuggestionButtons({ values, onSelect }: { values: readonly string[] | u
 }
 
 interface BackgroundSkillNodeProps {
-  skillKey: SagaDriveSkillKey;
+  skillKey: SagaTreeSkillKey;
   pointValue: 0 | 1 | 2;
   pointsUsed: number;
   backgroundPointsComplete: boolean;
   isSpecializationTarget: boolean;
   specializationName: string;
   specializationOptions: readonly string[];
-  onHoverChange: (skill: SagaDriveSkillKey | null) => void;
-  onAdjust: (skill: SagaDriveSkillKey, delta: 1 | -1) => void;
-  onSpecialize: (skill: SagaDriveSkillKey) => void;
+  onHoverChange: (skill: SagaTreeSkillKey | null) => void;
+  onAdjust: (skill: SagaTreeSkillKey, delta: 1 | -1) => void;
+  onSpecialize: (skill: SagaTreeSkillKey) => void;
   onSpecializationNameChange: (value: string) => void;
-  onSpecializationApply: (skill: SagaDriveSkillKey, name: string) => void;
+  onSpecializationApply: (skill: SagaTreeSkillKey, name: string) => void;
 }
 
 function BackgroundSkillNode({
@@ -182,18 +182,18 @@ function BackgroundSkillNode({
   onSpecializationNameChange,
   onSpecializationApply,
 }: BackgroundSkillNodeProps) {
-  const skill = getSagaDriveSkill(skillKey);
-  const attribute = getSagaDriveAttribute(skill.attribute);
+  const skill = getSagaTreeSkill(skillKey);
+  const attribute = getSagaTreeAttribute(skill.attribute);
   const hasSpecialization = Boolean(pointValue > 0 && specializationName.trim() && isSpecializationTarget);
   const selected = pointValue > 0;
   const canDecrease = pointValue > 0;
   const canIncrease =
-    pointsUsed < SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS && pointValue < 2;
+    pointsUsed < SAGA_TREE_START_BACKGROUND_SKILL_POINTS && pointValue < 2;
   const showSpecializeControl = backgroundPointsComplete && pointValue > 0;
   const selectValue = specializationOptions.includes(specializationName.trim())
     ? specializationName.trim()
     : '';
-  const selectedDescription = selectValue ? getSagaDriveSpecializationDescription(selectValue) : undefined;
+  const selectedDescription = selectValue ? getSagaTreeSpecializationDescription(selectValue) : undefined;
 
   const handleCardActivate = () => {
     if (canIncrease) onAdjust(skillKey, 1);
@@ -335,7 +335,7 @@ function BackgroundSkillNode({
               </SelectTrigger>
               <SelectContent>
                 {specializationOptions.map((name) => {
-                  const description = getSagaDriveSpecializationDescription(name);
+                  const description = getSagaTreeSpecializationDescription(name);
                   return (
                     <SelectItem
                       key={name}
@@ -387,9 +387,9 @@ function BackgroundSkillNode({
  * Vier Pool-Skills bleiben nach Punktverteilung sichtbar; belegte Skills werden hervorgehoben.
  */
 interface BackgroundSkillConnectorProps {
-  skills: readonly SagaDriveSkillKey[];
-  trainedSkills: readonly SagaDriveSkillKey[];
-  activeSkill: SagaDriveSkillKey | null;
+  skills: readonly SagaTreeSkillKey[];
+  trainedSkills: readonly SagaTreeSkillKey[];
+  activeSkill: SagaTreeSkillKey | null;
   scrollPhase: CarouselScrollPhase;
   onStandstill: () => void;
 }
@@ -634,11 +634,11 @@ export function CharacterBackgroundPanel({
   onComplicationChange,
   onCommunicationChange,
 }: CharacterBackgroundPanelProps) {
-  const templates = getSagaDriveBackgroundTemplatesForWorldProfile(worldProfileId);
-  const selectedTemplate = getSagaDriveBackgroundTemplate(backgroundTemplateId);
-  const poolSkills = skillPool.filter(isSagaDriveSkillKey);
+  const templates = getSagaTreeBackgroundTemplatesForWorldProfile(worldProfileId);
+  const selectedTemplate = getSagaTreeBackgroundTemplate(backgroundTemplateId);
+  const poolSkills = skillPool.filter(isSagaTreeSkillKey);
   const backgroundPointsUsed = sumBackgroundSkillPointsUsed(backgroundSkillPoints);
-  const backgroundPointsComplete = backgroundPointsUsed === SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS;
+  const backgroundPointsComplete = backgroundPointsUsed === SAGA_TREE_START_BACKGROUND_SKILL_POINTS;
   const occupiedBackgroundSkills = backgroundSkillsWithPoints(backgroundSkillPoints);
   const allSkillKeys = getAllSkillKeys();
   const customMode = backgroundTemplateId === null;
@@ -649,26 +649,26 @@ export function CharacterBackgroundPanel({
   const skillGraphViewMode = 'pool';
 
   const [scrollPhase, setScrollPhase] = useState<CarouselScrollPhase>('settled');
-  const [activeSkill, setActiveSkill] = useState<SagaDriveSkillKey | null>(null);
+  const [activeSkill, setActiveSkill] = useState<SagaTreeSkillKey | null>(null);
 
   const handleScrollPhaseChange = useCallback((phase: CarouselScrollPhase) => {
     setScrollPhase(phase);
   }, []);
   const handleStandstill = useCallback(() => setScrollPhase('settled'), []);
   const handleBackgroundPointAdjust = useCallback(
-    (skill: SagaDriveSkillKey, delta: 1 | -1) => {
+    (skill: SagaTreeSkillKey, delta: 1 | -1) => {
       onBackgroundSkillPointsChange(adjustBackgroundSkillPoints(backgroundSkillPoints, skill, delta));
     },
     [backgroundSkillPoints, onBackgroundSkillPointsChange],
   );
   const handleSpecialize = useCallback(
-    (skill: SagaDriveSkillKey) => {
+    (skill: SagaTreeSkillKey) => {
       onSpecializationSkillChange(skill);
     },
     [onSpecializationSkillChange],
   );
   const handleSpecializationApply = useCallback(
-    (skill: SagaDriveSkillKey, name: string) => {
+    (skill: SagaTreeSkillKey, name: string) => {
       if (onSpecializationApply) {
         onSpecializationApply(skill, name);
         return;
@@ -697,7 +697,7 @@ export function CharacterBackgroundPanel({
         <div className="flex flex-wrap items-center gap-2">
           {showSkillGraph ? (
             <Badge variant={backgroundPointsComplete ? 'default' : 'outline'} data-background-points-budget>
-              {backgroundPointsUsed} / {SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS} verteilt
+              {backgroundPointsUsed} / {SAGA_TREE_START_BACKGROUND_SKILL_POINTS} verteilt
             </Badge>
           ) : null}
           <Badge variant={complete ? 'default' : 'outline'}>{complete ? 'Hintergrund vollständig' : 'Hintergrund offen'}</Badge>
@@ -739,7 +739,7 @@ export function CharacterBackgroundPanel({
                       value={skill}
                       onValueChange={(value) => onPoolSkillChange(index, value)}
                       skillOptions={allSkillKeys}
-                      disabledSkillKeys={skillPool.filter((current, currentIndex): current is SagaDriveSkillKey => currentIndex !== index && isSagaDriveSkillKey(current))}
+                      disabledSkillKeys={skillPool.filter((current, currentIndex): current is SagaTreeSkillKey => currentIndex !== index && isSagaTreeSkillKey(current))}
                       placeholder={`Fertigkeit ${index + 1}`}
                       ariaLabel={`Hintergrund-Fertigkeit ${index + 1}`}
                     />
@@ -820,7 +820,7 @@ export function CharacterBackgroundPanel({
   );
 }
 
-function getAllSkillKeys(): SagaDriveSkillKey[] {
+function getAllSkillKeys(): SagaTreeSkillKey[] {
   return [
     'athletics', 'acrobatics', 'sleight', 'stealth', 'melee', 'ranged', 'awareness', 'insight', 'survival',
     'investigation', 'knowledge', 'technology', 'medicine', 'driving', 'persuasion', 'deception', 'intimidation', 'performance',

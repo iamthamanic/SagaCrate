@@ -11,7 +11,7 @@ GM publishes shared scene presentation → authoritative `world_state.shared.sce
 ## Hop chain
 1. **Producer (UI):** `SharedSceneGmControls` / `useSharedScenePresentation.publishScene`
 2. **Command:** `apply_session_runtime_command` kind=`scene` (inputs only; forged keys stripped)
-3. **Authoritative write:** `sagadrive_build_scene_presentation` → merge `shared.scenePresentation` (does not replace entire `shared`)
+3. **Authoritative write:** `sagatree_build_scene_presentation` → merge `shared.scenePresentation` (does not replace entire `shared`)
 4. **Consumers:** Player Panel + Display via snapshot/realtime (#297); append-only `session_events` kind=`scene`
 
 ## Simulations

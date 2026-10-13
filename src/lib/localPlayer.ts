@@ -12,7 +12,7 @@ export const LOCAL_PLAYER_USER_ID = '00000000-0000-4000-8000-000000000002';
 export const LOCAL_PLAYER_USERNAME = 'player';
 export const LOCAL_PLAYER_PASSWORD = '1234';
 /** Seeded email — keep stable; renaming would break existing GoTrue rows. */
-export const LOCAL_PLAYER_EMAIL = 'player@sagadrive.local';
+export const LOCAL_PLAYER_EMAIL = 'player@sagatree.local';
 
 export function isLocalPlayerShortcut(identifier: string, password: string): boolean {
   const normalized = identifier.trim().toLowerCase();

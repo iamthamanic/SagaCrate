@@ -16,7 +16,7 @@ import {
   type AvatarStructureMeshEvidence,
   type AvatarStructureNodeEvidence,
 } from '../../../domains/character/avatar';
-import type { SagaDriveHumanoidBoneId } from '../../../domains/character/avatar';
+import type { SagaTreeHumanoidBoneId } from '../../../domains/character/avatar';
 import { resolveCanonicalBoneId } from './rig-bone-aliases';
 
 function emptyEvidence(partial: Partial<AvatarStructureEvidence> = {}): AvatarStructureEvidence {
@@ -84,7 +84,7 @@ export async function extractAvatarStructureEvidenceFromBytes(
 
     const nodes: AvatarStructureNodeEvidence[] = [];
     const meshes: AvatarStructureMeshEvidence[] = [];
-    const humanoidBones: Partial<Record<SagaDriveHumanoidBoneId, string>> = {};
+    const humanoidBones: Partial<Record<SagaTreeHumanoidBoneId, string>> = {};
     let truncated = false;
     let boneCount = 0;
     let morphTargetCount = 0;

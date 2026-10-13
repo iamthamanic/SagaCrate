@@ -2,16 +2,16 @@
  * liveact-face-semantic-profile-v1 — versioned region/threshold rules for morph QA (#401).
  * Location: scripts/lib/liveact-face-semantic-profile-v1.mjs
  *
- * Provider-neutral, filename-neutral thresholds. Expected regions reference SagaDriveFaceAnchorsV1 ids.
+ * Provider-neutral, filename-neutral thresholds. Expected regions reference SagaTreeFaceAnchorsV1 ids.
  */
 
 /** V2: requires FaceAnchorAnatomyQa PASS before morph region energy is trusted. */
-export const SEMANTIC_QA_CONTRACT_VERSION = 'SagaDriveLiveActFaceSemanticQaV2';
+export const SEMANTIC_QA_CONTRACT_VERSION = 'SagaTreeLiveActFaceSemanticQaV2';
 export const SEMANTIC_PROFILE_VERSION = 'liveact-face-semantic-profile-v2';
 
 /** @typedef {'mouth'|'jaw'|'eyeLeft'|'eyeRight'|'browLeft'|'browRight'|'nose'|'forehead'|'cheek'} QaRegionId */
 
-/** Maps QA regions to anchor ids (SagaDriveFaceAnchorsV1). */
+/** Maps QA regions to anchor ids (SagaTreeFaceAnchorsV1). */
 export const QA_REGION_ANCHORS = {
   mouth: ['mouthUpper', 'mouthLower', 'mouthCornerLeft', 'mouthCornerRight'],
   jaw: ['chin', 'mouthLower'],

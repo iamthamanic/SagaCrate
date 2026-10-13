@@ -16,7 +16,7 @@ import {
 import { clearCharacterEditorBootstrap, setCharacterEditorBootstrap } from '../shared/characterEditorBootstrap';
 import { assertValidSnapshot, characterPresetService } from '../../../infrastructure/character/character-preset-service';
 import type { CharacterPresetVm } from '../../../domains/character/contracts/character-preset.types';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaTreeStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 import { StartingTemplatePicker } from './StartingTemplatePicker';
 
 type CreateStep = 'chooser' | 'presets' | 'versions';
@@ -73,7 +73,7 @@ export function CreateCharacterEntryDialog({
     await loadPresets();
   };
 
-  const handleStartingTemplate = (templateKey: SagaDriveStartingTemplateKey) => {
+  const handleStartingTemplate = (templateKey: SagaTreeStartingTemplateKey) => {
     setCharacterEditorBootstrap({
       kind: 'starting-template',
       templateKey,

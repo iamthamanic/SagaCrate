@@ -40,7 +40,7 @@ const faceAuthoringDoc = read('assets/species-3d/FACE-AUTHORING.md');
 const gate = read('scripts/test-gate.mjs');
 const acceptance = read('.qa/acceptance/liveact-face-anchor-ground-truth.md');
 
-check(/SagaDriveFaceMappingAuthoringV1/.test(domain), 'domain contract version');
+check(/SagaTreeFaceMappingAuthoringV1/.test(domain), 'domain contract version');
 check(/auto.*manual.*manual_override|FACE_MAPPING_AUTHORING_SOURCES/.test(domain), 'source enum');
 check(/isReviewedFaceMappingGroundTruth/.test(domain), 'fail-closed ground-truth helper');
 check(/createAutoUnreviewedFaceMappingAuthoring/.test(domain), 'auto unreviewed builder');
@@ -59,10 +59,10 @@ check(/createAutoUnreviewedFaceMappingAuthoring/.test(authorLib), 'author writes
 check(/faceMappingAuthoringPathBesideAnchors/.test(authorLib), 'sibling authoring path');
 check(/isReviewedFaceMappingGroundTruth/.test(authoringLib), 'offline helper present');
 
-check(/SagaDriveFaceMappingAuthoringV1|face-mapping-authoring/.test(faceAuthoringDoc), 'FACE-AUTHORING docs');
+check(/SagaTreeFaceMappingAuthoringV1|face-mapping-authoring/.test(faceAuthoringDoc), 'FACE-AUTHORING docs');
 check(/reviewed|Ground[- ]Truth|unreviewed|agent_reviewed/i.test(faceAuthoringDoc), 'review policy docs');
 check(/checkLiveActFaceMappingAuthoring|liveact-face-mapping-authoring-check/.test(gate), 'test-gate wiring');
-check(/SagaDriveFaceMappingAuthoringV1/.test(acceptance), 'acceptance references contract');
+check(/SagaTreeFaceMappingAuthoringV1/.test(acceptance), 'acceptance references contract');
 check(/createAgentReviewedFaceMappingAuthoring|agent_reviewed|reviewStatus/.test(domain), 'agent review fields');
 check(/canApplyAgentReviewToAuthoring/.test(domain), 'human immutable helper');
 

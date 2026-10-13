@@ -103,9 +103,9 @@ await build({
 });
 const mod = await import(`${outfile}?t=${Date.now()}`);
 
-check(mod.LIVEACT_PERFECT_FIDELITY_CONTRACT === 'SagaDriveLiveActPerfectFidelityV1', 'contract id');
-check(mod.LIVEACT_FIDELITY_CAPTURE_CONTRACT === 'SagaDriveLiveActFidelityCaptureV1', 'capture id');
-check(mod.LIVEACT_FIDELITY_REPORT_CONTRACT === 'SagaDriveLiveActFidelityReportV1', 'report id');
+check(mod.LIVEACT_PERFECT_FIDELITY_CONTRACT === 'SagaTreeLiveActPerfectFidelityV1', 'contract id');
+check(mod.LIVEACT_FIDELITY_CAPTURE_CONTRACT === 'SagaTreeLiveActFidelityCaptureV1', 'capture id');
+check(mod.LIVEACT_FIDELITY_REPORT_CONTRACT === 'SagaTreeLiveActFidelityReportV1', 'report id');
 check(mod.LIVEACT_PERFECT_FIDELITY_STAGES.length === 6, 'six stages');
 check(
   mod.LIVEACT_PERFECT_FIDELITY_STAGES.join(',') ===

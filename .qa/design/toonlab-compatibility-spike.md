@@ -1,7 +1,7 @@
 # ToonLab Compatibility Spike (#341)
 
 ## Intent
-Isolated, reproducible compatibility check of `@call-me-sensei/toonlab` against the current SagaDrive avatar renderer (`CharacterStudioRuntime` + MToon/PBR path) using real SagaDrive assets.
+Isolated, reproducible compatibility check of `@call-me-sensei/toonlab` against the current SagaTree avatar renderer (`CharacterStudioRuntime` + MToon/PBR path) using real SagaTree assets.
 
 ## Evaluated package
 - Package: `@call-me-sensei/toonlab@0.5.0`
@@ -18,12 +18,12 @@ Isolated, reproducible compatibility check of `@call-me-sensei/toonlab` against 
 Drop-in ToonLab shading on the current avatar renderer is **not** viable.
 
 ### Blockers
-1. **three peer gap** — ToonLab requires `three@^0.185.1`; SagaDrive is on `0.183.2`.
-2. **Renderer/material stack** — ToonLab 0.5 is WebGPU-first TSL/NodeMaterial; GLSL material path removed. SagaDrive avatar path is `WebGLRenderer` + MToon/GLSL (`mtoon-style-applier`).
+1. **three peer gap** — ToonLab requires `three@^0.185.1`; SagaTree is on `0.183.2`.
+2. **Renderer/material stack** — ToonLab 0.5 is WebGPU-first TSL/NodeMaterial; GLSL material path removed. SagaTree avatar path is `WebGLRenderer` + MToon/GLSL (`mtoon-style-applier`).
 3. **VRM peer gap** — ToonLab wants `@pixiv/three-vrm@^3.5.4`; host is `3.5.1`.
 
 ### Risks (non-blocking alone)
-- Package peers `react@^19` while SagaDrive is on React 18 (avatar runtime itself is React-free).
+- Package peers `react@^19` while SagaTree is on React 18 (avatar runtime itself is React-free).
 - Alpha/hair and morph preservation under `applyToonShader` are unverified until an executable TSL harness exists.
 - Dual-renderer / three bump performance and LiveAct regression risk.
 

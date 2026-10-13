@@ -21,5 +21,5 @@
 
 ## Contract spot-check
 
-- `SagaDriveLiveActTemporalV1` / `liveact-temporal-policy-v1`
+- `SagaTreeLiveActTemporalV1` / `liveact-temporal-policy-v1`
 - Policies: head 90/28, gaze 18/6, blink 6/3, lips 18/7, brows 50/16, cheeksNose 42/14

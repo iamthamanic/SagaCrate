@@ -1,18 +1,18 @@
 /**
- * StartingTemplatePicker — lists the ten SagaDrive Level-1 system starttemplates (#464).
+ * StartingTemplatePicker — lists the ten SagaTree Level-1 system starttemplates (#464).
  * Location: src/app/character/creation/StartingTemplatePicker.tsx
  *
  * Each row shows a template icon; playstyle summary lives in a help tooltip (keeps the list compact).
  */
 import type { SyntheticEvent } from 'react';
 import { CircleHelp } from 'lucide-react';
-import { listSagaDriveStartingTemplates } from '../../../domains/rules/sagatree/starting-templates';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
+import { listSagaTreeStartingTemplates } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaTreeStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../../shared/ui/tooltip';
 import { StartingTemplateIcon } from './StartingTemplateIcon';
 
 type StartingTemplatePickerProps = {
-  onSelect: (templateKey: SagaDriveStartingTemplateKey) => void;
+  onSelect: (templateKey: SagaTreeStartingTemplateKey) => void;
 };
 
 function stopHelpEvent(event: SyntheticEvent) {
@@ -21,7 +21,7 @@ function stopHelpEvent(event: SyntheticEvent) {
 }
 
 export function StartingTemplatePicker({ onSelect }: StartingTemplatePickerProps) {
-  const templates = listSagaDriveStartingTemplates();
+  const templates = listSagaTreeStartingTemplates();
 
   return (
     <div className="space-y-2">

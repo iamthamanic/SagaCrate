@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * liveact-face-anchor-anatomy-check — SagaDriveFaceAnchorAnatomyQaV1 gate.
+ * liveact-face-anchor-anatomy-check — SagaTreeFaceAnchorAnatomyQaV1 gate.
  * Location: scripts/liveact-face-anchor-anatomy-check.mjs
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';

@@ -1,4 +1,4 @@
-# ECC runner profile — SagaDrive
+# ECC runner profile — SagaTree
 # Enforces hands-off queue behavior for @ecc-runner-loop.
 
 runMode: loop

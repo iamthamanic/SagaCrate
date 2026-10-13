@@ -2,18 +2,18 @@
  * Avatar animation contract — pure domain (no React / Three / network).
  * Location: src/domains/character/avatar/animation-contract.ts
  *
- * Allowlisted preview clips retarget exclusively via SagaDriveHumanoidRigV1
+ * Allowlisted preview clips retarget exclusively via SagaTreeHumanoidRigV1
  * canonical bone handles. Capabilities are never raised by animation success.
  */
 
 import {
   RIG_CONTRACT_VERSION,
   type AvatarRigCapabilityFlag,
-  type SagaDriveHumanoidBoneId,
-  type SagaDriveHumanoidAnchorId,
+  type SagaTreeHumanoidBoneId,
+  type SagaTreeHumanoidAnchorId,
 } from './rig-contract';
 
-export const ANIMATION_CONTRACT_VERSION = 'SagaDriveAvatarAnimationV1' as const;
+export const ANIMATION_CONTRACT_VERSION = 'SagaTreeAvatarAnimationV1' as const;
 
 export const AVATAR_ANIMATION_ACTIONS = ['idle', 'walk', 'combat', 'emote'] as const;
 export type AvatarAnimationActionId = (typeof AVATAR_ANIMATION_ACTIONS)[number];
@@ -23,17 +23,17 @@ export interface AvatarAnimationClipCatalogEntry {
   clipId: string;
   labelDe: string;
   /** Canonical bones required for this clip to be playable. */
-  requiredBones: readonly SagaDriveHumanoidBoneId[];
+  requiredBones: readonly SagaTreeHumanoidBoneId[];
   /** Preferred rigid attachment anchor while this clip plays. */
-  attachmentAnchor: SagaDriveHumanoidAnchorId;
+  attachmentAnchor: SagaTreeHumanoidAnchorId;
   loop: boolean;
 }
 
-/** Allowlisted SagaDrive preview clips — no remote arbitrary animation URLs. */
+/** Allowlisted SagaTree preview clips — no remote arbitrary animation URLs. */
 export const AVATAR_ANIMATION_CATALOG: readonly AvatarAnimationClipCatalogEntry[] = [
   {
     actionId: 'idle',
-    clipId: 'sagadrive-preview-idle-v1',
+    clipId: 'sagatree-preview-idle-v1',
     labelDe: 'Idle',
     requiredBones: ['hips', 'spine', 'chest', 'neck', 'head'],
     attachmentAnchor: 'hips',
@@ -41,7 +41,7 @@ export const AVATAR_ANIMATION_CATALOG: readonly AvatarAnimationClipCatalogEntry[
   },
   {
     actionId: 'walk',
-    clipId: 'sagadrive-preview-walk-v1',
+    clipId: 'sagatree-preview-walk-v1',
     labelDe: 'Walk',
     requiredBones: [
       'hips',
@@ -57,7 +57,7 @@ export const AVATAR_ANIMATION_CATALOG: readonly AvatarAnimationClipCatalogEntry[
   },
   {
     actionId: 'combat',
-    clipId: 'sagadrive-preview-combat-v1',
+    clipId: 'sagatree-preview-combat-v1',
     labelDe: 'Combat',
     requiredBones: [
       'hips',
@@ -75,7 +75,7 @@ export const AVATAR_ANIMATION_CATALOG: readonly AvatarAnimationClipCatalogEntry[
   },
   {
     actionId: 'emote',
-    clipId: 'sagadrive-preview-emote-wave-v1',
+    clipId: 'sagatree-preview-emote-wave-v1',
     labelDe: 'Emote',
     requiredBones: ['spine', 'chest', 'rightUpperArm', 'rightLowerArm', 'rightHand'],
     attachmentAnchor: 'rightHand',
@@ -110,7 +110,7 @@ export function isAllowlistedAnimationClipId(clipId: string): boolean {
  */
 export function resolveAvatarAnimationSupport(input: {
   capabilityFlags: readonly AvatarRigCapabilityFlag[];
-  mappedBones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>;
+  mappedBones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>;
 }): AvatarAnimationSupportResult {
   const unsupportedReasons: Partial<Record<AvatarAnimationActionId, string>> = {};
   const supported: AvatarAnimationActionId[] = [];

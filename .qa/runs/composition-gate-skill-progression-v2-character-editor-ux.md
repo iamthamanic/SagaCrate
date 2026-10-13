@@ -9,9 +9,9 @@
 User allocates three start skill sources (7 free / 2 stackable background / 1 archetype), optionally fills level 3–19 development slots, saves the character, and later reopens it from Bibliothek → Bearbeiten.
 
 ## Hop chain
-1. `CharacterBackgroundPanel` + `BackgroundSkillPointsAllocator` / `CharacterSkillsPanel` + `SkillProgressionSlotsPanel` / `SkillCheckFormulaPanel` write editor state only (React). Domain caps, ranks, applied EB and advance validity come exclusively from `domains/rules/sagadrive/skill-progression` (and barrels) — no duplicated rule math in UI.
-2. Explicit `handleSaveCharacter` builds one `sagadrive_profile` (+ `skills` snapshot) and calls `characterService.createCharacter` / `updateCharacter`.
-3. Repository assert (`assertValidSagaDriveCharacterPersistence` from #90) validates once per write; insert/update targets existing `characters` row. Migration `014` only adds missing JSONB columns `abilities` / `emotion_profiles` already referenced by the DTO — no new table, queue, webhook, or multi-consumer fan-out.
+1. `CharacterBackgroundPanel` + `BackgroundSkillPointsAllocator` / `CharacterSkillsPanel` + `SkillProgressionSlotsPanel` / `SkillCheckFormulaPanel` write editor state only (React). Domain caps, ranks, applied EB and advance validity come exclusively from `domains/rules/sagatree/skill-progression` (and barrels) — no duplicated rule math in UI.
+2. Explicit `handleSaveCharacter` builds one `sagatree_profile` (+ `skills` snapshot) and calls `characterService.createCharacter` / `updateCharacter`.
+3. Repository assert (`assertValidSagaTreeCharacterPersistence` from #90) validates once per write; insert/update targets existing `characters` row. Migration `014` only adds missing JSONB columns `abilities` / `emotion_profiles` already referenced by the DTO — no new table, queue, webhook, or multi-consumer fan-out.
 4. After write, `characterService` invalidates the character-summary entity cache; Bibliothek force-refreshes summaries and `character-edit` bootstrap hydrates the editor via one `getCharacterById` read.
 
 One external side-effect per explicit save. Reload is a single owner-scoped read.

@@ -4,7 +4,7 @@
 Ersetze die bisherige grobe Character-Face-Debug-Schätzung durch ein echtes mesh-gebundenes Overlay. Kamera- und Character-Overlay teilen Face-Overlay- und Metrics-Toggles.
 
 ## Happy Path
-- [x] Character-Overlay wird ausschließlich aus deformierten `SagaDriveFaceAnchorsV1` projiziert.
+- [x] Character-Overlay wird ausschließlich aus deformierten `SagaTreeFaceAnchorsV1` projiziert.
 - [x] Kamera und Character nutzen `computeLiveActFaceMetrics` (getrennte Quellpunkte).
 - [x] Face-Overlay-Toggle steuert PiP + Character; Metrics-Toggle steuert beide HUDs.
 - [x] `npm run test-gate` inkl. `liveact-character-face-overlay-check.mjs`.

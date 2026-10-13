@@ -123,7 +123,7 @@ async function installLateAdminSuccessHold(page: Page): Promise<{ release: () =>
         body: JSON.stringify(
           buildFakeGoTrueSession({
             id: '00000000-0000-4000-8000-000000000001',
-            email: 'admin@sagadrive.local',
+            email: 'admin@sagatree.local',
             provider: 'email',
           }),
         ),
@@ -262,7 +262,7 @@ test('5 timeout → different user login → late admin must not replace user', 
     }
     const postData = req.postData() || '';
     const isAdminGrant =
-      postData.includes('admin%40sagadrive.local') || postData.includes('admin@sagadrive.local');
+      postData.includes('admin%40sagatree.local') || postData.includes('admin@sagatree.local');
     const isOtherGrant =
       postData.includes('someone%40example.com') || postData.includes(otherEmail);
 
@@ -275,7 +275,7 @@ test('5 timeout → different user login → late admin must not replace user', 
         body: JSON.stringify(
           buildFakeGoTrueSession({
             id: '00000000-0000-4000-8000-000000000001',
-            email: 'admin@sagadrive.local',
+            email: 'admin@sagatree.local',
             provider: 'email',
           }),
         ),
@@ -317,7 +317,7 @@ test('5 timeout → different user login → late admin must not replace user', 
   await expect(dashboardReadyLocator(page)).toBeVisible();
   await expect(page.getByRole('tab', { name: 'Login' })).toHaveCount(0);
   const email = await readStoredAuthEmail(page);
-  expect(email).not.toBe('admin@sagadrive.local');
+  expect(email).not.toBe('admin@sagatree.local');
   fs.writeFileSync(
     path.join(EVIDENCE, 'case-5-different-user.json'),
     `${JSON.stringify({ email, otherEmail }, null, 2)}\n`,
@@ -346,7 +346,7 @@ test('6 overlapping Local Admin attempts: newest wins; stale late success discar
           body: JSON.stringify(
             buildFakeGoTrueSession({
               id: '00000000-0000-4000-8000-000000000001',
-              email: 'admin@sagadrive.local',
+              email: 'admin@sagatree.local',
               provider: 'email',
             }),
           ),

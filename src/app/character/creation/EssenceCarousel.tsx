@@ -3,7 +3,7 @@
  * Location: src/app/character/creation/EssenceCarousel.tsx
  */
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { sagaDriveEssenceOptions, type SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
+import { sagaTreeEssenceOptions, type SagaTreeEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 import { EssenceIcon } from './EssenceIcon';
 import { RuleHelp } from '../shared/RuleHelp';
 import { Badge } from '../../../shared/ui/badge';
@@ -20,8 +20,8 @@ import { useCarouselScrollSync } from '../../../app/character/shared/useCarousel
 export type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 
 interface EssenceCarouselProps {
-  selectedEssence?: SagaDriveEssenceKey;
-  onSelect: (value: SagaDriveEssenceKey) => void;
+  selectedEssence?: SagaTreeEssenceKey;
+  onSelect: (value: SagaTreeEssenceKey) => void;
   labelledBy?: string;
   onScrollPhaseChange?: (phase: CarouselScrollPhase) => void;
 }
@@ -32,7 +32,7 @@ export function EssenceCarousel({
   labelledBy = 'essence-label',
   onScrollPhaseChange,
 }: EssenceCarouselProps) {
-  const options = sagaDriveEssenceOptions;
+  const options = sagaTreeEssenceOptions;
 
   const {
     setApi,

@@ -9,9 +9,9 @@ import type {
   CharacterRulesetKey,
   EmotionProfileDto,
   ItemDto,
-  SagaDriveSkillKey,
+  SagaTreeSkillKey,
 } from '../domain/character.entity';
-import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
+import type { SagaTreeProfileDto } from '../domain/sagatree-profile.entity';
 import type { InventoryState } from '../inventory-v2';
 import type { CharacterAbstractResources } from '../../rules/sagatree/items';
 
@@ -38,8 +38,8 @@ export interface CharacterVm {
   flaws: string[];
   appearance: CharacterAppearanceDto;
   attributes: CharacterAttributesDto;
-  skills: Record<SagaDriveSkillKey, number>;
-  sagaDriveProfile: SagaDriveProfileDto;
+  skills: Record<SagaTreeSkillKey, number>;
+  sagaTreeProfile: SagaTreeProfileDto;
   abilities: AbilityDto[];
   /** Legacy flat list — compatibility only once inventorySchemaVersion is 2. */
   inventory: ItemDto[];

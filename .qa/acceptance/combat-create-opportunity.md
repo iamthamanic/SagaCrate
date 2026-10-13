@@ -3,11 +3,11 @@
 <!-- Acceptance: Issue #194 — Universelle Kampfaktion „Gelegenheit schaffen“ -->
 
 ## Intent
-SagaDrive erhält mit **„Gelegenheit schaffen“** eine universelle Hauptaktion für kreative taktische Handlungen im direkten Kampf, die nicht bereits durch eine bestehende Core-Aktion oder ein Kampfmanöver abgedeckt sind. Die Fiktion bestimmt den plausiblen Check bzw. Widerstand; die Regel begrenzt den mechanischen Effekt strikt (nur benannter Vorteil auf Folgechecks), ohne spontane GM-Boni, freie Zustände oder Fate-artige Ergebnisverhandlung.
+SagaTree erhält mit **„Gelegenheit schaffen“** eine universelle Hauptaktion für kreative taktische Handlungen im direkten Kampf, die nicht bereits durch eine bestehende Core-Aktion oder ein Kampfmanöver abgedeckt sind. Die Fiktion bestimmt den plausiblen Check bzw. Widerstand; die Regel begrenzt den mechanischen Effekt strikt (nur benannter Vorteil auf Folgechecks), ohne spontane GM-Boni, freie Zustände oder Fate-artige Ergebnisverhandlung.
 
 ## Preconditions
-- Regelquelle: `docs/sagadrive core rules.md` §2.3, §2.5, §7.3–7.6.
-- Rules-Kernel: `src/domains/rules/sagadrive/**` (#94) — UI-freie pure Logik.
+- Regelquelle: `docs/sagatree core rules.md` §2.3, §2.5, §7.3–7.6.
+- Rules-Kernel: `src/domains/rules/sagatree/**` (#94) — UI-freie pure Logik.
 - Bestehende Kernaktionen/Manöver (Angreifen, Greifen, Schubsen, …) bleiben verbindlich und haben Vorrang.
 
 ## Happy Path
@@ -26,8 +26,8 @@ SagaDrive erhält mit **„Gelegenheit schaffen“** eine universelle Hauptaktio
 
 ## Scope
 ### In
-- `docs/sagadrive core rules.md` — §7.4 + Änderungsverlauf
-- `src/domains/rules/sagadrive/combat-create-opportunity/**` + Barrel-Export
+- `docs/sagatree core rules.md` — §7.4 + Änderungsverlauf
+- `src/domains/rules/sagatree/combat-create-opportunity/**` + Barrel-Export
 - `scripts/combat-create-opportunity-check.mjs` + `scripts/test-gate.mjs` Wiring
 - `.qa/acceptance/combat-create-opportunity.md`, `.qa/runs/*` proofs
 
@@ -56,7 +56,7 @@ SagaDrive erhält mit **„Gelegenheit schaffen“** eine universelle Hauptaktio
 N/A — kein UI-Slice.
 
 ## Implementation Notes
-- Docs: §7.4 „Gelegenheit schaffen“ + Änderungsverlauf 20.09.2026 in `docs/sagadrive core rules.md`.
-- Kernel: `src/domains/rules/sagadrive/combat-create-opportunity/index.ts` — eligibility (existing-action precedence, flavor deny, declared follow-ups), grade→named advantage sources, forbidden outputs (§2.3), §2.5 anti-stack + fold helper; exported via rules barrel.
+- Docs: §7.4 „Gelegenheit schaffen“ + Änderungsverlauf 20.09.2026 in `docs/sagatree core rules.md`.
+- Kernel: `src/domains/rules/sagatree/combat-create-opportunity/index.ts` — eligibility (existing-action precedence, flavor deny, declared follow-ups), grade→named advantage sources, forbidden outputs (§2.3), §2.5 anti-stack + fold helper; exported via rules barrel.
 - Gate: `scripts/combat-create-opportunity-check.mjs` wired in `scripts/test-gate.mjs`; report `.qa/runs/combat-create-opportunity-report.md`.
 - Out of scope kept: no Combat-UI, no hazard engine, no free conditions/numeric bonuses.

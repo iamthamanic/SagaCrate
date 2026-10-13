@@ -2,11 +2,11 @@
  * liveact-character-face-debug — deformed face anchor → screen debug sampling (#400).
  * Location: src/infrastructure/character/liveact/liveact-character-face-debug.ts
  *
- * No scene graph mutation; projects evaluated SagaDriveFaceAnchorsV1 via runtime camera.
+ * No scene graph mutation; projects evaluated SagaTreeFaceAnchorsV1 via runtime camera.
  */
 
 import * as THREE from 'three';
-import { SAGA_DRIVE_FACE_ANCHOR_IDS, type SagaDriveFaceAnchorId, type SagaDriveFaceAnchorsManifestV1 } from '../../../domains/character/avatar/face-anchor-contract';
+import { SAGA_TREE_FACE_ANCHOR_IDS, type SagaTreeFaceAnchorId, type SagaTreeFaceAnchorsManifestV1 } from '../../../domains/character/avatar/face-anchor-contract';
 import type { LiveActFaceLandmark2d } from '../../../domains/character/liveact/liveact-face-diagnostics';
 import {
   buildLiveActFaceLandmarksFromAnchorScreenPoints,
@@ -34,7 +34,7 @@ export interface LiveActCharacterFaceDebugSnapshot {
   readonly canvasHeight: number;
   readonly contours: LiveActCharacterFaceDebugContours | null;
   /** Individual projected anchors (partial maps still draw). */
-  readonly points: Readonly<Partial<Record<SagaDriveFaceAnchorId, LiveActCharacterFaceScreenPoint>>>;
+  readonly points: Readonly<Partial<Record<SagaTreeFaceAnchorId, LiveActCharacterFaceScreenPoint>>>;
   readonly metrics: LiveActFaceMetricsV1;
 }
 
@@ -58,9 +58,9 @@ export const LIVEACT_CHARACTER_FACE_OVERLAY_ANCHOR_IDS = [
   'browRightInner',
   'browRightCenter',
   'browRightOuter',
-] as const satisfies readonly SagaDriveFaceAnchorId[];
+] as const satisfies readonly SagaTreeFaceAnchorId[];
 
-const OVERLAY_POINT_IDS: readonly SagaDriveFaceAnchorId[] = SAGA_DRIVE_FACE_ANCHOR_IDS;
+const OVERLAY_POINT_IDS: readonly SagaTreeFaceAnchorId[] = SAGA_TREE_FACE_ANCHOR_IDS;
 export interface LiveActCharacterFaceDebugHandle {
   /** In-place snapshot updated by {@link sample}. */
   readonly snapshot: LiveActCharacterFaceDebugSnapshot;
@@ -70,9 +70,9 @@ export interface LiveActCharacterFaceDebugHandle {
 
 export interface LiveActCharacterFaceDebugController {
   bindModelRoot(root: THREE.Object3D | null): void;
-  bindManifest(manifest: SagaDriveFaceAnchorsManifestV1 | null): void;
+  bindManifest(manifest: SagaTreeFaceAnchorsManifestV1 | null): void;
   /** Currently bound manifest (session-local; may be null). */
-  getManifest(): SagaDriveFaceAnchorsManifestV1 | null;
+  getManifest(): SagaTreeFaceAnchorsManifestV1 | null;
   setEnabled(enabled: boolean): void;
   isEnabled(): boolean;
   isMappingAvailable(): boolean;
@@ -103,14 +103,14 @@ function projectWorldToCanvas(
 }
 
 function pickScreen(
-  screen: Partial<Record<SagaDriveFaceAnchorId, LiveActCharacterFaceScreenPoint>>,
-  id: SagaDriveFaceAnchorId,
+  screen: Partial<Record<SagaTreeFaceAnchorId, LiveActCharacterFaceScreenPoint>>,
+  id: SagaTreeFaceAnchorId,
 ): LiveActCharacterFaceScreenPoint | null {
   return screen[id] ?? null;
 }
 
 function buildContours(
-  screen: Partial<Record<SagaDriveFaceAnchorId, LiveActCharacterFaceScreenPoint>>,
+  screen: Partial<Record<SagaTreeFaceAnchorId, LiveActCharacterFaceScreenPoint>>,
 ): LiveActCharacterFaceDebugContours | null {
   const mouthUpper = pickScreen(screen, 'mouthUpper');
   const mouthLower = pickScreen(screen, 'mouthLower');
@@ -185,7 +185,7 @@ export function createLiveActCharacterFaceDebugController(deps: {
   getCanvasSize: () => { width: number; height: number };
 }): LiveActCharacterFaceDebugController {
   let modelRoot: THREE.Object3D | null = null;
-  let manifest: SagaDriveFaceAnchorsManifestV1 | null = null;
+  let manifest: SagaTreeFaceAnchorsManifestV1 | null = null;
   let enabled = false;
   let suppressSampling = false;
 
@@ -219,7 +219,7 @@ export function createLiveActCharacterFaceDebugController(deps: {
       const { width, height } = deps.getCanvasSize();
       const evaluated = evaluateFaceAnchorsManifest(modelRoot, manifest);
 
-      const screen: Partial<Record<SagaDriveFaceAnchorId, LiveActCharacterFaceScreenPoint>> = {};
+      const screen: Partial<Record<SagaTreeFaceAnchorId, LiveActCharacterFaceScreenPoint>> = {};
       for (const id of OVERLAY_POINT_IDS) {
         const ev = evaluated.evaluations[id];
         if (!ev || ev.status !== 'available') continue;
@@ -249,7 +249,7 @@ export function createLiveActCharacterFaceDebugController(deps: {
 
       const contours = buildContours(screen);
 
-      const normalized: Partial<Record<SagaDriveFaceAnchorId, LiveActFaceLandmark2d>> = {};
+      const normalized: Partial<Record<SagaTreeFaceAnchorId, LiveActFaceLandmark2d>> = {};
       for (const id of LIVEACT_CHARACTER_FACE_OVERLAY_ANCHOR_IDS) {
         const pt = screen[id];
         if (pt) normalized[id] = toNormalizedLandmark(pt, width, height);

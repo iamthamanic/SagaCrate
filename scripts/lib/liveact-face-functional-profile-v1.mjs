@@ -6,7 +6,7 @@
  * Thresholds are normalized (ratios, never pixels / absolute world units).
  */
 
-export const FACE_FUNCTIONAL_QA_CONTRACT_VERSION = 'SagaDriveLiveActFaceFunctionalQaV1';
+export const FACE_FUNCTIONAL_QA_CONTRACT_VERSION = 'SagaTreeLiveActFaceFunctionalQaV1';
 export const FACE_FUNCTIONAL_PROFILE_VERSION = 'liveact-face-functional-profile-v1';
 
 /** Isolated pose weight for V1 (neutral 0 → channel 1). */

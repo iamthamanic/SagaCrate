@@ -15,7 +15,7 @@ import {
   type LiveActFaceChannels,
 } from './liveact-face-contract';
 
-export const LIVEACT_CONTRACT_VERSION = 'SagaDriveLiveActFrameV1' as const;
+export const LIVEACT_CONTRACT_VERSION = 'SagaTreeLiveActFrameV1' as const;
 
 export const LIVEACT_STATUSES = [
   'idle',

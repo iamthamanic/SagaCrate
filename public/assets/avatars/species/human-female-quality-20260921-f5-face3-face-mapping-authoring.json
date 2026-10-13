@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveFaceMappingAuthoringV1",
+  "contractVersion": "SagaTreeFaceMappingAuthoringV1",
   "source": "manual_override",
   "reviewed": true,
   "reviewStatus": "human_reviewed",
@@ -7,7 +7,7 @@
   "asset": {
     "modelPath": "public/assets/avatars/species/human-female-quality-20260921-f5-face3.glb",
     "modelSha256": "871e38a7327480277fc39e9394deccb3ffb84ffd0d1b25b4c7377b160f3267ee",
-    "anchorsSha256": "89bbcd8b6ba49bbd0c0a8424127617316e406b3974863e06dfd2568129bd9f5e",
+    "anchorsSha256": "cb6e6d48e60877c627a835be561dabc77eee8ef162ff57d8114baf34f165eafc",
     "topologyFingerprint": "v147707:t214973:m1",
     "cacheBust": "quality5-face3-repro1"
   },

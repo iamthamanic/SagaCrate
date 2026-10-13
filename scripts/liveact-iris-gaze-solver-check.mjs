@@ -119,7 +119,7 @@ await build({
 
 const mod = await import(outfile + `?t=${Date.now()}`);
 
-check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaDriveLiveActIrisGazeV1', 'contract id');
+check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaTreeLiveActIrisGazeV1', 'contract id');
 
 // Directional solve
 const leftFix = mod.buildIrisGazeFixture('iris-look-left');

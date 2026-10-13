@@ -19,7 +19,7 @@
     "src/components/Profile.tsx",
     "src/components/ProjectJoin.tsx",
     "src/components/RulesetsTest.tsx",
-    "src/components/SagaDriveLogo.tsx",
+    "src/components/SagaTreeLogo.tsx",
     "src/components/SessionJoin.tsx",
     "src/components/ViewLoadingFallback.tsx",
     "src/components/assistant/CharacterAssistantButton.tsx",

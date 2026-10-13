@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * liveact-face-asset-contract-check — SagaDriveLiveActFaceAssetV1 profiles (#382).
+ * liveact-face-asset-contract-check — SagaTreeLiveActFaceAssetV1 profiles (#382).
  * Location: scripts/liveact-face-asset-contract-check.mjs
  */
 import { readFileSync } from 'node:fs';
@@ -27,7 +27,7 @@ const face = read('src/domains/character/liveact/liveact-face-contract.ts');
 const barrel = read('src/domains/character/liveact/index.ts');
 const gate = read('scripts/test-gate.mjs');
 
-check(/SagaDriveLiveActFaceAssetV1|LIVEACT_FACE_ASSET_CONTRACT_VERSION/.test(contract), 'contract version');
+check(/SagaTreeLiveActFaceAssetV1|LIVEACT_FACE_ASSET_CONTRACT_VERSION/.test(contract), 'contract version');
 check(/core-v1/.test(contract) && /full-v1/.test(contract), 'profiles core/full');
 check(/gazeMode|"none".*"morphs".*"bones"|LiveActFaceAssetGazeMode/.test(contract), 'gazeMode union');
 check(/checkLiveActFaceAssetProfile/.test(contract), 'profile checker');

@@ -4,7 +4,7 @@
 - Verdict: **ACCEPT**
 
 ## Architecture
-- Runtime anchors stay `SagaDriveFaceAnchorsV1`; provenance is a separate contract (correct separation).
+- Runtime anchors stay `SagaTreeFaceAnchorsV1`; provenance is a separate contract (correct separation).
 - Domain pure (no React/Three/provider names).
 - Author heuristic always emits `auto` + `reviewed:false` sibling JSON.
 

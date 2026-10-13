@@ -8,7 +8,7 @@
 GM previews N days (pure kernel) then commits apply_simulation_batch; SQL validates patch and persists v2 adventure.
 
 ## Hop chain
-SagaSimulationGmPanel → useSagaSimulation → advanceTime → buildSimulationPreview → useAdventureRuntime.run → apply_session_runtime_command → sagadrive_resolve_adventure_command (065) → world_state + projects.adventure_runtime.
+SagaSimulationGmPanel → useSagaSimulation → advanceTime → buildSimulationPreview → useAdventureRuntime.run → apply_session_runtime_command → sagatree_resolve_adventure_command (065) → world_state + projects.adventure_runtime.
 
 ## Simulations
 | Case | Intended | Composed | Result |

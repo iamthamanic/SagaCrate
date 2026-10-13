@@ -817,7 +817,7 @@ function checkAvatarRigNormalization() {
 }
 
 function checkAvatarMorphContract() {
-  console.log('Avatar morph contract (#212): SagaDriveAvatarMorphV1 bounds + migration...');
+  console.log('Avatar morph contract (#212): SagaTreeAvatarMorphV1 bounds + migration...');
   execFileSync(process.execPath, ['scripts/avatar-morph-contract-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -833,7 +833,7 @@ function checkAvatarBaseBodies() {
 }
 
 function checkAvatarMtoonProfile() {
-  console.log('Avatar MToon profile (#214): SagaDriveMToonProfileV1 + style applier...');
+  console.log('Avatar MToon profile (#214): SagaTreeMToonProfileV1 + style applier...');
   execFileSync(process.execPath, ['scripts/avatar-mtoon-profile-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -921,7 +921,7 @@ function checkLiveActDiagnosticsV2() {
 }
 
 function checkLiveActFaceAnchorsV1() {
-  console.log('LiveAct face anchors V1 (#399): SagaDriveFaceAnchorsV1 mesh bindings...');
+  console.log('LiveAct face anchors V1 (#399): SagaTreeFaceAnchorsV1 mesh bindings...');
   execFileSync(process.execPath, ['scripts/liveact-face-anchors-v1-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -1027,7 +1027,7 @@ function checkLiveActFaceMappingVisualGuides() {
 }
 
 function checkLiveActFaceAnchorAnatomy() {
-  console.log('LiveAct face anchor anatomy QA: SagaDriveFaceAnchorAnatomyQaV1...');
+  console.log('LiveAct face anchor anatomy QA: SagaTreeFaceAnchorAnatomyQaV1...');
   execFileSync(process.execPath, ['scripts/liveact-face-anchor-anatomy-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -1075,7 +1075,7 @@ function checkLiveActFaceAssetContract() {
 }
 
 function checkLiveActFaceAssetValidator() {
-  console.log('LiveAct face asset validator (#383): Khronos + SagaDrive gate...');
+  console.log('LiveAct face asset validator (#383): Khronos + SagaTree gate...');
   execFileSync(process.execPath, ['scripts/liveact-face-asset-validator-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -1210,9 +1210,9 @@ function checkLiveActAdaptiveTemporalSolver() {
     stdio: 'inherit',
   });
   console.log(
-    'SagaDrive Performance Face V2 (#450): Premium contract + compose with Caps V1...',
+    'SagaTree Performance Face V2 (#450): Premium contract + compose with Caps V1...',
   );
-  execFileSync(process.execPath, ['scripts/sagadrive-performance-face-v2-check.mjs'], {
+  execFileSync(process.execPath, ['scripts/sagatree-performance-face-v2-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
   });
@@ -1274,7 +1274,7 @@ function checkAvatarV2CompositionContract() {
 }
 
 function checkAvatarV2ModularGlbContract() {
-  console.log('Avatar V2 modular GLB contract (#250): extras.sagadrive roles/slots...');
+  console.log('Avatar V2 modular GLB contract (#250): extras.sagatree roles/slots...');
   execFileSync(process.execPath, ['scripts/avatar-v2-modular-glb-contract-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -1483,7 +1483,7 @@ function checkAvatarMeshyGeneration() {
 }
 
 function checkAvatarSourceSelector() {
-  console.log('Avatar source selector (#14): sagadrive|import|meshy + legacy...');
+  console.log('Avatar source selector (#14): sagatree|import|meshy + legacy...');
   execFileSync(process.execPath, ['scripts/avatar-source-selector-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
@@ -1758,6 +1758,11 @@ function checkArchitectureBoundaries() {
     cwd: root,
     stdio: 'inherit',
   });
+  console.log('SagaTree name ban: legacy product name must not reappear...');
+  execFileSync(process.execPath, ['scripts/sagatree-name-ban-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
 }
 
 function checkEdgeCorsShared() {
@@ -1776,9 +1781,9 @@ function checkItemDomainTaxonomy() {
   });
 }
 
-function checkSagaDriveItemRulesKernel() {
-  console.log('SagaDrive item rules kernel (#135): load/cost/protection/Traglast/tool contracts...');
-  execFileSync(process.execPath, ['scripts/sagadrive-item-rules-kernel-check.mjs'], {
+function checkSagaTreeItemRulesKernel() {
+  console.log('SagaTree item rules kernel (#135): load/cost/protection/Traglast/tool contracts...');
+  execFileSync(process.execPath, ['scripts/sagatree-item-rules-kernel-check.mjs'], {
     cwd: root,
     stdio: 'inherit',
   });
@@ -1954,7 +1959,7 @@ checkChangedDenoFunctions();
 checkArchitectureBoundaries();
 checkEdgeCorsShared();
 checkItemDomainTaxonomy();
-checkSagaDriveItemRulesKernel();
+checkSagaTreeItemRulesKernel();
 checkCombatCreateOpportunity();
 checkItemDefinitionPersistence();
 checkItemStandardPacks();

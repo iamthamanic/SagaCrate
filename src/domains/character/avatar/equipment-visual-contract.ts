@@ -19,14 +19,14 @@ import {
   type AvatarFitRangeV1,
   type AvatarFitStatus,
 } from './fit-range-contract';
-import { MORPH_CONTRACT_VERSION, type SagaDriveAvatarMorphStateV1 } from './morph-contract';
+import { MORPH_CONTRACT_VERSION, type SagaTreeAvatarMorphStateV1 } from './morph-contract';
 import {
   RIG_CONTRACT_VERSION,
-  SAGA_DRIVE_HUMANOID_ANCHORS,
-  type SagaDriveHumanoidAnchorId,
+  SAGA_TREE_HUMANOID_ANCHORS,
+  type SagaTreeHumanoidAnchorId,
 } from './rig-contract';
 
-export const EQUIPMENT_VISUAL_CONTRACT_VERSION = 'SagaDriveAvatarEquipmentVisualV1' as const;
+export const EQUIPMENT_VISUAL_CONTRACT_VERSION = 'SagaTreeAvatarEquipmentVisualV1' as const;
 
 export const EQUIPMENT_ATTACHMENT_KINDS = ['rigid', 'skinned'] as const;
 export type EquipmentAttachmentKind = (typeof EQUIPMENT_ATTACHMENT_KINDS)[number];
@@ -67,7 +67,7 @@ export interface AvatarEquipmentBinding {
   ownerUserId?: string;
   worldProfileId?: string | null;
   attachment: EquipmentAttachmentKind;
-  anchor: SagaDriveHumanoidAnchorId;
+  anchor: SagaTreeHumanoidAnchorId;
   rigVersion: typeof RIG_CONTRACT_VERSION;
   morphContractVersion: typeof MORPH_CONTRACT_VERSION;
   fitRangeContractVersion: typeof FIT_RANGE_CONTRACT_VERSION;
@@ -86,7 +86,7 @@ export interface AvatarEquipmentVisual {
   bindingId: string | null;
   assetKey: string | null;
   attachment: EquipmentAttachmentKind | null;
-  anchor: SagaDriveHumanoidAnchorId | null;
+  anchor: SagaTreeHumanoidAnchorId | null;
   slots: readonly EquipmentSlot[];
   primarySlot: EquipmentSlot;
   transform: AvatarEquipmentLocalTransform | null;
@@ -156,7 +156,7 @@ export function validateAvatarEquipmentBinding(
   if (!isEquipmentAttachmentKind(binding.attachment)) {
     return { ok: false, reasonDe: 'Attachment muss rigid oder skinned sein.' };
   }
-  if (!(SAGA_DRIVE_HUMANOID_ANCHORS as readonly string[]).includes(binding.anchor)) {
+  if (!(SAGA_TREE_HUMANOID_ANCHORS as readonly string[]).includes(binding.anchor)) {
     return { ok: false, reasonDe: 'Unbekannter Anchor.' };
   }
   if (binding.rigVersion !== RIG_CONTRACT_VERSION) {
@@ -208,7 +208,7 @@ function primarySlot(slots: readonly EquipmentSlot[]): EquipmentSlot {
 
 function resolveStatusFromFit(
   binding: AvatarEquipmentBinding,
-  morph: SagaDriveAvatarMorphStateV1 | undefined,
+  morph: SagaTreeAvatarMorphStateV1 | undefined,
 ): { status: EquipmentVisualStatus; fitStatus?: AvatarFitStatus; reasonDe: string } {
   if (!binding.fitRange) {
     return { status: 'ready', reasonDe: 'Binding bereit (ohne Fit-Range).' };
@@ -250,7 +250,7 @@ export function projectInventoryEquipmentVisuals(input: {
   inventory: InventoryState;
   definitions: ReadonlyMap<string, ItemDefinition> | ((id: string) => ItemDefinition | undefined);
   bindings: AvatarEquipmentBindingRepository;
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
   /** When asset was replaced, mark matching bindingIds as needs-review. */
   supersededBindingIds?: ReadonlySet<string>;
 }): AvatarEquipmentVisualProjection {
@@ -386,7 +386,7 @@ export function createAvatarEquipmentBinding(input: {
   definitionId: string;
   scope?: AvatarEquipmentBinding['scope'];
   attachment?: EquipmentAttachmentKind;
-  anchor?: SagaDriveHumanoidAnchorId;
+  anchor?: SagaTreeHumanoidAnchorId;
   assetVersion?: string;
   transform?: Partial<AvatarEquipmentLocalTransform>;
   hideRegions?: readonly EquipmentHideRegion[];

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Character Editor Rules UX Validation (#21, Epic #18)
+ * SagaTree Character Editor Rules UX Validation (#21, Epic #18)
  *
  * Structural + domain contract check for B1 (Character Editor as rules surface).
  * Playwright evidence lives in e2e/validate-character-editor-rules-ux.spec.ts
@@ -68,12 +68,12 @@ mustInclude(editorSrc, 'skillsComplete', 'I6 skill/spec completeness');
 
 // Attribute select only 0–4 at start (I1 hard UI cap)
 mustMatch(editorSrc, /\[0,\s*1,\s*2,\s*3,\s*4\]\.map/, 'I1 attribute SelectItem range 0–4');
-mustInclude(attrSrc, 'SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP = 4', 'I1 domain cap');
-mustInclude(attrSrc, 'SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET = 15', 'I2 domain budget');
+mustInclude(attrSrc, 'SAGA_TREE_START_ATTRIBUTE_BONUS_CAP = 4', 'I1 domain cap');
+mustInclude(attrSrc, 'SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET = 15', 'I2 domain budget');
 
 // Species / background budgets
-mustInclude(creationSrc, 'SAGA_DRIVE_SPECIES_TRAIT_BUDGET', 'I5 species budget constant');
-mustInclude(skillSrc, 'SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS', 'I3 background points');
+mustInclude(creationSrc, 'SAGA_TREE_SPECIES_TRAIT_BUDGET', 'I5 species budget constant');
+mustInclude(skillSrc, 'SAGA_TREE_START_BACKGROUND_SKILL_POINTS', 'I3 background points');
 mustInclude(skillSrc, 'SPECIALIZATION_MIN_RANK', 'I6 specialization min rank');
 
 // I7 / I8: editor must not expose secondary picks at L1 (no state setters for them)
@@ -168,7 +168,7 @@ if (!(bgPointsIllegal > BG_BUDGET)) FINDINGS.push('I3 probe');
 mkdirSync('.qa/runs', { recursive: true });
 
 const lines = [];
-lines.push('# SagaDrive Character Editor Rules UX Report (#21)');
+lines.push('# SagaTree Character Editor Rules UX Report (#21)');
 lines.push('');
 lines.push('B1 Contract: Playwright E2E (`e2e/validate-character-editor-rules-ux.spec.ts`) + structural/domain guards. Kein Core-Doc-Edit.');
 lines.push('');

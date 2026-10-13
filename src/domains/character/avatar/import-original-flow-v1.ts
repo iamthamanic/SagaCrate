@@ -22,14 +22,14 @@ import type {
 import type { AvatarRigCapabilityFlag } from './rig-contract';
 
 export const IMPORT_ORIGINAL_FLOW_CONTRACT_VERSION =
-  'SagaDriveImportOriginalFlowV1' as const;
+  'SagaTreeImportOriginalFlowV1' as const;
 
 /** Provider-neutral GLB structure help (repo doc; linked from Import UI). */
 export const AVATAR_IMPORT_GLB_SPEC_HELP_HREF =
-  'https://github.com/iamthamanic/sagadrive/blob/main/docs/avatar-v2-modular-glb-spec.md';
+  'https://github.com/iamthamanic/sagatree/blob/main/docs/avatar-v2-modular-glb-spec.md';
 
 export const AVATAR_IMPORT_GLB_SPEC_HELP_LABEL_DE =
-  'Hilfe: SagaDrive Modular Avatar GLB v1';
+  'Hilfe: SagaTree Modular Avatar GLB v1';
 
 /**
  * Wizard states for Import Flow v2.
@@ -246,7 +246,7 @@ export function buildImportAnalysisSummary(input: {
 export function morphEvidenceFromImportAnalysis(
   _analysis: Pick<AvatarStructureAnalysisResultV2, 'anatomy' | 'modularity'>,
 ): { hasBodyMorphTargets: boolean; hasFaceMorphTargets: boolean } {
-  // Anatomy/modularity alone does not prove SagaDrive morph targets.
+  // Anatomy/modularity alone does not prove SagaTree morph targets.
   void _analysis;
   return { hasBodyMorphTargets: false, hasFaceMorphTargets: false };
 }

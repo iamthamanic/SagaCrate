@@ -10,7 +10,7 @@
 | AC | Evidence |
 |----|----------|
 | Cache-bust query on all sidecar candidates | `face-anchors-manifest-url.ts` + check regression |
-| SagaDriveFaceMappingAuthoringV1 | `face-mapping-authoring-contract.ts` + barrel |
+| SagaTreeFaceMappingAuthoringV1 | `face-mapping-authoring-contract.ts` + barrel |
 | Fail-closed reviewed vs unreviewed | `isReviewedFaceMappingGroundTruth` + validator rejects auto+reviewed |
 | test-gate green | PASS |
 | typed-strict / no escapes | lint on 3 changed TS files |

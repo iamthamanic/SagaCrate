@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive World Profiles & Modules Validation (#30, Epic #18)
+ * SagaTree World Profiles & Modules Validation (#30, Epic #18)
  *
  * Deterministic validation of §4.7 (20 mandatory world-profile fields),
  * §16.1 (module contract), §16.2 (4-step rule priority), §16.3 (deactivated
@@ -223,7 +223,7 @@ function resolvePriority({ specific = null, modules = [], profile = null, core =
   if (specific) return { winner: 'spezifische Regel', source: specific.layer, value: specific.value };
   if (activeModule) return { winner: 'Spezialmodul', source: activeModule.id, value: activeModule.replacementRules?.[section.includes('8.8') ? '§8.8 Volle Ruhe' : section] ?? activeModule.purpose };
   if (profile) return { winner: 'Weltprofil', source: profile, value: profile };
-  return { winner: 'Core', source: 'SagaDrive Core', value: core };
+  return { winner: 'Core', source: 'SagaTree Core', value: core };
 }
 
 /** Two deliberate conflict cases (§16.2 ladder). */
@@ -358,7 +358,7 @@ function auditPriorityInversion() {
 
 function buildReport(profileOutcomes, conflictOutcomes, crossRows) {
   const out = [];
-  out.push('# SagaDrive World Profiles & Modules Report (#30)');
+  out.push('# SagaTree World Profiles & Modules Report (#30)');
   out.push('');
   out.push('Deterministische Prüfung von §4.7 (20 Pflichtfelder), §16.1 (Modulvertrag), §16.2 (Priorität), §16.3 (Deaktivierung), §16.5 (unabhängige Skalen). Kein RNG.');
   out.push('');

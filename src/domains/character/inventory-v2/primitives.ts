@@ -7,7 +7,7 @@
  * Domain-pure: no React, no Supabase, no UI imports.
  *
  * ItemLoad / ItemCost / MinimumStrength / ItemProtection are owned by the
- * SagaDrive items rules kernel (`domains/rules/sagatree/items`) and re-exported
+ * SagaTree items rules kernel (`domains/rules/sagatree/items`) and re-exported
  * here for Inventory v2 compatibility (#135).
  */
 

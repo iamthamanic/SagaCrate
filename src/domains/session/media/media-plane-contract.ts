@@ -51,14 +51,14 @@ export type MediaGrant = {
 };
 
 /**
- * Derive SFU room id from SagaDrive session identity — never from client room name.
+ * Derive SFU room id from SagaTree session identity — never from client room name.
  */
 export function deriveMediaRoomId(sessionId: string): string {
   const trimmed = sessionId.trim();
   if (!trimmed) {
     throw new Error('sessionId required for media room');
   }
-  return `sagadrive-session-${trimmed}`;
+  return `sagatree-session-${trimmed}`;
 }
 
 export function isMediaTrackKind(value: unknown): value is MediaTrackKind {

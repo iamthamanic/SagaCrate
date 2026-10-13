@@ -1,5 +1,5 @@
 /**
- * derived-stats slice — public SagaDrive derived stat rules kernel API.
+ * derived-stats slice — public SagaTree derived stat rules kernel API.
  * Location: src/domains/rules/sagatree/derived-stats/index.ts
  */
 export * from './types';

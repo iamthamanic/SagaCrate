@@ -23,7 +23,7 @@
   },
   "conclusion": [
     "MARKER_SIM is NOT a dry-run/no-op: it attaches 51 real morph shapes (shapes_attached=51) and writes jawOpen deltas.",
-    "It IS a marker-simulation / marker-sim path that drives FaceRig from 13 ICT-style markers (detected or proportional defaults), not from SagaDrive reviewed 21-anchor JSON.",
+    "It IS a marker-simulation / marker-sim path that drives FaceRig from 13 ICT-style markers (detected or proportional defaults), not from SagaTree reviewed 21-anchor JSON.",
     "When MediaPipe constellation residual is too high (m5: 0.241), FaceRig falls back to proportional defaults (seedConfident=0) — still produces morphs, but from default landmark layout."
   ]
 }

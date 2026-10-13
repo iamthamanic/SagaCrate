@@ -11,7 +11,7 @@
 ## Hop chain
 **Browse:** `Library` → `EntityBrowser` (ui, new) → `EntityBrowserCard` (ui, new) → `useCharacters` → `characterService.getUserCharacters` (service, geändert: local-admin owner resolution) → `characters` (RLS owner-scoped, unverändert) → Charaktere-Tab.
 
-**Auth resolution:** `auth-context` local-admin bypass (`sagadrive-local-admin-session`) ↔ `src/lib/localAdmin.ts` (new, geteilte Konstanten) ↔ `characterService.getAuthenticatedUserId` (fallback auf `local-admin` id). Keine neuen Write-Pfade; DELETE/UPDATE bleiben `owner_user_id`-gebunden.
+**Auth resolution:** `auth-context` local-admin bypass (`sagatree-local-admin-session`) ↔ `src/lib/localAdmin.ts` (new, geteilte Konstanten) ↔ `characterService.getAuthenticatedUserId` (fallback auf `local-admin` id). Keine neuen Write-Pfade; DELETE/UPDATE bleiben `owner_user_id`-gebunden.
 
 No queue/worker/outbox hop. Keine Schema-/Migrationsänderung.
 

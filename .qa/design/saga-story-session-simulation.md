@@ -4,7 +4,7 @@
 
 ## Problem & Intent
 
-SagaDrive hat heute einen Session-Abend-Flow (Prepare → Lobby → Live → Recap), aber keine echte Geschichte als Datenobjekt. Was der User „Saga“ nennt, ist die Geschichte (Orte, Geheimnisse, Bedrohungen, Fristen). Was der Code als `projects` (UI „Saga“, Prefix `SA-`) speichert, ist die Spielstand-Kette einer Gruppe. Die Saga-Übersicht zeigt nichts; mehrere Gruppen können dieselbe Geschichte nicht unabhängig spielen; Fristen und Bedrohungen bewegen sich nicht; Recaps sind nicht persistiert; GM-Geheimnisse liegen in client-lesbarem JSON und im Dornhain-Bundle.
+SagaTree hat heute einen Session-Abend-Flow (Prepare → Lobby → Live → Recap), aber keine echte Geschichte als Datenobjekt. Was der User „Saga“ nennt, ist die Geschichte (Orte, Geheimnisse, Bedrohungen, Fristen). Was der Code als `projects` (UI „Saga“, Prefix `SA-`) speichert, ist die Spielstand-Kette einer Gruppe. Die Saga-Übersicht zeigt nichts; mehrere Gruppen können dieselbe Geschichte nicht unabhängig spielen; Fristen und Bedrohungen bewegen sich nicht; Recaps sind nicht persistiert; GM-Geheimnisse liegen in client-lesbarem JSON und im Dornhain-Bundle.
 
 **Goal:** Welt, Saga (Geschichte), Gruppen-Spielstand (`projects`) und Session (Abend) sind getrennt. „Saga öffnen“ zeigt spoilerfreie Geschichte + Fortschritt der eigenen Gruppe. Sessions hängen pro Gruppe als Kette; die nächste übernimmt den Stand. Fristen/Bedrohungen laufen, wenn der GM Zeit vorstellt. Karte (Scriptony-Kachelkarte) zeigt Gruppenposition.
 
@@ -89,7 +89,7 @@ SagaDrive hat heute einen Session-Abend-Flow (Prepare → Lobby → Live → Rec
 
 ### DRY
 
-- Wiederverwenden: `adventure-runtime-state`, `useSessionRuntime`, `useAdventureRuntime`, `useCachedEntityList`/`entityCache`, `sagadrive_project_shared_adventure`, World-Ownership (015), Edge CORS + rate-limit Muster aus `character-lore`
+- Wiederverwenden: `adventure-runtime-state`, `useSessionRuntime`, `useAdventureRuntime`, `useCachedEntityList`/`entityCache`, `sagatree_project_shared_adventure`, World-Ownership (015), Edge CORS + rate-limit Muster aus `character-lore`
 - Nicht duplizieren: Dornhain-Geheimnisse nicht im Bundle; nur Server liefert audience-filtered Definition
 - Recap-Highlights aus Consequences mit Session-Scope (nicht `slice(0,20)` global)
 

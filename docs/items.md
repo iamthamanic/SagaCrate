@@ -91,18 +91,18 @@ SVGs are loaded as `<img src>` — never via `dangerouslySetInnerHTML`.
 #### Generate new item icon
 
 1. Add/update the item in `assets/item-icons.manifest.json` (`iconPrompt`, `status: needs-png` or `regenerate`).
-2. Ask Cursor Agent to generate the image with the shared SagaDrive icon prompt.
+2. Ask Cursor Agent to generate the image with the shared SagaTree icon prompt.
 3. Save the PNG to `assets/item-icon-sources/{slug}.png`.
 4. Run vectorization (`npm run icons:vectorize` if VTracer is installed, or push/force-add the PNG and run the GitHub Action).
 5. Commit the resulting SVG under `public/assets/items/`. Set manifest `status: ready`.
-6. Set the definition `iconKey` to the slug. SagaDrive uses only the SVG.
+6. Set the definition `iconKey` to the slug. SagaTree uses only the SVG.
 
 Valid SVGs are **never** regenerated automatically (`status: ready` skips conversion unless `--force` or `status: regenerate`).
 
 Exact Agent command example:
 
 ```text
-Generate the SagaDrive item icon for `skull-sword`.
+Generate the SagaTree item icon for `skull-sword`.
 
 Read the shared item icon style prompt from the repository
 (`getItemIconStyleTemplate` / `buildItemIconPrompt` in `src/domains/items/icon-assets.ts`).
@@ -138,7 +138,7 @@ encode storefront source metadata. Character Editor remains **kein Shop**
   Domain
   src/domains/items/**                  ItemDefinition, taxonomy, packs, world-catalog, assets, icon-assets, fork
   src/domains/character/inventory-v2/** ItemInstance / slots / equip
-  src/domains/rules/sagadrive/items/**  load / cost / protection / Traglast / tool kernel
+  src/domains/rules/sagatree/items/**  load / cost / protection / Traglast / tool kernel
 
 Infrastructure
   src/infrastructure/inventory/item-catalog-service.ts

@@ -1,5 +1,5 @@
 /**
- * liveact-face-asset-validate — Khronos + SagaDrive face GLB gate helpers (#383).
+ * liveact-face-asset-validate — Khronos + SagaTree face GLB gate helpers (#383).
  * Location: scripts/lib/liveact-face-asset-validate.mjs
  */
 
@@ -18,7 +18,7 @@ import {
   validateLiveActFaceFunctionalQa,
 } from './liveact-face-functional-validate.mjs';
 
-export const FACE_INVENTORY_VERSION = 'SagaDriveLiveActFaceInventoryV1';
+export const FACE_INVENTORY_VERSION = 'SagaTreeLiveActFaceInventoryV1';
 
 export const CORE_V1_CHANNELS = [
   'eyeBlinkLeft',
@@ -256,7 +256,7 @@ export async function validateLiveActFaceAsset(opts) {
       profile: opts.profile,
       profileOk: false,
       khronos: { pass: false, numErrors: 1, detail: String(err) },
-      sagaDrive: { pass: false, errors: ['glb_parse_failed'], missingRequired: required, emptyMorphs: [], preservationErrors: [] },
+      sagaTree: { pass: false, errors: ['glb_parse_failed'], missingRequired: required, emptyMorphs: [], preservationErrors: [] },
       supportedChannels: [],
       presentChannels: [],
       gazeMode: 'none',
@@ -322,7 +322,7 @@ export async function validateLiveActFaceAsset(opts) {
     if (!faceAnchorAnatomyQa.pass) {
       sagaErrors.push('face_anchor_anatomy_failed');
       semanticQa = {
-        contractVersion: 'SagaDriveLiveActFaceSemanticQaV2',
+        contractVersion: 'SagaTreeLiveActFaceSemanticQaV2',
         profileVersion: 'liveact-face-semantic-profile-v2',
         pass: false,
         skipped: false,
@@ -356,7 +356,7 @@ export async function validateLiveActFaceAsset(opts) {
     functionalQa = functionalQaSkippedResult('no_anchors_manifest');
   } else if (sagaErrors.includes('face_anchor_anatomy_failed')) {
     functionalQa = {
-      contractVersion: 'SagaDriveLiveActFaceFunctionalQaV1',
+      contractVersion: 'SagaTreeLiveActFaceFunctionalQaV1',
       profileVersion: 'liveact-face-functional-profile-v1',
       pass: false,
       skipped: false,
@@ -411,7 +411,7 @@ export async function validateLiveActFaceAsset(opts) {
       numErrors: khronosReport.issues?.numErrors ?? 0,
       numWarnings: khronosReport.issues?.numWarnings ?? 0,
     },
-    sagaDrive: {
+    sagaTree: {
       pass: sagaPass,
       errors: [...new Set(sagaErrors)],
       missingRequired,

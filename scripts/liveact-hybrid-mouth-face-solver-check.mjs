@@ -108,7 +108,7 @@ await build({
 });
 
 const mod = await import(outfile + `?t=${Date.now()}`);
-check(mod.LIVEACT_HYBRID_FACE_CONTRACT === 'SagaDriveLiveActHybridFaceV1', 'contract id');
+check(mod.LIVEACT_HYBRID_FACE_CONTRACT === 'SagaTreeLiveActHybridFaceV1', 'contract id');
 
 function solve(frame) {
   return mod.solveHybridFace({
@@ -358,7 +358,7 @@ const h2 = createHash('sha256').update(JSON.stringify(ab2)).digest('hex');
 check(h1 === h2, 'AB deterministic');
 
 // #446 intact
-check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaDriveLiveActIrisGazeV1', '#446 contract intact');
+check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaTreeLiveActIrisGazeV1', '#446 contract intact');
 check(typeof mod.solveIrisGaze === 'function', '#446 solve intact');
 check(typeof mod.arbitrateLiveActGaze === 'function', '#446 arb intact');
 

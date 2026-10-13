@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Conditions & Resistances Validation (#33, Epic #18)
+ * SagaTree Conditions & Resistances Validation (#33, Epic #18)
  *
  * Deterministic validation of Core §9 (Zustände), §6.5 (Widerstände),
  * §2.5 (Vorteil/Nachteil folding), §7.4 (Bereithalten/Reaktion), §8.5
@@ -690,7 +690,7 @@ function buildReport({
   findings,
 }) {
   const lines = [];
-  lines.push('# SagaDrive Conditions & Resistances Report (#33)');
+  lines.push('# SagaTree Conditions & Resistances Report (#33)');
   lines.push('');
   lines.push('Deterministische Prüfung von §9 Zustände, §6.5 Widerstände, §2.5 Vorteil/Nachteil, §7.4/§8.5. Kein RNG.');
   lines.push('');

@@ -1,8 +1,8 @@
 /**
- * Shared SagaDrive core probe models — single source of truth for all
+ * Shared SagaTree core probe models — single source of truth for all
  * validation engines. Extracted from scripts/validate-core-probability.mjs (#19).
  *
- * Rule source: "docs/sagadrive core rules.md" §2 (probes), §3 (attributes),
+ * Rule source: "docs/sagatree core rules.md" §2 (probes), §3 (attributes),
  * §5 (skills/caps/EB). Consumers: validate-core-probability.mjs (#19),
  * validate-combat-action-economy.mjs (#22).
  *

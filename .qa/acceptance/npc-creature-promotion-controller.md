@@ -4,7 +4,7 @@
 
 ## Intent
 
-SagaDrive soll kompakte NPC-/Kreaturen-Statblocks ohne Identitätsbruch in vollständige spielbare Charaktere überführen können und Full-NPCs unabhängig davon Spielern oder der Spielleitung zuweisen. Generische Vorlagen erzeugen neue Charaktere; konkrete einzigartige Figuren werden als dieselbe Identität ausgebaut.
+SagaTree soll kompakte NPC-/Kreaturen-Statblocks ohne Identitätsbruch in vollständige spielbare Charaktere überführen können und Full-NPCs unabhängig davon Spielern oder der Spielleitung zuweisen. Generische Vorlagen erzeugen neue Charaktere; konkrete einzigartige Figuren werden als dieselbe Identität ausgebaut.
 
 ## Preconditions
 

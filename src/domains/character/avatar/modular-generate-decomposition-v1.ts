@@ -8,7 +8,7 @@
  */
 
 export const MODULAR_GENERATE_DECOMPOSITION_VERSION =
-  'SagaDriveModularGenerateDecompositionV1' as const;
+  'SagaTreeModularGenerateDecompositionV1' as const;
 
 export const MODULAR_GENERATE_GOLDEN_FIXTURE_IDS = [
   'human',
@@ -377,7 +377,7 @@ function buildDefaultRolePlan(): readonly ModularGenerateRolePlanV1[] {
       role: 'base-body',
       source: 'library-preset',
       required: true,
-      notesDe: 'SagaDrive Base Body der gewählten Family.',
+      notesDe: 'SagaTree Base Body der gewählten Family.',
     },
     {
       role: 'identity',

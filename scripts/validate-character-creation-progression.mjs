@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Character Creation & Progression Validation (#20, Epic #18)
+ * SagaTree Character Creation & Progression Validation (#20, Epic #18)
  * Updated for Skill Progression v2 Core (Issue #89): 15er attribute bonus pool,
  * three skill sources with stackable background points, no min-6 trained skills.
  *
@@ -781,7 +781,7 @@ function runNegativePaths() {
 
 function buildReport(concepts, progressed, equivalences, rejections) {
   const out = [];
-  out.push('# SagaDrive Character Creation & Progression Report (#20)');
+  out.push('# SagaTree Character Creation & Progression Report (#20)');
   out.push('');
   out.push('Deterministische Prüfung von §17 (Erschaffung) und §13 (Progression). Kein RNG.');
   out.push('');

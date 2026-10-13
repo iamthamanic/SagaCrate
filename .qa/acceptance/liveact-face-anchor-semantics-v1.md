@@ -3,7 +3,7 @@
 <!-- feature-slug: liveact-face-anchor-semantics-v1 -->
 
 ## Intent
-Nach dem ersten Canonical Human Live-Test: SagaDrive-Semantik der 21 Face Anchors explizit dokumentieren und Auto Mapping (MediaPipe samples + surfaces + GT) daran ausrichten — ohne GT-Pixel zu hardcoden und ohne #422/#442.
+Nach dem ersten Canonical Human Live-Test: SagaTree-Semantik der 21 Face Anchors explizit dokumentieren und Auto Mapping (MediaPipe samples + surfaces + GT) daran ausrichten — ohne GT-Pixel zu hardcoden und ohne #422/#442.
 
 ## Happy Path
 - [ ] Design contract `.qa/design/liveact-face-anchor-semantics-v1.md` definiert alle 21 Anchors.

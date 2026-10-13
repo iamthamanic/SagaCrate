@@ -1,5 +1,5 @@
 /**
- * SagaDriveFaceMappingAutoV1 — provider-neutral auto-mapping result + merge + eval (#421).
+ * SagaTreeFaceMappingAutoV1 — provider-neutral auto-mapping result + merge + eval (#421).
  * Location: src/domains/character/avatar/face-mapping-auto-v1.ts
  *
  * Auto is always a proposal (source=auto, reviewed=false). Never auto-publish.
@@ -7,9 +7,9 @@
  */
 
 import {
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
-  type SagaDriveFaceAnchorId,
-  type SagaDriveFaceAnchorTriangleBinding,
+  SAGA_TREE_FACE_ANCHOR_IDS,
+  type SagaTreeFaceAnchorId,
+  type SagaTreeFaceAnchorTriangleBinding,
 } from './face-anchor-contract';
 import {
   isValidFaceMappingReviewedAtV1,
@@ -18,7 +18,7 @@ import {
 import {
   createEmptyFaceMappingDraft,
   setFaceMappingDraftBinding,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from './face-mapping-draft-v1';
 import {
   classifyFaceMappingSurfaceFromNodeIdentity,
@@ -29,7 +29,7 @@ import {
 
 export { isValidFaceMappingReviewedAtV1 } from './face-mapping-authoring-contract';
 
-export const FACE_MAPPING_AUTO_CONTRACT_VERSION = 'SagaDriveFaceMappingAutoV1' as const;
+export const FACE_MAPPING_AUTO_CONTRACT_VERSION = 'SagaTreeFaceMappingAutoV1' as const;
 
 export const FACE_MAPPING_AUTO_SESSION_STATUSES = [
   'proposed',
@@ -61,13 +61,13 @@ export interface FaceMappingAnchorAuthoringMetaV1 {
 }
 
 export type FaceMappingDraftAuthoringMeta = Partial<
-  Record<SagaDriveFaceAnchorId, FaceMappingAnchorAuthoringMetaV1>
+  Record<SagaTreeFaceAnchorId, FaceMappingAnchorAuthoringMetaV1>
 >;
 
 export interface FaceMappingAutoAnchorResultV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
   readonly outcome: FaceMappingAutoAnchorOutcome;
-  readonly binding: SagaDriveFaceAnchorTriangleBinding | null;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding | null;
   readonly confidence: number | null;
   readonly landmarkAvailability: number | null;
   readonly screenX: number | null;
@@ -123,7 +123,7 @@ export interface FaceMappingAutoSessionResultV1 {
  * `defaultReviewed` is ignored when source is auto (authoring contract forbids auto+reviewed).
  */
 export function createEmptyAnchorAuthoringMeta(
-  draft: SagaDriveFaceMappingDraftV1,
+  draft: SagaTreeFaceMappingDraftV1,
   options?: {
     defaultSource?: FaceMappingAuthoringSource;
     defaultReviewed?: boolean;
@@ -138,7 +138,7 @@ export function createEmptyAnchorAuthoringMeta(
   // Never invent reviewed GT without a canonical V1 reviewedAt — fail closed to unreviewed.
   const reviewed = wantReviewed && isValidFaceMappingReviewedAtV1(reviewedAt);
   const meta: FaceMappingDraftAuthoringMeta = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     if (draft.anchors[id]) {
       meta[id] = reviewed
         ? { source, reviewed: true, reviewedAt: reviewedAt! }
@@ -154,7 +154,7 @@ export function createEmptyAnchorAuthoringMeta(
  */
 export function isProtectedFaceMappingAnchor(
   meta: FaceMappingAnchorAuthoringMetaV1 | undefined,
-  binding: SagaDriveFaceAnchorTriangleBinding | null | undefined,
+  binding: SagaTreeFaceAnchorTriangleBinding | null | undefined,
 ): boolean {
   if (!binding) return false;
   if (!meta) return false;
@@ -176,7 +176,7 @@ export function isFaceMappingSaveDisabled(input: {
 /** Remove authoring meta for one anchor (e.g. after clear). */
 export function clearFaceMappingAuthoringMetaForAnchor(
   meta: FaceMappingDraftAuthoringMeta,
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
 ): FaceMappingDraftAuthoringMeta {
   if (!(anchorId in meta)) return meta;
   const next: FaceMappingDraftAuthoringMeta = { ...meta };
@@ -190,7 +190,7 @@ export interface ApplyAutoMappingOptions {
 }
 
 export interface ApplyAutoMappingResult {
-  readonly draft: SagaDriveFaceMappingDraftV1;
+  readonly draft: SagaTreeFaceMappingDraftV1;
   readonly meta: FaceMappingDraftAuthoringMeta;
   readonly appliedCount: number;
   readonly skippedProtectedCount: number;
@@ -204,7 +204,7 @@ export interface ApplyAutoMappingResult {
  * Landmark availability is gated in the Auto pipeline (`low_confidence`); apply trusts session outcomes.
  */
 export function applyAutoMappingToDraft(
-  draft: SagaDriveFaceMappingDraftV1,
+  draft: SagaTreeFaceMappingDraftV1,
   session: FaceMappingAutoSessionResultV1,
   metaIn: FaceMappingDraftAuthoringMeta,
   options: ApplyAutoMappingOptions,
@@ -261,7 +261,7 @@ export function applyAutoMappingToDraft(
 /** Mark a manually placed/edited anchor as manual_override (after auto) or manual. */
 export function markFaceMappingAnchorManual(
   meta: FaceMappingDraftAuthoringMeta,
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
   hadAuto: boolean,
 ): FaceMappingDraftAuthoringMeta {
   return {
@@ -281,12 +281,12 @@ export function markFaceMappingAnchorManual(
  */
 export function markAllBoundFaceMappingAnchorsAsReviewedManual(
   meta: FaceMappingDraftAuthoringMeta,
-  draft: SagaDriveFaceMappingDraftV1,
+  draft: SagaTreeFaceMappingDraftV1,
   nowIso: string,
 ): FaceMappingDraftAuthoringMeta {
   if (!isValidFaceMappingReviewedAtV1(nowIso)) return meta;
   const next: FaceMappingDraftAuthoringMeta = { ...meta };
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     if (!draft.anchors[id]) continue;
     const existing = meta[id];
     const source: FaceMappingAuthoringSource =
@@ -304,8 +304,8 @@ export function markAllBoundFaceMappingAnchorsAsReviewedManual(
 }
 
 export function resetFaceMappingDraftAndMeta(
-  draft: SagaDriveFaceMappingDraftV1,
-): { draft: SagaDriveFaceMappingDraftV1; meta: FaceMappingDraftAuthoringMeta } {
+  draft: SagaTreeFaceMappingDraftV1,
+): { draft: SagaTreeFaceMappingDraftV1; meta: FaceMappingDraftAuthoringMeta } {
   const next = createEmptyFaceMappingDraft(draft.baseline);
   return { draft: next, meta: createEmptyAnchorAuthoringMeta(next) };
 }
@@ -314,7 +314,7 @@ export function resetFaceMappingDraftAndMeta(
 export const FACE_MAPPING_AUTO_EVAL_THRESHOLD_STATUS = 'needs-calibration' as const;
 
 export interface FaceMappingAutoEvalAnchorRowV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
   readonly manualPresent: boolean;
   readonly autoPresent: boolean;
   readonly screenErrorPx: number | null;
@@ -342,11 +342,11 @@ export interface FaceMappingAutoEvalSummaryV1 {
   readonly p95ErrorPx: number | null;
   readonly maxErrorPx: number | null;
   readonly thresholdStatus: typeof FACE_MAPPING_AUTO_EVAL_THRESHOLD_STATUS;
-  readonly outlierAnchorIds: readonly SagaDriveFaceAnchorId[];
+  readonly outlierAnchorIds: readonly SagaTreeFaceAnchorId[];
 }
 
 export interface FaceMappingAutoEvalReportV1 {
-  readonly contractVersion: 'SagaDriveFaceMappingAutoEvalV1';
+  readonly contractVersion: 'SagaTreeFaceMappingAutoEvalV1';
   readonly rows: readonly FaceMappingAutoEvalAnchorRowV1[];
   readonly summary: FaceMappingAutoEvalSummaryV1;
 }
@@ -401,8 +401,8 @@ export function countsAsGroundTruthMeta(
  * Full GT eligibility for one bound anchor: provenance + surface semantics (#421 live evidence).
  */
 export function countsAsGroundTruthAnchor(input: {
-  readonly anchorId: SagaDriveFaceAnchorId;
-  readonly binding: SagaDriveFaceAnchorTriangleBinding | null | undefined;
+  readonly anchorId: SagaTreeFaceAnchorId;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding | null | undefined;
   readonly meta: FaceMappingAnchorAuthoringMetaV1 | undefined;
 }): boolean {
   if (!input.binding) return false;
@@ -417,7 +417,7 @@ export function countsAsGroundTruthAnchor(input: {
  * Surface semantics use provider-neutral node-identity classification.
  */
 export function evaluateAutoVsManualScreenPoints(input: {
-  manualScreen: Readonly<Partial<Record<SagaDriveFaceAnchorId, { x: number; y: number }>>>;
+  manualScreen: Readonly<Partial<Record<SagaTreeFaceAnchorId, { x: number; y: number }>>>;
   autoSession: FaceMappingAutoSessionResultV1;
   /** Optional face bbox width in px for normalized error; when absent normalizedFaceError is null. */
   faceWidthPx?: number;
@@ -437,7 +437,7 @@ export function evaluateAutoVsManualScreenPoints(input: {
 
   const autoById = new Map(input.autoSession.anchors.map((a) => [a.anchorId, a]));
 
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const manual = input.manualScreen[id];
     const auto = autoById.get(id);
     const manualPresent = Boolean(manual);
@@ -466,7 +466,7 @@ export function evaluateAutoVsManualScreenPoints(input: {
     // L/R check: only when both sides mapped with usable screen coords.
     let lateralityOk: boolean | null = null;
     if (id.endsWith('Left') || id.includes('Left')) {
-      const rightId = id.replace('Left', 'Right') as SagaDriveFaceAnchorId;
+      const rightId = id.replace('Left', 'Right') as SagaTreeFaceAnchorId;
       const leftAuto = auto;
       const rightAuto = autoById.get(rightId);
       if (
@@ -512,7 +512,7 @@ export function evaluateAutoVsManualScreenPoints(input: {
 
   const sorted = [...errors].sort((a, b) => a - b);
   const med = median(sorted);
-  const outlierIds: SagaDriveFaceAnchorId[] = [];
+  const outlierIds: SagaTreeFaceAnchorId[] = [];
   if (med != null) {
     for (let i = 0; i < rows.length; i += 1) {
       const row = rows[i];
@@ -527,10 +527,10 @@ export function evaluateAutoVsManualScreenPoints(input: {
   }
 
   return {
-    contractVersion: 'SagaDriveFaceMappingAutoEvalV1',
+    contractVersion: 'SagaTreeFaceMappingAutoEvalV1',
     rows,
     summary: {
-      expectedAnchors: SAGA_DRIVE_FACE_ANCHOR_IDS.length,
+      expectedAnchors: SAGA_TREE_FACE_ANCHOR_IDS.length,
       successfullyMapped,
       missing,
       raycastMisses,
@@ -551,7 +551,7 @@ export function evaluateAutoVsManualScreenPoints(input: {
 // ---------------------------------------------------------------------------
 
 export const FACE_MAPPING_GROUND_TRUTH_REFERENCE_VERSION =
-  'SagaDriveFaceMappingGroundTruthReferenceV1' as const;
+  'SagaTreeFaceMappingGroundTruthReferenceV1' as const;
 
 export const FACE_MAPPING_GROUND_TRUTH_REFERENCE_STATUSES = [
   'reviewed_manual_complete',
@@ -570,8 +570,8 @@ export interface FaceMappingGroundTruthScreenV1 {
 }
 
 export interface FaceMappingGroundTruthReferenceAnchorV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
-  readonly binding: SagaDriveFaceAnchorTriangleBinding;
+  readonly anchorId: SagaTreeFaceAnchorId;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding;
   readonly screen: FaceMappingGroundTruthScreenV1 | null;
   readonly source: FaceMappingAuthoringSource;
   readonly reviewed: boolean;
@@ -589,7 +589,7 @@ export interface FaceMappingGroundTruthReferenceV1 {
 
 export type FaceMappingScreenCoordMap = Readonly<
   Partial<
-    Record<SagaDriveFaceAnchorId, { x: number; y: number; meshLabel?: string | null }>
+    Record<SagaTreeFaceAnchorId, { x: number; y: number; meshLabel?: string | null }>
   >
 >;
 
@@ -602,7 +602,7 @@ export type FaceMappingScreenCoordMap = Readonly<
  * Eyes/Eyelashes/Teeth/Tongue bindings never count as normative GT.
  */
 export function freezeFaceMappingGroundTruthReference(input: {
-  draft: SagaDriveFaceMappingDraftV1;
+  draft: SagaTreeFaceMappingDraftV1;
   meta: FaceMappingDraftAuthoringMeta;
   screenCoords: FaceMappingScreenCoordMap;
   assetFingerprint?: string | null;
@@ -615,7 +615,7 @@ export function freezeFaceMappingGroundTruthReference(input: {
   let projectedCount = 0;
   let autoUnreviewedBound = 0;
 
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = input.draft.anchors[id];
     if (!binding) continue;
     boundCount += 1;
@@ -651,7 +651,7 @@ export function freezeFaceMappingGroundTruthReference(input: {
     });
   }
 
-  const expected = SAGA_DRIVE_FACE_ANCHOR_IDS.length;
+  const expected = SAGA_TREE_FACE_ANCHOR_IDS.length;
   let status: FaceMappingGroundTruthReferenceStatusV1;
   let validForGroundTruthComparison = false;
 
@@ -684,7 +684,7 @@ export function freezeFaceMappingGroundTruthReference(input: {
 // Compare export (#421) — GT reference vs auto proposal
 // ---------------------------------------------------------------------------
 
-export const FACE_MAPPING_COMPARE_EXPORT_KIND = 'SagaDriveFaceMappingCompareV1' as const;
+export const FACE_MAPPING_COMPARE_EXPORT_KIND = 'SagaTreeFaceMappingCompareV1' as const;
 
 export interface FaceMappingCompareExportScreenV1 {
   readonly x: number;
@@ -693,16 +693,16 @@ export interface FaceMappingCompareExportScreenV1 {
 }
 
 export interface FaceMappingCompareReferenceAnchorV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
-  readonly binding: SagaDriveFaceAnchorTriangleBinding;
+  readonly anchorId: SagaTreeFaceAnchorId;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding;
   readonly screen: FaceMappingCompareExportScreenV1 | null;
   readonly source: FaceMappingAuthoringSource;
   readonly reviewed: boolean;
 }
 
 export interface FaceMappingCompareProposalAnchorV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
-  readonly binding: SagaDriveFaceAnchorTriangleBinding | null;
+  readonly anchorId: SagaTreeFaceAnchorId;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding | null;
   readonly screen: FaceMappingCompareExportScreenV1 | null;
   readonly source: 'auto';
   readonly confidence: number | null;
@@ -714,7 +714,7 @@ export interface FaceMappingCompareProposalAnchorV1 {
 }
 
 export interface FaceMappingCompareAnchorDeltaV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
   readonly screenErrorPx: number | null;
   readonly normalizedFaceError: number | null;
   readonly lateralityOk: boolean | null;
@@ -757,7 +757,7 @@ export interface FaceMappingCompareExportV1 {
   /** Optional display provenance after apply — not used as GT manualScreen. */
   readonly draftAfterProvenance?: {
     readonly setCount: number;
-    readonly metaSources: Readonly<Partial<Record<SagaDriveFaceAnchorId, FaceMappingAuthoringSource>>>;
+    readonly metaSources: Readonly<Partial<Record<SagaTreeFaceAnchorId, FaceMappingAuthoringSource>>>;
   };
 }
 
@@ -767,7 +767,7 @@ function round1(n: number): number {
 
 function screenFromCoords(
   coords: FaceMappingScreenCoordMap | undefined,
-  id: SagaDriveFaceAnchorId,
+  id: SagaTreeFaceAnchorId,
   fallbackX: number | null,
   fallbackY: number | null,
   meshLabel?: string | null,
@@ -798,7 +798,7 @@ export function buildFaceMappingCompareExport(input: {
   reference: FaceMappingGroundTruthReferenceV1 | null;
   autoSession: FaceMappingAutoSessionResultV1 | null;
   /** Current draft only for display provenance after apply — NOT used as manualScreen. */
-  draftAfter?: SagaDriveFaceMappingDraftV1;
+  draftAfter?: SagaTreeFaceMappingDraftV1;
   metaAfter?: FaceMappingDraftAuthoringMeta;
   /** Optional override screens for proposal (else session screenX/Y). */
   proposalScreens?: FaceMappingScreenCoordMap;
@@ -822,7 +822,7 @@ export function buildFaceMappingCompareExport(input: {
   );
 
   const referenceAnchors: FaceMappingCompareReferenceAnchorV1[] = [];
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const ref = refById.get(id);
     if (!ref) continue;
     referenceAnchors.push({
@@ -845,7 +845,7 @@ export function buildFaceMappingCompareExport(input: {
   let missing = 0;
   let surfaceMismatchCount = 0;
 
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const auto = autoById.get(id);
     const expected = expectedFaceMappingSurfaceClasses(id);
     const meshNodeIdentity = auto?.meshNodeIdentity ?? auto?.binding?.nodeIdentity ?? null;
@@ -904,7 +904,7 @@ export function buildFaceMappingCompareExport(input: {
       proposalAnchors.map((p) => [p.anchorId, p] as const),
     );
 
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       const ref = refById.get(id);
       const prop = proposalScreenById.get(id);
       let screenErrorPx: number | null = null;
@@ -919,7 +919,7 @@ export function buildFaceMappingCompareExport(input: {
 
       let lateralityOk: boolean | null = null;
       if (id.endsWith('Left') || id.includes('Left')) {
-        const rightId = id.replace('Left', 'Right') as SagaDriveFaceAnchorId;
+        const rightId = id.replace('Left', 'Right') as SagaTreeFaceAnchorId;
         const leftProp = prop;
         const rightProp = proposalScreenById.get(rightId);
         if (leftProp?.binding && rightProp?.binding && leftProp.screen && rightProp.screen) {
@@ -963,8 +963,8 @@ export function buildFaceMappingCompareExport(input: {
   let draftAfterProvenance: FaceMappingCompareExportV1['draftAfterProvenance'];
   if (input.draftAfter) {
     let setCount = 0;
-    const metaSources: Partial<Record<SagaDriveFaceAnchorId, FaceMappingAuthoringSource>> = {};
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    const metaSources: Partial<Record<SagaTreeFaceAnchorId, FaceMappingAuthoringSource>> = {};
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       if (input.draftAfter.anchors[id]) setCount += 1;
       const src = input.metaAfter?.[id]?.source;
       if (src) metaSources[id] = src;
@@ -982,7 +982,7 @@ export function buildFaceMappingCompareExport(input: {
     proposal: input.autoSession ? { anchors: proposalAnchors } : null,
     comparison,
     summary: {
-      expectedAnchors: SAGA_DRIVE_FACE_ANCHOR_IDS.length,
+      expectedAnchors: SAGA_TREE_FACE_ANCHOR_IDS.length,
       mapped,
       missing,
       medianErrorPx: valid ? (medianErrorPx != null ? round1(medianErrorPx) : null) : null,
@@ -1010,7 +1010,7 @@ export function stringifyFaceMappingGroundTruthReference(
 }
 
 export const FACE_MAPPING_AUTO_SESSION_EXPORT_KIND =
-  'SagaDriveFaceMappingAutoSessionExportV1' as const;
+  'SagaTreeFaceMappingAutoSessionExportV1' as const;
 
 /** Clipboard/disk export of the last Auto Mapping proposal only (not GT, not compare). */
 export function stringifyFaceMappingAutoSessionExport(

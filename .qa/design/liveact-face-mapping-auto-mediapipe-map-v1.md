@@ -1,8 +1,8 @@
-# MediaPipe → SagaDriveFaceAnchorsV1 Map V1 (#421)
+# MediaPipe → SagaTreeFaceAnchorsV1 Map V1 (#421)
 
-**Version:** `MediaPipeSagaDriveFaceAnchorMapV1`  
-**Semantics:** `.qa/design/liveact-face-anchor-semantics-v1.md` (`SagaDriveFaceAnchorSemanticsV1`)  
-**Code:** `src/infrastructure/character/liveact/mediapipe-sagadrive-face-anchor-map-v1.ts`
+**Version:** `MediaPipeSagaTreeFaceAnchorMapV1`  
+**Semantics:** `.qa/design/liveact-face-anchor-semantics-v1.md` (`SagaTreeFaceAnchorSemanticsV1`)  
+**Code:** `src/infrastructure/character/liveact/mediapipe-sagatree-face-anchor-map-v1.ts`
 
 Left/Right = anatomical (subject), aligned to official MediaPipe Face Landmarker topology:
 

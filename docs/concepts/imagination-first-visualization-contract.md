@@ -1,8 +1,8 @@
-# SagaDrive Imagination-First Visualization Contract
+# SagaTree Imagination-First Visualization Contract
 
 ## Status
 
-This document is a **canonical product-experience contract** for how SagaDrive visualizes tabletop roleplaying without replacing player imagination.
+This document is a **canonical product-experience contract** for how SagaTree visualizes tabletop roleplaying without replacing player imagination.
 
 It applies to:
 
@@ -27,15 +27,15 @@ Related canonical sources:
 
 This document exists because "more detailed", "more realistic" and "more cinematic" are **not automatically better** for a TTRPG.
 
-SagaDrive must visualize enough to synchronize the shared fiction while deliberately leaving enough unresolved space for imagination.
+SagaTree must visualize enough to synchronize the shared fiction while deliberately leaving enough unresolved space for imagination.
 
 ---
 
 ## 1. Product Thesis
 
-SagaDrive does not fully simulate the fictional world.
+SagaTree does not fully simulate the fictional world.
 
-SagaDrive **materializes only the parts of the shared fiction that currently matter**.
+SagaTree **materializes only the parts of the shared fiction that currently matter**.
 
 Canonical principle:
 
@@ -52,7 +52,7 @@ EVOKE, DON'T EXHAUST
 MATERIALIZE, DON'T AUTHOR
 ```
 
-SagaDrive should help players think:
+SagaTree should help players think:
 
 > "I can see enough to feel the place, but there is still more to discover and imagine."
 
@@ -253,7 +253,7 @@ At least **30% of potentially describable scene detail should remain intentional
 
 ## 6. Progressive Materialization
 
-SagaDrive should reveal specificity as the fiction earns it.
+SagaTree should reveal specificity as the fiction earns it.
 
 Canonical progression:
 
@@ -438,7 +438,7 @@ LiveAct, face tracking, equipment and character visuals may therefore be highly 
 
 ## 12. Camera and Framing Rules
 
-SagaDrive should frame moments, not document everything.
+SagaTree should frame moments, not document everything.
 
 Default rules:
 
@@ -502,7 +502,7 @@ Hard rule:
 
 ## 15. Human Authorship Rule
 
-SagaDrive visualizes consequences of human-led fiction.
+SagaTree visualizes consequences of human-led fiction.
 
 Default causal order:
 
@@ -511,7 +511,7 @@ human intent
 -> speech/action
 -> rules/uncertainty if required
 -> consequence
--> SagaDrive materializes relevant result
+-> SagaTree materializes relevant result
 ```
 
 Reject this default pattern:
@@ -711,7 +711,7 @@ The scene becomes more concrete through attention and play.
 
 ### Reject
 
-Player hears something behind a door and SagaDrive renders the exact monster model.
+Player hears something behind a door and SagaTree renders the exact monster model.
 
 ### Accept
 
@@ -779,15 +779,15 @@ This section preserves the reasoning behind the Imagination-First contract so fu
 
 ### 25.1 Evidence labels
 
-- **RESEARCH-INFORMED** — grounded in work on collaborative/co-constitutive imagination, TTRPG play or media/Actual Play, then translated into a SagaDrive design rule.
-- **PRODUCT HEURISTIC** — a deliberate SagaDrive starting point to be tested with players.
-- **DOMAIN PRINCIPLE** — follows from the product decision that humans remain authors and SagaDrive materializes shared fiction rather than fully simulating it.
+- **RESEARCH-INFORMED** — grounded in work on collaborative/co-constitutive imagination, TTRPG play or media/Actual Play, then translated into a SagaTree design rule.
+- **PRODUCT HEURISTIC** — a deliberate SagaTree starting point to be tested with players.
+- **DOMAIN PRINCIPLE** — follows from the product decision that humans remain authors and SagaTree materializes shared fiction rather than fully simulating it.
 
 ### 25.2 Principle rationale
 
 | Rule | Why it exists | Evidence type | Failure mode it prevents |
 |---|---|---|---|
-| Show enough to synchronize, leave enough to imagine | TTRPG play depends on people jointly elaborating an incomplete shared world. SagaDrive should stabilize shared reference without resolving every personal image. | RESEARCH-INFORMED / DOMAIN PRINCIPLE | turning shared imagination into passive visual consumption |
+| Show enough to synchronize, leave enough to imagine | TTRPG play depends on people jointly elaborating an incomplete shared world. SagaTree should stabilize shared reference without resolving every personal image. | RESEARCH-INFORMED / DOMAIN PRINCIPLE | turning shared imagination into passive visual consumption |
 | canonical / suggestive / atmospheric | A generated image contains more visible detail than the fiction has actually established. Authority levels prevent pixels from silently becoming world truth. | DOMAIN PRINCIPLE | "it is on screen, therefore it exists" |
 | Progressive Materialization | In tabletop play, locations/objects become more specific through questions, attention and action. Visual detail should follow the same causal rhythm. | RESEARCH-INFORMED / PRODUCT HEURISTIC | maximum-detail scene dump before play begins |
 | Human Authorship Rule | The core loop is human intent -> uncertainty/rules -> consequence. AI should amplify/materialize this, not replace it with pre-authored spectacle. | DOMAIN PRINCIPLE | AI becoming the actual storyteller |
@@ -818,7 +818,7 @@ The following percentages/counts are **design heuristics**, not empirical laws.
 
 ### 25.4 Research references
 
-These sources support the **direction** of the contract. They do not establish the SagaDrive-specific percentages above.
+These sources support the **direction** of the contract. They do not establish the SagaTree-specific percentages above.
 
 - Bogotá, Kines & Ekdahl (2025), **You walk into a tavern: co-constitutive imagination in Dungeons and Dragons**. The paper describes D&D's imagined world as dynamically sustained and elaborated through reciprocal participation, with shared objects becoming increasingly detailed through inquiry and interaction. https://link.springer.com/article/10.1007/s11097-025-10106-2
 - Nicholas J. Mizer (2019), **Tabletop Role-Playing Games and the Experience of Imagined Worlds**. Ethnographic work on how free-form imagination and constrained rules combine in actual play. https://link.springer.com/book/10.1007/978-3-030-29127-3
@@ -827,7 +827,7 @@ These sources support the **direction** of the contract. They do not establish t
 
 ### 25.5 What is hypothesis vs. product law
 
-The following are **current product hypotheses** and should eventually be validated with SagaDrive playtests:
+The following are **current product hypotheses** and should eventually be validated with SagaTree playtests:
 
 - 30% unspecified detail is enough to preserve imaginative participation;
 - the authority distribution ranges produce the desired balance;
@@ -845,11 +845,11 @@ The following are **product laws unless explicitly changed at product level**:
 
 ### 25.6 Historical intent
 
-This contract was introduced in September 2026 because SagaDrive increasingly supports characters, scenes, items, LiveAct, Program output and Director-style presentation. Without a counter-rule, technical progress naturally pushes the product toward "render everything".
+This contract was introduced in September 2026 because SagaTree increasingly supports characters, scenes, items, LiveAct, Program output and Director-style presentation. Without a counter-rule, technical progress naturally pushes the product toward "render everything".
 
 The intended direction is different:
 
-> SagaDrive should make shared imagination more tangible without replacing the act of imagining together.
+> SagaTree should make shared imagination more tangible without replacing the act of imagining together.
 
 When a future agent changes a threshold, it must record:
 

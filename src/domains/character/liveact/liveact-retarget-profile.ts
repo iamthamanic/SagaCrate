@@ -13,7 +13,7 @@ import {
 } from './liveact-face-contract';
 import type { LiveActFrameV1 } from './liveact-contract';
 
-export const LIVEACT_RETARGET_PROFILE_VERSION = 'SagaDriveLiveActRetargetProfileV1' as const;
+export const LIVEACT_RETARGET_PROFILE_VERSION = 'SagaTreeLiveActRetargetProfileV1' as const;
 
 export interface LiveActChannelRetargetV1 {
   /** Multiplier after dead-zone (default 1). */

@@ -79,7 +79,7 @@ export function mapMediaPipeLandmarksToLiveActDiagnostics(input: {
   };
 
   const frame: LiveActFaceDiagnosticsFrameV1 = {
-    contractVersion: 'SagaDriveLiveActFaceDiagnosticsV1',
+    contractVersion: 'SagaTreeLiveActFaceDiagnosticsV1',
     timestampMs: input.timestampMs,
     sequence: input.sequence,
     trackingLost: false,

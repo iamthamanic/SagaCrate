@@ -25,7 +25,7 @@ Move free-form character notes into the Hintergrund tab and add a Statistik tab 
 
 ## Regression
 - [x] Species / background / parameter flows still work
-- [x] Character save still persists notes and sagadrive_profile
+- [x] Character save still persists notes and sagatree_profile
 
 ## Assumptions
 - Migration number is `009` so it does not collide with upcoming world-profile `008` on the other branch

@@ -1,7 +1,7 @@
 # Feature: LiveAct Semantic Face Morph Validator V2 (#401)
 
 ## Intent
-Offline semantic QA for face morph channels: expected-region energy, forbidden leakage, left/right dominance, and combination poses — on top of existing Khronos + structural SagaDrive gates (#383).
+Offline semantic QA for face morph channels: expected-region energy, forbidden leakage, left/right dominance, and combination poses — on top of existing Khronos + structural SagaTree gates (#383).
 
 ## Happy Path
 - [x] Validator measures per-channel expected-region energy, leakage, and side correctness with versioned thresholds (`liveact-face-semantic-profile-v1.mjs`).

@@ -9,7 +9,7 @@
 Client opens library/overview or Dornhain panel; story definitions/versions are loaded with audience projection; new group runs pin the same published version.
 
 ## Hop chain
-Library / GoldenAdventureDornhainPanel / useSagaOverview → project summaries join saga_definitions metadata OR RPC get_native_saga_definition_by_slug / get_saga_overview → sagadrive_project_saga_definition_payload → UI. create_project_from_saga_version writes new projects row pinned to version.
+Library / GoldenAdventureDornhainPanel / useSagaOverview → project summaries join saga_definitions metadata OR RPC get_native_saga_definition_by_slug / get_saga_overview → sagatree_project_saga_definition_payload → UI. create_project_from_saga_version writes new projects row pinned to version.
 
 ## Simulations
 | Case | Intended | Composed | Result |

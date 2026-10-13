@@ -1,5 +1,5 @@
 /**
- * PostFxLookInspector — Post-FX knobs in SagaDrive terms (#344).
+ * PostFxLookInspector — Post-FX knobs in SagaTree terms (#344).
  * Location: src/app/look/editor/inspectors/PostFxLookInspector.tsx
  */
 import { Label } from '../../../../shared/ui/label';

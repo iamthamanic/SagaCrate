@@ -1,4 +1,4 @@
-# SagaDrive Character Visual Styleguide
+# SagaTree Character Visual Styleguide
 
 **Status:** Binding for species base bodies, Meshy/generation refs, and Avatar V2 authoring  
 **Canonical golden refs:** `assets/species-3d/human/golden/`
@@ -41,7 +41,7 @@ Provenance: `assets/species-3d/human/provenance.json`
 
 ### Runtime look
 
-- Materials: SagaDrive **MToon** preferred; controlled PBR fallback (`SagaDriveMToonProfileV1`).
+- Materials: SagaTree **MToon** preferred; controlled PBR fallback (`SagaTreeMToonProfileV1`).
 - Albedo maps must stay visible (no flat clay tint over textures).
 - Editor may toggle MToon preview on/off; **saved look** remains MToon-on by default.
 

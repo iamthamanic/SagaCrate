@@ -19,7 +19,7 @@ ACCEPT
 N/A / not blocking for this slice
 
 ## Phase E — UI guidelines
-Progress list is DE-labeled SagaDrive stages; no provider internals. Static OK.
+Progress list is DE-labeled SagaTree stages; no provider internals. Static OK.
 
 ## Secure-by-Default Coverage
 PASS — no Critical checklist violations in scope.

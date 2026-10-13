@@ -76,8 +76,8 @@ if (frameworkCount !== expectedFrameworks.length) {
 
 requireMatch(source, /examples:\s*readonly string\[\]/, 'framework example contract');
 requireMatch(source, /worldProfileIds\?:\s*readonly string\[\]/, 'world-profile framework filtering contract');
-requireMatch(source, /skillPool:\s*readonly \[SagaDriveSkillKey, SagaDriveSkillKey, SagaDriveSkillKey, SagaDriveSkillKey\]/, 'fixed four-skill framework pool');
-requireMatch(source, /validateSagaDriveBackgroundTemplateCatalog/, 'framework catalog runtime validation');
+requireMatch(source, /skillPool:\s*readonly \[SagaTreeSkillKey, SagaTreeSkillKey, SagaTreeSkillKey, SagaTreeSkillKey\]/, 'fixed four-skill framework pool');
+requireMatch(source, /validateSagaTreeBackgroundTemplateCatalog/, 'framework catalog runtime validation');
 requireMatch(carousel, /'Hintergrund Framework'/, 'framework terminology in carousel');
 requireMatch(carousel, /'Freier Hintergrund'/, 'free background terminology in carousel');
 requireMatch(carousel, /option\.template\.examples\.join/, 'cross-setting examples shown in carousel');

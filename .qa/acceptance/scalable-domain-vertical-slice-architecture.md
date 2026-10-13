@@ -4,7 +4,7 @@
 
 ## Intent
 
-Etabliere Modular-Monolith-Grenzen (Domains, Vertical Slices, UI-unabhängiger Rules-Kernel) und migriere Character/SagaDrive-Rules inkrementell — als Fundament für Skill Progression v2 (#90/#91), ohne Big-Bang.
+Etabliere Modular-Monolith-Grenzen (Domains, Vertical Slices, UI-unabhängiger Rules-Kernel) und migriere Character/SagaTree-Rules inkrementell — als Fundament für Skill Progression v2 (#90/#91), ohne Big-Bang.
 
 Roadmap: GitHub Issue #94 — `scalable-domain-vertical-slice-architecture`.
 
@@ -20,8 +20,8 @@ Roadmap: GitHub Issue #94 — `scalable-domain-vertical-slice-architecture`.
 - [x] CharacterEditor liegt unter `src/app/character/edit/`; Creation-/Progression-Panels unter `creation/` bzw. `progression/`.
 - [x] `character.service.ts` ist auf Use-Cases + Supabase-Repository aufgeteilt; Legacy-Barrel exportiert weiter `characterService`.
 - [x] `character.types.ts` ist in Domain-, Persistence- und Contract-Typen getrennt; Legacy-Barrel bleibt kompatibel.
-- [x] `derivedStats`-Berechnung liegt in `domains/rules/sagadrive/derived-stats/` ohne React/UI-Imports.
-- [x] SagaDrive-Rulesets liegen unter `domains/rules/sagadrive/*`; Legacy `modules/rulesets` re-exportiert.
+- [x] `derivedStats`-Berechnung liegt in `domains/rules/sagatree/derived-stats/` ohne React/UI-Imports.
+- [x] SagaTree-Rulesets liegen unter `domains/rules/sagatree/*`; Legacy `modules/rulesets` re-exportiert.
 - [x] `scripts/architecture-boundary-check.mjs` ist in `scripts/test-gate.mjs` verdrahtet und schlägt bei verbotenen Imports fehl.
 - [x] `npm run test-gate` ist grün; bestehende Character-/Rules-Regressionsskripte lesen kanonische Pfade.
 - [x] Berührte TS-Dateien enthalten keine Type-Escape-Hatches (`any`, `@ts-ignore`, etc.).
@@ -36,7 +36,7 @@ Roadmap: GitHub Issue #94 — `scalable-domain-vertical-slice-architecture`.
 ## Regression
 
 - [x] Character Editor Tabs, Speichern, Presets, Hintergrund, Spezies-Merkmale, Attribute, Inventar — Regressionsskripte grün.
-- [x] SagaDrive Rules-Validatoren (`validate-character-creation-progression`, etc.) weiter grün.
+- [x] SagaTree Rules-Validatoren (`validate-character-creation-progression`, etc.) weiter grün.
 - [x] App lazy-load von CharacterEditor funktioniert (Build grün).
 
 ## Security Coverage
@@ -65,7 +65,7 @@ Architectural refactor — preserve existing auth/RLS; no new endpoints.
 ## Implementation Notes
 
 - Files touched: layered `src/domains/`, `src/infrastructure/`, `src/app/character/`, `src/shared/ui/`; compatibility barrels under `src/modules/` and `src/components/CharacterEditor.tsx`
-- Architecture: rules kernel in `domains/rules/sagadrive/*`; character split into domain/contracts/use-cases + Supabase repository + infra facade
+- Architecture: rules kernel in `domains/rules/sagatree/*`; character split into domain/contracts/use-cases + Supabase repository + infra facade
 - Boundary check: `scripts/architecture-boundary-check.mjs` wired into `scripts/test-gate.mjs`
 - Regression scripts updated to canonical paths
 - Unit / validators: `npm run test-gate` → **passed**

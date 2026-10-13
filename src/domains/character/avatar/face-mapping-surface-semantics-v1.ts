@@ -6,10 +6,10 @@
  * No asset-specific name hacks (e.g. if (name==="Eyes")). Pure domain — no React / Three / MediaPipe.
  */
 
-import type { SagaDriveFaceAnchorId } from './face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from './face-anchor-contract';
 
 export const FACE_MAPPING_SURFACE_SEMANTICS_VERSION =
-  'SagaDriveFaceMappingSurfaceSemanticsV1' as const;
+  'SagaTreeFaceMappingSurfaceSemanticsV1' as const;
 
 export const FACE_MAPPING_SURFACE_CLASSES_V1 = [
   'face_skin',
@@ -148,11 +148,11 @@ const EYE_LID: readonly FaceMappingSurfaceClassV1[] = ['eyelid_or_skin', 'face_s
 const BROW: readonly FaceMappingSurfaceClassV1[] = ['eyebrow', 'face_skin'];
 
 /**
- * Expected surface classes per SagaDrive face anchor.
+ * Expected surface classes per SagaTree face anchor.
  * Eyeball alone is never the sole/expected hit for eye canthus or lids (mismatch).
  */
 export function expectedFaceMappingSurfaceClasses(
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
 ): readonly FaceMappingSurfaceClassV1[] {
   switch (anchorId) {
     case 'mouthUpper':
@@ -190,12 +190,12 @@ export function expectedFaceMappingSurfaceClasses(
 /**
  * Ok when actual class is among expected for the anchor.
  * Rules: eye canthus/lids on eyeball/eyelash = NOT ok; mouth/nose/chin on non-face_skin = NOT ok.
- * `oral_interior` is never allowed for any SagaDriveFaceAnchorV1.
+ * `oral_interior` is never allowed for any SagaTreeFaceAnchorV1.
  * `unknown` is allowed only when the anchor expects `face_skin` (provisional unlabeled body mesh —
  * e.g. `*_mesh`, HighRes skins without semantic tokens). Known-bad classes still reject.
  */
 export function isFaceMappingSurfaceSemanticsOk(
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
   actualClass: FaceMappingSurfaceClassV1,
 ): boolean {
   if (actualClass === 'oral_interior') return false;

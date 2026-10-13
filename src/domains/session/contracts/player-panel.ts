@@ -9,17 +9,17 @@ import type { CharacterAttributesDto } from '../../character/domain/character.en
 import type { EquipmentSlot, InventoryState } from '../../character/inventory-v2';
 import { EQUIPMENT_SLOTS } from '../../character/inventory-v2';
 import {
-  getSagaDriveExperienceBonus,
-  resolveSagaDriveSkillBuildState,
-  resolveSagaDriveSkillRanksSafe,
+  getSagaTreeExperienceBonus,
+  resolveSagaTreeSkillBuildState,
+  resolveSagaTreeSkillRanksSafe,
 } from '../../rules/sagatree/skill-progression';
 import {
-  getSagaDriveSkill,
-  sagaDriveAttributeDefinitions,
-  type SagaDriveAttributeKey,
-  type SagaDriveSkillKey,
+  getSagaTreeSkill,
+  sagaTreeAttributeDefinitions,
+  type SagaTreeAttributeKey,
+  type SagaTreeSkillKey,
 } from '../../rules/sagatree/character-creation';
-import { computeSagaDriveDerivedStats } from '../../rules/sagatree/derived-stats';
+import { computeSagaTreeDerivedStats } from '../../rules/sagatree/derived-stats';
 import type { PlaySessionStatus } from './session-lifecycle';
 import type { SessionPresenceEntry, SessionRuntimeState } from './session-runtime';
 import { readLastSharedRoll, type SharedRollResultView } from './shared-rolls';
@@ -57,13 +57,13 @@ export interface PlayerPanelStatLine {
 }
 
 export interface PlayerPanelSkillLine {
-  key: SagaDriveSkillKey;
+  key: SagaTreeSkillKey;
   label: string;
   rank: number;
 }
 
 export interface PlayerPanelAttributeLine {
-  key: SagaDriveAttributeKey;
+  key: SagaTreeAttributeKey;
   label: string;
   shortLabel: string;
   value: number;
@@ -189,9 +189,9 @@ function readSharedStringList(shared: Record<string, unknown>, keys: readonly st
 }
 
 function skillBuildFromCharacter(character: CharacterVm) {
-  const profile = character.sagaDriveProfile;
+  const profile = character.sagaTreeProfile;
   const specialization = profile.background.specialization;
-  return resolveSagaDriveSkillBuildState({
+  return resolveSagaTreeSkillBuildState({
     freeSkillRanks: profile.freeSkillRanks,
     backgroundSkillPoints: profile.background.backgroundSkillPoints,
     skillPool: profile.background.skillPool,
@@ -288,7 +288,7 @@ export function buildPlayerPanelModel(input: BuildPlayerPanelModelInput): Player
   const runtime = input.runtime;
   const shared = runtime?.gameplay.shared ?? {};
 
-  const emptyAttributes = sagaDriveAttributeDefinitions.map((def) => ({
+  const emptyAttributes = sagaTreeAttributeDefinitions.map((def) => ({
     key: def.key,
     label: def.label,
     shortLabel: def.shortLabel,
@@ -336,10 +336,10 @@ export function buildPlayerPanelModel(input: BuildPlayerPanelModelInput): Player
     };
   }
 
-  const skillRanks = resolveSagaDriveSkillRanksSafe(skillBuildFromCharacter(character), character.level);
-  const experienceBonus = getSagaDriveExperienceBonus(character.level);
+  const skillRanks = resolveSagaTreeSkillRanksSafe(skillBuildFromCharacter(character), character.level);
+  const experienceBonus = getSagaTreeExperienceBonus(character.level);
   const attributes: CharacterAttributesDto = character.attributes;
-  const derived = computeSagaDriveDerivedStats({
+  const derived = computeSagaTreeDerivedStats({
     attributes,
     finalSkillRanks: skillRanks,
     experienceBonus,
@@ -386,17 +386,17 @@ export function buildPlayerPanelModel(input: BuildPlayerPanelModelInput): Player
     .filter((entry) => (resistanceKeys as readonly string[]).includes(entry.key))
     .map((entry) => ({ key: entry.key, label: entry.label, value: entry.displayValue }));
 
-  const attributeLines: PlayerPanelAttributeLine[] = sagaDriveAttributeDefinitions.map((def) => ({
+  const attributeLines: PlayerPanelAttributeLine[] = sagaTreeAttributeDefinitions.map((def) => ({
     key: def.key,
     label: def.label,
     shortLabel: def.shortLabel,
     value: attributes[def.key],
   }));
 
-  const skills: PlayerPanelSkillLine[] = (Object.keys(skillRanks) as SagaDriveSkillKey[])
+  const skills: PlayerPanelSkillLine[] = (Object.keys(skillRanks) as SagaTreeSkillKey[])
     .map((key) => ({
       key,
-      label: getSagaDriveSkill(key).label,
+      label: getSagaTreeSkill(key).label,
       rank: skillRanks[key],
     }))
     .filter((line) => line.rank > 0)
@@ -404,7 +404,7 @@ export function buildPlayerPanelModel(input: BuildPlayerPanelModelInput): Player
 
   const sharedMomentum = readSharedNumber(shared, ['momentum', 'sharedMomentum', 'shared_momentum']);
   const momentumShared = sharedMomentum !== null;
-  const momentum = momentumShared ? sharedMomentum : character.sagaDriveProfile.momentum;
+  const momentum = momentumShared ? sharedMomentum : character.sagaTreeProfile.momentum;
   const conditionsFromMap =
     character.id
     && shared.conditionsByCharacter
@@ -434,7 +434,7 @@ export function buildPlayerPanelModel(input: BuildPlayerPanelModelInput): Player
     && encounter?.status === 'active',
   );
 
-  let drive = character.sagaDriveProfile.drive;
+  let drive = character.sagaTreeProfile.drive;
   const driveMap = shared.driveByCharacter;
   if (driveMap && typeof driveMap === 'object' && !Array.isArray(driveMap) && character.id) {
     const overlay = (driveMap as Record<string, unknown>)[character.id];

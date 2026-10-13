@@ -1,5 +1,5 @@
 /**
- * face-mapping-raycast — pointer → SagaDriveFaceAnchorsV1 triangle binding (#420/#421).
+ * face-mapping-raycast — pointer → SagaTreeFaceAnchorsV1 triangle binding (#420/#421).
  * Location: src/infrastructure/character/avatar/face-mapping-raycast.ts
  *
  * Raycasts only allowlisted avatar surface meshes (no helpers/equipment/debug).
@@ -13,7 +13,7 @@
  */
 
 import * as THREE from 'three';
-import type { SagaDriveFaceAnchorTriangleBinding } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorTriangleBinding } from '../../../domains/character/avatar/face-anchor-contract';
 
 const _raycaster = new THREE.Raycaster();
 const _pointerNdc = new THREE.Vector2();
@@ -27,7 +27,7 @@ const EXCLUDE_NAME_RE =
   /hair|weapon|sword|shield|helper|debug|grid|floor|axis|gizmo|outline|equipment|wearable|prop/i;
 
 /**
- * Precise SagaDrive equipment/wearable runtime roots only.
+ * Precise SagaTree equipment/wearable runtime roots only.
  * Do NOT apply EXCLUDE_NAME_RE here — fuzzy substrings on ancestors falsely reject
  * imported hierarchies like Character_Hair → Body or Chair → Body.
  */
@@ -47,7 +47,7 @@ function isFaceMappingExcludedEquipmentAncestorName(name: string): boolean {
 export function isUnderFaceMappingExcludedAncestor(object: THREE.Object3D): boolean {
   let cur: THREE.Object3D | null = object;
   while (cur) {
-    if (cur.userData?.sagadriveExcludeFaceMapping === true) return true;
+    if (cur.userData?.sagatreeExcludeFaceMapping === true) return true;
     if (cur.userData?.isHelper === true) return true;
     if (isFaceMappingExcludedEquipmentAncestorName(cur.name)) return true;
     cur = cur.parent;
@@ -90,7 +90,7 @@ function resolvePrimitiveIndex(geometry: THREE.BufferGeometry, faceIndex: number
 }
 
 /**
- * Clamp + renormalize so bindings always pass SagaDriveFaceAnchorsV1 barycentric validation.
+ * Clamp + renormalize so bindings always pass SagaTreeFaceAnchorsV1 barycentric validation.
  * Numerical noise from skinned hits must not make markers vanish as "ungültig".
  */
 export function normalizeFaceMappingBarycentric(
@@ -109,7 +109,7 @@ export function normalizeFaceMappingBarycentric(
 }
 
 export interface FaceMappingRaycastHitV1 {
-  readonly binding: SagaDriveFaceAnchorTriangleBinding;
+  readonly binding: SagaTreeFaceAnchorTriangleBinding;
   readonly worldPoint: { readonly x: number; readonly y: number; readonly z: number };
 }
 

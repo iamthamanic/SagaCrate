@@ -222,7 +222,7 @@ function minimalCharacter() {
       charisma: 0,
     },
     skills: {},
-    sagaDriveProfile: {
+    sagaTreeProfile: {
       speciesTraitInstances: [],
       background: {
         name: 'Soldat',

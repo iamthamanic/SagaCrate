@@ -54,7 +54,7 @@ export function createLiveActRigDebugController(scene: THREE.Scene): LiveActRigD
     const skinned = findPrimarySkinnedMesh(modelRoot);
     if (!skinned || !skinned.skeleton?.bones?.length) return;
     helper = new SkeletonHelper(skinned);
-    helper.userData.sagadriveLiveActRigDebug = true;
+    helper.userData.sagatreeLiveActRigDebug = true;
     // Draw through the mesh so the debug overlay is actually visible.
     const materials = Array.isArray(helper.material) ? helper.material : [helper.material];
     for (const mat of materials) {

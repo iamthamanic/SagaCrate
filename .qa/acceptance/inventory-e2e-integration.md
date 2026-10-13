@@ -10,7 +10,7 @@ This ticket verifies and documents; it does not redesign the product.
 
 ## Preconditions
 - Child issues #106–#113 are merged on the integration branch.
-- Authoritative rules live in `docs/sagadrive core rules.md` §10 and must match
+- Authoritative rules live in `docs/sagatree core rules.md` §10 and must match
   the implemented Inventory-v2 slot/stack/load/equipment/container contract.
 - `npm run test-gate` wires all Inventory-v2 child gates plus this integration gate.
 
@@ -89,7 +89,7 @@ See `.qa/evidence/inventory-v2-epic-114/README.md` (required list; binaries not 
 | File | Purpose |
 |------|---------|
 | `.qa/acceptance/inventory-e2e-integration.md` | This acceptance record |
-| `docs/sagadrive core rules.md` §10.0.1 | Authoritative 13-point Inventory-v2 contract |
+| `docs/sagatree core rules.md` §10.0.1 | Authoritative 13-point Inventory-v2 contract |
 | `docs/inventory-v2.md` | Dedicated 13-rule product contract |
 | `README.md` | Inventory uses 20 base slots + load capacity |
 | `src/app/character/inventory/InventorySummaryBar.tsx` | RuleHelp mentions slots + load |

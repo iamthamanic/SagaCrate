@@ -1,7 +1,7 @@
 # Acceptance — avatar-mtoon-style-profile-v1
 
 ## Intent
-Central SagaDriveMToonProfileV1 so all avatar screens share one stylized toon look (MToon preferred, controlled PBR fallback).
+Central SagaTreeMToonProfileV1 so all avatar screens share one stylized toon look (MToon preferred, controlled PBR fallback).
 
 ## Happy Path
 - [ ] Domain profile documents 7 material classes + light/outline/performance.

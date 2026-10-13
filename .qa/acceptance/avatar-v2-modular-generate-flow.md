@@ -28,7 +28,7 @@ Vertical Slice: `Mit KI erstellen` → `Editierbar & kleidungsfähig` endet in k
 ### In
 - Orchestration job/use-case for modular generate
 - Body-family + identity/traits + catalog wearables/props per spike rolePlan
-- Progress UI (SagaDrive steps, no provider internals leak)
+- Progress UI (SagaTree steps, no provider internals leak)
 - Save/reload/editor/equipment/animation integration
 ### Out
 - Custom Creature clothing auto-fit

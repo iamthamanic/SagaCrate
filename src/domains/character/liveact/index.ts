@@ -1,5 +1,5 @@
 /**
- * domains/character/liveact — public API for SagaDrive LiveAct contracts.
+ * domains/character/liveact — public API for SagaTree LiveAct contracts.
  * Location: src/domains/character/liveact/index.ts
  */
 
@@ -615,7 +615,7 @@ export {
 } from './liveact-personal-calibration-ab';
 
 export {
-  SAGADRIVE_PERFORMANCE_FACE_CONTRACT,
+  SAGATREE_PERFORMANCE_FACE_CONTRACT,
   PERFORMANCE_FACE_VALIDATOR_VERSION,
   PERFORMANCE_FACE_MANIFEST_VERSION,
   PERFORMANCE_FACE_AUTHORING_SPEC,

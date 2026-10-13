@@ -10,7 +10,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import type {
   AvatarEquipmentVisual,
   RigidEquipmentAttachOp,
-  SagaDriveHumanoidAnchorId,
+  SagaTreeHumanoidAnchorId,
 } from '../../../domains/character/avatar';
 import { planRigidEquipmentAttaches } from '../../../domains/character/avatar';
 import type { AvatarRigAnalysisResult } from '../../../domains/character/avatar';
@@ -129,17 +129,17 @@ export class AvatarRigidEquipmentRuntime {
     this.group.removeFromParent();
   }
 
-  private listAvailableAnchors(): Set<SagaDriveHumanoidAnchorId> {
-    const set = new Set<SagaDriveHumanoidAnchorId>();
+  private listAvailableAnchors(): Set<SagaTreeHumanoidAnchorId> {
+    const set = new Set<SagaTreeHumanoidAnchorId>();
     const anchors = this.analysis?.rig.anchors;
     if (!anchors) return set;
     for (const [key, name] of Object.entries(anchors)) {
-      if (name) set.add(key as SagaDriveHumanoidAnchorId);
+      if (name) set.add(key as SagaTreeHumanoidAnchorId);
     }
     return set;
   }
 
-  private findAnchorObject(anchor: SagaDriveHumanoidAnchorId): THREE.Object3D | null {
+  private findAnchorObject(anchor: SagaTreeHumanoidAnchorId): THREE.Object3D | null {
     if (!this.avatarRoot || !this.analysis) return null;
     const sourceName = this.analysis.rig.anchors[anchor];
     if (!sourceName) return null;

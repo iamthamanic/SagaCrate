@@ -4,11 +4,11 @@
  */
 
 import type { InventoryItemType } from '../inventory-v2';
-import type { SagaDriveHumanoidAnchorId } from './rig-contract';
+import type { SagaTreeHumanoidAnchorId } from './rig-contract';
 import type { AvatarEquipmentLocalTransform } from './equipment-visual-contract';
 import { clampEquipmentTransform } from './equipment-visual-contract';
 
-export const ITEM_AVATAR_FIT_DEFAULTS_VERSION = 'SagaDriveItemAvatarFitDefaultsV1' as const;
+export const ITEM_AVATAR_FIT_DEFAULTS_VERSION = 'SagaTreeItemAvatarFitDefaultsV1' as const;
 
 const IDENTITY: AvatarEquipmentLocalTransform = {
   position: [0, 0, 0],
@@ -17,7 +17,7 @@ const IDENTITY: AvatarEquipmentLocalTransform = {
 };
 
 /** Default canonical #6 anchor for workbench fitting. */
-export function defaultAnchorForItemType(type: InventoryItemType): SagaDriveHumanoidAnchorId {
+export function defaultAnchorForItemType(type: InventoryItemType): SagaTreeHumanoidAnchorId {
   switch (type) {
     case 'weapon':
       return 'rightHand';
@@ -38,7 +38,7 @@ export function defaultAnchorForItemType(type: InventoryItemType): SagaDriveHuma
 /** Helm-like misc head → head; backpack-ish → back. */
 export function defaultAnchorForMiscEquip(
   miscEquip: 'none' | 'head' | 'accessory' | 'special' | 'feet',
-): SagaDriveHumanoidAnchorId {
+): SagaTreeHumanoidAnchorId {
   switch (miscEquip) {
     case 'head':
       return 'head';
@@ -60,7 +60,7 @@ export function defaultRigidFitTransform(): AvatarEquipmentLocalTransform {
 export function resolveWorkbenchDefaultAnchor(input: {
   type: InventoryItemType;
   miscEquip?: 'none' | 'head' | 'accessory' | 'special' | 'feet';
-}): SagaDriveHumanoidAnchorId {
+}): SagaTreeHumanoidAnchorId {
   if (input.type === 'misc' && input.miscEquip && input.miscEquip !== 'none') {
     return defaultAnchorForMiscEquip(input.miscEquip);
   }

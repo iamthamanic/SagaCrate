@@ -1,6 +1,6 @@
-# SagaDrive UI Generation Guidelines
+# SagaTree UI Generation Guidelines
 
-Diese Regeln gelten fuer neue und ueberarbeitete SagaDrive-Produktoberflaechen. `src/THEME_GUIDE.md` ist die kanonische visuelle Detailreferenz. UI-Primitives unter `src/shared/ui/` sind die technische Source of Truth.
+Diese Regeln gelten fuer neue und ueberarbeitete SagaTree-Produktoberflaechen. `src/THEME_GUIDE.md` ist die kanonische visuelle Detailreferenz. UI-Primitives unter `src/shared/ui/` sind die technische Source of Truth.
 
 Vor Generierung oder Umsetzung zuerst klassifizieren:
 - `SETUP`: klassische Konfigurations-/Editor-UI ist erlaubt.
@@ -15,13 +15,13 @@ Vor Generierung oder Umsetzung zuerst klassifizieren:
 - Dark-first, klar, ruhig, hochwertig und funktional.
 - Bestehende Radix/shadcn-Komponenten wiederverwenden statt lokale Sonderloesungen zu bauen.
 - Darker Grotesque als UI-Schrift beibehalten.
-- Keine zufaelligen Farben ausserhalb der SagaDrive-CI.
+- Keine zufaelligen Farben ausserhalb der SagaTree-CI.
 - Controls muessen auch ohne Hover oder Focus eindeutig als Controls erkennbar sein.
 - Touch Targets fuer wichtige Controls mindestens 44px hoch.
 
 ## Brand-Farbrollen
 
-SagaDrive verwendet zwei Markenfarben mit festen semantischen Rollen:
+SagaTree verwendet zwei Markenfarben mit festen semantischen Rollen:
 
 ### Cyan / Teal: Auswahl und wichtigste Aktion
 

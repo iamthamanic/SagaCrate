@@ -101,7 +101,7 @@ supabase/functions/
 
 ### Canonical Design Sources
 
-- `src/THEME_GUIDE.md` is the canonical SagaDrive design-system reference.
+- `src/THEME_GUIDE.md` is the canonical SagaTree design-system reference.
 - `src/guidelines/Guidelines.md` contains compact AI/Figma-Make generation rules.
 - `src/styles/globals.css` and `src/shared/ui/` are the technical source of truth.
 - `docs/concepts/conductor-experience-contract.md` is mandatory for Performance Mode/live interaction work.
@@ -313,15 +313,15 @@ Canonical doc: [`docs/navigation-public-ids.md`](docs/navigation-public-ids.md).
 
 ### Rulesets Integration
 
-**Primary:** SagaDrive Rulesets (Custom)
+**Primary:** SagaTree Rulesets (Custom)
 **Supplement:** Open5e API (D&D 5e SRD)
 
 ```typescript
-// Use SagaDrive ruleset as primary
+// Use SagaTree ruleset as primary
 const { data: mmsRuleset } = await supabase
   .from('rulesets')
   .select('*')
-  .eq('id', 'sagadrive-custom')
+  .eq('id', 'sagatree-custom')
   .single();
 
 // Enrich with Open5e data
@@ -414,7 +414,7 @@ Vor Commit: `npm run test-gate` (inkl. `architecture-boundary-check`).
 4. Test end-to-end
 
 ### When Adding Rulesets
-1. Primary: SagaDrive custom rules
+1. Primary: SagaTree custom rules
 2. Supplement: Open5e API data
 3. Merge in `rulesets` function
 4. No full replacement

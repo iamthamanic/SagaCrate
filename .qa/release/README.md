@@ -1,4 +1,4 @@
-# SagaDrive Release Readiness
+# SagaTree Release Readiness
 
 `readiness.json` ist die kanonische Source of Truth für Release-Reife. GitHub Issues sind Work-Items und Evidence, aber nicht der Release-Vertrag.
 
@@ -6,7 +6,7 @@
 
 | Milestone | Bedeutung |
 |---|---|
-| **R0 – Reveal** | Wir können SagaDrive öffentlich zeigen |
+| **R0 – Reveal** | Wir können SagaTree öffentlich zeigen |
 | **R1 – Closed Alpha** | Fremde Gruppen können wirklich spielen |
 | **R2 – Public Beta** | Jeder kann selbstständig starten |
 | **R3 – Paid Acquisition** | Wir können Geld in User Acquisition stecken |

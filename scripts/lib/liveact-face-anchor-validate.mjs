@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { NodeIO } from '@gltf-transform/core';
 import {
   FACE_ANCHORS_CONTRACT_VERSION,
-  isSagaDriveFaceAnchorId,
+  isSagaTreeFaceAnchorId,
 } from './liveact-face-anchor-ids.mjs';
 import { countTrianglesForNodePrimitive, findNodeByIdentity } from './liveact-face-anchor-glb.mjs';
 
@@ -54,7 +54,7 @@ export function validateFaceAnchorsAgainstDocument(document, anchors) {
   const errors = [];
 
   for (const [anchorId, bindingRaw] of Object.entries(anchors)) {
-    if (!isSagaDriveFaceAnchorId(anchorId)) {
+    if (!isSagaTreeFaceAnchorId(anchorId)) {
       errors.push(`unknown_anchor:${anchorId}`);
       continue;
     }

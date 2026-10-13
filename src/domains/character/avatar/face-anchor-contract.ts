@@ -1,15 +1,15 @@
 /**
- * SagaDriveFaceAnchorsV1 — semantic face surface anchors on avatar meshes (#399).
+ * SagaTreeFaceAnchorsV1 — semantic face surface anchors on avatar meshes (#399).
  * Location: src/domains/character/avatar/face-anchor-contract.ts
  *
  * Provider-neutral: bindings use stable node identity + triangle barycentrics only.
  * Pure domain — no React, Three.js, or tracking SDK names.
  */
 
-export const FACE_ANCHORS_CONTRACT_VERSION = 'SagaDriveFaceAnchorsV1' as const;
+export const FACE_ANCHORS_CONTRACT_VERSION = 'SagaTreeFaceAnchorsV1' as const;
 
 /** Versioned semantic anchor ids (exact set for V1). */
-export const SAGA_DRIVE_FACE_ANCHOR_IDS = [
+export const SAGA_TREE_FACE_ANCHOR_IDS = [
   'mouthUpper',
   'mouthLower',
   'mouthCornerLeft',
@@ -33,10 +33,10 @@ export const SAGA_DRIVE_FACE_ANCHOR_IDS = [
   'forehead',
 ] as const;
 
-export type SagaDriveFaceAnchorId = (typeof SAGA_DRIVE_FACE_ANCHOR_IDS)[number];
+export type SagaTreeFaceAnchorId = (typeof SAGA_TREE_FACE_ANCHOR_IDS)[number];
 
 /** Barycentric weights on a triangle (u + v + w ≈ 1). */
-export interface SagaDriveFaceAnchorBarycentric {
+export interface SagaTreeFaceAnchorBarycentric {
   readonly u: number;
   readonly v: number;
   readonly w: number;
@@ -46,19 +46,19 @@ export interface SagaDriveFaceAnchorBarycentric {
  * Runtime/manifest binding: point on a mesh primitive triangle.
  * `nodeIdentity` is the stable glTF node id (name or authored path token), not a runtime object ref.
  */
-export interface SagaDriveFaceAnchorTriangleBinding {
+export interface SagaTreeFaceAnchorTriangleBinding {
   readonly nodeIdentity: string;
   readonly primitiveIndex: number;
   readonly triangleIndex: number;
-  readonly barycentric: SagaDriveFaceAnchorBarycentric;
+  readonly barycentric: SagaTreeFaceAnchorBarycentric;
 }
 
-export interface SagaDriveFaceAnchorsManifestV1 {
+export interface SagaTreeFaceAnchorsManifestV1 {
   readonly contractVersion: typeof FACE_ANCHORS_CONTRACT_VERSION;
-  readonly anchors: Readonly<Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>>>;
+  readonly anchors: Readonly<Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>>>;
 }
 
-export interface SagaDriveFaceAnchorBindingValidationIssue {
+export interface SagaTreeFaceAnchorBindingValidationIssue {
   readonly code:
     | 'invalid_anchor_id'
     | 'invalid_node_identity'
@@ -66,25 +66,25 @@ export interface SagaDriveFaceAnchorBindingValidationIssue {
     | 'invalid_triangle_index'
     | 'invalid_barycentric'
     | 'contract_version_mismatch';
-  readonly anchorId?: SagaDriveFaceAnchorId;
+  readonly anchorId?: SagaTreeFaceAnchorId;
   readonly detail: string;
 }
 
-export interface SagaDriveFaceAnchorBindingValidationResult {
+export interface SagaTreeFaceAnchorBindingValidationResult {
   readonly ok: boolean;
-  readonly issues: readonly SagaDriveFaceAnchorBindingValidationIssue[];
+  readonly issues: readonly SagaTreeFaceAnchorBindingValidationIssue[];
 }
 
 const BARYCENTRIC_EPS = 1e-4;
 const BARYCENTRIC_SUM_EPS = 1e-3;
 
-export function isSagaDriveFaceAnchorId(id: string): id is SagaDriveFaceAnchorId {
-  return (SAGA_DRIVE_FACE_ANCHOR_IDS as readonly string[]).includes(id);
+export function isSagaTreeFaceAnchorId(id: string): id is SagaTreeFaceAnchorId {
+  return (SAGA_TREE_FACE_ANCHOR_IDS as readonly string[]).includes(id);
 }
 
 export function validateFaceAnchorBarycentric(
-  barycentric: SagaDriveFaceAnchorBarycentric,
-): SagaDriveFaceAnchorBindingValidationIssue | null {
+  barycentric: SagaTreeFaceAnchorBarycentric,
+): SagaTreeFaceAnchorBindingValidationIssue | null {
   const { u, v, w } = barycentric;
   if (!Number.isFinite(u) || !Number.isFinite(v) || !Number.isFinite(w)) {
     return { code: 'invalid_barycentric', detail: 'Barycentric components must be finite numbers.' };
@@ -103,10 +103,10 @@ export function validateFaceAnchorBarycentric(
 }
 
 export function validateFaceAnchorTriangleBinding(
-  binding: SagaDriveFaceAnchorTriangleBinding,
-  anchorId?: SagaDriveFaceAnchorId,
-): SagaDriveFaceAnchorBindingValidationResult {
-  const issues: SagaDriveFaceAnchorBindingValidationIssue[] = [];
+  binding: SagaTreeFaceAnchorTriangleBinding,
+  anchorId?: SagaTreeFaceAnchorId,
+): SagaTreeFaceAnchorBindingValidationResult {
+  const issues: SagaTreeFaceAnchorBindingValidationIssue[] = [];
 
   const nodeIdentity = binding.nodeIdentity.trim();
   if (!nodeIdentity) {
@@ -142,9 +142,9 @@ export function validateFaceAnchorTriangleBinding(
 }
 
 export function validateFaceAnchorsManifestV1(
-  manifest: SagaDriveFaceAnchorsManifestV1,
-): SagaDriveFaceAnchorBindingValidationResult {
-  const issues: SagaDriveFaceAnchorBindingValidationIssue[] = [];
+  manifest: SagaTreeFaceAnchorsManifestV1,
+): SagaTreeFaceAnchorBindingValidationResult {
+  const issues: SagaTreeFaceAnchorBindingValidationIssue[] = [];
 
   if (manifest.contractVersion !== FACE_ANCHORS_CONTRACT_VERSION) {
     issues.push({
@@ -154,7 +154,7 @@ export function validateFaceAnchorsManifestV1(
   }
 
   for (const [rawId, binding] of Object.entries(manifest.anchors)) {
-    if (!isSagaDriveFaceAnchorId(rawId)) {
+    if (!isSagaTreeFaceAnchorId(rawId)) {
       issues.push({
         code: 'invalid_anchor_id',
         detail: `Unknown anchor id: ${rawId}`,
@@ -173,8 +173,8 @@ export function validateFaceAnchorsManifestV1(
  * Fail-closed parse: rejects unknown keys, wrong version, and invalid bindings.
  */
 export function parseFaceAnchorsManifestV1(input: unknown):
-  | { ok: true; manifest: SagaDriveFaceAnchorsManifestV1 }
-  | { ok: false; issues: readonly SagaDriveFaceAnchorBindingValidationIssue[] } {
+  | { ok: true; manifest: SagaTreeFaceAnchorsManifestV1 }
+  | { ok: false; issues: readonly SagaTreeFaceAnchorBindingValidationIssue[] } {
   if (!input || typeof input !== 'object') {
     return {
       ok: false,
@@ -205,10 +205,10 @@ export function parseFaceAnchorsManifestV1(input: unknown):
     };
   }
 
-  const anchors: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> = {};
+  const anchors: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> = {};
 
   for (const [key, value] of Object.entries(anchorsRaw)) {
-    if (!isSagaDriveFaceAnchorId(key)) {
+    if (!isSagaTreeFaceAnchorId(key)) {
       return {
         ok: false,
         issues: [{ code: 'invalid_anchor_id', detail: `Unknown anchor id: ${key}` }],
@@ -230,7 +230,7 @@ export function parseFaceAnchorsManifestV1(input: unknown):
       };
     }
     const baryObj = baryRaw as Record<string, unknown>;
-    const binding: SagaDriveFaceAnchorTriangleBinding = {
+    const binding: SagaTreeFaceAnchorTriangleBinding = {
       nodeIdentity: typeof b.nodeIdentity === 'string' ? b.nodeIdentity : '',
       primitiveIndex: typeof b.primitiveIndex === 'number' ? b.primitiveIndex : -1,
       triangleIndex: typeof b.triangleIndex === 'number' ? b.triangleIndex : -1,
@@ -243,7 +243,7 @@ export function parseFaceAnchorsManifestV1(input: unknown):
     anchors[key] = binding;
   }
 
-  const manifest: SagaDriveFaceAnchorsManifestV1 = {
+  const manifest: SagaTreeFaceAnchorsManifestV1 = {
     contractVersion: FACE_ANCHORS_CONTRACT_VERSION,
     anchors,
   };
@@ -256,9 +256,9 @@ export function parseFaceAnchorsManifestV1(input: unknown):
 }
 
 /** Deterministic manifest checksum input (stable key order). */
-export function stableFaceAnchorsManifestJson(manifest: SagaDriveFaceAnchorsManifestV1): string {
-  const ordered: Record<string, SagaDriveFaceAnchorTriangleBinding> = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+export function stableFaceAnchorsManifestJson(manifest: SagaTreeFaceAnchorsManifestV1): string {
+  const ordered: Record<string, SagaTreeFaceAnchorTriangleBinding> = {};
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = manifest.anchors[id];
     if (binding) ordered[id] = binding;
   }
@@ -274,7 +274,7 @@ export function stableFaceAnchorsManifestJson(manifest: SagaDriveFaceAnchorsMani
  */
 export function readFaceAnchorsFromAvatar(avatar: {
   face_anchors?: unknown;
-} | null | undefined): SagaDriveFaceAnchorsManifestV1 | null {
+} | null | undefined): SagaTreeFaceAnchorsManifestV1 | null {
   if (!avatar || avatar.face_anchors == null) return null;
   const parsed = parseFaceAnchorsManifestV1(avatar.face_anchors);
   return parsed.ok ? parsed.manifest : null;

@@ -65,7 +65,7 @@ function mustNotInclude(file, needles, label) {
 section('1 · core rules §7.4');
 
 mustInclude(
-  'docs/sagadrive core rules.md',
+  'docs/sagatree core rules.md',
   [
     '**Gelegenheit schaffen:**',
     'Bestehende Aktionen und Manöver haben immer Vorrang',

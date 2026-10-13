@@ -68,7 +68,7 @@ section('1 · files');
 section('2 · barrel export');
 {
   const barrel = read('src/domains/rules/sagatree/index.ts');
-  check(/starting-templates/.test(barrel), 'sagadrive index exports starting-templates');
+  check(/starting-templates/.test(barrel), 'sagatree index exports starting-templates');
 }
 
 section('3 · no forbidden fields in catalog');
@@ -95,9 +95,9 @@ section('4 · catalog validates against rules kernel');
     logLevel: 'silent',
   });
   const mod = await import(pathToFileURL(outfile).href);
-  const result = mod.validateSagaDriveStartingTemplateCatalog();
+  const result = mod.validateSagaTreeStartingTemplateCatalog();
   check(result.ok === true, result.ok ? 'catalog valid' : `${result.code}: ${result.message}`);
-  const list = mod.listSagaDriveStartingTemplates();
+  const list = mod.listSagaTreeStartingTemplates();
   check(list.length === 10, 'exactly 10 templates');
   for (const key of KEYS) {
     check(list.some((t) => t.key === key), `has ${key}`);
@@ -105,8 +105,8 @@ section('4 · catalog validates against rules kernel');
   for (const label of LABELS) {
     check(list.some((t) => t.labelDe === label), `label ${label}`);
   }
-  check(mod.getSagaDriveStartingTemplate('mage')?.archetype === 'thinker', 'mage is thinker');
-  check(mod.getSagaDriveStartingTemplate('unknown') === null, 'unknown key → null');
+  check(mod.getSagaTreeStartingTemplate('mage')?.archetype === 'thinker', 'mage is thinker');
+  check(mod.getSagaTreeStartingTemplate('unknown') === null, 'unknown key → null');
 }
 
 section('5 · test-gate wiring');

@@ -7,7 +7,7 @@
  * Optional: QtMesh/ICT 13-marker world positions via opts.markerPositions.
  */
 
-import { SAGA_DRIVE_FACE_ANCHOR_IDS } from './liveact-face-anchor-ids.mjs';
+import { SAGA_TREE_FACE_ANCHOR_IDS } from './liveact-face-anchor-ids.mjs';
 import { findNodeByIdentity, listMeshedNodeIdentities } from './liveact-face-anchor-glb.mjs';
 
 /**
@@ -39,7 +39,7 @@ export const FACE_ANCHOR_HEAD_HINTS = {
   browRightCenter: { nx: 0.3, ny: 0.82, nz: 0.94 },
 };
 
-/** QtMesh MARKER_SIM / ICT-style marker names → SagaDriveFaceAnchorsV1 ids. */
+/** QtMesh MARKER_SIM / ICT-style marker names → SagaTreeFaceAnchorsV1 ids. */
 export const QTMESH_MARKER_TO_ANCHOR = {
   Forehead: 'forehead',
   Chin: 'chin',
@@ -602,7 +602,7 @@ export function authorHeuristicFaceAnchorsManifest(document, opts = {}) {
 
   /** @type {Record<string, unknown>} */
   const anchors = {};
-  for (const anchorId of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const anchorId of SAGA_TREE_FACE_ANCHOR_IDS) {
     const vertexIndex = vertexByAnchor[anchorId];
     if (vertexIndex == null || vertexIndex < 0) {
       const hint = FACE_ANCHOR_HEAD_HINTS[anchorId];

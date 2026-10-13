@@ -1,12 +1,12 @@
 /**
- * host-mtoon-look-adapter — Default LookStyleAdapter on SagaDrive WebGL/MToon host (#342).
+ * host-mtoon-look-adapter — Default LookStyleAdapter on SagaTree WebGL/MToon host (#342).
  * Location: src/infrastructure/look/adapters/host-mtoon-look-adapter.ts
  *
  * Reuses material snapshot restore + MToon style applier. Never imports ToonLab.
  */
 import type { Object3D, Scene } from 'three';
 import type { LookCapability, LookProfileVersion } from '../../../domains/look/types';
-import { createSagaDriveMToonProfileV1 } from '../../../domains/character/avatar/mtoon-profile';
+import { createSagaTreeMToonProfileV1 } from '../../../domains/character/avatar/mtoon-profile';
 import {
   applyMtoonProfileToModel,
   applyMtoonProfileToScene,
@@ -76,7 +76,7 @@ function restoreSnapshots(target: LookRuntimeTarget): void {
 }
 
 export function createHostMtoonLookAdapter(): LookStyleAdapter {
-  const profile = createSagaDriveMToonProfileV1();
+  const profile = createSagaTreeMToonProfileV1();
 
   return {
     id: 'host-mtoon',

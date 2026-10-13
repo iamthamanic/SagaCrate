@@ -1,19 +1,19 @@
 /**
- * assert-character-persistence — Server-side SagaDrive build validation before persistence.
+ * assert-character-persistence — Server-side SagaTree build validation before persistence.
  * Location: src/domains/character/use-cases/assert-character-persistence.ts
  */
 import {
-  applySagaDriveAttributeAdvances,
-  isValidSagaDriveAttributeBuild,
-  type SagaDriveAttributeAdvances,
+  applySagaTreeAttributeAdvances,
+  isValidSagaTreeAttributeBuild,
+  type SagaTreeAttributeAdvances,
 } from '../../rules/sagatree/attribute-progression';
 import {
-  assertSagaDriveSkillPersistence,
-  resolveSagaDriveSkillBuildState,
-  type SagaDriveSkillRankMap,
+  assertSagaTreeSkillPersistence,
+  resolveSagaTreeSkillBuildState,
+  type SagaTreeSkillRankMap,
 } from '../../rules/sagatree/skill-progression';
 import type { CharacterAttributesDto } from '../domain/character.entity';
-import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
+import type { SagaTreeProfileDto } from '../domain/sagatree-profile.entity';
 
 function attributesEqual(left: CharacterAttributesDto, right: CharacterAttributesDto): boolean {
   return left.strength === right.strength
@@ -24,28 +24,28 @@ function attributesEqual(left: CharacterAttributesDto, right: CharacterAttribute
     && left.charisma === right.charisma;
 }
 
-export function assertValidSagaDriveAttributePersistence(
+export function assertValidSagaTreeAttributePersistence(
   attributes: CharacterAttributesDto,
-  profile: SagaDriveProfileDto,
+  profile: SagaTreeProfileDto,
   level: number,
 ): void {
   if (!profile.baseAttributes) return;
-  const advances = (profile.attributeAdvances ?? {}) as SagaDriveAttributeAdvances;
-  if (!isValidSagaDriveAttributeBuild(profile.baseAttributes, advances, level)) {
-    throw new Error('Invalid SagaDrive attribute build: base distribution or permanent advances violate Core rules.');
+  const advances = (profile.attributeAdvances ?? {}) as SagaTreeAttributeAdvances;
+  if (!isValidSagaTreeAttributeBuild(profile.baseAttributes, advances, level)) {
+    throw new Error('Invalid SagaTree attribute build: base distribution or permanent advances violate Core rules.');
   }
-  const expected = applySagaDriveAttributeAdvances(profile.baseAttributes, advances, level);
+  const expected = applySagaTreeAttributeAdvances(profile.baseAttributes, advances, level);
   if (!attributesEqual(attributes, expected)) {
-    throw new Error('Invalid SagaDrive attribute build: final attributes must match baseAttributes plus advances.');
+    throw new Error('Invalid SagaTree attribute build: final attributes must match baseAttributes plus advances.');
   }
 }
 
-export function assertValidSagaDriveSkillPersistence(
-  skills: SagaDriveSkillRankMap,
-  profile: SagaDriveProfileDto,
+export function assertValidSagaTreeSkillPersistence(
+  skills: SagaTreeSkillRankMap,
+  profile: SagaTreeProfileDto,
   level: number,
 ): void {
-  const resolved = resolveSagaDriveSkillBuildState({
+  const resolved = resolveSagaTreeSkillBuildState({
     freeSkillRanks: profile.freeSkillRanks,
     backgroundSkillPoints: profile.background.backgroundSkillPoints,
     skillPool: profile.background.skillPool,
@@ -55,7 +55,7 @@ export function assertValidSagaDriveSkillPersistence(
     backgroundSpecialization: profile.background.specialization,
   });
 
-  assertSagaDriveSkillPersistence(
+  assertSagaTreeSkillPersistence(
     skills,
     resolved,
     level,
@@ -64,12 +64,12 @@ export function assertValidSagaDriveSkillPersistence(
   );
 }
 
-export function assertValidSagaDriveCharacterPersistence(
+export function assertValidSagaTreeCharacterPersistence(
   attributes: CharacterAttributesDto,
-  skills: SagaDriveSkillRankMap,
-  profile: SagaDriveProfileDto,
+  skills: SagaTreeSkillRankMap,
+  profile: SagaTreeProfileDto,
   level: number,
 ): void {
-  assertValidSagaDriveAttributePersistence(attributes, profile, level);
-  assertValidSagaDriveSkillPersistence(skills, profile, level);
+  assertValidSagaTreeAttributePersistence(attributes, profile, level);
+  assertValidSagaTreeSkillPersistence(skills, profile, level);
 }

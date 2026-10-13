@@ -1,29 +1,29 @@
 /**
- * compute-derived-stats — Pure SagaDrive derived stat formulas (no UI).
+ * compute-derived-stats — Pure SagaTree derived stat formulas (no UI).
  * Location: src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts
  */
 import {
-  getSagaDriveSkill,
-  sagaDriveAttributeDefinitions,
-  type SagaDriveAttributeKey,
-  type SagaDriveSkillKey,
+  getSagaTreeSkill,
+  sagaTreeAttributeDefinitions,
+  type SagaTreeAttributeKey,
+  type SagaTreeSkillKey,
 } from '../character-creation';
 import { carryCapacity as computeCarryCapacity } from '../items';
-import { getSagaDriveAppliedExperienceBonus } from '../skill-progression';
+import { getSagaTreeAppliedExperienceBonus } from '../skill-progression';
 import type {
-  ComputeSagaDriveDerivedStatsInput,
+  ComputeSagaTreeDerivedStatsInput,
   DerivedStatComputation,
 } from './types';
 
-function attributeShortLabel(key: SagaDriveAttributeKey): string {
-  return sagaDriveAttributeDefinitions.find((entry) => entry.key === key)?.shortLabel ?? key;
+function attributeShortLabel(key: SagaTreeAttributeKey): string {
+  return sagaTreeAttributeDefinitions.find((entry) => entry.key === key)?.shortLabel ?? key;
 }
 
-function skillShortLabel(key: SagaDriveSkillKey): string {
-  return getSagaDriveSkill(key).label;
+function skillShortLabel(key: SagaTreeSkillKey): string {
+  return getSagaTreeSkill(key).label;
 }
 
-export function computeSagaDriveDerivedStats(input: ComputeSagaDriveDerivedStatsInput): DerivedStatComputation[] {
+export function computeSagaTreeDerivedStats(input: ComputeSagaTreeDerivedStatsInput): DerivedStatComputation[] {
   const { attributes, finalSkillRanks, experienceBonus, level, overloaded } = input;
   const carryCapacity = computeCarryCapacity(attributes.strength);
   const movement = overloaded ? 6 : 9;
@@ -31,7 +31,7 @@ export function computeSagaDriveDerivedStats(input: ComputeSagaDriveDerivedStats
   const meleeDefense = finalSkillRanks.melee;
   const acrobaticsDefense = finalSkillRanks.acrobatics;
   const defenseSkill = Math.max(meleeDefense, acrobaticsDefense);
-  const defenseSkillKey: SagaDriveSkillKey = meleeDefense >= acrobaticsDefense ? 'melee' : 'acrobatics';
+  const defenseSkillKey: SagaTreeSkillKey = meleeDefense >= acrobaticsDefense ? 'melee' : 'acrobatics';
 
   const athleticsManeuver = attributes.strength + finalSkillRanks.athletics;
   const acrobaticsManeuver = attributes.dexterity + finalSkillRanks.acrobatics;
@@ -39,7 +39,7 @@ export function computeSagaDriveDerivedStats(input: ComputeSagaDriveDerivedStats
 
   const awarenessRank = finalSkillRanks.awareness;
   const initiativeExperienceBonus = typeof level === 'number'
-    ? getSagaDriveAppliedExperienceBonus(awarenessRank, level)
+    ? getSagaTreeAppliedExperienceBonus(awarenessRank, level)
     : (awarenessRank > 0 ? experienceBonus : 0);
   const initiativeBonus = attributes.perception + awarenessRank + initiativeExperienceBonus;
 

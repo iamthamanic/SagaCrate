@@ -3,7 +3,7 @@
  * Location: src/infrastructure/character/avatar/avatar-skinned-wearable-runtime.ts
  *
  * Provider-agnostic: only authorized logical assets. Uses SkeletonUtils.clone and
- * rebinds SkinnedMesh bones onto the active SagaDrive humanoid skeleton.
+ * rebinds SkinnedMesh bones onto the active SagaTree humanoid skeleton.
  */
 
 import * as THREE from 'three';

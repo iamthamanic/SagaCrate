@@ -4,7 +4,7 @@
 
 ## Intent
 
-Wende den Adaptive-UI-Standard auf die wichtigsten SagaDrive-Journeys an und friere sie als Phone/Tablet/Desktop-Referenzflows ein, die #378 aufrufen kann.
+Wende den Adaptive-UI-Standard auf die wichtigsten SagaTree-Journeys an und friere sie als Phone/Tablet/Desktop-Referenzflows ein, die #378 aufrufen kann.
 
 ## Happy Path
 

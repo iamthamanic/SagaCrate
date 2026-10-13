@@ -99,7 +99,7 @@ await build({
 const mod = await import(outfile + `?t=${Date.now()}`);
 const report = mod.runPerfectFidelityV2E2e();
 
-check(report.contractVersion === 'SagaDriveLiveActPerfectFidelityV2E2E', 'contract');
+check(report.contractVersion === 'SagaTreeLiveActPerfectFidelityV2E2E', 'contract');
 check(report.standardFallbackGreen === true, 'canonical standard fallback');
 check(report.canonicalPremiumBlockerOk === true, 'canonical premium blocker documented');
 check(report.externalPremiumPass === true, 'external premium pass');

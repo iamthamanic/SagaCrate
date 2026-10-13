@@ -11,7 +11,7 @@ import {
   type CanonicalBodyFamilyId,
 } from './canonical-body-families-v1';
 import type { AvatarFitStatus } from './fit-range-contract';
-import type { SagaDriveAvatarMorphStateV1 } from './morph-contract';
+import type { SagaTreeAvatarMorphStateV1 } from './morph-contract';
 import {
   isStarterWearableId,
   resolveStarterWearableFit,
@@ -20,7 +20,7 @@ import {
 } from './starter-wardrobe-manifest-v1';
 
 export const BODY_FAMILY_VARIANT_RESOLVER_VERSION =
-  'SagaDriveBodyFamilyVariantResolverV1' as const;
+  'SagaTreeBodyFamilyVariantResolverV1' as const;
 
 export type BodyFamilyVariantResolveStatus =
   | 'ready'
@@ -33,7 +33,7 @@ export type BodyFamilyVariantResolveStatus =
 export interface BodyFamilyVariantResolveInput {
   wearableId: string;
   bodyFamily: string;
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
 }
 
 export interface BodyFamilyVariantResolveResult {

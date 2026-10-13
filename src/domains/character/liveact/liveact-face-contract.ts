@@ -5,7 +5,7 @@
  * Does NOT collapse to the legacy emotion/viseme set. No React / Three / MediaPipe / DOM.
  */
 
-export const LIVEACT_FACE_CONTRACT_VERSION = 'SagaDriveLiveActFaceV1' as const;
+export const LIVEACT_FACE_CONTRACT_VERSION = 'SagaTreeLiveActFaceV1' as const;
 
 /**
  * Explicit Face Landmarker / ARKit blendshape channel ids (52 including `_neutral`).

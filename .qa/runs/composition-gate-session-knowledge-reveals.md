@@ -12,9 +12,9 @@ GM reveals knowledge fact to a target audience; unauthorized clients never recei
 ```text
 KnowledgeGmControls
 → applyCommand kind=reveal
-→ sagadrive_apply_knowledge_reveal
+→ sagatree_apply_knowledge_reveal
 → shared.knowledge
-→ get_session_runtime_snapshot → sagadrive_project_shared_knowledge
+→ get_session_runtime_snapshot → sagatree_project_shared_knowledge
 → projectKnowledgeForAccess / KnowledgeFeed
 ```
 

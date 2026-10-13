@@ -20,7 +20,7 @@ Decide productive default/fallback rigging paths for Humanoid vs Custom Creature
 | `meshy-full-rig` | Current Meshy auto-rig adapter |
 | `meshy-generate-rig` | Generate-ingress remesh+rig (infra only) |
 | `skintokens-full-rig` / `skintokens-existing-skeleton` | Provider contract; worker **unavailable** in this spike |
-| `unirig-prior-art` | Research only — no SagaDrive adapter |
+| `unirig-prior-art` | Research only — no SagaTree adapter |
 | `import-existing-rig` | Keep imported skeleton + Analyzer |
 
 ## 4. Decision

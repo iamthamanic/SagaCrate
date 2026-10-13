@@ -47,7 +47,7 @@ mustInclude(
 );
 
 mustInclude(
-  'docs/sagadrive core rules.md',
+  'docs/sagatree core rules.md',
   [
     '### 15.1 Stufe und Machtgrad',
     '### 15.3 Kampfprofile',
@@ -61,7 +61,7 @@ mustInclude(
 );
 
 mustNotInclude(
-  'docs/sagadrive core rules.md',
+  'docs/sagatree core rules.md',
   ['#### Scherge', 'zwei Initiativeslots pro Runde', 'jeder erfolgreiche Schadenseffekt von mindestens 1 besiegt den Schergen'],
   'core §15 removed legacy',
 );
@@ -83,7 +83,7 @@ execFileSync(
 
 const api = await import(pathToFileURL(outfile).href);
 
-check(api.SAGADRIVE_NPC_LEVEL_BENCHMARKS.length === 20, '20 level benchmarks');
+check(api.SAGATREE_NPC_LEVEL_BENCHMARKS.length === 20, '20 level benchmarks');
 
 for (let level = 1; level <= 20; level += 1) {
   const row = api.levelBenchmark(level);
@@ -150,7 +150,7 @@ const incapacitated = api.computeCompactStatblockBenchmarks({
 equal(incapacitated.impulsesAllowed, false, 'Kampfunfähig blocks impulses');
 
 equal(api.combineHealth(20, 0.8, 1.5), 24, 'combineHealth rounds up once');
-equal(api.impulseDamageStepBelowPrimary(api.SAGADRIVE_NPC_DAMAGE_STEPS[3]).label, 'd8+1', 'impulse below primary');
+equal(api.impulseDamageStepBelowPrimary(api.SAGATREE_NPC_DAMAGE_STEPS[3]).label, 'd8+1', 'impulse below primary');
 
 let threw = false;
 try {

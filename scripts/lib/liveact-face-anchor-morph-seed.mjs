@@ -8,7 +8,7 @@
  * Output is auto/unreviewed — not Semantic QA ground truth (morph-seeded, therefore circular).
  */
 
-import { SAGA_DRIVE_FACE_ANCHOR_IDS } from './liveact-face-anchor-ids.mjs';
+import { SAGA_TREE_FACE_ANCHOR_IDS } from './liveact-face-anchor-ids.mjs';
 import { bindingForVertex } from './liveact-face-anchor-heuristic.mjs';
 
 /** Morphs required to seed the full set; missing ones fail loudly instead of guessing. */
@@ -224,7 +224,7 @@ export function authorMorphSeededFaceAnchorsManifest(document) {
   /** @type {Record<string, unknown>} */
   const anchors = {};
   const missing = [];
-  for (const anchorId of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const anchorId of SAGA_TREE_FACE_ANCHOR_IDS) {
     const vi = v[anchorId];
     if (vi == null || vi < 0) {
       missing.push(anchorId);

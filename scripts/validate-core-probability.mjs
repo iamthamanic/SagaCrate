@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Core Probability Validation (#19, Epic #18)
+ * SagaTree Core Probability Validation (#19, Epic #18)
  *
- * Deterministic, exact (non-Monte-Carlo) validation of the SagaDrive core probe:
+ * Deterministic, exact (non-Monte-Carlo) validation of the SagaTree core probe:
  *   d20 + attribute + skill + experience bonus + specialization + explicit modifiers
  *
- * Rule source: "docs/sagadrive core rules.md" §2 (probes), §3 (attributes),
+ * Rule source: "docs/sagatree core rules.md" §2 (probes), §3 (attributes),
  * §5 (skills/caps/EB), §2.7 (difficulty scale), §19 (validation phase).
- * Validation plan: "docs/sagadrive core validation.md" section A1.
+ * Validation plan: "docs/sagatree core validation.md" section A1.
  *
  * Computes exact grade probabilities for the full A1 matrix plus consistency
  * assertions that fail the run on degenerate curves. Report is written to
@@ -148,7 +148,7 @@ function runMatrix() {
 
 function buildReport(rows, findings, profileCount) {
   const lines = [];
-  lines.push('# SagaDrive Core Probability Validation Report (#19)');
+  lines.push('# SagaTree Core Probability Validation Report (#19)');
   lines.push('');
   lines.push('Exact, deterministic validation of the core probe per A1 matrix.');
   lines.push('');

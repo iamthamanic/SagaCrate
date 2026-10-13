@@ -24,7 +24,7 @@ function newInstanceId(groupId: string, role: CharacterTraitInstance['role']): s
 
 /**
  * Create a source-neutral trait lifecycle registry.
- * MIT-inspired lifecycle semantics from M3 CharacterStudio; SagaDrive public contract is local.
+ * MIT-inspired lifecycle semantics from M3 CharacterStudio; SagaTree public contract is local.
  */
 export function createTraitLifecycleRegistry(
   options: TraitLifecycleRegistryOptions = {},

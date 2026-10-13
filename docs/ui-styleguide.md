@@ -1,4 +1,4 @@
-# SagaDrive UI Styleguide — Character Editor Patterns
+# SagaTree UI Styleguide — Character Editor Patterns
 
 Dieses Dokument beschreibt wiederverwendbare UI/UX-Muster aus dem Feature-Branch `feat/attribute-bonus-pool` (Attribute-Bonus-Pool, Hintergrund-Frameworks, Karussell-Connectors). Ziel: konsistente Übernahme in weiteren Editor-Bereichen.
 
@@ -202,7 +202,7 @@ const { setApi, current, handleCardClick, scrollPrev, scrollNext } = useCarousel
 **Empfohlene Migration:** Gleiches Karussell-Muster wie Archetyp/Background:
 
 1. `EssenceCarousel.tsx` anlegen (Kopie von `ArchetypeCarousel` als Vorlage)
-2. `useCarouselScrollSync` mit `sagaDriveEssenceOptions`
+2. `useCarouselScrollSync` mit `sagaTreeEssenceOptions`
 3. Manifestations-Vorschau im Center-Slide (wie jetzt im Grid bei `selected`)
 
 **Deutsche Copy:** „Primäre Essenz“, „Essenz-Manifestation“, „Rang I · geplant“.
@@ -364,8 +364,8 @@ import { RuleHelp } from '@/modules/characters/components/RuleHelp';
 ## Verwandte Dokumente
 
 - `docs/character-visual-styleguide.md` — **Avatar-/Charakter-Art-Look** (getrennt von diesem UI-Guide)
-- `docs/attribute-bonus-pool-rules-amendment.md` — **SUPERSEDED**; kanonisch: `docs/sagadrive core rules.md` §3.2/§3.3/§3.7
-- `docs/sagadrive-background-competency-rules.md` — Hintergrund-Kompetenzen
+- `docs/attribute-bonus-pool-rules-amendment.md` — **SUPERSEDED**; kanonisch: `docs/sagatree core rules.md` §3.2/§3.3/§3.7
+- `docs/sagatree-background-competency-rules.md` — Hintergrund-Kompetenzen
 - `.qa/design/background-competency-system.md` — UX-Design Hintergrund
 - `.qa/acceptance/attribute-bonus-pool.md` — Acceptance Attribute-Bonus
 - `.qa/acceptance/background-frameworks.md` — Acceptance Frameworks

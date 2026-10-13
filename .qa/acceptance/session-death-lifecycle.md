@@ -1,7 +1,7 @@
 # Acceptance — session-death-lifecycle (#373)
 
 ## Intent
-Session lifecycle `alive → downed/critical → stabilization → dead` using SagaDrive Core Rules §8.5 / §16.4. No UI-only death simulation.
+Session lifecycle `alive → downed/critical → stabilization → dead` using SagaTree Core Rules §8.5 / §16.4. No UI-only death simulation.
 
 ## Source of truth
 - Domain: `src/domains/session/contracts/session-death-lifecycle.ts`
@@ -10,7 +10,7 @@ Session lifecycle `alive → downed/critical → stabilization → dead` using S
 - Gate: `scripts/session-death-lifecycle-check.mjs`
 
 ## Acceptance
-- [x] life-state follows existing SagaDrive rules (difficulty start levels, death-save grades, Sterbend 3 = Tod)
+- [x] life-state follows existing SagaTree rules (difficulty start levels, death-save grades, Sterbend 3 = Tod)
 - [x] dead character cannot perform prohibited gameplay actions (`canAttemptCheck` false)
 - [x] inventory/equipment untouched by life transitions
 - [x] `shared.lifeByCharacter` persists across reload/reconnect (world_state)

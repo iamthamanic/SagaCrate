@@ -1,6 +1,6 @@
 # Inventory v2 — verbindlicher Spielvertrag
 
-Authoritative product contract for SagaDrive Inventory v2 (Epic #105, closed by #114).
+Authoritative product contract for SagaTree Inventory v2 (Epic #105, closed by #114).
 Implementation lives under `src/domains/character/inventory-v2/` (domain),
 `src/infrastructure/inventory/` (catalog persistence), and
 `src/app/character/inventory/` (Character Editor UI).
@@ -37,7 +37,7 @@ builtin Standard packs, World-authored defs, and Personal defs. **Item instances
 
 ## Verwandte Dokumente
 
-- Core Rules §5.7 / §10 (`docs/sagadrive core rules.md`) — Werkzeuge, Lastpunkte, Katalog, Waffenmerkmale
+- Core Rules §5.7 / §10 (`docs/sagatree core rules.md`) — Werkzeuge, Lastpunkte, Katalog, Waffenmerkmale
 - Item architecture: `docs/items.md` — Taxonomie, Packs, World `item-catalog`, Assets, Archive/Fork
 - Domain ops: `src/domains/character/inventory-v2/`
 - Item domain: `src/domains/items/`

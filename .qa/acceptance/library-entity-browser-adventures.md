@@ -6,7 +6,7 @@
 Bibliothek-Tab **Abenteuer** von Hardcode-Mocks auf echte Kampagnen/`projects` umstellen (`useProjects`) und denselben `EntityBrowser` wie bei Charakteren nutzen. Meta-Chips: Status, Member-Count, Projektcode. Create/Join an bestehende Flows („Projekt starten" via `join`) anbinden — kein neuer Adventure-Editor.
 
 ## Preconditions
-- SagaDrive läuft lokal-only (`localhost:8000` / `sagadrive-db`, AGENTS.md Non-Negotiables).
+- SagaTree läuft lokal-only (`localhost:8000` / `sagatree-db`, AGENTS.md Non-Negotiables).
 - `EntityBrowser`/`EntityBrowserCard` existieren aus Slice `library-entity-browser-characters` (#48, gemerged in PR #58).
 - `useProjects` liefert `ProjectVm` (`name`, `description`, `status`, `members`, `code`, `totalSessions`); kein Cover-Feld (keine Migration).
 - Dashboard nutzt `useProjects` bereits; Library-Tab Abenteuer zeigt zwei hardcoded Mock-Cards.

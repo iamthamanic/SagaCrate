@@ -34,7 +34,7 @@ for (const needle of [
   'character-portraits',
   'dm-tools/dice',
   'BLOCKED_604',
-  'sagadrive-regular',
+  'sagatree-regular',
   'PROJECT_SAFE',
   'select=${PROJECT_SAFE}',
 ]) {
@@ -52,7 +52,7 @@ try {
   fail(`report.json parse error: ${e}`);
 }
 
-if (report.stack !== 'sagadrive-regular') fail('report.stack must be sagadrive-regular');
+if (report.stack !== 'sagatree-regular') fail('report.stack must be sagatree-regular');
 if (report.ok !== true) fail('report.ok must be true');
 
 const required = [

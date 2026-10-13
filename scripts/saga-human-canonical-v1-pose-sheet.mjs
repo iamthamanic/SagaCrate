@@ -3,7 +3,7 @@
  * saga-human-canonical-v1-pose-sheet — LiveAct pose sheets for the three Human meshes.
  * Location: scripts/saga-human-canonical-v1-pose-sheet.mjs
  *
- * Same LiveAct VRM output + identical LiveActFrameV1 poses for SagaDrive Human, Reference VRM
+ * Same LiveAct VRM output + identical LiveActFrameV1 poses for SagaTree Human, Reference VRM
  * (diagnostic) and Saga Human Canonical V1 (candidate), in headless Chromium (SwiftShader WebGL).
  * Output: .qa/evidence/saga-human-canonical-v1/*.jpg + pose-sheet-report.json (renders only,
  * no camera / user data). Bundle + page live in .qa/runs/ (never committed).
@@ -44,8 +44,8 @@ const HARNESS_PREFIX = '/__harness/';
 const CANDIDATE_ID = 'saga-human-canonical-v1';
 const AVATARS = [
   {
-    id: 'sagadrive-human',
-    labelDe: 'SagaDrive Human',
+    id: 'sagatree-human',
+    labelDe: 'SagaTree Human',
     url: '/assets/avatars/species/human-male-quality-20260921-m5-face1.vrm',
   },
   {

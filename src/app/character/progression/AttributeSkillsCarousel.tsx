@@ -15,9 +15,9 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import {
-  sagaDriveAttributeDefinitions,
-  sagaDriveSkillDefinitions,
-  type SagaDriveAttributeKey,
+  sagaTreeAttributeDefinitions,
+  sagaTreeSkillDefinitions,
+  type SagaTreeAttributeKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import { RuleHelp } from '../shared/RuleHelp';
 import { Badge } from '../../../shared/ui/badge';
@@ -33,7 +33,7 @@ import { useCarouselScrollSync } from '../../../app/character/shared/useCarousel
 
 export type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 
-const ATTRIBUTE_ICONS: Readonly<Record<SagaDriveAttributeKey, LucideIcon>> = {
+const ATTRIBUTE_ICONS: Readonly<Record<SagaTreeAttributeKey, LucideIcon>> = {
   strength: Dumbbell,
   dexterity: Zap,
   endurance: HeartPulse,
@@ -43,8 +43,8 @@ const ATTRIBUTE_ICONS: Readonly<Record<SagaDriveAttributeKey, LucideIcon>> = {
 };
 
 interface AttributeSkillsCarouselProps {
-  selectedAttribute: SagaDriveAttributeKey;
-  onSelect: (value: SagaDriveAttributeKey) => void;
+  selectedAttribute: SagaTreeAttributeKey;
+  onSelect: (value: SagaTreeAttributeKey) => void;
   labelledBy?: string;
   onScrollPhaseChange?: (phase: CarouselScrollPhase) => void;
 }
@@ -55,7 +55,7 @@ export function AttributeSkillsCarousel({
   labelledBy = 'attribute-skills-heading',
   onScrollPhaseChange,
 }: AttributeSkillsCarouselProps) {
-  const options = sagaDriveAttributeDefinitions;
+  const options = sagaTreeAttributeDefinitions;
 
   const {
     setApi,
@@ -105,7 +105,7 @@ export function AttributeSkillsCarousel({
           {options.map((option, index) => {
             const isCenter = index === current;
             const isSelected = selectedAttribute === option.key;
-            const skillCount = sagaDriveSkillDefinitions.filter((skill) => skill.attribute === option.key).length;
+            const skillCount = sagaTreeSkillDefinitions.filter((skill) => skill.attribute === option.key).length;
             const AttributeIcon = ATTRIBUTE_ICONS[option.key];
 
             return (

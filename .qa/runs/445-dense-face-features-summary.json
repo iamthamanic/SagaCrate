@@ -1,6 +1,6 @@
 {
-  "contractVersion": "SagaDriveLiveActDenseFaceFeaturesV1",
-  "geometryContractVersion": "SagaDriveLiveActDenseSemanticGeometryV1",
+  "contractVersion": "SagaTreeLiveActDenseFaceFeaturesV1",
+  "geometryContractVersion": "SagaTreeLiveActDenseSemanticGeometryV1",
   "fixtureIds": [
     "canonical-neutral",
     "mouth-open",
@@ -57,6 +57,6 @@
     "committedRealFaceFeatureTraces": 0,
     "networkSerialization": 0
   },
-  "deterministicHash": "41c5fda42506543dc6b574fc229126026cbca476ffe423aa09bd95b2097cab3b",
+  "deterministicHash": "ed88c04b4b648eb0b755bf3e81a75b05567960c45b653f717bc2f21722a63c7b",
   "authoritativeGate": "scripts/liveact-dense-face-features-check.mjs"
 }

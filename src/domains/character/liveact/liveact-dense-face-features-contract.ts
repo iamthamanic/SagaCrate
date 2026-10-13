@@ -1,16 +1,16 @@
 /**
- * liveact-dense-face-features-contract — SagaDrive Dense Face Features V1 (#445).
+ * liveact-dense-face-features-contract — SagaTree Dense Face Features V1 (#445).
  * Location: src/domains/character/liveact/liveact-dense-face-features-contract.ts
  *
  * Provider-neutral geometric features. No provider landmark indices. No avatar morph names.
- * Does not inflate SagaDriveLiveActFrameV1.
+ * Does not inflate SagaTreeLiveActFrameV1.
  */
 
 export const LIVEACT_DENSE_FACE_FEATURES_CONTRACT =
-  'SagaDriveLiveActDenseFaceFeaturesV1' as const;
+  'SagaTreeLiveActDenseFaceFeaturesV1' as const;
 
 export const LIVEACT_DENSE_SEMANTIC_GEOMETRY_CONTRACT =
-  'SagaDriveLiveActDenseSemanticGeometryV1' as const;
+  'SagaTreeLiveActDenseSemanticGeometryV1' as const;
 
 /** Named semantic geometry — domain input after provider adapter. */
 export const DENSE_SEMANTIC_POINT_IDS = [

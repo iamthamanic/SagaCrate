@@ -441,7 +441,7 @@ async function processAsset(id) {
   writeFileSync(join(qaFinal, 'face-asset-validate.json'), `${JSON.stringify(inv, null, 2)}\n`);
   if (!assetResult.ok || inv.structuralPass !== true || inv.functionalQa?.pass !== true) {
     throw new Error(
-      `${id}: Stage-B FAIL structural=${inv.structuralPass} func=${inv.functionalQa?.pass} saga=${JSON.stringify(inv.sagaDrive?.errors)}`,
+      `${id}: Stage-B FAIL structural=${inv.structuralPass} func=${inv.functionalQa?.pass} saga=${JSON.stringify(inv.sagaTree?.errors)}`,
     );
   }
   if (inv.semanticQa?.pass !== true) throw new Error(`${id}: Semantic FAIL`);

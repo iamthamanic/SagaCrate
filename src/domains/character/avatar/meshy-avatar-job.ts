@@ -5,7 +5,7 @@
  * Provider status is never a capability proof — #6 owns capabilities after storage.
  */
 
-export const MESHY_AVATAR_JOB_CONTRACT_VERSION = 'SagaDriveMeshyAvatarJobV1' as const;
+export const MESHY_AVATAR_JOB_CONTRACT_VERSION = 'SagaTreeMeshyAvatarJobV1' as const;
 
 export const MESHY_AVATAR_PROMPT_MAX_CHARS = 500;
 export const MESHY_AVATAR_PROMPT_MIN_CHARS = 8;

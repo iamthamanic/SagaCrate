@@ -3,7 +3,7 @@
 <!-- seeded for GitHub issue #162 / avatar-order-23 -->
 
 ## Intent
-Prepared skinned wearables on SagaDriveHumanoidRigV1 when capability + #216 fit allow; fail-soft otherwise.
+Prepared skinned wearables on SagaTreeHumanoidRigV1 when capability + #216 fit allow; fail-soft otherwise.
 
 ## Happy Path
 - [ ] planSkinnedWearableAttaches requires skinned-wearable-ready + ready status

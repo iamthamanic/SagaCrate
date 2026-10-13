@@ -46,7 +46,7 @@ function toWorkerRequest(req: Request, serviceName: string): Request {
   return new Request(url.toString(), req);
 }
 
-console.log('SagaDrive edge main dispatcher started');
+console.log('SagaTree edge main dispatcher started');
 
 serve(async (req: Request) => {
   try {

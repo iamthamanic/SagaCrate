@@ -9,7 +9,7 @@
 Ein Entwickler führt den Test Gate bzw. `node scripts/validate-damage-healing-dying.mjs` aus; die Engine berechnet exakte Schadens-/Sterbe-/Heilungskurven über die C2-Pflichtmatrix und schreibt den Report nach `.qa/runs/validate-damage-healing-dying-report.md`.
 
 ## Hop chain
-`docs/sagadrive core rules.md` §8/§16.4 kodieren Schadens-, Schutz-, Sterbe- und Erholungsregeln → `scripts/lib/core-probe.mjs` liefert die geteilte Kernprobe (Grade-Auflösung identisch zu #19/#22) → `scripts/validate-damage-healing-dying.mjs` faltet die Schadenswürfel exakt (§8.1/§8.2), leitet Schutz-/Durchdringungs-Effekte ab (§8.3), modelliert die Dying-State-Machine (§8.5), massiven Schaden (§8.6), Erholungspfade (§8.8) und Härtegrade (§16.4) → Konsistenz-Assertions (Krit > Normal-Ø, Schutz monotone Schadensminderung, Durchdringung strikt hilfreich, Heroisch ≤ Standard ≤ Hart tödlich) → Report-Artefakt → `scripts/test-gate.mjs` (`checkDamageHealingDyingValidation()`).
+`docs/sagatree core rules.md` §8/§16.4 kodieren Schadens-, Schutz-, Sterbe- und Erholungsregeln → `scripts/lib/core-probe.mjs` liefert die geteilte Kernprobe (Grade-Auflösung identisch zu #19/#22) → `scripts/validate-damage-healing-dying.mjs` faltet die Schadenswürfel exakt (§8.1/§8.2), leitet Schutz-/Durchdringungs-Effekte ab (§8.3), modelliert die Dying-State-Machine (§8.5), massiven Schaden (§8.6), Erholungspfade (§8.8) und Härtegrade (§16.4) → Konsistenz-Assertions (Krit > Normal-Ø, Schutz monotone Schadensminderung, Durchdringung strikt hilfreich, Heroisch ≤ Standard ≤ Hart tödlich) → Report-Artefakt → `scripts/test-gate.mjs` (`checkDamageHealingDyingValidation()`).
 
 ## Simulations
 | Case | Intended | Composed | Result |

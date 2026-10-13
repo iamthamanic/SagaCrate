@@ -1,8 +1,8 @@
-# Feature-Vergleich: Original Repos vs SagaDrive Self-Host
+# Feature-Vergleich: Original Repos vs SagaTree Self-Host
 
 ## 📊 Übersicht
 
-| Repo | Sprache | Features | SagaDrive Status |
+| Repo | Sprache | Features | SagaTree Status |
 |------|---------|----------|-------------------|
 | **GameMasterAI** | Node.js + React | Full-Stack TTRPG | ⚠️ Teilweise |
 | **AI-Game-Master-Autonomous** | Python + Arma Reforger | Autonomous AI GM | ❌ Nicht implementiert |
@@ -14,7 +14,7 @@
 ## 1️⃣ GameMasterAI (deckofdmthings)
 
 ### Original Features:
-| Feature | Beschreibung | SagaDrive | Status |
+| Feature | Beschreibung | SagaTree | Status |
 |---------|--------------|------------|--------|
 | **Frontend UI** | React Web Interface | ❌ Fehlt | Nicht übernommen |
 | **MongoDB Storage** | Game Saves + User Accounts | ⚠️ PostgreSQL statt MongoDB | Angepasst |
@@ -26,7 +26,7 @@
 | **User Accounts** | Auth System | ✅ Supabase Auth | Implementiert |
 
 ### Fehlende Features:
-1. **Frontend UI** - SagaDrive hat das Frontend, aber wir haben nur das Backend erstellt
+1. **Frontend UI** - SagaTree hat das Frontend, aber wir haben nur das Backend erstellt
 2. **MongoDB Integration** - Wir nutzen PostgreSQL (besser für TTRPG-Daten)
 3. **AI Notetaker** - In Sessions als Logs implementiert, aber nicht als separater Service
 
@@ -35,7 +35,7 @@
 ## 2️⃣ AI-Game-Master-Autonomous (mtrak)
 
 ### Original Features:
-| Feature | Beschreibung | SagaDrive | Status |
+| Feature | Beschreibung | SagaTree | Status |
 |---------|--------------|------------|--------|
 | **NLP Processing** | Natürliche Spracheingabe | ✅ AI-GM Function | Implementiert |
 | **Ollama Integration** | Lokales LLM | ✅ Ollama | Implementiert |
@@ -57,7 +57,7 @@
 ## 3️⃣ Lorekeeper-MCP (frap129)
 
 ### Original Features:
-| Feature | Beschreibung | SagaDrive | Status |
+| Feature | Beschreibung | SagaTree | Status |
 |---------|--------------|------------|--------|
 | **Semantic Search** | Milvus Vector DB | ⚠️ Neo4j statt Milvus | Angepasst |
 | **Open5e Integration** | D&D 5e SRD API | ❌ Nicht übernommen | Fehlt |
@@ -80,7 +80,7 @@
 ## 4️⃣ AI-Dungeon-Master (fedefreak92)
 
 ### Original Features:
-| Feature | Beschreibung | SagaDrive | Status |
+| Feature | Beschreibung | SagaTree | Status |
 |---------|--------------|------------|--------|
 | **Stack FSM** | Game State Machine | ⚠️ Sessions State | Vereinfacht |
 | **Combat System** | Kampfsystem | ✅ DM-Tools Combat | Implementiert |
@@ -139,7 +139,7 @@
 ## 🎯 Was fehlt noch?
 
 ### Kritisch (muss implementiert werden):
-1. **Frontend UI** - React/Vite Interface für SagaDrive
+1. **Frontend UI** - React/Vite Interface für SagaTree
 2. **Open5e API Integration** - Für volle D&D 5e Daten
 3. **Map System** - Visuelle Maps statt Text-Only
 
@@ -160,7 +160,7 @@
 ## 💡 Empfehlung
 
 ### Priorität 1: Frontend
-Das Backend ist vollständig, aber es fehlt ein Frontend. SagaDrive hat bereits ein Frontend (Vite + React), das integriert werden muss.
+Das Backend ist vollständig, aber es fehlt ein Frontend. SagaTree hat bereits ein Frontend (Vite + React), das integriert werden muss.
 
 ### Priorität 2: Open5e Integration
 Für volle D&D 5e Kompatibilität sollte Open5e API integriert werden (Spells, Monsters, Items).

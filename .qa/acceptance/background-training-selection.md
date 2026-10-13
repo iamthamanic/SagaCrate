@@ -80,7 +80,7 @@ Roadmap/Design-Artefakt: im Repository nicht vorhanden; Scope basiert auf dem ak
 
 ## Implementation Notes
 - Files touched: `src/components/CharacterEditor.tsx`, `src/modules/rulesets/backgroundTemplates.ts`, `src/modules/characters/components/BackgroundCarousel.tsx`, `src/modules/characters/components/CharacterBackgroundPanel.tsx`, `scripts/background-framework-regression-check.mjs`, `scripts/character-editor-regression-check.mjs`, `e2e/character-editor.spec.ts` sowie QA-Artefakte.
-- Das Core-Framework-Modell enthält keine statischen Trainingsempfehlungen und keine Compatibility-Projektion mehr. `getSagaDriveBackgroundTemplate` liefert wieder direkt das echte `SagaDriveBackgroundTemplate`.
+- Das Core-Framework-Modell enthält keine statischen Trainingsempfehlungen und keine Compatibility-Projektion mehr. `getSagaTreeBackgroundTemplate` liefert wieder direkt das echte `SagaTreeBackgroundTemplate`.
 - `CharacterEditor` setzt `backgroundTraining` bei jeder Framework-Auswahl nativ auf `['', '']`; damit startet die Auswahl direkt bei `0 / 2`, ohne historisches `recommendedTraining`-Feld oder Bridge-Typ.
 - Die Regression-Checks verbieten `recommendedTraining` sowohl im Framework-Modell als auch im Parent-Editor und verlangen den expliziten neutralen Reset im Editor.
 - Nach `2 / 2` rendert der Background-Graph nur die zwei trainierten Nodes. `Auswahl ändern` öffnet den Vierer-Pool erneut und behält die bestehende Auswahl bis zur tatsächlichen Änderung.

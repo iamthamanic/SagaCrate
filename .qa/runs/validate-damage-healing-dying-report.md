@@ -1,4 +1,4 @@
-# SagaDrive Damage, Healing & Dying Validation Report (#23)
+# SagaTree Damage, Healing & Dying Validation Report (#23)
 
 Exact damage distributions (§8.1/§8.2), protection matrix (§8.3), dying state machine (§8.5), massive damage (§8.6), recovery (§8.8), difficulty modules (§16.4).
 

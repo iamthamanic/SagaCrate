@@ -4,7 +4,7 @@
 Move remaining feature screens and shell composition out of `src/components/**` into `src/app/**` slices.
 
 ## Happy Path
-- [x] Layout, AuthGate, LoginScreen, SagaDriveLogo, ViewLoadingFallback → `app/shell`
+- [x] Layout, AuthGate, LoginScreen, SagaTreeLogo, ViewLoadingFallback → `app/shell`
 - [x] Dashboard → `app/dashboard`
 - [x] Profile → `app/profile`
 - [x] Library + EntityBrowser(+Card) → `app/library`

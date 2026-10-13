@@ -34,7 +34,7 @@ check(!/from ['"]react['"]/.test(domain), 'no react');
 check(!/from ['"]three['"]/.test(domain), 'no three');
 check(/validateModularAvatarGlbNodes/.test(index), 'barrel');
 check(/kein Meshy/.test(spec), 'spec provider-neutral (kein Meshy)');
-check(/extras\.sagadrive/.test(spec), 'spec extras');
+check(/extras\.sagatree/.test(spec), 'spec extras');
 check(/Body_Base/.test(spec), 'spec Body_Base');
 
 for (const name of [
@@ -78,8 +78,8 @@ const limitedResult = m.validateModularAvatarGlbNodes(limited.nodes);
 check(limitedResult.status === 'limited', 'no extras → limited');
 
 const foreign = m.parseModularAvatarGlbExtras({
-  sagadrive: {
-    contractVersion: 'SagaDriveModularAvatarGlbV1',
+  sagatree: {
+    contractVersion: 'SagaTreeModularAvatarGlbV1',
     role: 'wearable',
     slot: 'not-a-slot',
   },

@@ -108,7 +108,7 @@ const player = access.validateLiveSessionAccess({
 });
 const viewer = access.validateLiveSessionAccess({ role: 'viewer', capabilities: [] });
 check(player.ok && viewer.ok, 'access ok');
-check(domain.deriveMediaRoomId('abc') === 'sagadrive-session-abc', 'room id');
+check(domain.deriveMediaRoomId('abc') === 'sagatree-session-abc', 'room id');
 check(domain.canPublishTrack(player.access, 'camera') === true, 'player publish');
 check(domain.canPublishTrack(viewer.access, 'camera') === false, 'viewer no publish');
 check(domain.resolveMediaGrant(viewer.access).receiveOnly === true, 'receiveOnly');

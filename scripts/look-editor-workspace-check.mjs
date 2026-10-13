@@ -83,7 +83,7 @@ section('3 · 3-column AdaptiveLiveStage layout');
   check(/beforeunload|dirty/.test(read('src/app/look/editor/useLookEditor.ts')), 'unsaved guard');
 }
 
-section('4 · nav + inspectors SagaDrive terms');
+section('4 · nav + inspectors SagaTree terms');
 {
   const sections = read('src/app/look/editor/look-editor-sections.ts');
   const nav = read('src/app/look/editor/LookEditorNav.tsx');
@@ -99,9 +99,9 @@ section('4 · nav + inspectors SagaDrive terms');
   check(/min-h-11/.test(nav), 'nav targets ≥44px');
   check(/Erweitert/.test(inspector), 'advanced collapsed');
   check(/data-look-editor-versions/.test(inspector), 'version list');
-  check(/Stylisierung|Kontur/.test(character), 'character SagaDrive terms');
-  check(/Wärme|Hauptlicht/.test(lighting), 'lighting SagaDrive terms');
-  check(/Kontrast|Sättigung/.test(postFx), 'postFx SagaDrive terms');
+  check(/Stylisierung|Kontur/.test(character), 'character SagaTree terms');
+  check(/Wärme|Hauptlicht/.test(lighting), 'lighting SagaTree terms');
+  check(/Kontrast|Sättigung/.test(postFx), 'postFx SagaTree terms');
   check(/Noch nicht verfügbar|lookCapabilityUnavailableLabel/.test(world), 'world reserved copy');
   check(!/toonlab|ToonLab|lora|LoRA|comfy/i.test(character + lighting + postFx), 'no ToonLab/LoRA knobs');
   check(!/type=["']range["']/.test(world), 'world has no fake sliders');
@@ -110,7 +110,7 @@ section('4 · nav + inspectors SagaDrive terms');
 section('5 · draft round-trip (no provider blobs)');
 {
   const draftSrc = read('src/app/look/editor/look-editor-draft.ts');
-  check(/sagadrive:look-knobs-v1:/.test(draftSrc), 'knobs URI scheme');
+  check(/sagatree:look-knobs-v1:/.test(draftSrc), 'knobs URI scheme');
   check(
     !/from ['"][^'"]*toonlab/i.test(draftSrc) && !/require\(['"][^'"]*toonlab/i.test(draftSrc),
     'draft mapper has no ToonLab imports',

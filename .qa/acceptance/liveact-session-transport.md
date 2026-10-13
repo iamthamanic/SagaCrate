@@ -14,7 +14,7 @@ duplicating tracking, DB pose writes, or second renderers.
 
 ## Happy Path
 
-- [ ] `SagaDriveLiveActNetworkFrameV1` encode/decode (no landmarks/video)
+- [ ] `SagaTreeLiveActNetworkFrameV1` encode/decode (no landmarks/video)
 - [ ] Publish stage = calibrated (post #448); consumer does not re-temporal
 - [ ] MediaPlane `publishData` / `subscribeData` on adapter + memory fan-out
 - [ ] Transport throttle ≤30 Hz; sequence/stale/OOO drop

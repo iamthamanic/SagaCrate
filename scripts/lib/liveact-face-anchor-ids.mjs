@@ -1,11 +1,11 @@
 /**
- * liveact-face-anchor-ids — canonical SagaDriveFaceAnchorsV1 ids for offline scripts (#399).
+ * liveact-face-anchor-ids — canonical SagaTreeFaceAnchorsV1 ids for offline scripts (#399).
  * Location: scripts/lib/liveact-face-anchor-ids.mjs
  */
 
-export const FACE_ANCHORS_CONTRACT_VERSION = 'SagaDriveFaceAnchorsV1';
+export const FACE_ANCHORS_CONTRACT_VERSION = 'SagaTreeFaceAnchorsV1';
 
-export const SAGA_DRIVE_FACE_ANCHOR_IDS = [
+export const SAGA_TREE_FACE_ANCHOR_IDS = [
   'mouthUpper',
   'mouthLower',
   'mouthCornerLeft',
@@ -29,6 +29,6 @@ export const SAGA_DRIVE_FACE_ANCHOR_IDS = [
   'forehead',
 ];
 
-export function isSagaDriveFaceAnchorId(id) {
-  return SAGA_DRIVE_FACE_ANCHOR_IDS.includes(id);
+export function isSagaTreeFaceAnchorId(id) {
+  return SAGA_TREE_FACE_ANCHOR_IDS.includes(id);
 }

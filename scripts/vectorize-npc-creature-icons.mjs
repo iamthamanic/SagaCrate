@@ -92,7 +92,7 @@ function shouldConvert(entry, svgAbs) {
  * @returns {string} path to preprocess PNG (may equal pngAbs if unchanged / unavailable)
  */
 function preprocessKnockOutBlackBg(pngAbs) {
-  const outAbs = join(tmpdir(), `sagadrive-npc-icon-nobg-${basename(pngAbs)}`);
+  const outAbs = join(tmpdir(), `sagatree-npc-icon-nobg-${basename(pngAbs)}`);
   const py = `
 from PIL import Image, ImageDraw
 import sys

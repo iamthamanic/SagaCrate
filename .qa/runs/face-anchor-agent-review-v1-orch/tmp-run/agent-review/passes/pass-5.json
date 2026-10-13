@@ -1,0 +1,390 @@
+{
+  "protocolVersion": "face-anchor-agent-review-v1",
+  "passIndex": 5,
+  "reviewerId": "agent-pass-5",
+  "evidenceManifestSha256": "c65275c028c2042ba02261d11d1321cdbfc4f93b314efaa9349734ee574819e5",
+  "modelSha256": "357e5d6fafa34d27360fec24b4326d3534905e33c6acdee60198fb078b7b79e5",
+  "anchorsSha256": "53f8b498bcb62a4dfb5e40c77bc2834e007b0b4e1435f91c64abc234957e9109",
+  "topologyFingerprint": "v1:t1000:m50",
+  "findings": [
+    {
+      "anchorId": "mouthUpper",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "mouthLower",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "mouthCornerLeft",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "mouthCornerRight",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeLeftInner",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeLeftOuter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeLeftUpper",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeLeftLower",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeRightInner",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeRightOuter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeRightUpper",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "eyeRightLower",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browLeftInner",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browLeftOuter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browLeftCenter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browRightInner",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browRightOuter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "browRightCenter",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "noseTip",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "chin",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    },
+    {
+      "anchorId": "forehead",
+      "visualStatus": "pass",
+      "anatomyStatus": "pass",
+      "sideStatus": "pass",
+      "surfaceStatus": "pass",
+      "evidenceViews": [
+        "frontal",
+        "yaw_left_35",
+        "yaw_right_35",
+        "pitch_up",
+        "pitch_down",
+        "eyes_brows_closeup",
+        "mouth_nose_closeup"
+      ],
+      "conciseReason": "fixture_all_pass",
+      "needsHuman": false
+    }
+  ],
+  "reviewedAt": "2026-09-30T12:00:00.000Z"
+}

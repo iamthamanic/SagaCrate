@@ -2,28 +2,28 @@
  * starting-templates validate — fail-closed catalog checks against rules kernel (#463).
  * Location: src/domains/rules/sagatree/starting-templates/validate.ts
  */
-import { isValidSagaDriveBaseAttributeDistribution } from '../attribute-progression';
-import { getSagaDriveBackgroundTemplate } from '../background-templates';
+import { isValidSagaTreeBaseAttributeDistribution } from '../attribute-progression';
+import { getSagaTreeBackgroundTemplate } from '../background-templates';
 import {
-  SAGA_DRIVE_START_ATTRIBUTE_ARRAY,
-  getSagaDriveSkill,
+  SAGA_TREE_START_ATTRIBUTE_ARRAY,
+  getSagaTreeSkill,
 } from '../character-creation';
 import {
-  isValidSagaDriveSkillDevelopment,
+  isValidSagaTreeSkillDevelopment,
   isValidStartSkillBuild,
 } from '../skill-progression';
-import { sagaDriveStartingTemplates } from './catalog';
+import { sagaTreeStartingTemplates } from './catalog';
 import {
-  SAGA_DRIVE_STARTING_TEMPLATE_KEYS,
-  type SagaDriveStartingTemplate,
-  type SagaDriveStartingTemplateKey,
+  SAGA_TREE_STARTING_TEMPLATE_KEYS,
+  type SagaTreeStartingTemplate,
+  type SagaTreeStartingTemplateKey,
 } from './types';
 
-export type SagaDriveStartingTemplateValidation =
-  | { readonly ok: true; readonly template: SagaDriveStartingTemplate }
+export type SagaTreeStartingTemplateValidation =
+  | { readonly ok: true; readonly template: SagaTreeStartingTemplate }
   | { readonly ok: false; readonly code: string; readonly message: string };
 
-function attributeValuesMatchStartArray(template: SagaDriveStartingTemplate): boolean {
+function attributeValuesMatchStartArray(template: SagaTreeStartingTemplate): boolean {
   const values = [
     template.attributes.strength,
     template.attributes.dexterity,
@@ -32,13 +32,13 @@ function attributeValuesMatchStartArray(template: SagaDriveStartingTemplate): bo
     template.attributes.perception,
     template.attributes.charisma,
   ].sort((a, b) => b - a);
-  const expected = [...SAGA_DRIVE_START_ATTRIBUTE_ARRAY].sort((a, b) => b - a);
+  const expected = [...SAGA_TREE_START_ATTRIBUTE_ARRAY].sort((a, b) => b - a);
   return values.every((value, index) => value === expected[index]);
 }
 
-export function validateSagaDriveStartingTemplate(
-  template: SagaDriveStartingTemplate,
-): SagaDriveStartingTemplateValidation {
+export function validateSagaTreeStartingTemplate(
+  template: SagaTreeStartingTemplate,
+): SagaTreeStartingTemplateValidation {
   if (!template.labelDe.trim() || !template.summaryDe.trim()) {
     return {
       ok: false,
@@ -47,7 +47,7 @@ export function validateSagaDriveStartingTemplate(
     };
   }
 
-  if (!isValidSagaDriveBaseAttributeDistribution(template.attributes)) {
+  if (!isValidSagaTreeBaseAttributeDistribution(template.attributes)) {
     return {
       ok: false,
       code: 'starting-template-attributes',
@@ -62,7 +62,7 @@ export function validateSagaDriveStartingTemplate(
     };
   }
 
-  const background = getSagaDriveBackgroundTemplate(template.backgroundTemplateId);
+  const background = getSagaTreeBackgroundTemplate(template.backgroundTemplateId);
   if (!background) {
     return {
       ok: false,
@@ -99,7 +99,7 @@ export function validateSagaDriveStartingTemplate(
 
   // Spec name must exist on the skill catalog (reuse existing specializations).
   try {
-    const skillDef = getSagaDriveSkill(template.backgroundSpecialization.skill);
+    const skillDef = getSagaTreeSkill(template.backgroundSpecialization.skill);
     if (!skillDef.specializations.includes(template.backgroundSpecialization.name)) {
       return {
         ok: false,
@@ -115,7 +115,7 @@ export function validateSagaDriveStartingTemplate(
     };
   }
 
-  if (!isValidSagaDriveSkillDevelopment(skillBuild, [], specs, 1)) {
+  if (!isValidSagaTreeSkillDevelopment(skillBuild, [], specs, 1)) {
     return {
       ok: false,
       code: 'starting-template-development',
@@ -126,19 +126,19 @@ export function validateSagaDriveStartingTemplate(
   return { ok: true, template };
 }
 
-export function validateSagaDriveStartingTemplateCatalog(
-  templates: readonly SagaDriveStartingTemplate[] = sagaDriveStartingTemplates,
-): SagaDriveStartingTemplateValidation {
-  if (templates.length !== SAGA_DRIVE_STARTING_TEMPLATE_KEYS.length) {
+export function validateSagaTreeStartingTemplateCatalog(
+  templates: readonly SagaTreeStartingTemplate[] = sagaTreeStartingTemplates,
+): SagaTreeStartingTemplateValidation {
+  if (templates.length !== SAGA_TREE_STARTING_TEMPLATE_KEYS.length) {
     return {
       ok: false,
       code: 'starting-template-count',
-      message: `expected ${SAGA_DRIVE_STARTING_TEMPLATE_KEYS.length} templates, got ${templates.length}`,
+      message: `expected ${SAGA_TREE_STARTING_TEMPLATE_KEYS.length} templates, got ${templates.length}`,
     };
   }
 
   const seen = new Set<string>();
-  for (const expected of SAGA_DRIVE_STARTING_TEMPLATE_KEYS) {
+  for (const expected of SAGA_TREE_STARTING_TEMPLATE_KEYS) {
     const template = templates.find((entry) => entry.key === expected);
     if (!template) {
       return {
@@ -155,20 +155,20 @@ export function validateSagaDriveStartingTemplateCatalog(
       };
     }
     seen.add(template.key);
-    const result = validateSagaDriveStartingTemplate(template);
+    const result = validateSagaTreeStartingTemplate(template);
     if (!result.ok) return result;
   }
 
   return { ok: true, template: templates[0]! };
 }
 
-export function getSagaDriveStartingTemplate(
-  key: SagaDriveStartingTemplateKey | string,
-): SagaDriveStartingTemplate | null {
-  const template = sagaDriveStartingTemplates.find((entry) => entry.key === key);
+export function getSagaTreeStartingTemplate(
+  key: SagaTreeStartingTemplateKey | string,
+): SagaTreeStartingTemplate | null {
+  const template = sagaTreeStartingTemplates.find((entry) => entry.key === key);
   return template ?? null;
 }
 
-export function listSagaDriveStartingTemplates(): readonly SagaDriveStartingTemplate[] {
-  return sagaDriveStartingTemplates;
+export function listSagaTreeStartingTemplates(): readonly SagaTreeStartingTemplate[] {
+  return sagaTreeStartingTemplates;
 }

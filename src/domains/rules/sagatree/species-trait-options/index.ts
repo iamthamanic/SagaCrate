@@ -1,6 +1,6 @@
-import type { SagaDriveSpeciesTraitKey } from '../character-creation';
+import type { SagaTreeSpeciesTraitKey } from '../character-creation';
 
-export type SagaDriveSpeciesTraitOptionKey =
+export type SagaTreeSpeciesTraitOptionKey =
   | 'sense-sight'
   | 'sense-hearing'
   | 'sense-smell-chemical'
@@ -31,20 +31,20 @@ export type SagaDriveSpeciesTraitOptionKey =
   | 'toxic-atmosphere'
   | 'high-radiation';
 
-export interface SagaDriveSpeciesTraitOption {
-  value: SagaDriveSpeciesTraitOptionKey;
+export interface SagaTreeSpeciesTraitOption {
+  value: SagaTreeSpeciesTraitOptionKey;
   label: string;
   description: string;
 }
 
-export interface SagaDriveSpeciesTraitOptionCatalog {
+export interface SagaTreeSpeciesTraitOptionCatalog {
   label: string;
   placeholder: string;
   helpIntro: string;
-  options: readonly SagaDriveSpeciesTraitOption[];
+  options: readonly SagaTreeSpeciesTraitOption[];
 }
 
-const SHARPENED_SENSE_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
+const SHARPENED_SENSE_OPTIONS: readonly SagaTreeSpeciesTraitOption[] = [
   {
     value: 'sense-sight',
     label: 'Sehen',
@@ -67,7 +67,7 @@ const SHARPENED_SENSE_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
   },
 ];
 
-export const sagaDriveNarrowResistanceHazardOptions: readonly SagaDriveSpeciesTraitOption[] = [
+export const sagaTreeNarrowResistanceHazardOptions: readonly SagaTreeSpeciesTraitOption[] = [
   {
     value: 'poison-toxins',
     label: 'Gift / Toxine',
@@ -120,7 +120,7 @@ export const sagaDriveNarrowResistanceHazardOptions: readonly SagaDriveSpeciesTr
   },
 ];
 
-const ENVIRONMENT_ADAPTATION_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
+const ENVIRONMENT_ADAPTATION_OPTIONS: readonly SagaTreeSpeciesTraitOption[] = [
   {
     value: 'heat-dryness',
     label: 'Hitze & Trockenheit',
@@ -153,7 +153,7 @@ const ENVIRONMENT_ADAPTATION_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
   },
 ];
 
-const ENHANCED_SIGHT_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
+const ENHANCED_SIGHT_OPTIONS: readonly SagaTreeSpeciesTraitOption[] = [
   {
     value: 'darkvision',
     label: 'Dunkelsicht',
@@ -171,7 +171,7 @@ const ENHANCED_SIGHT_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
   },
 ];
 
-const EXTREME_ENVIRONMENT_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
+const EXTREME_ENVIRONMENT_OPTIONS: readonly SagaTreeSpeciesTraitOption[] = [
   {
     value: 'vacuum-anoxia',
     label: 'Vakuum & Sauerstofflosigkeit',
@@ -204,7 +204,7 @@ const EXTREME_ENVIRONMENT_OPTIONS: readonly SagaDriveSpeciesTraitOption[] = [
   },
 ];
 
-export const sagaDriveSpeciesTraitOptionCatalogs: Readonly<Partial<Record<SagaDriveSpeciesTraitKey, SagaDriveSpeciesTraitOptionCatalog>>> = {
+export const sagaTreeSpeciesTraitOptionCatalogs: Readonly<Partial<Record<SagaTreeSpeciesTraitKey, SagaTreeSpeciesTraitOptionCatalog>>> = {
   'sharpened-sense': {
     label: 'Sinn',
     placeholder: 'Sinn wählen',
@@ -215,7 +215,7 @@ export const sagaDriveSpeciesTraitOptionCatalogs: Readonly<Partial<Record<SagaDr
     label: 'Gefahrenart',
     placeholder: 'Gefahrenart wählen',
     helpIntro: 'Entscheidend ist die konkrete Wirkung, nicht ihre Quelle. Magisches Feuer zählt zum Beispiel als Hitze / Verbrennung. Eine allgemeine Resistenz gegen „Magie“ gibt es nicht.',
-    options: sagaDriveNarrowResistanceHazardOptions,
+    options: sagaTreeNarrowResistanceHazardOptions,
   },
   'environment-adaptation': {
     label: 'Umgebung',
@@ -237,7 +237,7 @@ export const sagaDriveSpeciesTraitOptionCatalogs: Readonly<Partial<Record<SagaDr
   },
 };
 
-const LEGACY_OPTION_ALIASES: Readonly<Partial<Record<SagaDriveSpeciesTraitKey, Readonly<Record<string, SagaDriveSpeciesTraitOptionKey>>>>> = {
+const LEGACY_OPTION_ALIASES: Readonly<Partial<Record<SagaTreeSpeciesTraitKey, Readonly<Record<string, SagaTreeSpeciesTraitOptionKey>>>>> = {
   'sharpened-sense': {
     sehen: 'sense-sight',
     sicht: 'sense-sight',
@@ -285,24 +285,24 @@ function normalizeLookupValue(value: string): string {
   return value.trim().toLocaleLowerCase('de-DE');
 }
 
-export function getSagaDriveSpeciesTraitOptionCatalog(trait: SagaDriveSpeciesTraitKey): SagaDriveSpeciesTraitOptionCatalog | undefined {
-  return sagaDriveSpeciesTraitOptionCatalogs[trait];
+export function getSagaTreeSpeciesTraitOptionCatalog(trait: SagaTreeSpeciesTraitKey): SagaTreeSpeciesTraitOptionCatalog | undefined {
+  return sagaTreeSpeciesTraitOptionCatalogs[trait];
 }
 
-export function isSagaDriveSpeciesTraitOptionKeyForTrait(
-  trait: SagaDriveSpeciesTraitKey,
+export function isSagaTreeSpeciesTraitOptionKeyForTrait(
+  trait: SagaTreeSpeciesTraitKey,
   value: string,
-): value is SagaDriveSpeciesTraitOptionKey {
-  const catalog = getSagaDriveSpeciesTraitOptionCatalog(trait);
+): value is SagaTreeSpeciesTraitOptionKey {
+  const catalog = getSagaTreeSpeciesTraitOptionCatalog(trait);
   return Boolean(catalog?.options.some((option) => option.value === value));
 }
 
-export function normalizeSagaDriveSpeciesTraitOptionKey(
-  trait: SagaDriveSpeciesTraitKey,
+export function normalizeSagaTreeSpeciesTraitOptionKey(
+  trait: SagaTreeSpeciesTraitKey,
   value: string,
-): SagaDriveSpeciesTraitOptionKey | undefined {
+): SagaTreeSpeciesTraitOptionKey | undefined {
   const normalized = normalizeLookupValue(value);
-  const catalog = getSagaDriveSpeciesTraitOptionCatalog(trait);
+  const catalog = getSagaTreeSpeciesTraitOptionCatalog(trait);
   if (!catalog) return undefined;
 
   const direct = catalog.options.find(

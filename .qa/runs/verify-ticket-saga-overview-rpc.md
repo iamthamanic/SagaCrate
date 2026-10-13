@@ -13,7 +13,7 @@ PASS
 - vite build: PASS
 - typed-strict (touched): PASS
 - secrets RG: PASS
-- Migration 060 applied on sagadrive-db: PASS (auth gate raises `not authenticated`)
+- Migration 060 applied on sagatree-db: PASS (auth gate raises `not authenticated`)
 
 ## Acceptance
 | Criterion | Status |

@@ -1,12 +1,12 @@
 # Feature: validate-damage-healing-dying
 
-<!-- Acceptance: Issue #23 (Epic #18), Validierungsplan C2, `docs/sagadrive core rules.md` §6.1/§6.6, §8, §16.4 -->
+<!-- Acceptance: Issue #23 (Epic #18), Validierungsplan C2, `docs/sagatree core rules.md` §6.1/§6.6, §8, §16.4 -->
 
 ## Intent
-Schaden, Schutz, Heilung und Sterben werden über mehrere Konflikte geprüft, damit SagaDrive verwundbare Figuren behält, ohne dass einzelne Treffer, Rüstung oder Regeneration die Belastungskurve ungewollt dominieren.
+Schaden, Schutz, Heilung und Sterben werden über mehrere Konflikte geprüft, damit SagaTree verwundbare Figuren behält, ohne dass einzelne Treffer, Rüstung oder Regeneration die Belastungskurve ungewollt dominieren.
 
 ## Preconditions
-- SagaDrive lokal-only; Regelquelle `docs/sagadrive core rules.md` §6.1 (Gesundheit), §6.6 (Erholung), §8 (Schaden/Heilung/Tod), §16.4 (Härtegrade Heroisch/Standard/Hart).
+- SagaTree lokal-only; Regelquelle `docs/sagatree core rules.md` §6.1 (Gesundheit), §6.6 (Erholung), §8 (Schaden/Heilung/Tod), §16.4 (Härtegrade Heroisch/Standard/Hart).
 - Validierungsplan C2 definiert Pflichtfälle und Messgrößen (Treffer bis 0, Heilung pro Ruhephase, Sterbewahrscheinlichkeit, Schutzwirkung, Attrition).
 - #19 (PR #61) und #22 (PR #62) sind abgeschlossen; die Schadenswürfel werden über die geteilte Kernprobe (`scripts/lib/core-probe.mjs`) bzw. exakte Verteilungen aufgelöst.
 - Der Validierungsapparat ist ein deterministisches Node-Script (`scripts/validate-damage-healing-dying.mjs`): exakte Wahrscheinlichkeiten für Einzelwürfe, vollständige Zustands-Simulation (Health-Track) über drei Bänder.

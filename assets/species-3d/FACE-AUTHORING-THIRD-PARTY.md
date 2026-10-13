@@ -1,8 +1,8 @@
 # Third-party notices — LiveAct Face Authoring (offline)
 
-SagaDrive does **not** vendor or ship QtMeshEditor at runtime. The FaceRig CLI is an
-optional offline authoring tool resolved via `SAGADRIVE_QTMESH_BIN`, `PATH`, or
-`.cache/sagadrive-tools/qtmesh/` (see `scripts/bootstrap-qtmesh-facerig.sh`).
+SagaTree does **not** vendor or ship QtMeshEditor at runtime. The FaceRig CLI is an
+optional offline authoring tool resolved via `SAGATREE_QTMESH_BIN`, `PATH`, or
+`.cache/sagatree-tools/qtmesh/` (see `scripts/bootstrap-qtmesh-facerig.sh`).
 
 | Component | Upstream | License | Role |
 |-----------|----------|---------|------|

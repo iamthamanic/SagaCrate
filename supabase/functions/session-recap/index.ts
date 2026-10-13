@@ -294,7 +294,7 @@ serve(async (request: Request) => {
     // Ensure recap skeleton exists / load snapshot via RPC helper (service role).
     const upsertRes = await serviceFetch(
       supabaseConfig,
-      '/rest/v1/rpc/sagadrive_upsert_session_recap',
+      '/rest/v1/rpc/sagatree_upsert_session_recap',
       {
         method: 'POST',
         body: JSON.stringify({ p_session_id: sessionId }),

@@ -74,9 +74,9 @@ const SPECIES_DEVELOPMENT_MODE_LABELS = {
   disabled: 'Deaktiviert',
 } as const;
 
-const CHARACTER_VIEW_MODE_STORAGE_KEY = 'sagadrive_library_characters_view_mode';
-const ADVENTURE_VIEW_MODE_STORAGE_KEY = 'sagadrive_library_adventures_view_mode';
-const WORLD_VIEW_MODE_STORAGE_KEY = 'sagadrive_library_worlds_view_mode';
+const CHARACTER_VIEW_MODE_STORAGE_KEY = 'sagatree_library_characters_view_mode';
+const ADVENTURE_VIEW_MODE_STORAGE_KEY = 'sagatree_library_adventures_view_mode';
+const WORLD_VIEW_MODE_STORAGE_KEY = 'sagatree_library_worlds_view_mode';
 
 const PROJECT_STATUS_LABELS: Record<ProjectSummaryVm['status'], string> = {
   active: 'Aktiv',

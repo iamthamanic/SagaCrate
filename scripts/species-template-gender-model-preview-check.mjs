@@ -55,7 +55,7 @@ check(/resolveSpeciesTemplateModelUrl/.test(hook), 'hook resolves template model
 check(/quality: 'preview'/.test(hook), 'hook display uses preview quality');
 check(/quality: 'fidelity'/.test(hook), 'hook persist uses fidelity quality');
 check(
-  /avatarSource === 'sagadrive' && selectedTemplateSpeciesId/.test(hook),
+  /avatarSource === 'sagatree' && selectedTemplateSpeciesId/.test(hook),
   'native template preview wins over imported model_url',
 );
 check(

@@ -9,7 +9,7 @@
 Authenticated member requests saga hub overview for a public saga id.
 
 ## Hop chain
-`useSagaOverview` → `sagaOverviewService.getOverviewByPublicId` → RPC `get_saga_overview` (SECURITY DEFINER) → `sagadrive_project_shared_adventure` audience filter → JSON VM → `parseSagaOverview` / `assertSagaOverviewAudienceSafe` → `entityCache` → (UI consumer in #571)
+`useSagaOverview` → `sagaOverviewService.getOverviewByPublicId` → RPC `get_saga_overview` (SECURITY DEFINER) → `sagatree_project_shared_adventure` audience filter → JSON VM → `parseSagaOverview` / `assertSagaOverviewAudienceSafe` → `entityCache` → (UI consumer in #571)
 
 ## Simulations
 | Case | Intended | Composed | Result |

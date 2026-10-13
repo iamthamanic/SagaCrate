@@ -9,7 +9,7 @@
 
 import type { AvatarV2Anatomy, AvatarV2BodyFamily } from './composition-contract-v2';
 
-export const BODY_PROFILE_CONTRACT_VERSION = 'SagaDriveBodyProfileV1' as const;
+export const BODY_PROFILE_CONTRACT_VERSION = 'SagaTreeBodyProfileV1' as const;
 
 /** Canonical clothing/fit families — not species. */
 export const BODY_PROFILE_FAMILY_IDS = ['standard', 'compact', 'heavy'] as const;

@@ -3,7 +3,7 @@
  * Location: src/domains/character/avatar/canonical-body-families-v1.ts
  *
  * Three versioned humanoid base bodies sharing the same Rig/Morph/MToon contracts.
- * Legacy `sagadrive-base-humanoid-v1` maps to standard. No baked clothing; underwear separate.
+ * Legacy `sagatree-base-humanoid-v1` maps to standard. No baked clothing; underwear separate.
  */
 
 import {
@@ -15,7 +15,7 @@ import {
   type BaseBodyMaterialSlot,
   type BaseBodyProvenance,
   type BaseBodyTraitSocket,
-  type SagaDriveBaseBodyManifestV1,
+  type SagaTreeBaseBodyManifestV1,
 } from './base-body-contract';
 import { MORPH_CONTRACT_VERSION } from './morph-contract';
 import { RIG_CONTRACT_VERSION } from './rig-contract';
@@ -26,7 +26,7 @@ import {
 } from './asset-authoring-contract-v1';
 
 export const CANONICAL_BODY_FAMILIES_CONTRACT_VERSION =
-  'SagaDriveCanonicalBodyFamiliesV1' as const;
+  'SagaTreeCanonicalBodyFamiliesV1' as const;
 
 export const CANONICAL_BODY_FAMILY_IDS = ['standard', 'compact', 'heavy'] as const;
 export type CanonicalBodyFamilyId = (typeof CANONICAL_BODY_FAMILY_IDS)[number];
@@ -41,7 +41,7 @@ export type CanonicalBodyAssetId =
   (typeof CANONICAL_BODY_ASSET_IDS)[CanonicalBodyFamilyId];
 
 /** Legacy single-humanoid id — treat as standard. */
-export const LEGACY_BASE_BODY_ASSET_ID = 'sagadrive-base-humanoid-v1' as const;
+export const LEGACY_BASE_BODY_ASSET_ID = 'sagatree-base-humanoid-v1' as const;
 
 export const CANONICAL_BODY_REGIONS = [
   'head',
@@ -79,15 +79,15 @@ export interface CanonicalBodyFamilyManifestV1 {
 }
 
 const SHARED_PROVENANCE: BaseBodyProvenance = {
-  licenseSpdx: 'LicenseRef-SagaDrive-Internal',
-  licenseUrl: 'https://sagadrive.local/licenses/internal',
-  source: 'SagaDrive first-party authoring (#255)',
+  licenseSpdx: 'LicenseRef-SagaTree-Internal',
+  licenseUrl: 'https://sagatree.local/licenses/internal',
+  source: 'SagaTree first-party authoring (#255)',
   notes: 'Adult stylized MToon; no chibi; underwear separate from base mesh.',
 };
 
 const SHARED_AUTHORING: AssetAuthoringProvenanceV1 = {
   license: 'first-party',
-  attributionDe: 'SagaDrive First-Party Base Body',
+  attributionDe: 'SagaTree First-Party Base Body',
 };
 
 const FAMILY_META: Record<
@@ -164,10 +164,10 @@ export function listCanonicalBodyFamilyManifests(): readonly CanonicalBodyFamily
   return CANONICAL_BODY_FAMILY_IDS.map(createCanonicalBodyFamilyManifest);
 }
 
-/** Project family manifest onto SagaDriveBaseBodyManifestV1 shape for callers. */
-export function toSagaDriveBaseBodyManifest(
+/** Project family manifest onto SagaTreeBaseBodyManifestV1 shape for callers. */
+export function toSagaTreeBaseBodyManifest(
   family: CanonicalBodyFamilyManifestV1,
-): SagaDriveBaseBodyManifestV1 {
+): SagaTreeBaseBodyManifestV1 {
   return {
     contractVersion: BASE_BODY_CONTRACT_VERSION,
     assetVersion: family.assetVersion,

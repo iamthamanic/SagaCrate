@@ -15,10 +15,10 @@ import {
 import type { AvatarRigCapabilityFlag } from './rig-contract';
 
 export const AVATAR_V2_COMPOSITION_CONTRACT_VERSION =
-  'SagaDriveAvatarCompositionV2' as const;
+  'SagaTreeAvatarCompositionV2' as const;
 
 /** Ingress origin — generate replaces legacy `meshy` in V2 vocabulary (still readable). */
-export const AVATAR_V2_SOURCES = ['sagadrive', 'import', 'generate'] as const;
+export const AVATAR_V2_SOURCES = ['sagatree', 'import', 'generate'] as const;
 export type AvatarV2Source = (typeof AVATAR_V2_SOURCES)[number];
 
 export const AVATAR_V2_ANATOMIES = ['humanoid', 'custom-creature', 'unknown'] as const;
@@ -90,12 +90,12 @@ export function isAvatarV2Modularity(value: unknown): value is AvatarV2Modularit
 
 /**
  * Map v1 AvatarSource → V2 source vocabulary.
- * `meshy` → `generate` (provider-neutral); unknown → fail-closed sagadrive via resolve.
+ * `meshy` → `generate` (provider-neutral); unknown → fail-closed sagatree via resolve.
  */
 export function toAvatarV2Source(source: AvatarSource): AvatarV2Source {
   if (source === 'meshy') return 'generate';
   if (source === 'import') return 'import';
-  return 'sagadrive';
+  return 'sagatree';
 }
 
 /**
@@ -169,7 +169,7 @@ export function compositionFromCharacterAvatarDto(
   if (!avatar) {
     return {
       contractVersion: AVATAR_V2_COMPOSITION_CONTRACT_VERSION,
-      source: 'sagadrive',
+      source: 'sagatree',
       anatomy: 'unknown',
       bodyCompatibility: 'unknown',
       bodyFamily: 'custom',
@@ -203,13 +203,13 @@ export function compositionFromCharacterAvatarDto(
     capabilities: bag.capabilities,
   });
 
-  // SagaDrive catalog presets without external model → assume humanoid modular baseline,
+  // SagaTree catalog presets without external model → assume humanoid modular baseline,
   // still without inventing capability flags from source alone.
   let anatomy = parsed.anatomy;
   let modularity = parsed.modularity;
   let bodyCompatibility = parsed.bodyCompatibility;
   if (
-    source === 'sagadrive' &&
+    source === 'sagatree' &&
     !avatar.model_url &&
     anatomy === 'unknown' &&
     modularity === 'limited'

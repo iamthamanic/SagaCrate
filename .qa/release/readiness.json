@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "repository": "iamthamanic/sagadrive",
+  "repository": "iamthamanic/sagatree",
   "generatedStatusPath": ".qa/release/STATUS.md",
   "runtimeStatePath": ".qa/release/runtime/latest.json",
   "statuses": [
@@ -15,7 +15,7 @@
     {
       "id": "R0",
       "title": "R0 – Reveal",
-      "meaning": "Wir können SagaDrive öffentlich zeigen",
+      "meaning": "Wir können SagaTree öffentlich zeigen",
       "order": 0
     },
     {
@@ -226,7 +226,7 @@
     {
       "id": "RULES-001",
       "area": "rules",
-      "title": "Standardcheck autoritativ nach SagaDrive Core",
+      "title": "Standardcheck autoritativ nach SagaTree Core",
       "requiredFrom": "R1",
       "blocking": true,
       "linkedIssues": [

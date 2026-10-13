@@ -10,7 +10,7 @@ export function lookPreviewAvatarFromModelUrl(modelUrl: string): CharacterAvatar
   return {
     schema_version: 1,
     provider: 'm3-character-studio',
-    source: 'sagadrive',
+    source: 'sagatree',
     preset: 'look-preview',
     model_format: format,
     model_url: modelUrl,

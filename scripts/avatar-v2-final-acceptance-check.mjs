@@ -32,11 +32,11 @@ check(/AVATAR_V2_SECURITY_MATRIX_V1/.test(domain), 'security');
 check(/AVATAR_V2_PERF_BUDGETS_V1/.test(domain), 'perf');
 check(!/from ['"]react['"]/.test(domain), 'no react');
 check(/assertAvatarV2FinalAcceptanceInvariants/.test(index), 'barrel');
-check(/SagaDrive Modular Avatar GLB v1/.test(glbDoc), 'glb title');
+check(/SagaTree Modular Avatar GLB v1/.test(glbDoc), 'glb title');
 check(/provider-neutral|provider-neutral/i.test(glbDoc), 'glb provider-neutral');
 check(/Capabilities|Fähigkeiten/.test(glbDoc), 'glb capabilities section');
 check(/final-acceptance|Golden Matrix/.test(pipeline), 'pipeline closeout');
-check(/cross-owner|extras\.sagadrive|provider-success/i.test(securityDoc), 'security doc');
+check(/cross-owner|extras\.sagatree|provider-success/i.test(securityDoc), 'security doc');
 
 const outDir = join(root, 'node_modules/.cache/avatar-v2-final-acceptance-check');
 mkdirSync(outDir, { recursive: true });

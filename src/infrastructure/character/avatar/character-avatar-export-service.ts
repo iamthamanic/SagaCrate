@@ -80,7 +80,7 @@ export async function materializeAvatarSaveExport(
     avatar: input.avatar,
     runtimeOverlays: input.runtimeOverlays,
     embedsSourceMesh,
-    catalogBasePath: embedsSourceMesh ? undefined : 'sagadrive-base-humanoid-v1.vrm',
+    catalogBasePath: embedsSourceMesh ? undefined : 'sagatree-base-humanoid-v1.vrm',
   });
 
   const bytes = encodeAvatarExportGlb({

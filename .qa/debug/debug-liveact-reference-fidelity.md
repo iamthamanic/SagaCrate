@@ -1,7 +1,7 @@
 # Debug Report — `liveact-reference-fidelity`
 
 **Date:** 2026-09-25  
-**Project:** `sagadrive`  
+**Project:** `sagatree`  
 **Shell:** web (Vite, port 3004)  
 **Repro grade:** full (domain + three/three-vrm headless repro with real rest poses/clip; asset facts from VRM file)
 
@@ -10,7 +10,7 @@
 ## Summary
 
 Five independent causes, not one: (A) the procedural Idle clip keeps playing during LiveAct and overwrites the head bone after `vrm.update()`; (B) engine smoothing feeds back the calibrated frame, so calibration subtracts the baseline ~2.9×; (C) without calibration, resting `eyeBlink` 0.17–0.28 is applied 1:1; (D) retarget is identity and MediaPipe under-reports; (E) the Reference VRM `jawOpen` expression does not bind the lower-teeth mesh.  
-**Confidence:** high (A, B, E, D) · medium (C gaze part, A on SagaDrive GLB)
+**Confidence:** high (A, B, E, D) · medium (C gaze part, A on SagaTree GLB)
 
 ---
 
@@ -87,7 +87,7 @@ No errors relevant to these symptoms (behavioural bugs, not exceptions).
 ## Prior art
 
 - [x] Repo grep — locations above.
-- [x] GitHub: [#403](https://github.com/iamthamanic/sagadrive/issues/403) (closed) kept identity gains until RAW→APPLIED evidence; no issue for idle/calibration bugs.
+- [x] GitHub: [#403](https://github.com/iamthamanic/sagatree/issues/403) (closed) kept identity gains until RAW→APPLIED evidence; no issue for idle/calibration bugs.
 - [x] `.qa/acceptance/liveact-face-retarget-profile.md` — identity until QA documents overrides.
 - [ ] LightRAG — not queried.
 
@@ -137,4 +137,4 @@ Not verifiable in the embedded browser: the calibration run itself (background t
 ## Notes
 
 - Assumption: user frames in the screenshot are representative (single frame).
-- Out of scope: gaze range tuning, tongue tracking, SagaDrive GLB morph quality.
+- Out of scope: gaze range tuning, tongue tracking, SagaTree GLB morph quality.

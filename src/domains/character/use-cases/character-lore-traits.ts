@@ -39,7 +39,7 @@ const commonSuggestions: Record<CharacterTraitCategory, readonly string[]> = {
   ],
 };
 
-const sagaDriveSuggestions: Record<CharacterTraitCategory, readonly string[]> = {
+const sagaTreeSuggestions: Record<CharacterTraitCategory, readonly string[]> = {
   personality: [
     'Passt sich schnell an neue Welten an',
     'Sucht Lösungen außerhalb fester Rollen',
@@ -110,7 +110,7 @@ export function getCharacterTraitSuggestions(
 ): string[] {
   const rulesetSuggestions = context.ruleset === 'dnd-5.5e'
     ? dnd55Suggestions[category]
-    : sagaDriveSuggestions[category];
+    : sagaTreeSuggestions[category];
   const contextualSuggestion = getContextualSuggestion(category, context);
   return Array.from(
     new Set([

@@ -11,7 +11,7 @@ export { CharacterNotesSection } from './CharacterNotesSection';
 export { CharacterStatisticsPanel } from './CharacterStatisticsPanel';
 export { CharacterPresetPanel } from './CharacterPresetPanel';
 export { RuleHelp } from '../shared/RuleHelp';
-export { CharacterSkillsPanel, createEmptySagaDriveSkillRanks, resolveSagaDriveSkillRanksSafe } from './CharacterSkillsPanel';
+export { CharacterSkillsPanel, createEmptySagaTreeSkillRanks, resolveSagaTreeSkillRanksSafe } from './CharacterSkillsPanel';
 export { AttributeSkillsCarousel } from './AttributeSkillsCarousel';
 export { AttributeSkillConnector } from './AttributeSkillConnector';
 export { AttributeSkillNode } from './AttributeSkillNode';

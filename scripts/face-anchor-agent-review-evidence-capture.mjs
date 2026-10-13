@@ -14,7 +14,7 @@
  *     --anchors <face-anchors.json> \
  *     [--model-sha <hex>] [--anchors-sha <hex>] [--topology <fp>]
  *
- * Without a browser page that exposes SagaDrive face-setup capture hooks, this script
+ * Without a browser page that exposes SagaTree face-setup capture hooks, this script
  * still writes a validated capture plan + empty-slot check contract. Prefer the harness
  * page when Character Studio Face Setup is available (`--harness` mode).
  */

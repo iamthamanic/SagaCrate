@@ -6,7 +6,7 @@
 - Verdict: CLEAR
 
 ## Event
-Avatar model finishes loading; runtime analyzes bones/aliases into SagaDriveHumanoidRigV1 capabilities; UI shows DE labels without raw bone strings.
+Avatar model finishes loading; runtime analyzes bones/aliases into SagaTreeHumanoidRigV1 capabilities; UI shows DE labels without raw bone strings.
 
 ## Hop chain
 Producer (CharacterStudioRuntime.loadModel)

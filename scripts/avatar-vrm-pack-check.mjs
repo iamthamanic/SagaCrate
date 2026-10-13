@@ -47,7 +47,7 @@ const fixtureGlb = join(fixtureDir, 'minimal-humanoid-face.glb');
 await io.write(fixtureGlb, createMinimalPackFixtureDocument());
 
 const inventory = {
-  version: 'SagaDriveLiveActFaceInventoryV1',
+  version: 'SagaTreeLiveActFaceInventoryV1',
   input: 'minimal-humanoid-face.glb',
   profile: 'core-v1',
   profileOk: true,
@@ -64,7 +64,7 @@ const result = await packAvatarVrm1({
   inputGlbPath: fixtureGlb,
   inventoryPath,
   outputVrmPath: outVrm,
-  metaName: 'SagaDriveMinimalPack',
+  metaName: 'SagaTreeMinimalPack',
 });
 
 check(existsSync(outVrm), 'output VRM written');

@@ -1,0 +1,22 @@
+{
+  "protocolVersion": "face-anchor-agent-review-v1",
+  "outcome": "human_review_required",
+  "requiredPasses": 5,
+  "completedPasses": 0,
+  "deterministicPass": false,
+  "evidenceManifestSha256": "",
+  "conflictingAnchorIds": [],
+  "reasons": [
+    "evidence:animation_must_be_false",
+    "evidence:invalid_anchors_sha256",
+    "evidence:invalid_model_sha256",
+    "evidence:invalid_neutral_pose",
+    "evidence:liveact_must_be_false",
+    "evidence:missing_candidate_model_path",
+    "evidence:missing_topology_fingerprint",
+    "evidence:protocol_version_mismatch",
+    "evidence:shots_missing",
+    "missing_or_invalid_screenshot_evidence"
+  ],
+  "aggregatedAt": "2026-09-30T12:00:00.000Z"
+}

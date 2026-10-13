@@ -10,7 +10,7 @@ User creates a character (own or from preset version), saves a validated sheet, 
 
 ## Hop chain
 1. **Create chooser** (`CreateCharacterEntryDialog`) → either empty editor or `assertValidSnapshot` + `setCharacterEditorBootstrap(preset snapshot)` → `CharacterEditor` re-asserts via `takeCharacterEditorBootstrap` (one-shot; new unsaved character). Preset list errors still open the presets step (empty + stub).
-2. **Save** → `characterService.createCharacter` (first) or `updateCharacter` (subsequent) with `sagadrive_profile.presetReleaseMode`.
+2. **Save** → `characterService.createCharacter` (first) or `updateCharacter` (subsequent) with `sagatree_profile.presetReleaseMode`.
 3. **Manual preset** → `CharacterPresetPanel` → `characterPresetService.createPresetFromCharacter` / `releaseVersion` with `withSafePortraitUrl` + `assertValidSnapshot` → `character_presets` row (versions JSONB append-only; RLS origin=user + owned source).
 4. **Auto-release** → after successful save, `maybeAutoReleaseVersion` loads linked preset by `source_character_id`, skips if level not increased / already present / validation fails → at most one `releaseVersion` write.
 5. **Delete source character** → FK `ON DELETE SET NULL`; preset remains; UI may show „Quellcharakter gelöscht“.
