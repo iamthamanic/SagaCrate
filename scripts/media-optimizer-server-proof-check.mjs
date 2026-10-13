@@ -35,7 +35,10 @@ for (const p of paths) check(existsSync(join(root, p)), `exists ${p}`);
 
 const proof = readFileSync(join(root, 'supabase/functions/_shared/media-server-optimize-proof.ts'), 'utf8');
 const decisionDoc = readFileSync(join(root, 'docs/media-optimizer-server-decision.md'), 'utf8');
-check(/NOT imported by any production|Proof-only/i.test(proof), 'proof-only marker');
+check(
+  /Deno Edge runtime|#645|#647|quality ladder/i.test(proof),
+  'proof module identity marker',
+);
 check(/deno-adapter|dedicated-worker|not-viable/.test(decisionDoc), 'decision enum in docs');
 check(/Storage|Auth/i.test(decisionDoc), 'docs mention Storage/Auth unchanged');
 check(!/from ['"].*storage|from ['"].*auth/i.test(proof), 'no Storage/Auth imports in proof');

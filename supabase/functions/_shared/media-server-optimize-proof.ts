@@ -1,10 +1,10 @@
 /**
- * Server-side raster optimization PROOF for the Deno Edge runtime (#645).
+ * Server-side raster optimization for the Deno Edge runtime (#645/#647).
  * Location: supabase/functions/_shared/media-server-optimize-proof.ts
  *
- * Proof-only: decode PNG/JPEG/WebP → (optional box downscale) → WebP encode with a quality ladder.
- * NOT imported by any production Edge Function, Storage, or Auth path. #647 may adopt it
- * after the decision recorded in docs/media-optimizer-server-decision.md.
+ * Decode PNG/JPEG/WebP → (optional box downscale) → WebP encode with a quality ladder.
+ * Adopted by production item-thumbnail Meshy persist via `media-server-raster-optimize.ts`
+ * after the `deno-adapter` decision in docs/media-optimizer-server-decision.md.
  *
  * Codecs: @jsquash/{png,jpeg,webp} (WASM, same family as the browser engine #630).
  */

@@ -579,6 +579,14 @@ function checkMediaOptimizerServerProof() {
   });
 }
 
+function checkMediaOptimizerProviderOutput() {
+  console.log('Media optimizer provider output (#647): Meshy optimize before Storage...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-provider-output-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2086,6 +2094,7 @@ checkMediaOptimizerLookReference();
 checkMediaOptimizerItemWebpContract();
 checkMediaOptimizerItemIntake();
 checkMediaOptimizerServerProof();
+checkMediaOptimizerProviderOutput();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
