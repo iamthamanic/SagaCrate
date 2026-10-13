@@ -106,6 +106,7 @@ export function EntityBrowser<T extends { id: string }>({
     navClass,
     navButtonClass,
     getItemClassName,
+    getItemStyle,
     getCardClassName,
     contentClassName,
   } = useCenterFocusCarousel({
@@ -166,6 +167,7 @@ export function EntityBrowser<T extends { id: string }>({
                   <CarouselItem
                     key={`${getId(item)}__${slideIndex}`}
                     className={getItemClassName(slideIndex)}
+                    style={getItemStyle(slideIndex)}
                   >
                     <div
                       className={getCardClassName()}
