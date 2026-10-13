@@ -92,13 +92,12 @@ const LOOK_REFERENCE_POLICY: ImageAssetPolicy = {
 };
 
 /**
- * Item thumbnails: PNG/JPEG only until Domain/Edge/Bucket/DB/Meshy consumers
- * migrate together — WebP output stays false in V1 until that slice lands.
+ * Item thumbnails: PNG/JPEG/WebP (#641) — Domain/Edge/Bucket/DB/Meshy aligned.
  */
 const ITEM_THUMBNAIL_POLICY: ImageAssetPolicy = {
   profileId: 'item-thumbnail',
   kind: 'image',
-  allowedMimeTypes: ['image/png', 'image/jpeg'],
+  allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
   budget: {
     targetBytes: 1 * MiB,
     maxUploadBytes: 10 * MiB,
@@ -107,7 +106,7 @@ const ITEM_THUMBNAIL_POLICY: ImageAssetPolicy = {
   minQuality: 55,
   preserveAlpha: true,
   gifAnimation: 'reject',
-  allowWebpOutput: false,
+  allowWebpOutput: true,
 };
 
 const IMAGE_POLICIES: Record<AssetProfileId, ImageAssetPolicy> = {

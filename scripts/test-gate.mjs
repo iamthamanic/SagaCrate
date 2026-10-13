@@ -544,6 +544,14 @@ function checkMediaOptimizerLookReference() {
   });
 }
 
+function checkMediaOptimizerItemWebpContract() {
+  console.log('Media optimizer item WebP contract (#641): domain/edge/bucket/DB/Meshy...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-item-webp-contract-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2048,6 +2056,7 @@ checkMediaOptimizerPreviewIntake();
 checkMediaOptimizerCharacterPortrait();
 checkMediaOptimizerWorldPin();
 checkMediaOptimizerLookReference();
+checkMediaOptimizerItemWebpContract();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();

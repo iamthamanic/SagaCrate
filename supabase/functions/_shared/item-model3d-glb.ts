@@ -224,8 +224,11 @@ export async function probeMeshyGlbContentLength(
   return null;
 }
 
-/** Encode image bytes as a data URI for Meshy image_url input. */
-export function imageBytesToDataUri(bytes: Uint8Array, mime: 'image/png' | 'image/jpeg'): string {
+/** Encode image bytes as a data URI for Meshy image_url input (#641: WebP allowed). */
+export function imageBytesToDataUri(
+  bytes: Uint8Array,
+  mime: 'image/png' | 'image/jpeg' | 'image/webp',
+): string {
   let binary = '';
   for (let i = 0; i < bytes.length; i += 1) {
     binary += String.fromCharCode(bytes[i]!);

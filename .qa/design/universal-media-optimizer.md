@@ -32,7 +32,7 @@ Lossless WebP first (`@jsquash/webp`), then quality ladder, then downscale to pr
 | character-portrait | PNG/JPEG/WebP/GIF | 5 MiB | GIF → convert-static when optimizing |
 | map-pin | PNG/JPEG/WebP | 5 MiB | |
 | look-reference | PNG/JPEG/WebP | 8 MiB/image | Aggregate request **12 MiB**; 1–10 images |
-| item-thumbnail | PNG/JPEG | 10 MiB | WebP output **off** until coordinated migration |
+| item-thumbnail | PNG/JPEG/WebP | 10 MiB | WebP enabled (#641 coordinated Domain/Edge/Bucket/DB) |
 
 ## Server
 

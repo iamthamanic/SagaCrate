@@ -108,7 +108,7 @@ function fileToBase64(file: File): Promise<string> {
 
 export function validateThumbnailFileClient(file: File): ItemThumbnailMime {
   if (!isAllowedItemThumbnailMime(file.type)) {
-    throw new Error('Nur PNG oder JPEG sind erlaubt.');
+    throw new Error('Nur PNG, JPEG oder WebP sind erlaubt.');
   }
   if (file.size > ITEM_THUMBNAIL_MAX_BYTES) {
     throw new Error('Datei zu groß (max. 10 MB).');

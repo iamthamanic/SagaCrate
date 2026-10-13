@@ -12,7 +12,7 @@ export type ItemThumbnailOrigin = (typeof ITEM_THUMBNAIL_ORIGINS)[number];
 
 export const ITEM_THUMBNAIL_ASSET_KEY_PREFIX = 'thumbnail2d:';
 export const ITEM_THUMBNAIL_MAX_BYTES = 10 * 1024 * 1024;
-export const ITEM_THUMBNAIL_ALLOWED_MIME = ['image/png', 'image/jpeg'] as const;
+export const ITEM_THUMBNAIL_ALLOWED_MIME = ['image/png', 'image/jpeg', 'image/webp'] as const;
 export type ItemThumbnailMime = (typeof ITEM_THUMBNAIL_ALLOWED_MIME)[number];
 
 /** Manifest fields the UI may show; provider task ids stay infrastructure-only. */
@@ -88,7 +88,7 @@ export function isAllowedItemThumbnailMime(value: string): value is ItemThumbnai
   return (ITEM_THUMBNAIL_ALLOWED_MIME as readonly string[]).includes(value);
 }
 
-/** PNG / JPEG magic-byte sniff (first bytes only). */
+/** PNG / JPEG / WebP magic-byte sniff (first bytes only). */
 export function sniffItemThumbnailMime(bytes: Uint8Array): ItemThumbnailMime | null {
   if (bytes.length >= 8
     && bytes[0] === 0x89
@@ -104,11 +104,27 @@ export function sniffItemThumbnailMime(bytes: Uint8Array): ItemThumbnailMime | n
   if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
     return 'image/jpeg';
   }
+  // RIFF....WEBP
+  if (
+    bytes.length >= 12
+    && bytes[0] === 0x52
+    && bytes[1] === 0x49
+    && bytes[2] === 0x46
+    && bytes[3] === 0x46
+    && bytes[8] === 0x57
+    && bytes[9] === 0x45
+    && bytes[10] === 0x42
+    && bytes[11] === 0x50
+  ) {
+    return 'image/webp';
+  }
   return null;
 }
 
-export function extensionForItemThumbnailMime(mime: ItemThumbnailMime): 'png' | 'jpg' {
-  return mime === 'image/png' ? 'png' : 'jpg';
+export function extensionForItemThumbnailMime(mime: ItemThumbnailMime): 'png' | 'jpg' | 'webp' {
+  if (mime === 'image/png') return 'png';
+  if (mime === 'image/webp') return 'webp';
+  return 'jpg';
 }
 
 /**

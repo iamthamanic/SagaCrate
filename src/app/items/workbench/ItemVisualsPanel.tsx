@@ -196,7 +196,7 @@ export function ItemVisualsPanel({
       <input
         ref={fileRef}
         type="file"
-        accept="image/png,image/jpeg"
+        accept="image/png,image/jpeg,image/webp"
         className="hidden"
         data-item-thumbnail-file
         onChange={(event) => {

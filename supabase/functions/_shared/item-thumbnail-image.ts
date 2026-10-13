@@ -1,10 +1,10 @@
 /**
- * Item thumbnail image validation + SSRF-safe remote fetch (#140).
+ * Item thumbnail image validation + SSRF-safe remote fetch (#140/#641).
  * Location: supabase/functions/_shared/item-thumbnail-image.ts
  */
 
 export const ITEM_THUMBNAIL_MAX_BYTES = 10 * 1024 * 1024;
-export const ITEM_THUMBNAIL_ALLOWED_MIME = ['image/png', 'image/jpeg'] as const;
+export const ITEM_THUMBNAIL_ALLOWED_MIME = ['image/png', 'image/jpeg', 'image/webp'] as const;
 export type ItemThumbnailMime = (typeof ITEM_THUMBNAIL_ALLOWED_MIME)[number];
 
 const MESHY_HOST_ALLOWLIST = [
@@ -35,11 +35,27 @@ export function sniffItemThumbnailMime(bytes: Uint8Array): ItemThumbnailMime | n
   if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
     return 'image/jpeg';
   }
+  // RIFF....WEBP
+  if (
+    bytes.length >= 12 &&
+    bytes[0] === 0x52 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x46 &&
+    bytes[8] === 0x57 &&
+    bytes[9] === 0x45 &&
+    bytes[10] === 0x42 &&
+    bytes[11] === 0x50
+  ) {
+    return 'image/webp';
+  }
   return null;
 }
 
-export function extensionForItemThumbnailMime(mime: ItemThumbnailMime): 'png' | 'jpg' {
-  return mime === 'image/png' ? 'png' : 'jpg';
+export function extensionForItemThumbnailMime(mime: ItemThumbnailMime): 'png' | 'jpg' | 'webp' {
+  if (mime === 'image/png') return 'png';
+  if (mime === 'image/webp') return 'webp';
+  return 'jpg';
 }
 
 export function buildItemThumbnailStoragePath(options: {
@@ -81,7 +97,7 @@ export function validateThumbnailBytes(
   if (bytes.byteLength === 0) throw new Error('Empty image');
   if (bytes.byteLength > ITEM_THUMBNAIL_MAX_BYTES) throw new Error('Image exceeds 10 MB limit');
   const sniffed = sniffItemThumbnailMime(bytes);
-  if (!sniffed) throw new Error('Only PNG and JPEG images are allowed');
+  if (!sniffed) throw new Error('Only PNG, JPEG and WebP images are allowed');
   if (claimedMime && claimedMime !== sniffed && !(claimedMime === 'image/jpg' && sniffed === 'image/jpeg')) {
     throw new Error('Declared MIME does not match file contents');
   }

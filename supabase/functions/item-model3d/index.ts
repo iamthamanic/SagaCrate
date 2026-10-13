@@ -234,7 +234,7 @@ async function uploadToStorage(
 async function downloadThumbnailBytes(
   config: SupabaseConfig,
   storagePath: string,
-): Promise<{ mime: 'image/png' | 'image/jpeg'; bytes: Uint8Array }> {
+): Promise<{ mime: 'image/png' | 'image/jpeg' | 'image/webp'; bytes: Uint8Array }> {
   const response = await fetch(
     `${config.url}/storage/v1/object/${THUMB_BUCKET}/${storagePath}`,
     {
@@ -249,7 +249,7 @@ async function downloadThumbnailBytes(
   if (!response.ok) throw new Error(`Thumbnail download failed (${response.status})`);
   const bytes = new Uint8Array(await response.arrayBuffer());
   const sniffed = sniffItemThumbnailMime(bytes);
-  if (!sniffed) throw new Error('Thumbnail asset is not a valid PNG/JPEG');
+  if (!sniffed) throw new Error('Thumbnail asset is not a valid PNG/JPEG/WebP');
   return { mime: sniffed, bytes };
 }
 
