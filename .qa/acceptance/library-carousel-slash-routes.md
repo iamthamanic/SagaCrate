@@ -15,4 +15,4 @@ Bibliothek uses slash routes for entity tabs; EntityBrowser carousel cards are w
 - [x] `npm run test-gate` PASS
 
 ## Composition Gate
-See `.qa/runs/composition-gate-library-carousel-slash-routes.md` — Verdict CLEAR (HEAD_SHA bc5c4d2f2cda2b4d2ff6ada23b852663de088628).
+See `.qa/runs/composition-gate-library-carousel-slash-routes.md` — Verdict CLEAR (HEAD_SHA 017a6f2ac69206ed64e4e1253b19c545f5c1e519).

@@ -1,6 +1,6 @@
 # Composition Gate — library-carousel-slash-routes
 
-- HEAD_SHA: bc5c4d2f2cda2b4d2ff6ada23b852663de088628
+- HEAD_SHA: 017a6f2ac69206ed64e4e1253b19c545f5c1e519
 - BASE_SHA: dd6f2edf (origin/main tip at branch cut)
 - Date: 2026-10-13
 - Verdict: CLEAR
