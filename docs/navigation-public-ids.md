@@ -52,6 +52,22 @@ Public IDs are **identifiers, not secrets**. Knowledge of an ID never grants acc
 
 Compatibility: `/gamemaster` and `/adventure-editor` remain reachable but are not a second navigation source of truth.
 
+## Canonical Library URLs
+
+Bibliothek tabs use the same History API slash router (not `?tab=`):
+
+```text
+/library                         → redirect/normalize → /library/player-characters
+/library/player-characters       → Charaktere
+/library/npc-creatures           → NPCs & Kreaturen
+/library/sagas                   → Sagas
+/library/worlds                  → Welten
+/library/items                   → Items
+/library/looks                   → Looks
+```
+
+Legacy bookmarks `/library?tab=adventures` (etc.) still resolve once, then normalize onto the slash path.
+
 ## Screen vs Modal
 
 **Screen + URL** when any of: reload restore, history step, shareable link, own resource identity, standalone/long task, primary navigation.

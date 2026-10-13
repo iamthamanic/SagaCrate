@@ -1,6 +1,6 @@
 /**
  * EntityBrowserCard — shared card body for EntityBrowser carousel and list views.
- * Carousel: portrait (aspect 4/5) hero image with title/meta/actions below.
+ * Carousel: square hero by default (portrait-safe); optional landscape for covers.
  * List: compact horizontal row with square thumbnail.
  * Thumbnail/portrait click opens a reusable image lightbox when an image URL is present.
  * Location: src/app/library/EntityBrowserCard.tsx
@@ -26,6 +26,13 @@ type EntityBrowserCardProps = {
   imageFallback: string;
   /** How the image fills its frame. Default `cover`. Use `contain` for sketches/icons. */
   imageObjectFit?: 'cover' | 'contain';
+  /** CSS object-position for `cover` crops (e.g. covers with baked-in titles: `center 75%`). */
+  imageObjectPosition?: string;
+  /**
+   * Carousel image frame. Default `square` keeps character portraits uncropped.
+   * Use `landscape` for wide saga/world covers.
+   */
+  imageAspect?: 'square' | 'landscape';
   /** Click image to enlarge. Default true when `imageUrl` is set. */
   imageEnlargeable?: boolean;
   variant: 'carousel' | 'list';
@@ -165,6 +172,8 @@ function EntityPortraitStage({
   imageAlt,
   imageFallback,
   imageObjectFit = 'cover',
+  imageObjectPosition,
+  imageAspect = 'square',
   enlargeable = false,
   onEnlarge,
 }: {
@@ -172,6 +181,8 @@ function EntityPortraitStage({
   imageAlt: string;
   imageFallback: string;
   imageObjectFit?: 'cover' | 'contain';
+  imageObjectPosition?: string;
+  imageAspect?: 'square' | 'landscape';
   enlargeable?: boolean;
   onEnlarge?: () => void;
 }) {
@@ -188,8 +199,9 @@ function EntityPortraitStage({
   return (
     <div
       className={cn(
-        // Square stage matches Dornhain pregen thumbs; keeps carousel cards compact.
-        'relative aspect-square w-full overflow-hidden bg-black',
+        // Square = portrait-safe; landscape = short 16/9 cover frames (saga/world).
+        'relative w-full overflow-hidden bg-black',
+        imageAspect === 'landscape' ? 'aspect-video' : 'aspect-square',
         canEnlarge && 'cursor-zoom-in',
       )}
       role={canEnlarge ? 'button' : undefined}
@@ -215,9 +227,12 @@ function EntityPortraitStage({
           alt={imageAlt}
           loading="lazy"
           draggable={false}
+          style={imageObjectPosition ? { objectPosition: imageObjectPosition } : undefined}
           className={cn(
             'pointer-events-none absolute inset-0 h-full w-full',
-            imageObjectFit === 'contain' ? 'object-contain p-4' : 'object-cover',
+            imageObjectFit === 'contain'
+              ? (imageAspect === 'landscape' ? 'object-contain p-1' : 'object-contain p-4')
+              : 'object-cover',
           )}
           onError={() => setImageFailed(true)}
         />
@@ -240,6 +255,8 @@ export function EntityBrowserCard({
   imageAlt,
   imageFallback,
   imageObjectFit = 'cover',
+  imageObjectPosition,
+  imageAspect = 'square',
   imageEnlargeable,
   variant,
   isCenter = false,
@@ -332,7 +349,8 @@ export function EntityBrowserCard({
     <>
       <Card
         className={cn(
-          'w-full overflow-hidden transition-all duration-300',
+          // gap-0: no empty band between stage and text; card height = content height.
+          'w-full gap-0 overflow-hidden transition-all duration-300',
           isCenter
             ? 'border-primary/40 shadow-none'
             : 'shadow-md hover:border-primary/40',
@@ -346,10 +364,12 @@ export function EntityBrowserCard({
           imageAlt={imageAlt}
           imageFallback={imageFallback}
           imageObjectFit={imageObjectFit}
+          imageObjectPosition={imageObjectPosition}
+          imageAspect={imageAspect}
           enlargeable={enlargeable}
           onEnlarge={openEnlarge}
         />
-        <CardContent className="space-y-2 p-2.5 md:p-3">
+        <CardContent className="space-y-2.5 p-3 [&:last-child]:pb-3">
           <div className="min-w-0 space-y-0.5">
             <div className="flex flex-wrap items-center gap-1.5">
               <p className="truncate text-sm font-semibold">{title}</p>
@@ -374,7 +394,10 @@ export function EntityBrowserCard({
             )}
           </div>
           {actions && (
-            <div className="flex gap-1.5" onClick={(event) => event.stopPropagation()}>
+            <div
+              className="flex w-full flex-wrap gap-1.5"
+              onClick={(event) => event.stopPropagation()}
+            >
               {actions}
             </div>
           )}

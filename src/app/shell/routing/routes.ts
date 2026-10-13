@@ -214,6 +214,8 @@ export function pathForView(viewId: string): string | null {
   if (normalized === 'look-create') return '/looks/create';
   if (normalized === 'npc-creature-create') return '/npc-creatures/create';
   if (normalized === 'saga-list') return '/sagas';
+  // Shell "Bibliothek" lands on player-characters (slash router, not bare /library).
+  if (normalized === 'library') return pathForLibraryTab('characters');
   if (normalized in VIEW_PATHS) {
     return VIEW_PATHS[normalized as keyof typeof VIEW_PATHS];
   }
@@ -258,10 +260,24 @@ export type LibraryTabId =
   | 'items'
   | 'looks';
 
+/** Canonical slash segments under `/library/…` (History API router). */
+export const LIBRARY_TAB_PATH_SEGMENTS: Record<LibraryTabId, string> = {
+  characters: 'player-characters',
+  npcs: 'npc-creatures',
+  adventures: 'sagas',
+  worlds: 'worlds',
+  items: 'items',
+  looks: 'looks',
+};
+
+/** Path segment + legacy query aliases (`?tab=` / old names). */
 const LIBRARY_TAB_ALIASES: Record<string, LibraryTabId> = {
   characters: 'characters',
   charaktere: 'characters',
+  'player-characters': 'characters',
+  'player-character': 'characters',
   npcs: 'npcs',
+  'npc-creatures': 'npcs',
   adventures: 'adventures',
   sagas: 'adventures',
   worlds: 'worlds',
@@ -275,10 +291,21 @@ export function parseLibraryTabParam(raw: string | null | undefined): LibraryTab
   return LIBRARY_TAB_ALIASES[raw.trim().toLowerCase()] ?? null;
 }
 
-/** Deep-link into Bibliothek with a tab selected (default characters → bare /library). */
+/**
+ * Resolve library tab from pathname (`/library`, `/library/sagas`, …).
+ * Returns null when the path is not a library route.
+ */
+export function parseLibraryTabFromPathname(pathname: string): LibraryTabId | null {
+  const path = normalizePathname(pathname);
+  if (path === '/library') return 'characters';
+  const match = path.match(/^\/library\/([^/]+)$/);
+  if (!match) return null;
+  return parseLibraryTabParam(match[1] ?? '');
+}
+
+/** Deep-link into Bibliothek tab via slash path (e.g. `/library/player-characters`). */
 export function pathForLibraryTab(tab: LibraryTabId = 'characters'): string {
-  if (tab === 'characters') return '/library';
-  return `/library?tab=${tab}`;
+  return `/library/${LIBRARY_TAB_PATH_SEGMENTS[tab]}`;
 }
 
 /**
@@ -572,6 +599,14 @@ export function resolvePathname(pathname: string): ResolvedRoute {
       return { kind: 'not-found', attemptedPath: path };
     }
     return { kind: 'npc-creature-edit', definitionId };
+  }
+
+  const libraryTabMatch = path.match(/^\/library\/([^/]+)$/);
+  if (libraryTabMatch) {
+    if (parseLibraryTabParam(libraryTabMatch[1] ?? '')) {
+      return { kind: 'view', view: 'library' };
+    }
+    return { kind: 'not-found', attemptedPath: path };
   }
 
   const view = PATH_TO_VIEW.get(path);
