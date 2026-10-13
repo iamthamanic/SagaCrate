@@ -117,7 +117,59 @@ CREATE TRIGGER trg_enforce_character_sheet_status_complete
   EXECUTE FUNCTION public.enforce_character_sheet_status_complete();
 
 -- ---------------------------------------------------------------------------
--- 4) Drop legacy sagadrive_* SQL wrappers
+-- 4a) Rename any remaining sagadrive_* helpers → sagatree_* (post-073 leftovers)
+-- ---------------------------------------------------------------------------
+DO $$
+DECLARE
+  r RECORD;
+  new_name TEXT;
+  arg_list TEXT;
+  new_exists BOOLEAN;
+BEGIN
+  FOR r IN
+    SELECT p.oid, p.proname
+    FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'public'
+      AND (
+        p.proname LIKE 'sagadrive_%'
+        OR p.proname = 'generate_sagadrive_public_id'
+      )
+    ORDER BY p.proname
+  LOOP
+    IF r.proname = 'generate_sagadrive_public_id' THEN
+      new_name := 'generate_sagatree_public_id';
+    ELSE
+      new_name := 'sagatree_' || substr(r.proname, length('sagadrive_') + 1);
+    END IF;
+
+    arg_list := pg_get_function_identity_arguments(r.oid);
+    SELECT EXISTS (
+      SELECT 1
+      FROM pg_proc p2
+      JOIN pg_namespace n2 ON n2.oid = p2.pronamespace
+      WHERE n2.nspname = 'public'
+        AND p2.proname = new_name
+        AND pg_get_function_identity_arguments(p2.oid) = arg_list
+    ) INTO new_exists;
+
+    IF new_exists THEN
+      -- Twin already canonical — drop the legacy name (wrappers / duplicates).
+      EXECUTE format('DROP FUNCTION IF EXISTS public.%I(%s)', r.proname, arg_list);
+    ELSE
+      EXECUTE format(
+        'ALTER FUNCTION public.%I(%s) RENAME TO %I',
+        r.proname,
+        arg_list,
+        new_name
+      );
+    END IF;
+  END LOOP;
+END;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- 4b) Drop known legacy wrappers if still present (idempotent)
 -- ---------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS public.generate_sagadrive_public_id(TEXT);
 DROP FUNCTION IF EXISTS public.sagadrive_empty_adventure_runtime();
