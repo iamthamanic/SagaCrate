@@ -37,8 +37,9 @@ services:
       # Do not mount them over /docker-entrypoint-initdb.d — that replaces the
       # image role bootstrap and breaks first boot (supabase_admin missing).
       - ./supabase/migrations:/migrations:ro
+    # Loopback only — never publish Postgres on 0.0.0.0 (#605)
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     networks:
       - sagatree-network
 
@@ -52,6 +53,8 @@ services:
       KONG_DNS_ORDER: last,A,CNAME
       KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
       KONG_NGINX_PROXY_INCLUDE: /etc/kong/nginx-proxy.template
+      # Default 1 worker (~99 MiB); set KONG_NGINX_WORKER_PROCESSES=2 + recreate for ~175 MiB (#605)
+      KONG_NGINX_WORKER_PROCESSES: ${KONG_NGINX_WORKER_PROCESSES:-1}
     volumes:
       - ./supabase/config/kong.yml:/home/kong/kong.yml:ro
       - ./supabase/config/nginx-proxy.template:/etc/kong/nginx-proxy.template:ro
@@ -201,7 +204,8 @@ services:
     environment:
       <<: *supabase-env
       JWT_SECRET: ${JWT_SECRET:-your-jwt-secret}
-      VERIFY_JWT: "false"
+      # Prod-safe default; local opt-out: VERIFY_JWT=false (#605)
+      VERIFY_JWT: ${VERIFY_JWT:-true}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
       CHARACTER_AI_PROVIDER: ${CHARACTER_AI_PROVIDER:-ollama}
@@ -227,8 +231,9 @@ services:
     volumes:
       - ./supabase/functions:/home/deno/functions:ro
       - ./supabase/config/import_map.json:/home/deno/import_map.json:ro
+    # Loopback only — Edge is reached via Kong /functions/v1 (#605)
     ports:
-      - "9998:9998"
+      - "127.0.0.1:9998:9998"
     depends_on:
       supabase-auth:
         condition: service_healthy

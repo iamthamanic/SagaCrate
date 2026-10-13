@@ -216,6 +216,14 @@ function checkRealtimeComposeBootContract() {
   });
 }
 
+function checkComposeHardenDefaults() {
+  console.log('Compose harden defaults (#605): Kong workers / VERIFY_JWT / loopback binds...');
+  execFileSync(process.execPath, ['scripts/compose-harden-defaults-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2152,6 +2160,7 @@ checkLocalAuthEmailSagatree();
 checkSagaStateColumnPrivileges();
 checkSagatreeCoreWorkflowsContract();
 checkRealtimeComposeBootContract();
+checkComposeHardenDefaults();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();
