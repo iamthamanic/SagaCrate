@@ -1,6 +1,6 @@
 # Composition Gate — media-opt-character-portrait
 
-- HEAD_SHA: 1d85f31253f6b391ceb664319536be6f99072ef7
+- HEAD_SHA: f82ad7af5f0266167ea569be9cf3ea79510d6b7e
 - BASE_SHA: 5e0cb766c0f7ab8883c503beae3a324cd0a607a1
 - Date: 2026-10-13
 - Verdict: SKIPPED
