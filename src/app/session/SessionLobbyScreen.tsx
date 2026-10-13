@@ -148,7 +148,7 @@ export function SessionLobbyScreen({
             data-session-lobby-join-hero
           >
             <div
-              className="relative mx-auto aspect-[2/3] w-28 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:mx-0 sm:w-32"
+              className="relative mx-auto aspect-square w-44 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:mx-0 sm:w-52"
               data-session-lobby-saga-cover-frame
             >
               {model.summary.sagaCoverUrl ? (
@@ -159,7 +159,7 @@ export function SessionLobbyScreen({
                       ? `Saga-Cover: ${model.summary.sagaName}`
                       : 'Saga-Cover'
                   }
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-center"
                   data-session-lobby-saga-cover
                 />
               ) : (
