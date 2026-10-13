@@ -55,6 +55,8 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@jsquash/jpeg": "1.6.0",
+    "@jsquash/png": "3.1.1",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/vite": "4.1.12",
     "@types/node": "^20.10.0",

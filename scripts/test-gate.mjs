@@ -571,6 +571,14 @@ function checkMediaOptimizerItemIntake() {
 
 
 
+function checkMediaOptimizerServerProof() {
+  console.log('Media optimizer server proof (#645): Deno WASM/CPU/RAM feasibility...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-server-proof-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2077,6 +2085,7 @@ checkMediaOptimizerWorldPin();
 checkMediaOptimizerLookReference();
 checkMediaOptimizerItemWebpContract();
 checkMediaOptimizerItemIntake();
+checkMediaOptimizerServerProof();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
