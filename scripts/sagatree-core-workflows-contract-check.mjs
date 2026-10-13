@@ -80,9 +80,8 @@ if (rt !== 'PASS' && rt !== 'BLOCKED_604') {
 
 const edgeNegPass =
   byName['edge.dm_tools_anon_deny']?.pass && byName['edge.ai_gm_stranger_deny']?.pass;
-const edgeBlocked = report.edgeAuthz?.status === 'BLOCKED_605';
-if (!edgeNegPass && !edgeBlocked) {
-  fail('edge negative checks must PASS or report edgeAuthz.status=BLOCKED_605');
+if (!edgeNegPass) {
+  fail('edge negative checks must PASS (anon deny + stranger deny; #607)');
 }
 
 console.log('✓ sagatree-core-workflows contract OK', {
