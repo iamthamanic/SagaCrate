@@ -4,7 +4,7 @@
  *
  * No React/Supabase. Role is never taken from the invite token/URL.
  */
-const INVITE_RETURN_KEY = 'sagadrive:invite-return';
+const INVITE_RETURN_KEY = 'sagatree:invite-return';
 
 export type SessionInviteErrorCode =
   | 'missing_token'

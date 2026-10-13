@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActIrisGazeV1",
+  "contractVersion": "SagaTreeLiveActIrisGazeV1",
   "irisLandmarkProvenance": {
     "package": "@mediapipe/tasks-vision@0.10.14",
     "leftContour": [
@@ -17,7 +17,7 @@
     "center": "centroid(contour[4])"
   },
   "ab": {
-    "contractVersion": "SagaDriveLiveActIrisGazeAbReportV1",
+    "contractVersion": "SagaTreeLiveActIrisGazeAbReportV1",
     "fixtureVersion": "iris-sphere-v1",
     "fixtureIds": [
       "iris-neutral",

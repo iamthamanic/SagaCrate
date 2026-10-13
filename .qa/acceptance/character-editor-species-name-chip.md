@@ -22,4 +22,4 @@ Show the selected Spezies Wappen and label to the right of the character Name in
 
 ## Implementation Notes
 - Added `SelectedSpeciesChip` (banner + label) and rendered it to the right of the Name input in `CharacterEditor` CardHeader when `characterRace` is set.
-- Reuses `getSpeciesBannerUrl` and `getCharacterCreationOptionLabel(sagaDriveRaceOptions)`.
+- Reuses `getSpeciesBannerUrl` and `getCharacterCreationOptionLabel(sagaTreeRaceOptions)`.

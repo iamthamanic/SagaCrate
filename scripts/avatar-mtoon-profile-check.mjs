@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * avatar-mtoon-profile-check — deterministic tests for #214 SagaDriveMToonProfileV1.
+ * avatar-mtoon-profile-check — deterministic tests for #214 SagaTreeMToonProfileV1.
  * Location: scripts/avatar-mtoon-profile-check.mjs
  */
 import { readFileSync } from 'node:fs';
@@ -25,8 +25,8 @@ const toggleUi = read('src/app/character/avatar/AvatarMtoonStyleToggle.tsx');
 const index = read('src/domains/character/avatar/index.ts');
 
 check(/MTOON_PROFILE_VERSION/.test(profile), 'profile version');
-check(/SagaDriveMToonProfileV1/.test(profile), 'profile type');
-check(/createSagaDriveMToonProfileV1/.test(profile), 'factory');
+check(/SagaTreeMToonProfileV1/.test(profile), 'profile type');
+check(/createSagaTreeMToonProfileV1/.test(profile), 'factory');
 check(/MTOON_MATERIAL_CLASSES/.test(profile), 'seven classes list');
 check(!/from ['"]three['"]/.test(profile), 'domain has no Three');
 check(!/ShaderMaterial|RawShaderMaterial|onBeforeCompile/.test(profile), 'no custom shader in domain');
@@ -55,7 +55,7 @@ check(/data-testid="avatar-mtoon-style-notice"/.test(canvas), 'non-blocking noti
 check(/data-testid="avatar-mtoon-toggle"/.test(toggleUi), 'mtoon toggle button');
 check(/AvatarMtoonStyleToggle/.test(canvas), 'mtoon toggle component imported');
 check(/setMtoonStyleEnabled/.test(canvas), 'canvas wires runtime toggle');
-check(/export \{[\s\S]*createSagaDriveMToonProfileV1/.test(index), 'barrel export');
+check(/export \{[\s\S]*createSagaTreeMToonProfileV1/.test(index), 'barrel export');
 
 const applierToggle = applier;
 check(/captureMaterialStyleSnapshots/.test(applierToggle), 'snapshot helper');
@@ -68,8 +68,8 @@ function resolvePath({ hasMtoonMaterials, isImportModel }) {
   return {
     path: 'pbr-fallback',
     noticeDe: isImportModel
-      ? 'Dieses Import-Modell unterstützt MToon nur eingeschränkt — SagaDrive nutzt den kontrollierten PBR-Fallback.'
-      : 'MToon-Materialien fehlen — SagaDrive nutzt den kontrollierten PBR-Fallback.',
+      ? 'Dieses Import-Modell unterstützt MToon nur eingeschränkt — SagaTree nutzt den kontrollierten PBR-Fallback.'
+      : 'MToon-Materialien fehlen — SagaTree nutzt den kontrollierten PBR-Fallback.',
   };
 }
 

@@ -3,13 +3,13 @@
 <!-- seeded for GitHub issue #14 / avatar-order-17 -->
 
 ## Intent
-CharacterEditor bündelt drei Avatar-Quellen (SagaDrive / Import / Meshy) mit gemeinsamem Save-Vertrag; `source` und Capabilities bleiben getrennt.
+CharacterEditor bündelt drei Avatar-Quellen (SagaTree / Import / Meshy) mit gemeinsamem Save-Vertrag; `source` und Capabilities bleiben getrennt.
 
 ## Happy Path
 - [ ] Drei Source-Cards + genau ein aktiver Flow
-- [ ] `source` persistiert; Legacy `provider: m3-character-studio` → sagadrive
+- [ ] `source` persistiert; Legacy `provider: m3-character-studio` → sagatree
 - [ ] Capability-Summary ohne erfundene Flags aus Source
-- [ ] Dirty SagaDrive → Confirm beim Wechsel zu Import/Meshy
+- [ ] Dirty SagaTree → Confirm beim Wechsel zu Import/Meshy
 - [ ] typed-strict + avatar-source-selector-check grün
 
 ## Scope
@@ -24,4 +24,4 @@ Out: SkinTokens as source, new capability inventing.
 
 ## Implementation Notes
 - resolveAvatarSource / evaluateAvatarSourceSwitch
-- Morph/Trait-UI nur für sagadrive aktiv
+- Morph/Trait-UI nur für sagatree aktiv

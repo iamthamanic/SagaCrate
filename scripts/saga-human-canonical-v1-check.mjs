@@ -26,7 +26,7 @@ import { finalizeSkinWeights } from './lib/saga-human-canonical-v1/assemble.mjs'
 import { loadSourcesManifest, SOURCES_MANIFEST_REL } from './lib/saga-human-canonical-v1/sources.mjs';
 import { inspectCanonicalHumanVrm } from './lib/saga-human-canonical-v1/inspect-vrm.mjs';
 import { FULL_V1_CHANNELS } from './lib/liveact-face-asset-validate.mjs';
-import { SAGA_DRIVE_FACE_ANCHOR_IDS } from './lib/liveact-face-anchor-ids.mjs';
+import { SAGA_TREE_FACE_ANCHOR_IDS } from './lib/liveact-face-anchor-ids.mjs';
 import { validateFaceAnchorsManifestFile } from './lib/liveact-face-anchor-validate.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -123,8 +123,8 @@ function checkReportAndSidecars() {
   const anchorsRel = report.outputs?.faceAnchors?.path ?? '';
   const anchors = JSON.parse(read(anchorsRel)).anchors ?? {};
   check(
-    SAGA_DRIVE_FACE_ANCHOR_IDS.every((id) => anchors[id]?.nodeIdentity === 'Body'),
-    'anchors: all 21 SagaDrive face anchors must bind to Body',
+    SAGA_TREE_FACE_ANCHOR_IDS.every((id) => anchors[id]?.nodeIdentity === 'Body'),
+    'anchors: all 21 SagaTree face anchors must bind to Body',
   );
   const authoring = JSON.parse(read(anchorsRel.replace(/-face-anchors\.json$/, '-face-mapping-authoring.json')));
   check(authoring.source === 'auto' && authoring.reviewed === false, 'authoring: must stay auto / unreviewed');

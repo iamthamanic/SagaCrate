@@ -95,7 +95,7 @@ await build({
 });
 
 const mod = await import(`${outFile}?t=${Date.now()}`);
-check(mod.LIVEACT_PERSONAL_CALIBRATION_CONTRACT === 'SagaDriveLiveActCalibrationProfileV2', 'contract');
+check(mod.LIVEACT_PERSONAL_CALIBRATION_CONTRACT === 'SagaTreeLiveActCalibrationProfileV2', 'contract');
 check(mod.LIVEACT_PERSONAL_CALIBRATION_DURATION_MS >= 20_000, 'duration >=20s');
 check(mod.LIVEACT_PERSONAL_CALIBRATION_DURATION_MS <= 40_000, 'duration <=40s');
 check(Array.isArray(mod.LIVEACT_PERSONAL_CALIBRATION_PHASES) && mod.LIVEACT_PERSONAL_CALIBRATION_PHASES.length === 6, '6 phases');

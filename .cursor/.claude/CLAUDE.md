@@ -1,4 +1,4 @@
-# Security Guidelines — SagaDrive
+# Security Guidelines — SagaTree
 
 Read `AGENTS.md` at repo root before making changes.
 

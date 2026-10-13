@@ -1,5 +1,5 @@
 /**
- * public-resource-id — SagaDrive Public ID contract (generate, parse, validate).
+ * public-resource-id — SagaTree Public ID contract (generate, parse, validate).
  * Location: src/domains/resource-id/public-resource-id.ts
  *
  * Format: PREFIX-XXXXX with alphabet excluding ambiguous O/0/I/1.

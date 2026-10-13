@@ -47,6 +47,6 @@ Avatar “Mit KI erstellen” supports Meshy **Text-to-3D** (prompt → mesh) an
 - Edge: `generationMode` start path; `generation_mode` column (027); poll branches text vs image status.
 - Client: `startMeshyAvatarJob({ mode, imageDataUri?, texturePrompt? })`.
 - Check: `scripts/avatar-meshy-generation-check.mjs` covers both modes.
-- Migration 027 applied on local `sagadrive-db`.
+- Migration 027 applied on local `sagatree-db`.
 - GLB budget (028): soft 80MB → remesh @50k; store ≤100MB; download hard ≤200MB. Image-to-3d uses `should_remesh` at create; text+image both remesh via `/remesh` when still oversized.
 - Local preview: `normalizeSafeUrl` accepts `http://localhost` / `127.0.0.1` signed storage URLs so Meshy GLBs load instead of the skinnie VRM fallback.

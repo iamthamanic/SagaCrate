@@ -17,7 +17,7 @@ import type { BaseBodySpeciesId } from './base-body-contract';
 import { listSpeciesTemplateIds } from './species-template-pack-v1';
 
 export const SPECIES_TEMPLATE_MODELS_CONTRACT_VERSION =
-  'SagaDriveSpeciesTemplateModelsV1' as const;
+  'SagaTreeSpeciesTemplateModelsV1' as const;
 
 /** Public Vite base for pilot species meshes (VRM primary / GLB fallback). */
 export const SPECIES_TEMPLATE_MODEL_PUBLIC_BASE = '/assets/avatars/species' as const;

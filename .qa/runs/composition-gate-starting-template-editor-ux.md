@@ -6,7 +6,7 @@
 
 ## Event
 
-Player picks a SagaDrive starttemplate or user preset; create dialog bootstraps
+Player picks a SagaTree starttemplate or user preset; create dialog bootstraps
 the editor; picker/editor chrome shows icons, playstyle copy, Vorlage badge,
 and incomplete-tab hints without changing persistence.
 
@@ -23,7 +23,7 @@ No new persist hop; Speichern unchanged. No species/look/inventory mutation.
 
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| N-actors | Ten labels + summaryDe from catalog | `listSagaDriveStartingTemplates` | pass |
+| N-actors | Ten labels + summaryDe from catalog | `listSagaTreeStartingTemplates` | pass |
 | Invalid/missing | Unknown/invalid template fails closed | toast + clear bootstrap; no partial apply | pass |
 | Two consumers | Picker chrome + editor badge read same catalog key | key-only handoff; badge session state only | pass |
 

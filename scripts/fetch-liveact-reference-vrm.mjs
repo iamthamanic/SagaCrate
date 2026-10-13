@@ -45,15 +45,15 @@ const ATTR = join(root, 'public/assets/avatars/reference/ATTRIBUTION.md');
 
 const attribution = `# Attribution — LiveAct Golden Reference VRM
 
-- **File:** \`valid-white-m1-default.vrm\` — SagaDrive derivative \`${DERIVATIVE_ID}\` of \`${ASSET_PATH}\`
+- **File:** \`valid-white-m1-default.vrm\` — SagaTree derivative \`${DERIVATIVE_ID}\` of \`${ASSET_PATH}\`
 - **Upstream:** https://github.com/TLTMedia/valid-vrm-avatars
 - **Commit:** \`${COMMIT}\`
 - **Original sha256:** \`${ORIGINAL_SHA256}\` (${ORIGINAL_BYTES} bytes; upstream Git LFS pointer oid)
 - **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 - **Original:** Google VALID — https://github.com/google-research/google-research/tree/master/valid
 - **VRM + ARKit52:** TLTMedia
-- **Purpose:** SagaDrive LiveAct diagnostic reference only — not a product default avatar
-- **Changes (SagaDrive):** the expressions \`jawOpen\`, \`jawLeft\`, \`jawRight\` and \`jawForward\` additionally bind the lower-teeth mesh (\`h_TeethDown\`) to its authored \`h_teeth.t_*\` twin shape, so the teeth follow the jaw. Applied by \`scripts/lib/liveact-reference-vrm-teeth-binds.mjs\`; geometry, textures and rig are unchanged.
+- **Purpose:** SagaTree LiveAct diagnostic reference only — not a product default avatar
+- **Changes (SagaTree):** the expressions \`jawOpen\`, \`jawLeft\`, \`jawRight\` and \`jawForward\` additionally bind the lower-teeth mesh (\`h_TeethDown\`) to its authored \`h_teeth.t_*\` twin shape, so the teeth follow the jaw. Applied by \`scripts/lib/liveact-reference-vrm-teeth-binds.mjs\`; geometry, textures and rig are unchanged.
 - **Derivative sha256:** \`${DERIVATIVE_SHA256}\` (\`${DERIVATIVE_ID}\`, rebuilt deterministically from the original)
 
 Fetch binary: \`node scripts/fetch-liveact-reference-vrm.mjs\` — the unmodified original is kept in \`.cache/liveact-reference-vrm/\` (gitignored); \`--skip-if-present\` keeps a served file that already matches the derivative hash.

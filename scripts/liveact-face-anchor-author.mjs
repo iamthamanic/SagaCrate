@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * liveact-face-anchor-author — write SagaDriveFaceAnchorsV1 manifests from GLB (#399).
+ * liveact-face-anchor-author — write SagaTreeFaceAnchorsV1 manifests from GLB (#399).
  * Location: scripts/liveact-face-anchor-author.mjs
  *
  * Offline only. Domain stays provider-neutral; this script never names DCC tools.

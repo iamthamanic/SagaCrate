@@ -1,4 +1,4 @@
-# SagaDrive Navigation — Public IDs, URLs, Screen vs Modal
+# SagaTree Navigation — Public IDs, URLs, Screen vs Modal
 
 Canonical rules for #276. Implementation: `src/domains/resource-id/**`, `src/app/shell/routing/**`.
 

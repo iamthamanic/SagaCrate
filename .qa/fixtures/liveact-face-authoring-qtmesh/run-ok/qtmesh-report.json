@@ -3,13 +3,13 @@
   "repository": "fernandotonon/QtMeshEditor",
   "commit": "8720dc91bd7426908b9218673fbd74d544dd908c",
   "license": "MIT",
-  "bin": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/.qa/fixtures/liveact-face-authoring-qtmesh/fake-qtmesh",
+  "bin": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/.qa/fixtures/liveact-face-authoring-qtmesh/fake-qtmesh",
   "binSource": "flag",
   "argv": [
     "facerig",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/.qa/fixtures/liveact-face-authoring-qtmesh/input.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/.qa/fixtures/liveact-face-authoring-qtmesh/input.glb",
     "-o",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/.qa/fixtures/liveact-face-authoring-qtmesh/run-ok/out.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/.qa/fixtures/liveact-face-authoring-qtmesh/run-ok/out.glb",
     "--json"
   ],
   "exitCode": 0,

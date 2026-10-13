@@ -7,7 +7,7 @@ When avatar source is „Vorlage anpassen“, selecting a species template (Mens
 
 ## Preconditions
 - Pilot GLBs exist at `/assets/avatars/species/human-male.glb` and `human-female.glb`
-- Character Editor open, avatar source `sagadrive`
+- Character Editor open, avatar source `sagatree`
 - WebGL available in the browser
 
 ## Happy Path
@@ -44,7 +44,7 @@ When avatar source is „Vorlage anpassen“, selecting a species template (Mens
 
 ## Implementation Notes
 - Domain: `species-template-models-v1.ts` — allowlisted `/assets/avatars/species/{human-male|human-female}.glb`
-- Hook: `useCharacterAvatarEditor` takes `genderReading`; sets `model_url` when source=`sagadrive` + template + m/w
+- Hook: `useCharacterAvatarEditor` takes `genderReading`; sets `model_url` when source=`sagatree` + template + m/w
 - Editor passes `genderReading` into the hook
 - Check: `scripts/species-template-gender-model-preview-check.mjs` (+ test-gate)
 - Divers / unset / non-human → no mesh (initials fallback)

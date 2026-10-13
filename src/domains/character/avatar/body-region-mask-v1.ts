@@ -12,7 +12,7 @@ import {
 } from './equipment-visual-contract';
 
 export const BODY_REGION_MASK_CONTRACT_VERSION =
-  'SagaDriveBodyRegionMaskV1' as const;
+  'SagaTreeBodyRegionMaskV1' as const;
 
 export interface BodyRegionMaskSnapshot {
   contractVersion: typeof BODY_REGION_MASK_CONTRACT_VERSION;

@@ -45,7 +45,7 @@ const authoringMd = readFileSync(join(root, 'assets/species-3d/FACE-AUTHORING.md
 
 check(/liveact-face-functional-validator-check/.test(gate), 'test-gate wiring');
 check(/validateLiveActFaceFunctionalQa|functionalQa/.test(assetLib), 'asset validate wires functionalQa');
-check(/SagaDriveLiveActFaceFunctionalQaV1/.test(profileLib), 'functional contract');
+check(/SagaTreeLiveActFaceFunctionalQaV1/.test(profileLib), 'functional contract');
 check(!/m5-face|f5-face|human-male/i.test(profileLib), 'no filename thresholds');
 check(/functionalQa|Functional Face QA/.test(authoringMd), 'FACE-AUTHORING documents functionalQa');
 check(/resolveFaceAnchorPositions/.test(functionalLib), 'reuses anatomy neutral resolver');
@@ -343,7 +343,7 @@ check(
   'jawNoGap mouth gap violation',
 );
 check(jawNoGap.ok === false, 'jawNoGap overall fail');
-check(jawNoGap.inventory.sagaDrive.errors.includes('functional_qa_failed'), 'functional_qa_failed surfaced');
+check(jawNoGap.inventory.sagaTree.errors.includes('functional_qa_failed'), 'functional_qa_failed surfaced');
 
 // 3) blink both eyes
 const blinkBoth = await runCase('functional-blink-both', 'blinkBoth');
@@ -403,7 +403,7 @@ check(
   check(diag.inventory.functionalQa?.skipped === true, 'diagnostic skips auto authoring');
   check(diag.inventory.functionalQa?.pass !== false || diag.inventory.functionalQa?.skipped === true, 'diagnostic not hard-fail');
   check(
-    !((diag.inventory.sagaDrive?.errors || []).includes('functional_qa_blocked_by_ground_truth')),
+    !((diag.inventory.sagaTree?.errors || []).includes('functional_qa_blocked_by_ground_truth')),
     'diagnostic does not report GT block error',
   );
 }

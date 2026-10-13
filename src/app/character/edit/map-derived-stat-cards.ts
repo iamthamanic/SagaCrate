@@ -4,10 +4,10 @@
  */
 import type { DerivedStatCardProps } from '../../../app/character/shared/DerivedStatCard';
 import {
-  computeSagaDriveDerivedStats,
-  type ComputeSagaDriveDerivedStatsInput,
+  computeSagaTreeDerivedStats,
+  type ComputeSagaTreeDerivedStatsInput,
 } from '../../../domains/rules/sagatree/derived-stats';
 
-export function buildSagaDriveDerivedStatCards(input: ComputeSagaDriveDerivedStatsInput): DerivedStatCardProps[] {
-  return computeSagaDriveDerivedStats(input).map(({ key: _key, ...card }) => card);
+export function buildSagaTreeDerivedStatCards(input: ComputeSagaTreeDerivedStatsInput): DerivedStatCardProps[] {
+  return computeSagaTreeDerivedStats(input).map(({ key: _key, ...card }) => card);
 }

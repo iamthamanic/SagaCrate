@@ -4,25 +4,25 @@
  */
 import { Badge } from '../../../shared/ui/badge';
 import {
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  type SagaDriveSkillKey,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import type { CharacterAttributesDto } from '../../../domains/character';
 import {
-  SAGA_DRIVE_SPECIALIZATION_BONUS,
-  getSagaDriveAppliedExperienceBonus,
-  getSagaDriveExperienceBonus,
-  type SagaDriveBackgroundSkillPoints,
+  SAGA_TREE_SPECIALIZATION_BONUS,
+  getSagaTreeAppliedExperienceBonus,
+  getSagaTreeExperienceBonus,
+  type SagaTreeBackgroundSkillPoints,
 } from '../../../domains/rules/sagatree/skill-progression';
 
 interface SkillCheckFormulaPanelProps {
-  skillKey: SagaDriveSkillKey;
+  skillKey: SagaTreeSkillKey;
   characterLevel: number;
   attributes: CharacterAttributesDto;
   finalRank: number;
   freeRank: number;
-  backgroundPoints: SagaDriveBackgroundSkillPoints;
+  backgroundPoints: SagaTreeBackgroundSkillPoints;
   archetypePoint: boolean;
   specializationName?: string;
 }
@@ -46,16 +46,16 @@ export function SkillCheckFormulaPanel({
   archetypePoint,
   specializationName,
 }: SkillCheckFormulaPanelProps) {
-  const skill = getSagaDriveSkill(skillKey);
-  const attribute = getSagaDriveAttribute(skill.attribute);
+  const skill = getSagaTreeSkill(skillKey);
+  const attribute = getSagaTreeAttribute(skill.attribute);
   const attributeValue = attributes[skill.attribute];
   const backgroundValue = backgroundPoints[skillKey] ?? 0;
-  const globalEb = getSagaDriveExperienceBonus(characterLevel);
-  const appliedEb = getSagaDriveAppliedExperienceBonus(finalRank, characterLevel);
+  const globalEb = getSagaTreeExperienceBonus(characterLevel);
+  const appliedEb = getSagaTreeAppliedExperienceBonus(finalRank, characterLevel);
   const hasSpecialization = Boolean(specializationName?.trim());
   // §5.2: the specialization bonus is situational and never part of the normal check.
   const checkTotal = attributeValue + finalRank + appliedEb;
-  const specializedCheckTotal = checkTotal + SAGA_DRIVE_SPECIALIZATION_BONUS;
+  const specializedCheckTotal = checkTotal + SAGA_TREE_SPECIALIZATION_BONUS;
 
   return (
     <div className="space-y-4 text-sm">
@@ -86,7 +86,7 @@ export function SkillCheckFormulaPanel({
       </div>
 
       {hasSpecialization ? (
-        <Badge variant="secondary">{specializationName} +{SAGA_DRIVE_SPECIALIZATION_BONUS} (situationsgebunden)</Badge>
+        <Badge variant="secondary">{specializationName} +{SAGA_TREE_SPECIALIZATION_BONUS} (situationsgebunden)</Badge>
       ) : null}
 
       <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 font-mono text-xs leading-relaxed">
@@ -101,7 +101,7 @@ export function SkillCheckFormulaPanel({
       {hasSpecialization ? (
         <div className="rounded-lg border border-border bg-muted/10 p-3 font-mono text-xs leading-relaxed" data-testid="specialization-situational-bonus">
           <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-wide text-muted-foreground">Passende Spezialisierung</p>
-          <p>Bei passender Spezialisierung „{specializationName}“: +{SAGA_DRIVE_SPECIALIZATION_BONUS}</p>
+          <p>Bei passender Spezialisierung „{specializationName}“: +{SAGA_TREE_SPECIALIZATION_BONUS}</p>
           <p className="mt-1 font-semibold">Gesamt in passender Situation: d20 +{specializedCheckTotal}</p>
         </div>
       ) : null}

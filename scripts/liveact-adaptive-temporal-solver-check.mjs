@@ -97,7 +97,7 @@ await build({
 });
 
 const mod = await import(outfile + `?t=${Date.now()}`);
-check(mod.LIVEACT_TEMPORAL_CONTRACT === 'SagaDriveLiveActTemporalV1', 'contract id');
+check(mod.LIVEACT_TEMPORAL_CONTRACT === 'SagaTreeLiveActTemporalV1', 'contract id');
 check(mod.LIVEACT_TEMPORAL_POLICY_VERSION === 'liveact-temporal-policy-v1', 'policy version');
 
 // V1 baseline unchanged numerically on a fixed sample
@@ -194,9 +194,9 @@ const afterReset = mod.stepAdaptiveTemporal(reset, lostSeq.frames[0]);
 check((afterReset.frame.face.mouthSmileLeft ?? 0) > 0.5, 'after reset follows current input');
 
 // #446 / #447 intact
-check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaDriveLiveActIrisGazeV1', '#446 contract');
+check(mod.LIVEACT_IRIS_GAZE_CONTRACT === 'SagaTreeLiveActIrisGazeV1', '#446 contract');
 check(typeof mod.solveIrisGaze === 'function', '#446 solve');
-check(mod.LIVEACT_HYBRID_FACE_CONTRACT === 'SagaDriveLiveActHybridFaceV1', '#447 contract');
+check(mod.LIVEACT_HYBRID_FACE_CONTRACT === 'SagaTreeLiveActHybridFaceV1', '#447 contract');
 check(typeof mod.solveHybridFace === 'function', '#447 solve');
 
 // Overshoot helper

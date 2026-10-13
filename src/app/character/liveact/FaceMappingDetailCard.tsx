@@ -6,18 +6,18 @@
  * the highlighted Character marker (bidirectional selection feedback).
  */
 
-import type { SagaDriveFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
 import {
   FACE_MAPPING_ANCHOR_LABEL_DE,
   resolveFaceMappingMarkerStatus,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from '../../../domains/character/avatar/face-mapping-draft-v1';
 import { resolveFaceMappingFeatureGroupDe } from '../../../domains/character/avatar/face-mapping-guide-geometry';
 import { FaceMappingFeatureIcon } from './FaceMappingFeatureIcon';
 
 interface FaceMappingDetailCardProps {
-  draft: SagaDriveFaceMappingDraftV1;
-  selectedAnchorId: SagaDriveFaceAnchorId;
+  draft: SagaTreeFaceMappingDraftV1;
+  selectedAnchorId: SagaTreeFaceAnchorId;
 }
 
 function statusLabelDe(status: string): string {

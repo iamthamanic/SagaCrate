@@ -41,7 +41,7 @@ export async function ensureLoggedIn(
   await page.goto('/');
   if (options?.clearCharacterEditId !== false) {
     await page.evaluate(() => {
-      sessionStorage.removeItem('sagadrive:character-edit-id');
+      sessionStorage.removeItem('sagatree:character-edit-id');
     });
   }
 

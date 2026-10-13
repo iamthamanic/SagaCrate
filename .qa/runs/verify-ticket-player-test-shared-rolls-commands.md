@@ -12,7 +12,7 @@ Slug: `player-test-shared-rolls-commands`
 
 | Checkbox | Evidence |
 |----------|----------|
-| Standard check via Rules Kernel | `probe/index.ts` + SQL `sagadrive_resolve_session_check` |
+| Standard check via Rules Kernel | `probe/index.ts` + SQL `sagatree_resolve_session_check` |
 | Advantage/disadvantage + Drive | modes in UI/RPC; `applyDriveReroll` + SQL keep-better |
 | GM target/resistance | GM `target`/`resistance` → `shared.checkTarget`; gameplay checkTarget |
 | Shared session event | roll event payload + `shared.lastRoll` |

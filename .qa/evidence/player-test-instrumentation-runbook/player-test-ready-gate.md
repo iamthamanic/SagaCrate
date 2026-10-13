@@ -37,7 +37,7 @@ Alle Punkte müssen erfüllt sein, bevor fremde Tester eingeladen werden.
 ## Product
 
 - [ ] Testabenteuer ist in 60–90 Minuten spielbar.
-- [ ] Tester benötigen keine Erklärung der internen SagaDrive-Architektur.
+- [ ] Tester benötigen keine Erklärung der internen SagaTree-Architektur.
 - [ ] Voice/Video-Abhängigkeit ist vorab klar: Discord/Meet.
 - [ ] Feedbackbogen + Event-/Observation-Protokoll stehen vor Start bereit.
 

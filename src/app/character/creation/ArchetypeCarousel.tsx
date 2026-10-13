@@ -3,7 +3,7 @@
  * Location: src/app/character/creation/ArchetypeCarousel.tsx
  */
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { sagaDriveArchetypeOptions, type SagaDriveArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
+import { sagaTreeArchetypeOptions, type SagaTreeArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
 import { ArchetypeIcon } from './ArchetypeIcon';
 import { RuleHelp } from '../shared/RuleHelp';
 import { Badge } from '../../../shared/ui/badge';
@@ -25,14 +25,14 @@ import { useCarouselScrollSync } from '../../../app/character/shared/useCarousel
 export type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 
 interface ArchetypeCarouselProps {
-  selectedArchetype?: SagaDriveArchetypeKey;
-  onSelect: (value: SagaDriveArchetypeKey) => void;
+  selectedArchetype?: SagaTreeArchetypeKey;
+  onSelect: (value: SagaTreeArchetypeKey) => void;
   labelledBy?: string;
   onScrollPhaseChange?: (phase: CarouselScrollPhase) => void;
 }
 
 export function ArchetypeCarousel({ selectedArchetype, onSelect, labelledBy = 'archetype-label', onScrollPhaseChange }: ArchetypeCarouselProps) {
-  const options = sagaDriveArchetypeOptions;
+  const options = sagaTreeArchetypeOptions;
 
   const {
     setApi,

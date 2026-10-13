@@ -5,7 +5,7 @@
  * Never merged into LiveActFrameV1. Ephemeral; no persistence or serialize API.
  */
 
-export const LIVEACT_FACE_DIAGNOSTICS_VERSION = 'SagaDriveLiveActFaceDiagnosticsV1' as const;
+export const LIVEACT_FACE_DIAGNOSTICS_VERSION = 'SagaTreeLiveActFaceDiagnosticsV1' as const;
 
 /** Normalized image coordinates (0..1), origin top-left. */
 export interface LiveActFaceLandmark2d {

@@ -49,7 +49,7 @@ interface LayoutProps {
   onNavigate: (view: string) => void;
 }
 
-const SIDEBAR_COLLAPSED_KEY = 'sagadrive-sidebar-collapsed';
+const SIDEBAR_COLLAPSED_KEY = 'sagatree-sidebar-collapsed';
 /** Tailwind `md` breakpoint — keep in sync with CSS. */
 const DESKTOP_MQ = '(min-width: 768px)';
 

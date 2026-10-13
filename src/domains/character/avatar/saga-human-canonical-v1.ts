@@ -3,7 +3,7 @@
  * Location: src/domains/character/avatar/saga-human-canonical-v1.ts
  *
  * One canonical human built offline from pinned CC0 MakeHuman data
- * (scripts/build-saga-human-canonical-v1.mjs). Comparison candidate next to SagaDrive Human and
+ * (scripts/build-saga-human-canonical-v1.mjs). Comparison candidate next to SagaTree Human and
  * the diagnostic Reference VRM — never a default, never persisted with a character.
  * Pure domain: allowlisted relative path + provenance + asset contracts. No React / Three / fetch.
  */

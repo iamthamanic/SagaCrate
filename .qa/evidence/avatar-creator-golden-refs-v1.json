@@ -2,7 +2,7 @@
   "contract": "AvatarCreatorFinalVisualUxAcceptanceV1",
   "issue": 218,
   "generatedBy": "scripts/avatar-creator-final-acceptance-check.mjs",
-  "mtoonProfileVersion": "SagaDriveMToonProfileV1",
+  "mtoonProfileVersion": "SagaTreeMToonProfileV1",
   "golden": [
     {
       "id": "golden-fantasy-adult-elf",

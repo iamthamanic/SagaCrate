@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState, type MutableRefObject, type RefObject } from 'react';
 import type { CharacterAvatarDto } from '../../../domains/character/domain/character.entity';
 import type { LiveActCapabilitiesV1 } from '../../../domains/character/liveact';
-import type { SagaDriveFaceAnchorsManifestV1 } from '../../../domains/character/avatar';
+import type { SagaTreeFaceAnchorsManifestV1 } from '../../../domains/character/avatar';
 import {
   resolveAvatarSurfaceView,
   type AvatarRenderMode,
@@ -45,7 +45,7 @@ interface AvatarSurfaceViewerProps {
   /** Override Face Tracking on 3D surfaces. Default: on for editor/player-panel, off for tiny session strip. */
   enableFaceTracking?: boolean;
   /** Persist Face Mapping anchors onto the character avatar (editor). */
-  onFaceAnchorsCommitted?: (manifest: SagaDriveFaceAnchorsManifestV1) => void;
+  onFaceAnchorsCommitted?: (manifest: SagaTreeFaceAnchorsManifestV1) => void;
 }
 
 const SIZE_CLASS = {
@@ -221,7 +221,7 @@ export function AvatarSurfaceViewer({
     characterFaceMappingAvailable,
   ]);
 
-  const handleFaceAnchorsCommitted = (manifest: SagaDriveFaceAnchorsManifestV1) => {
+  const handleFaceAnchorsCommitted = (manifest: SagaTreeFaceAnchorsManifestV1) => {
     onFaceAnchorsCommitted?.(manifest);
     const runtime = studioRuntimeRef.current;
     if (runtime) {

@@ -10,7 +10,7 @@ Player Panel / GM → `applyCommand({ kind: 'roll', payload: inputs-only })`
 → optional Drive reroll (§2.10 keep-better) → append `session_events` +
 `world_state.shared.lastRoll`.
 
-Rules kernel TS (`domains/rules/sagadrive/probe`) is the pure source of truth for
+Rules kernel TS (`domains/rules/sagatree/probe`) is the pure source of truth for
 grade/mode/drive comparison used by tests; SQL mirrors the same formulas for
 authoritative live resolution.
 

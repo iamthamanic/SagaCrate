@@ -33,27 +33,27 @@ Führe die Migrationen in dieser Reihenfolge aus:
 3. `supabase/migrations/004_project_membership_security.sql`
 4. `supabase/migrations/005_character_ruleset_metadata.sql`
 5. `supabase/migrations/006_character_portrait_storage.sql`
-6. `supabase/migrations/007_sagadrive_character_profile.sql`
+6. `supabase/migrations/007_sagatree_character_profile.sql`
 
-Auf dem Self-Host-Stack (`docker compose`, Container `sagadrive-db`) Migrationen **nicht** über `/docker-entrypoint-initdb.d` mounten (das überschreibt das Image-Bootstrap). Stattdessen:
+Auf dem Self-Host-Stack (`docker compose`, Container `sagatree-db`) Migrationen **nicht** über `/docker-entrypoint-initdb.d` mounten (das überschreibt das Image-Bootstrap). Stattdessen:
 
 ```bash
 docker compose up -d supabase-db
 ./scripts/apply-migrations.sh                 # 001–007
-./scripts/apply-migrations.sh 007_sagadrive_character_profile.sql  # nur 007
+./scripts/apply-migrations.sh 007_sagatree_character_profile.sql  # nur 007
 ```
 
-`002_character_trait_arrays.sql` ist sowohl für bestehende als auch für frisch angelegte SagaDrive-Datenbanken vorgesehen. Sie stellt `personality_traits`, `ideals`, `bonds` und `flaws` auf die vom CharacterEditor verwendeten Textbaustein-Arrays um und bewahrt vorhandene Einzelwerte als Ein-Element-Arrays.
+`002_character_trait_arrays.sql` ist sowohl für bestehende als auch für frisch angelegte SagaTree-Datenbanken vorgesehen. Sie stellt `personality_traits`, `ideals`, `bonds` und `flaws` auf die vom CharacterEditor verwendeten Textbaustein-Arrays um und bewahrt vorhandene Einzelwerte als Ein-Element-Arrays.
 
 `003_character_lore_rate_limits.sql` legt den persistenten Character-Lore-Rate-Limiter an. Die Tabelle ist nicht direkt für `anon` oder `authenticated` zugänglich; konsumiert wird das atomare Minutenkontingent ausschließlich über die `service_role`-RPC `consume_character_lore_rate_limit`. Die Migration muss vor dem produktiven Deploy der `character-lore` Edge Function aktiv sein, da die Funktion bei fehlendem persistentem Limiter bewusst fail-closed reagiert.
 
 `004_project_membership_security.sql` härtet bestehende Installationen nach: Browser dürfen `project_id`, `user_id`, `role` und `status` einer Mitgliedschaft nicht mehr als Autorisierungsgrant selbst schreiben. Beitritt per Geheimcode läuft über `join_project_by_code`, die eigene Charakterzuordnung über `set_my_project_character`. Gekickte Mitgliedschaften bleiben als server-/GM-kontrollierte Sperrdatensätze erhalten und können nicht selbst reaktiviert oder gelöscht werden. Die Migration normalisiert außerdem die Projekt-Sichtbarkeit auf GM oder aktive Mitgliedschaft, ersetzt Legacy-Ressourcen-Policies durch aktive Membership-Semantik und erzwingt eine case-insensitiv eindeutige Projektcode-Identität.
 
-`005_character_ruleset_metadata.sql` persistiert das im CharacterEditor ausgewählte Regelset separat als `ruleset_key` und den D&D-5.5e-Hintergrund als `dnd_background`. Bestehende Charaktere werden rückwärtskompatibel als `sagadrive-core` behandelt. Beim Wechsel zurück auf SagaTree Core (`sagadrive-core`) wird ein eventuell vorhandener D&D-Hintergrund entfernt, damit keine regelsetfremden Metadaten erhalten bleiben.
+`005_character_ruleset_metadata.sql` persistiert das im CharacterEditor ausgewählte Regelset separat als `ruleset_key` und den D&D-5.5e-Hintergrund als `dnd_background`. Bestehende Charaktere werden rückwärtskompatibel als `sagatree-core` behandelt. Beim Wechsel zurück auf SagaTree Core (`sagatree-core`) wird ein eventuell vorhandener D&D-Hintergrund entfernt, damit keine regelsetfremden Metadaten erhalten bleiben.
 
 `006_character_portrait_storage.sql` richtet den privaten Storage-Bucket `character-portraits` ein. Upload und Lesen sind für `authenticated` nur im eigenen User-ID-Unterordner erlaubt; der Bucket begrenzt Portraits auf 5 MB und die unterstützten Bild-MIME-Typen. Der Browser lädt Portraits über denselben konfigurierten Supabase-Client hoch, sodass der dokumentierte Self-Host-Stack denselben Pfad verwendet.
 
-`007_sagadrive_character_profile.sql` ergänzt `characters.sagadrive_profile` (JSONB) und persistente `characters.notes` für den SagaDrive-Core Character Editor.
+`007_sagatree_character_profile.sql` ergänzt `characters.sagatree_profile` (JSONB) und persistente `characters.notes` für den SagaTree-Core Character Editor.
 
 ---
 
@@ -181,7 +181,7 @@ Gehe zu **Table Editor** und prüfe, ob alle Tabellen existieren:
 Prüfe bei `characters` zusätzlich:
 
 - `personality_traits`, `ideals`, `bonds` und `flaws` sind Text-Arrays.
-- `ruleset_key` existiert, ist nicht `NULL` und enthält nur `sagadrive-core` oder `dnd-5.5e`.
+- `ruleset_key` existiert, ist nicht `NULL` und enthält nur `sagatree-core` oder `dnd-5.5e`.
 - `dnd_background` existiert als separates optionales Textfeld und wird nicht mit `background_story` vermischt.
 
 Prüfe anschließend:

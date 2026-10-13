@@ -1,14 +1,14 @@
 import {
-  isSagaDriveSpeciesTraitOptionKeyForTrait,
-  sagaDriveNarrowResistanceHazardOptions,
-  type SagaDriveSpeciesTraitOption,
-  type SagaDriveSpeciesTraitOptionKey,
+  isSagaTreeSpeciesTraitOptionKeyForTrait,
+  sagaTreeNarrowResistanceHazardOptions,
+  type SagaTreeSpeciesTraitOption,
+  type SagaTreeSpeciesTraitOptionKey,
 } from '../species-trait-options';
 
-export { sagaDriveNarrowResistanceHazardOptions };
-export type SagaDriveNarrowResistanceHazardOption = SagaDriveSpeciesTraitOption;
-export type SagaDriveNarrowResistanceHazardKey = SagaDriveSpeciesTraitOptionKey;
+export { sagaTreeNarrowResistanceHazardOptions };
+export type SagaTreeNarrowResistanceHazardOption = SagaTreeSpeciesTraitOption;
+export type SagaTreeNarrowResistanceHazardKey = SagaTreeSpeciesTraitOptionKey;
 
-export function isSagaDriveNarrowResistanceHazardKey(value: string): value is SagaDriveNarrowResistanceHazardKey {
-  return isSagaDriveSpeciesTraitOptionKeyForTrait('narrow-resistance', value);
+export function isSagaTreeNarrowResistanceHazardKey(value: string): value is SagaTreeNarrowResistanceHazardKey {
+  return isSagaTreeSpeciesTraitOptionKeyForTrait('narrow-resistance', value);
 }

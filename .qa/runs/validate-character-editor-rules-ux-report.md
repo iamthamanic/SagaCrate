@@ -1,4 +1,4 @@
-# SagaDrive Character Editor Rules UX Report (#21)
+# SagaTree Character Editor Rules UX Report (#21)
 
 B1 Contract: Playwright E2E (`e2e/validate-character-editor-rules-ux.spec.ts`) + structural/domain guards. Kein Core-Doc-Edit.
 

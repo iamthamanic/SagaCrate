@@ -1,12 +1,12 @@
 # Feature: Character Editor UI Polish
 
 ## Intent
-Der Character Editor soll wie eine hochwertige SagaDrive-Produktoberflaeche wirken. Besonders Dropdowns und Form Controls muessen auch im Ruhezustand klar als interaktive Eingabeflaechen erkennbar sein, ohne den bestehenden Dark-/Light-Theme- und Radix/shadcn-Stil zu brechen.
+Der Character Editor soll wie eine hochwertige SagaTree-Produktoberflaeche wirken. Besonders Dropdowns und Form Controls muessen auch im Ruhezustand klar als interaktive Eingabeflaechen erkennbar sein, ohne den bestehenden Dark-/Light-Theme- und Radix/shadcn-Stil zu brechen.
 
 ## Preconditions
 - Der bestehende CharacterEditor-Flow, Avatar-State und Save-Verhalten bleiben funktional unveraendert.
 - Bestehende Radix/shadcn-Primitives werden weiterverwendet; keine neue UI-Bibliothek wird eingefuehrt.
-- Die bestehende SagaDrive-Farbwelt und responsive Struktur bleiben erhalten.
+- Die bestehende SagaTree-Farbwelt und responsive Struktur bleiben erhalten.
 
 ## Happy Path
 - [ ] Select-Trigger besitzen auch ohne Hover/Focus einen sichtbaren, kontrastreichen 1px-Rahmen und eine klar abgegrenzte Surface.
@@ -31,7 +31,7 @@ Der Character Editor soll wie eine hochwertige SagaDrive-Produktoberflaeche wirk
 Browser-Verifikation gegen den vom Nutzer gelieferten CharacterEditor-Screenshot erforderlich.
 
 ## Implementation Notes
-- Bestehende UI-Primitives wurden statt einer CharacterEditor-Sonderloesung verfeinert, damit dieselben Controls an allen SagaDrive-Stellen konsistent aussehen.
+- Bestehende UI-Primitives wurden statt einer CharacterEditor-Sonderloesung verfeinert, damit dieselben Controls an allen SagaTree-Stellen konsistent aussehen.
 - `SelectTrigger` hat jetzt dauerhaft `border-foreground/20`, eine klarere Surface, 44px Standardhoehe, Hover-Border, Focus-Ring und einen staerker abgegrenzten Dropdown-Content.
 - `Input` und `Textarea` verwenden dieselbe Border-/Surface-/Focus-Hierarchie und 44px Haupt-Control-Hoehe.
 - `TabsList` und aktive `TabsTrigger` haben jetzt eine ruhigere Segment-Control-Hierarchie mit sichtbarem Rahmen und aktivem Surface-Zustand.

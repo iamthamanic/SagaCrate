@@ -80,7 +80,7 @@ const template = m.materializeAvatarArtifact(
     nowIso: now,
   }),
 );
-check(template.source.origin === 'sagadrive', 'template origin');
+check(template.source.origin === 'sagatree', 'template origin');
 check(template.analysisStatus === 'pending', 'template analysis pending');
 check(template.isActive === false, 'template inactive until activate');
 check(template.asset.assetKey.startsWith('avatar-asset:'), 'template asset key');

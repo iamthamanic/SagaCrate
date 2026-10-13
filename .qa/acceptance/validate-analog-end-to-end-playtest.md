@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #31 (Epic #18), Type: chore, Labels: P2, Validierung
-- Regeln: `docs/sagadrive core rules.md` Abschnitte 1.3, 19 und 20 (analoge Spielbarkeit)
-- Validierungsplan: `docs/sagadrive core validation.md` Phase G1
+- Regeln: `docs/sagatree core rules.md` Abschnitte 1.3, 19 und 20 (analoge Spielbarkeit)
+- Validierungsplan: `docs/sagatree core validation.md` Phase G1
 - Feature slug: `validate-analog-end-to-end-playtest`
 
 ## Preconditions
@@ -44,7 +44,7 @@
 - **Sessions:** A (Eldenmark Chargen/Exploration/Sozial/Kampf), B (Reise/Projekt/Elite/Heilung), C (Graustadt + Drive aus, §16.3 ohne Digital-Ersatz).
 - **Metriken:** Regelpausen, Nachschläge, manuelle Rechenschritte, Unklarheiten pro Szene; Papier-Aufwandsschwellen fail-closed.
 - **Prior-Slices:** liest Findings-Zeile aus #19–#30/#32/#33 Reports; spekulative Core-Vorschläge verboten.
-- **Verdrahtung:** `checkAnalogEndToEndPlaytestValidation()` in `scripts/test-gate.mjs`; G1-Status in `docs/sagadrive core validation.md`.
+- **Verdrahtung:** `checkAnalogEndToEndPlaytestValidation()` in `scripts/test-gate.mjs`; G1-Status in `docs/sagatree core validation.md`.
 - Keine App-/UI-/Schema-Änderung; kein neues Dependency.
 
 ## Happy Path (verified)

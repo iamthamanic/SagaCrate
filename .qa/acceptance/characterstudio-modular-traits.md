@@ -3,7 +3,7 @@
 <!-- seeded for GitHub issue #4 / avatar-order-04 -->
 
 ## Intent
-SagaDrive erhält ein source-neutrales Trait-System für Kopf, Ohren, Haare, Kleidung und Accessoires. Persistenter Basislook und temporäre Runtime-Overlays bleiben strikt getrennt. Der CharacterEditor wechselt kompatible Traits live per Card-Picker.
+SagaTree erhält ein source-neutrales Trait-System für Kopf, Ohren, Haare, Kleidung und Accessoires. Persistenter Basislook und temporäre Runtime-Overlays bleiben strikt getrennt. Der CharacterEditor wechselt kompatible Traits live per Card-Picker.
 
 ## Preconditions
 - #13 (clean M3 trait lifecycle core) ist auf `main`.

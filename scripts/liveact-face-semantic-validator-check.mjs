@@ -34,7 +34,7 @@ check(/liveact-face-semantic-validator-check/.test(gate), 'test-gate wiring');
 check(/validateLiveActFaceSemanticQa/.test(assetLib), 'asset validate orchestrates semantic');
 check(/semanticQa/.test(assetLib), 'inventory semanticQa field');
 check(/blocked_by_invalid_face_anchors|faceAnchorAnatomyQa|validateFaceAnchorAnatomy/.test(semanticLib), 'anatomy gate before semantic');
-check(/SagaDriveLiveActFaceSemanticQaV2/.test(profileLib), 'semantic contract V2');
+check(/SagaTreeLiveActFaceSemanticQaV2/.test(profileLib), 'semantic contract V2');
 check(!/m5-face|f5-face|human-male/i.test(profileLib), 'no filename thresholds in profile');
 
 /** Anchor reference positions for fixture mesh (model space, +X = character left). */
@@ -258,7 +258,7 @@ const failResult = await validateLiveActFaceAsset({
   functionalMode: 'diagnostic',
 });
 check(failResult.ok === false, 'leaky jawOpen fails overall');
-check(failResult.inventory.sagaDrive.errors.includes('semantic_qa_failed'), 'semantic error surfaced');
+check(failResult.inventory.sagaTree.errors.includes('semantic_qa_failed'), 'semantic error surfaced');
 check(failResult.inventory.semanticQa?.channels?.jawOpen?.pass === false, 'jawOpen semantic fail');
 
 const wrongSidePath = join(fixtureDir, 'face-semantic-blink-wrong-side.glb');

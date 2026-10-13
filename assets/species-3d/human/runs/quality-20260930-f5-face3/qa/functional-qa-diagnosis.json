@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActFaceFunctionalQaDiagnosisV1",
+  "contractVersion": "SagaTreeLiveActFaceFunctionalQaDiagnosisV1",
   "assetId": "f5",
   "candidateGlb": "public/assets/avatars/species/human-female-quality-20260921-f5-face1.glb",
   "modelSha256Prefix": "a003a7ac",

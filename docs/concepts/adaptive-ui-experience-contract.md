@@ -248,4 +248,4 @@ A user-facing implementation should not be accepted with a failed Hard Gate unle
 
 ## 14. Decision Rationale
 
-SagaDrive already had mobile-first notes in `THEME_GUIDE` and Performance baselines in the Conductor contract, but agents still accepted "responsive/premium" wording without measurable gates. This Adaptive UI contract closes that gap with device bands, recomposition rules, and `AU-*` IDs that Acceptance and later automated gates (#483) can reference.
+SagaTree already had mobile-first notes in `THEME_GUIDE` and Performance baselines in the Conductor contract, but agents still accepted "responsive/premium" wording without measurable gates. This Adaptive UI contract closes that gap with device bands, recomposition rules, and `AU-*` IDs that Acceptance and later automated gates (#483) can reference.

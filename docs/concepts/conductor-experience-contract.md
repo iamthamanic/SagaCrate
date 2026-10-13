@@ -1,10 +1,10 @@
-# SagaDrive Conductor Experience Contract
+# SagaTree Conductor Experience Contract
 
 ## Status
 
-This document is a **canonical product-experience contract** for SagaDrive.
+This document is a **canonical product-experience contract** for SagaTree.
 
-It defines how SagaDrive must **behave and feel during direct manipulation, live play, GM control, Director control and other high-frequency interactive surfaces**. It exists because visual polish alone cannot encode the intended product experience for coding agents.
+It defines how SagaTree must **behave and feel during direct manipulation, live play, GM control, Director control and other high-frequency interactive surfaces**. It exists because visual polish alone cannot encode the intended product experience for coding agents.
 
 Related canonical sources:
 
@@ -19,9 +19,9 @@ When this document conflicts with a local implementation shortcut, **this docume
 
 ## 1. Product Thesis
 
-SagaDrive is not a dashboard for administering a tabletop RPG.
+SagaTree is not a dashboard for administering a tabletop RPG.
 
-SagaDrive is a **digital instrument for conducting a living shared world**.
+SagaTree is a **digital instrument for conducting a living shared world**.
 
 The target feeling is closer to a conductor, performer or "bender" controlling a responsive medium than to a user navigating CRUD screens.
 
@@ -42,7 +42,7 @@ Do not use words such as "premium", "cinematic", "magical", "smooth" or "immersi
 
 ## 2. Operating Modes
 
-Every SagaDrive surface must be classified before implementation.
+Every SagaTree surface must be classified before implementation.
 
 ### 2.1 Setup Mode
 
@@ -326,7 +326,7 @@ Do not confirm routine actions only because they write to the server.
 
 ## 9. Mastery Layer
 
-SagaDrive must support increasing user mastery.
+SagaTree must support increasing user mastery.
 
 ### Required
 
@@ -520,10 +520,10 @@ This section preserves **why** the contract exists and **why the numeric default
 
 Each baseline belongs to one of four categories:
 
-- **RESEARCH-INFORMED** — supported by published HCI or TTRPG research, then adapted to SagaDrive.
+- **RESEARCH-INFORMED** — supported by published HCI or TTRPG research, then adapted to SagaTree.
 - **PLATFORM CONVENTION** — based on mature platform guidance and used as a compatibility/accessibility baseline.
-- **PRODUCT HEURISTIC** — an explicit SagaDrive design choice that must be validated in real use.
-- **DOMAIN PRINCIPLE** — derived from the kind of product SagaDrive is and the live-session job it performs.
+- **PRODUCT HEURISTIC** — an explicit SagaTree design choice that must be validated in real use.
+- **DOMAIN PRINCIPLE** — derived from the kind of product SagaTree is and the live-session job it performs.
 
 A PRODUCT HEURISTIC is intentionally testable and replaceable. It is not disguised as scientific fact.
 
@@ -543,7 +543,7 @@ A PRODUCT HEURISTIC is intentionally testable and replaceable. It is not disguis
 
 | Baseline | Why this value was selected | Evidence type | Change rule |
 |---|---|---|---|
-| input acknowledgement p95 <= 100 ms | Delays around/above 100 ms in discrete interaction become perceptible and weaken the direct-manipulation illusion. SagaDrive uses this as a user-visible response ceiling, not a server SLA. | RESEARCH-INFORMED | may become stricter; loosen only with measured evidence and explicit ticket rationale |
+| input acknowledgement p95 <= 100 ms | Delays around/above 100 ms in discrete interaction become perceptible and weaken the direct-manipulation illusion. SagaTree uses this as a user-visible response ceiling, not a server SLA. | RESEARCH-INFORMED | may become stricter; loosen only with measured evidence and explicit ticket rationale |
 | context update <= 100 ms, ceiling 150 ms | Context selection should feel like the same interaction as the click/keypress. 150 ms is a temporary upper bound, not a target. | PRODUCT HEURISTIC informed by responsiveness research | validate on supported devices |
 | press 70-100 ms | Press feedback should read as tactile acknowledgement, not as a transition. | PRODUCT HEURISTIC | tune globally, not per feature |
 | hover 120-160 ms | Long enough to avoid visual flicker, short enough to stay subordinate to selection/action. | PRODUCT HEURISTIC | tune globally after usability testing |
@@ -551,10 +551,10 @@ A PRODUCT HEURISTIC is intentionally testable and replaceable. It is not disguis
 | panel transition 180-240 ms | Provides spatial continuity without slowing live operation. | PRODUCT HEURISTIC | >300 ms requires explicit authored reason |
 | spatial transition 250-400 ms | Source -> destination motion needs enough time to be legible as movement rather than a color flash. | PRODUCT HEURISTIC | use shortest duration that preserves causality |
 | reveal 400-700 ms, <=900 ms default | Reveals may deliberately carry more weight, but should not suspend control for a full second during live play. | PRODUCT HEURISTIC | authored set pieces may override explicitly |
-| >=44x44 px primary touch target | 44x44 is the comfortable default control size used in Apple touch guidance; SagaDrive adopts it as a cross-device product baseline for important touch controls. | PLATFORM CONVENTION | do not reduce for primary touch actions |
+| >=44x44 px primary touch target | 44x44 is the comfortable default control size used in Apple touch guidance; SagaTree adopts it as a cross-device product baseline for important touch controls. | PLATFORM CONVENTION | do not reduce for primary touch actions |
 | <=2 interactions after target selection | A GM should be able to react to conversation without entering an administrative mini-flow. Two interactions allow one optional choice plus commit. | DOMAIN PRINCIPLE / PRODUCT HEURISTIC | measure task completion in live-session tests |
 | <=3 interactions from neutral live state | Neutral state may require selecting the target first; this adds one step to the <=2 rule. | DOMAIN PRINCIPLE / PRODUCT HEURISTIC | same as above |
-| max 7 direct contextual actions | This is a scanability/product-density heuristic, **not Miller's Law**. Beyond this point SagaDrive requires grouping/overflow so the action rail remains readable. | PRODUCT HEURISTIC | tune based on observed command frequency |
+| max 7 direct contextual actions | This is a scanability/product-density heuristic, **not Miller's Law**. Beyond this point SagaTree requires grouping/overflow so the action rail remains readable. | PRODUCT HEURISTIC | tune based on observed command frequency |
 | Undo >=8 s or persistent history | Gives time to notice a mistaken live action without leaving an indefinite transient control on screen. | PRODUCT HEURISTIC | persistent history may replace timeout |
 | top 5 frequent commands get shortcut/palette path | "5" forces explicit prioritization of the actual recurring workflow rather than shortcutting everything. | PRODUCT HEURISTIC | derive from telemetry/usability once available |
 | max 3 emphasized status signals per local region | Prevents every status from competing for attention during live play. | PRODUCT HEURISTIC | exceptions require hierarchy rationale |
@@ -562,7 +562,7 @@ A PRODUCT HEURISTIC is intentionally testable and replaceable. It is not disguis
 
 ### 17.4 Research and platform references
 
-These references explain the direction of the evidence-backed rules. They do **not** validate every SagaDrive-specific heuristic above.
+These references explain the direction of the evidence-backed rules. They do **not** validate every SagaTree-specific heuristic above.
 
 - Apple, **Improving app responsiveness**: discrete interaction work should stay below roughly 100 ms; continuous interaction must update around display refresh intervals. https://developer.apple.com/documentation/xcode/improving-app-responsiveness
 - Apple, **Understanding user interface responsiveness**: distinguishes discrete and continuous interaction and explains how latency/hitches break direct manipulation. https://developer.apple.com/documentation/xcode/understanding-user-interface-responsiveness/
@@ -570,7 +570,7 @@ These references explain the direction of the evidence-backed rules. They do **n
 
 ### 17.5 Historical intent
 
-These baselines were introduced in September 2026 while converting the product goal "SagaDrive should feel like conducting/bending a living world rather than operating software" into instructions that AI coding agents can execute and reviewers can verify.
+These baselines were introduced in September 2026 while converting the product goal "SagaTree should feel like conducting/bending a living world rather than operating software" into instructions that AI coding agents can execute and reviewers can verify.
 
 The values are intentionally explicit because agents do not reliably infer human qualities such as flow, responsiveness, tactility, restraint or instrument-like control from adjectives alone.
 

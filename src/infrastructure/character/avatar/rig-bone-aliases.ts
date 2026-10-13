@@ -2,13 +2,13 @@
  * Deterministic bone alias tables — Infrastructure mapping helpers (pure strings).
  * Location: src/infrastructure/character/avatar/rig-bone-aliases.ts
  *
- * Maps VRM / Meshy / SkinTokens / Blender common names → SagaDriveHumanoidBoneId.
+ * Maps VRM / Meshy / SkinTokens / Blender common names → SagaTreeHumanoidBoneId.
  */
 
-import type { SagaDriveHumanoidBoneId } from '../../../domains/character/avatar';
+import type { SagaTreeHumanoidBoneId } from '../../../domains/character/avatar';
 
 /** Lowercase source bone name → canonical id. First match wins; later aliases must not remap. */
-export const BONE_ALIAS_TABLE: Readonly<Record<string, SagaDriveHumanoidBoneId>> = {
+export const BONE_ALIAS_TABLE: Readonly<Record<string, SagaTreeHumanoidBoneId>> = {
   // VRM / UniVRM
   hips: 'hips',
   j_hips: 'hips',
@@ -107,7 +107,7 @@ export function shouldIgnoreBoneName(name: string): boolean {
   return IGNORE_SUBSTRINGS.some((token) => n.includes(token));
 }
 
-export function resolveCanonicalBoneId(sourceName: string): SagaDriveHumanoidBoneId | undefined {
+export function resolveCanonicalBoneId(sourceName: string): SagaTreeHumanoidBoneId | undefined {
   if (shouldIgnoreBoneName(sourceName)) return undefined;
   const key = normalizeBoneName(sourceName);
   return BONE_ALIAS_TABLE[key];

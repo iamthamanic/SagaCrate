@@ -1,7 +1,7 @@
 # Debug Report — liveact-expand-modal-no-face-drive
 
 **Date:** 2026-09-25  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** partial (vite-only) — code + user screenshots; no Playwright e2e this turn  
 

@@ -78,7 +78,7 @@ function extractJsonObject(text: string): Record<string, unknown> | null {
 
 function buildSystemPrompt(): string {
   return [
-    'You analyze visual references for a SagaDrive LookProfile draft.',
+    'You analyze visual references for a SagaTree LookProfile draft.',
     'Return ONLY a JSON object with keys:',
     'displayName (string),',
     'palette { primary, secondary, accent, background } as #RRGGBB,',
@@ -100,7 +100,7 @@ function buildUserText(images: LookRefVisionImagePart[], displayNameHint?: strin
     ? `Display name hint: ${displayNameHint.trim().slice(0, 80)}`
     : '';
   return [
-    'Analyze these references into a SagaDrive Look draft JSON.',
+    'Analyze these references into a SagaTree Look draft JSON.',
     hint,
     'References:',
     ...lines,

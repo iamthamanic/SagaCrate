@@ -3,7 +3,7 @@
 <!-- seeded by ecc-runner from issue #339 on 2026-09-27 — refined by @implement -->
 
 ## Intent
-Führe einen UI- und Renderer-unabhängigen LookProfile-Vertrag für SagaDrive ein. Er beschreibt visuelle Looks, Versionen, Quellen, Referenzen, Capabilities, Scopes, Ausführungsmodi und die Regeln, welcher Look für Welt und Player-Charakter tatsächlich gilt.
+Führe einen UI- und Renderer-unabhängigen LookProfile-Vertrag für SagaTree ein. Er beschreibt visuelle Looks, Versionen, Quellen, Referenzen, Capabilities, Scopes, Ausführungsmodi und die Regeln, welcher Look für Welt und Player-Charakter tatsächlich gilt.
 
 ## Preconditions
 - Domain layer may not import React or Supabase (`AGENTS.md` #94).

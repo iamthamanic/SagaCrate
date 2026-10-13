@@ -12,8 +12,8 @@
     {
       "name": "FakeBody",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "body",
           "slot": "body_base",
           "bodyFamily": "standard"

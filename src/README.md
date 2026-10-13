@@ -1,4 +1,4 @@
-# SagaDrive - SagaDrive
+# SagaTree - SagaTree
 
 Enterprise-level platform for interactive tabletop RPG sessions with AI support.
 
@@ -141,4 +141,4 @@ npm run build
 
 ## 📄 License
 
-Proprietary - SagaDrive Platform
+Proprietary - SagaTree Platform

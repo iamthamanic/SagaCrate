@@ -5,14 +5,14 @@
 
 import type { AvatarEquipmentVisual } from './equipment-visual-contract';
 import type { EquipmentHideRegion } from './equipment-visual-contract';
-import type { SagaDriveHumanoidAnchorId } from './rig-contract';
+import type { SagaTreeHumanoidAnchorId } from './rig-contract';
 
-export const RIGID_EQUIPMENT_PLAN_VERSION = 'SagaDriveRigidEquipmentPlanV1' as const;
+export const RIGID_EQUIPMENT_PLAN_VERSION = 'SagaTreeRigidEquipmentPlanV1' as const;
 
 export interface RigidEquipmentAttachOp {
   instanceId: string;
   assetKey: string;
-  anchor: SagaDriveHumanoidAnchorId;
+  anchor: SagaTreeHumanoidAnchorId;
   position: readonly [number, number, number];
   rotationEuler: readonly [number, number, number];
   scale: readonly [number, number, number];
@@ -37,7 +37,7 @@ export function planRigidEquipmentAttaches(input: {
   previousInstanceIds?: readonly string[];
   generation: number;
   /** Anchors present on current #6 rig. */
-  availableAnchors: ReadonlySet<SagaDriveHumanoidAnchorId> | readonly SagaDriveHumanoidAnchorId[];
+  availableAnchors: ReadonlySet<SagaTreeHumanoidAnchorId> | readonly SagaTreeHumanoidAnchorId[];
 }): RigidEquipmentPlan {
   const available =
     input.availableAnchors instanceof Set

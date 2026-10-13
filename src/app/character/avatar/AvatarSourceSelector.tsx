@@ -1,5 +1,5 @@
 /**
- * AvatarSourceSelector — three source cards (SagaDrive / Import / Meshy) for #14.
+ * AvatarSourceSelector — three source cards (SagaTree / Import / Meshy) for #14.
  * Location: src/app/character/avatar/AvatarSourceSelector.tsx
  *
  * Source is UI origin only; capabilities come from validated analysis, never from the card choice.

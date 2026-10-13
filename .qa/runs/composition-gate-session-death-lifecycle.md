@@ -9,7 +9,7 @@ GM applies damage to 0 HP or issues `life` command (death_save / stabilize / mar
 ## Hop chain
 DeathLifecycleControls / PlayerPanel life chip
 → useDeathLifecycle.applyCommand(kind=life) + existing damage path
-→ session-death-lifecycle pure transitions + SQL sagadrive_resolve_life_command / extended sagadrive_resolve_damage_command
+→ session-death-lifecycle pure transitions + SQL sagatree_resolve_life_command / extended sagatree_resolve_damage_command
 → shared.lifeByCharacter + conditionsByCharacter / encounter conditions
 → PlayerPanel canAttemptCheck + lifeLabel converge on reconnect/reload
 

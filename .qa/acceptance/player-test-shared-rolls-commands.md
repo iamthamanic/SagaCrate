@@ -54,9 +54,9 @@ Standardchecks, Vorteil/Nachteil und Drive-Reroll laufen über bestehende Rules-
 - HEAD_SHA: 3eae479329f3affe73fdf46fd045d8403dfe88eb
 
 ## Implementation Notes
-- Rules kernel: `src/domains/rules/sagadrive/probe` (`resolveProbeGrade`, `resolveProbeFromDice`, `applyDriveReroll`)
+- Rules kernel: `src/domains/rules/sagatree/probe` (`resolveProbeGrade`, `resolveProbeFromDice`, `applyDriveReroll`)
 - Session contract: `src/domains/session/contracts/shared-rolls.ts` (strip forged keys, lastRoll projection)
-- Migration: `supabase/migrations/042_session_shared_rolls.sql` — `sagadrive_resolve_session_check` + roll branch in `apply_session_runtime_command`
+- Migration: `supabase/migrations/042_session_shared_rolls.sql` — `sagatree_resolve_session_check` + roll branch in `apply_session_runtime_command`
 - UI: Player Panel mode/Drive + `data-last-shared-roll`; hook sends inputs-only roll payload
 - Gate: `scripts/player-test-shared-rolls-check.mjs` wired into `test-gate`
 - Design: `.qa/design/player-test-shared-rolls-commands.md`

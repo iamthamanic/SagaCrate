@@ -1,5 +1,5 @@
 /**
- * Static SagaDrive item icons (public SVG) — prompt template + path helpers.
+ * Static SagaTree item icons (public SVG) — prompt template + path helpers.
  * Separate from Meshy thumbnail2d (`assets.ts`). Domain-pure: no React / network.
  * Location: src/domains/items/icon-assets.ts
  */
@@ -44,7 +44,7 @@ export interface ItemIconPromptInput {
   iconPrompt: string;
 }
 
-const ITEM_ICON_STYLE_TEMPLATE = `RPG inventory item icon for SagaDrive.
+const ITEM_ICON_STYLE_TEMPLATE = `RPG inventory item icon for SagaTree.
 
 Single isolated object.
 Centered composition.
@@ -77,7 +77,7 @@ Designed specifically so the image can be cleanly converted into vector SVG.
 Item:
 {{ITEM_DESCRIPTION}}
 
-Maintain the exact same SagaDrive inventory icon style as the other generated item icons.`;
+Maintain the exact same SagaTree inventory icon style as the other generated item icons.`;
 
 /** Shared style template used by Cursor Agent image generation. */
 export function getItemIconStyleTemplate(): string {

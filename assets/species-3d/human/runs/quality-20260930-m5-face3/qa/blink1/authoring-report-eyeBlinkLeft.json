@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActFaceFunctionalMorphAuthorV1",
+  "contractVersion": "SagaTreeLiveActFaceFunctionalMorphAuthorV1",
   "profileVersion": "liveact-face-functional-morph-author-profile-v1",
   "channel": "eyeBlinkLeft",
   "inputPath": "assets/species-3d/human/runs/quality-20260930-m5-face3/human-male-quality-20260921-m5-face3-jawopen1.glb",

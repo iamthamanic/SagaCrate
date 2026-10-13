@@ -1,6 +1,6 @@
 {
-  "contractVersion": "SagaDriveLiveActFidelityReportV1",
-  "fidelityContractVersion": "SagaDriveLiveActPerfectFidelityV1",
+  "contractVersion": "SagaTreeLiveActFidelityReportV1",
+  "fidelityContractVersion": "SagaTreeLiveActPerfectFidelityV1",
   "benchmarkVersion": "pf-benchmark-v1",
   "scenarioId": "v1-compatibility-baseline",
   "sourceKind": "synthetic",

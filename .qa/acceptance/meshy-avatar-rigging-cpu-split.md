@@ -29,4 +29,4 @@ Prevent Edge CPU hard-limit kills during Meshy avatar `rigging` by splitting rem
 - Edge: `character-avatar-meshy/index.ts` step machine
 - UX: `AvatarMeshyGeneratingOverlay.tsx`, `CharacterEditor.tsx`, `AvatarMeshyPanel.tsx`
 - Check: `scripts/avatar-meshy-generation-check.mjs`
-- Ops: restart `sagadrive-edge` after deploy; retry stuck jobs (clear sessionStorage job id if needed)
+- Ops: restart `sagatree-edge` after deploy; retry stuck jobs (clear sessionStorage job id if needed)

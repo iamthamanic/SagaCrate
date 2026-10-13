@@ -9,7 +9,7 @@ Mache das Webcam-Face-Overlay geometrisch korrekt für die tatsächlich sichtbar
 - [ ] - [ ] `object-cover` Crop + Scale + Mirror werden von einem deterministischen VideoViewportTransform berechnet und Overlay/Video matchen.
 - [ ] - [ ] Metrics-Switch ist separat, initial true, bei Overlay ON sichtbar wirksam und unabhängig abschaltbar.
 - [ ] - [ ] Geometrische Metriken sind dimensionslos normalisiert, nicht rohe Pixelabstände.
-- [ ] - [ ] UI nutzt bestehende SagaDrive-Primitives/Tokens; kein per-frame React state und `npm run test-gate` ist grün.
+- [ ] - [ ] UI nutzt bestehende SagaTree-Primitives/Tokens; kein per-frame React state und `npm run test-gate` ist grün.
 - [ ] - [ ] Touched files: zero type escape hatches (typed-strict / Boy Scout).
 
 ## Edge Cases

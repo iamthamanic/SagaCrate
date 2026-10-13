@@ -3,7 +3,7 @@
  * Shows beside the Charaktername input when a Spezies is selected.
  * Location: src/app/character/creation/SelectedSpeciesChip.tsx
  */
-import { getCharacterCreationOptionLabel, sagaDriveRaceOptions } from '../../../domains/rules/sagatree/character-creation';
+import { getCharacterCreationOptionLabel, sagaTreeRaceOptions } from '../../../domains/rules/sagatree/character-creation';
 import { getSpeciesBannerUrl } from './speciesBanners';
 
 type SelectedSpeciesChipProps = {
@@ -16,7 +16,7 @@ export function SelectedSpeciesChip({ species, label, className = '' }: Selected
   const key = species.trim().toLowerCase();
   if (!key) return null;
 
-  const defaultLabel = getCharacterCreationOptionLabel(sagaDriveRaceOptions, key);
+  const defaultLabel = getCharacterCreationOptionLabel(sagaTreeRaceOptions, key);
   const displayLabel = label?.trim() || defaultLabel;
 
   return (

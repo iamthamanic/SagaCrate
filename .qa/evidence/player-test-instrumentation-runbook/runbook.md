@@ -8,7 +8,7 @@ Operate Private Dogfood (Phase 9) and External Player Test #1 (Phase 10) without
 
 ## Voice / Video (mandatory preflight)
 
-- **Voice und Video laufen extern über Discord oder Google Meet** — SagaDrive stellt in dieser Player-Test-Stufe kein In-App-A/V bereit.
+- **Voice und Video laufen extern über Discord oder Google Meet** — SagaTree stellt in dieser Player-Test-Stufe kein In-App-A/V bereit.
 - Before start: create/join the Discord voice channel **or** Google Meet link; paste it in the session briefing.
 - Do **not** start the digital session until every participant has working voice.
 - OBS / Face Tracking / in-app A/V are **out of scope** for Test #1.
@@ -50,7 +50,7 @@ Primary metrics (also in domain contract `PHASE10_PRIMARY_METRICS`):
 7. Combat-Rundenzeit
 8. Subjektive Immersion / Flow
 9. „Würdest du die nächste Session wieder damit spielen?“
-10. „Welchen Teil würdest du vermissen, wenn SagaDrive weg wäre?“
+10. „Welchen Teil würdest du vermissen, wenn SagaTree weg wäre?“
 
 Plus: qualitative Beobachtung + Session-Eventlog + kurzes Post-Interview — **nicht nur NPS**.
 

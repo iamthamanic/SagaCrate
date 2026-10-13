@@ -11,19 +11,19 @@ Spieler verteilt 15 Basis-Attribut-Bonuspunkte (+0…+4), optional permanente Le
 
 ## Hop chain
 `CharacterEditor` state (`baseAttributes`, `attributeAdvances`, `characterLevel`)
-→ `attributeProgression.ts` (`isValidSagaDriveBaseAttributeDistribution` / `applySagaDriveAttributeAdvances` / `isValidSagaDriveAttributeBuild`)
+→ `attributeProgression.ts` (`isValidSagaTreeBaseAttributeDistribution` / `applySagaTreeAttributeAdvances` / `isValidSagaTreeAttributeBuild`)
 → UI-Karten (`+{base} Bonus`, Budget-Badge, optionale Entwicklungs-Selects, `AttributeD20Icon`)
-→ abgeleitete Stats (`buildSagaDriveDerivedStatCards` mit **final** `attributes`)
-→ Persistenz: `characterService.createCharacter({ attributes: final, sagadrive_profile: { baseAttributes, attributeAdvances, … } })`
-→ Normalize/Load: `normalizeSagaDriveProfile` + `resolveSagaDriveAttributeBuildState` rekonstruiert Editor-State (Basis vs. Advances); Legacy ohne `baseAttributes` → Final als Basis, Advances leer
-→ Server: `assertValidSagaDriveAttributePersistence` prüft Build + Final=Base+Advances bei vorhandenen `baseAttributes`
+→ abgeleitete Stats (`buildSagaTreeDerivedStatCards` mit **final** `attributes`)
+→ Persistenz: `characterService.createCharacter({ attributes: final, sagatree_profile: { baseAttributes, attributeAdvances, … } })`
+→ Normalize/Load: `normalizeSagaTreeProfile` + `resolveSagaTreeAttributeBuildState` rekonstruiert Editor-State (Basis vs. Advances); Legacy ohne `baseAttributes` → Final als Basis, Advances leer
+→ Server: `assertValidSagaTreeAttributePersistence` prüft Build + Final=Base+Advances bei vorhandenen `baseAttributes`
 
 ## Simulations
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
 | N-actors / 1 event | Eine Figur: Basis 15 exakt; je Level-8/16 genau ein Advance; Final ≤ +5; Derived nutzt Final. | Editor-Validierung und Derived-Cards folgen dem Final-Wert. Budget-Badge und Selects folgen Basis + separaten Advances. | pass |
-| Invalid/missing | Summe ≠ 15, Basis > +4, fehlende Advances bei L8/16, Final > +5 → nicht speicherbar. | `attributeDistributionValid` blockiert Save; Server `isValidSagaDriveAttributeBuild` + Final-Match bei Persistenz. | pass |
-| Two consumers / crash | Save/Load behält Basis vs. permanente Entwicklung getrennt; Levelwechsel redistributiert Basis nicht. | `sagadrive_profile.baseAttributes` + `attributeAdvances` persistiert (JSONB, keine Schema-Migration). Save schreibt Final in `attributes` und Sources im Profil. Nach Save rehydriert der Editor via `resolveSagaDriveAttributeBuildState`. Legacy-Profile ohne Sources: Final = Basis, Advances `{}`. | pass |
+| Invalid/missing | Summe ≠ 15, Basis > +4, fehlende Advances bei L8/16, Final > +5 → nicht speicherbar. | `attributeDistributionValid` blockiert Save; Server `isValidSagaTreeAttributeBuild` + Final-Match bei Persistenz. | pass |
+| Two consumers / crash | Save/Load behält Basis vs. permanente Entwicklung getrennt; Levelwechsel redistributiert Basis nicht. | `sagatree_profile.baseAttributes` + `attributeAdvances` persistiert (JSONB, keine Schema-Migration). Save schreibt Final in `attributes` und Sources im Profil. Nach Save rehydriert der Editor via `resolveSagaTreeAttributeBuildState`. Legacy-Profile ohne Sources: Final = Basis, Advances `{}`. | pass |
 
 ## Flags
 none

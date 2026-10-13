@@ -11,15 +11,15 @@
 
 import { useEffect, useRef, type RefObject } from 'react';
 import {
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
-  type SagaDriveFaceAnchorId,
-  type SagaDriveFaceAnchorTriangleBinding,
+  SAGA_TREE_FACE_ANCHOR_IDS,
+  type SagaTreeFaceAnchorId,
+  type SagaTreeFaceAnchorTriangleBinding,
 } from '../../../domains/character/avatar/face-anchor-contract';
 import type { FaceMappingDraftAuthoringMeta } from '../../../domains/character/avatar/face-mapping-auto-v1';
 import {
   FACE_MAPPING_ANCHOR_SHORT_DE,
   resolveFaceMappingMarkerStatus,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from '../../../domains/character/avatar/face-mapping-draft-v1';
 import { buildFaceMappingGuidePaths } from '../../../domains/character/avatar/face-mapping-guide-geometry';
 import type { CharacterStudioRuntime } from '../../../infrastructure/character/avatar/character-studio-runtime';
@@ -28,11 +28,11 @@ export type FaceMappingOverlayViewMode = 'draft' | 'auto' | 'both';
 
 interface FaceMappingMarkerLayerProps {
   active: boolean;
-  draftRef: RefObject<SagaDriveFaceMappingDraftV1 | null>;
+  draftRef: RefObject<SagaTreeFaceMappingDraftV1 | null>;
   studioRuntimeRef: RefObject<CharacterStudioRuntime | null>;
   /** Last Auto Mapping triangle bindings (ghost layer; camera-stable). */
   autoBindingsRef?: RefObject<
-    Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> | null
+    Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> | null
   >;
   /**
    * Authoring provenance (same source as the marker list). Read each paint so
@@ -43,10 +43,10 @@ interface FaceMappingMarkerLayerProps {
   viewMode?: FaceMappingOverlayViewMode;
   /** When false, pan/select only — no draft place/drag (e.g. while autoBusy). */
   editingAllowed?: boolean;
-  onSelectAnchor: (anchorId: SagaDriveFaceAnchorId) => void;
+  onSelectAnchor: (anchorId: SagaTreeFaceAnchorId) => void;
   onBindingPlaced: (
-    anchorId: SagaDriveFaceAnchorId,
-    binding: SagaDriveFaceAnchorTriangleBinding | null,
+    anchorId: SagaTreeFaceAnchorId,
+    binding: SagaTreeFaceAnchorTriangleBinding | null,
   ) => void;
 }
 
@@ -79,7 +79,7 @@ type ScreenPt = { x: number; y: number };
 
 function drawGuidePaths(
   ctx: CanvasRenderingContext2D,
-  screen: Partial<Record<SagaDriveFaceAnchorId, ScreenPt>>,
+  screen: Partial<Record<SagaTreeFaceAnchorId, ScreenPt>>,
   alpha = 1,
 ): void {
   const paths = buildFaceMappingGuidePaths(screen);
@@ -164,10 +164,10 @@ function drawModeBanner(
 
 function projectBindingsScreens(
   rt: CharacterStudioRuntime,
-  bindings: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>>,
-): Partial<Record<SagaDriveFaceAnchorId, ScreenPt>> {
-  const screen: Partial<Record<SagaDriveFaceAnchorId, ScreenPt>> = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  bindings: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>>,
+): Partial<Record<SagaTreeFaceAnchorId, ScreenPt>> {
+  const screen: Partial<Record<SagaTreeFaceAnchorId, ScreenPt>> = {};
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = bindings[id];
     if (!binding) continue;
     const world = rt.evaluateFaceMappingBindingWorld(binding, id);
@@ -180,10 +180,10 @@ function projectBindingsScreens(
 
 function projectDraftScreens(
   rt: CharacterStudioRuntime,
-  draft: SagaDriveFaceMappingDraftV1,
-): Partial<Record<SagaDriveFaceAnchorId, ScreenPt>> {
-  const bindings: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  draft: SagaTreeFaceMappingDraftV1,
+): Partial<Record<SagaTreeFaceAnchorId, ScreenPt>> {
+  const bindings: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> = {};
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = draft.anchors[id];
     if (binding) bindings[id] = binding;
   }
@@ -191,20 +191,20 @@ function projectDraftScreens(
 }
 
 function findNearestMarker(
-  screen: Partial<Record<SagaDriveFaceAnchorId, ScreenPt>>,
+  screen: Partial<Record<SagaTreeFaceAnchorId, ScreenPt>>,
   x: number,
   y: number,
-  preferId: SagaDriveFaceAnchorId | null,
-): SagaDriveFaceAnchorId | null {
+  preferId: SagaTreeFaceAnchorId | null,
+): SagaTreeFaceAnchorId | null {
   if (preferId) {
     const preferred = screen[preferId];
     if (preferred && Math.hypot(preferred.x - x, preferred.y - y) <= HIT_RADIUS_PX) {
       return preferId;
     }
   }
-  let best: SagaDriveFaceAnchorId | null = null;
+  let best: SagaTreeFaceAnchorId | null = null;
   let bestDist = HIT_RADIUS_PX;
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const pt = screen[id];
     if (!pt) continue;
     const d = Math.hypot(pt.x - x, pt.y - y);
@@ -218,10 +218,10 @@ function findNearestMarker(
 
 function drawAutoGhosts(
   ctx: CanvasRenderingContext2D,
-  screen: Partial<Record<SagaDriveFaceAnchorId, ScreenPt>>,
+  screen: Partial<Record<SagaTreeFaceAnchorId, ScreenPt>>,
   withLabels: boolean,
 ): void {
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const pt = screen[id];
     if (!pt) continue;
     ctx.beginPath();
@@ -271,7 +271,7 @@ export function FaceMappingMarkerLayer({
     runtime.setOrbitControlsEnabled(true);
 
     let raf = 0;
-    let draggingId: SagaDriveFaceAnchorId | null = null;
+    let draggingId: SagaTreeFaceAnchorId | null = null;
     let dragMoved = false;
     let grabbedExisting = false;
     let panning = false;
@@ -280,7 +280,7 @@ export function FaceMappingMarkerLayer({
       x: number;
       y: number;
       t: number;
-      anchorId: SagaDriveFaceAnchorId | null;
+      anchorId: SagaTreeFaceAnchorId | null;
       button: number;
     } | null = null;
 
@@ -328,14 +328,14 @@ export function FaceMappingMarkerLayer({
 
       if (showDraft) {
         // Same reviewed provenance as the marker list (meta[id].reviewed === true).
-        const reviewedAnchorIds = new Set<SagaDriveFaceAnchorId>();
+        const reviewedAnchorIds = new Set<SagaTreeFaceAnchorId>();
         const meta = getAuthoringMetaRef.current?.();
         if (meta) {
-          for (const id of Object.keys(meta) as SagaDriveFaceAnchorId[]) {
+          for (const id of Object.keys(meta) as SagaTreeFaceAnchorId[]) {
             if (meta[id]?.reviewed === true) reviewedAnchorIds.add(id);
           }
         }
-        for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+        for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
           const pt = draftScreen[id];
           if (!pt || draft.selectedAnchorId === id) continue;
           const status = resolveFaceMappingMarkerStatus(draft, id, {

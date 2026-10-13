@@ -108,7 +108,7 @@ No shifts.
 - primary direct damage -1 step
 - spend signature budget on control, positioning, protection, help or utility
 
-Profile shifts may not create hidden modifiers beyond SagaDrive caps. If a +1 cannot be represented legally at the cap, move that profile strength to another allowed dimension or signature ability.
+Profile shifts may not create hidden modifiers beyond SagaTree caps. If a +1 cannot be represented legally at the cap, move that profile strength to another allowed dimension or signature ability.
 
 ## Combat roles
 Calculation order: level benchmark -> concept -> profile -> role -> explicit gear/abilities.

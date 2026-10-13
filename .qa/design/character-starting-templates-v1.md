@@ -1,8 +1,8 @@
-# SagaDrive Starttemplates V1 — Level-1 Build Contract
+# SagaTree Starttemplates V1 — Level-1 Build Contract
 
 Feature slug: `character-starting-templates-design-v1`  
 Source issues: #465 (this contract), #463 (domain catalog), #464 (create UI)  
-Rules SoT: `src/domains/rules/sagadrive/**` (character-creation, attribute-progression, skill-progression, background-templates)
+Rules SoT: `src/domains/rules/sagatree/**` (character-creation, attribute-progression, skill-progression, background-templates)
 
 ## Purpose
 
@@ -15,7 +15,7 @@ Level 1 still grants only the existing Rank-I core ability of the chosen primary
 | Rule | Value |
 |------|-------|
 | Level | 1 |
-| Attribute curve | Permutation of `SAGA_DRIVE_START_ATTRIBUTE_ARRAY = [4,3,3,2,2,1]` only |
+| Attribute curve | Permutation of `SAGA_TREE_START_ATTRIBUTE_ARRAY = [4,3,3,2,2,1]` only |
 | Attribute order | STÄ / GES / AUS / VER / WAH / CHA |
 | Attribute budget / cap | 15 / start cap 4 |
 | Free skill points | 7 |
@@ -218,7 +218,7 @@ Skill stacks: `free + background + archetype(+1 if selected)`.
 ## Implementation notes for #463 / #464
 
 - Persist only mechanical fields listed above; never race/appearance/inventory.
-- Validate with `isValidSagaDriveBaseAttributeDistribution`, `isValidStartSkillBuild`, and L1 `isValidSagaDriveSkillDevelopment` (single background specialization).
+- Validate with `isValidSagaTreeBaseAttributeDistribution`, `isValidStartSkillBuild`, and L1 `isValidSagaTreeSkillDevelopment` (single background specialization).
 - UI (#464) passes **template key only**; editor resolves against the domain catalog.
 - Rank-cap note: free points on archetype-trained skills were reduced where stacking would exceed 3 (e.g. Vanguard ranged free 0 after bg2+arch1).
 

@@ -1,5 +1,5 @@
 
-> SagaDrive@0.1.0 test-gate
+> SagaTree@0.1.0 test-gate
 > node scripts/attribute-bonus-regression-check.mjs && node scripts/skill-progression-regression-check.mjs && node scripts/test-gate.mjs
 
 Attribute bonus regression check passed.
@@ -24,32 +24,32 @@ Skill progression domain behavior check passed.
 Skill progression regression check passed.
 Test Gate: running project checks...
 
-> SagaDrive@0.1.0 checks
+> SagaTree@0.1.0 checks
 > npm run lint && npm run typecheck && npm run build
 
 
-> SagaDrive@0.1.0 lint
+> SagaTree@0.1.0 lint
 > node scripts/lint.mjs
 
 Type-safety lint passed (0 changed TypeScript files).
 
-> SagaDrive@0.1.0 typecheck
+> SagaTree@0.1.0 typecheck
 > node scripts/typecheck.mjs
 
 Typecheck skipped (no changed TypeScript files).
 
-> SagaDrive@0.1.0 prebuild
+> SagaTree@0.1.0 prebuild
 > node scripts/vendor-mediapipe-face-landmarker.mjs
 
 vendor-mediapipe-face-landmarker OK → public/mediapipe/**
 
-> SagaDrive@0.1.0 build
+> SagaTree@0.1.0 build
 > vite build
 
 vite v6.3.5 building for production...
 transforming...
-[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-loop/node_modules/@gltf-transform/core/dist/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
-[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-loop/node_modules/@gltf-transform/core/dist/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-loop/node_modules/@gltf-transform/core/dist/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-loop/node_modules/@gltf-transform/core/dist/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
 ✓ 2302 modules transformed.
 rendering chunks...
 computing gzip size...
@@ -114,16 +114,16 @@ Item domain taxonomy & provenance (#134): ItemDefinition owner, normalize/valida
 
 ⚡ Done in 4ms
 item-domain-taxonomy-check: OK
-SagaDrive item rules kernel (#135): load/cost/protection/Traglast/tool contracts...
+SagaTree item rules kernel (#135): load/cost/protection/Traglast/tool contracts...
 
-  node_modules/.cache/sagadrive-item-rules-kernel-check/rules-items.mjs  9.9kb
+  node_modules/.cache/sagatree-item-rules-kernel-check/rules-items.mjs  9.9kb
 
 ⚡ Done in 2ms
 
-  node_modules/.cache/sagadrive-item-rules-kernel-check/inventory.mjs  142.7kb
+  node_modules/.cache/sagatree-item-rules-kernel-check/inventory.mjs  142.7kb
 
 ⚡ Done in 4ms
-sagadrive-item-rules-kernel-check: PASS
+sagatree-item-rules-kernel-check: PASS
 Combat create opportunity (#194): Gelegenheit schaffen kernel + docs...
 
 ## 1 · core rules §7.4
@@ -138,10 +138,10 @@ OK [core-rules-create-opportunity]: found "Erfolg gegen Preis nach Abschnitt 2.3
 
 ## 2 · structure & purity
 OK [rules barrel]: found "export * from './combat-create-opportunity'"
-OK [2 · structure & purity]: src/domains/rules/sagadrive/combat-create-opportunity/index.ts: no React
-OK [2 · structure & purity]: src/domains/rules/sagadrive/combat-create-opportunity/index.ts: no Supabase import
-OK [2 · structure & purity]: src/domains/rules/sagadrive/combat-create-opportunity/index.ts: no any
-OK [2 · structure & purity]: src/domains/rules/sagadrive/combat-create-opportunity/index.ts: no as unknown as
+OK [2 · structure & purity]: src/domains/rules/sagatree/combat-create-opportunity/index.ts: no React
+OK [2 · structure & purity]: src/domains/rules/sagatree/combat-create-opportunity/index.ts: no Supabase import
+OK [2 · structure & purity]: src/domains/rules/sagatree/combat-create-opportunity/index.ts: no any
+OK [2 · structure & purity]: src/domains/rules/sagatree/combat-create-opportunity/index.ts: no as unknown as
 
 ## 3 · eligibility & grades
 
@@ -183,7 +183,7 @@ OK [4 · §2.5 anti-stack + fold]: many advantages still single advantage mode
 OK [4 · §2.5 anti-stack + fold]: many advantages never become 3d20
 
 ## 5 · report
-OK [5 · report]: wrote /Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-loop/.qa/runs/combat-create-opportunity-report.md
+OK [5 · report]: wrote /Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-loop/.qa/runs/combat-create-opportunity-report.md
 
 combat-create-opportunity-check: PASS
 ItemDefinition persistence lifecycle & security (#136): CRUD/fork/taxonomy roundtrip...
@@ -395,11 +395,11 @@ Avatar custom VRM/GLB import (#5): validation + owner storage + UI states...
 avatar-custom-import-check PASS
 Avatar rig normalization (#6): humanoid contract + aliases + analyzer...
 avatar-rig-normalization-check PASS
-Avatar morph contract (#212): SagaDriveAvatarMorphV1 bounds + migration...
+Avatar morph contract (#212): SagaTreeAvatarMorphV1 bounds + migration...
 avatar-morph-contract-check PASS
 Avatar base bodies (#213): morphable humanoid manifest + species presets...
 avatar-base-bodies-check PASS
-Avatar MToon profile (#214): SagaDriveMToonProfileV1 + style applier...
+Avatar MToon profile (#214): SagaTreeMToonProfileV1 + style applier...
 avatar-mtoon-profile-check PASS
 Avatar body/face editor (#215): morph UI + live apply...
 avatar-body-face-editor-check PASS
@@ -421,7 +421,7 @@ LiveAct face diagnostics (#331): overlay + neutral calibration...
 liveact-face-diagnostics-check OK
 LiveAct diagnostics V2 (#397): RAW→APPLIED stage trace...
 liveact-diagnostics-v2-check OK
-LiveAct face anchors V1 (#399): SagaDriveFaceAnchorsV1 mesh bindings...
+LiveAct face anchors V1 (#399): SagaTreeFaceAnchorsV1 mesh bindings...
 liveact-face-anchors-v1-check OK
 LiveAct face mapping authoring (#419): sidecar cache-bust + provenance...
 liveact-face-mapping-authoring-check OK
@@ -443,7 +443,7 @@ liveact-fidelity-check: Reference VRM binary not present — asset check skipped
 liveact-fidelity-check OK
 LiveAct face mapping visual guides: binding labels + smooth guides + pulse/detail...
 liveact-face-mapping-visual-guides-check OK
-LiveAct face anchor anatomy QA: SagaDriveFaceAnchorAnatomyQaV1...
+LiveAct face anchor anatomy QA: SagaTreeFaceAnchorAnatomyQaV1...
 liveact-face-anchor-anatomy-check: m5 PASS {
   faceH: 0.35802,
   faceW: 0.11483,
@@ -477,7 +477,7 @@ LiveAct capability ownership (#381): Input vs Avatar compose...
 liveact-capability-ownership-check OK
 LiveAct face asset contract (#382): core-v1 / full-v1 / gazeMode...
 liveact-face-asset-contract-check OK
-LiveAct face asset validator (#383): Khronos + SagaDrive gate...
+LiveAct face asset validator (#383): Khronos + SagaTree gate...
 liveact-face-asset-validator-check OK
 LiveAct semantic face morph validator (#401): region/side/combination QA...
 liveact-face-semantic-validator-check OK
@@ -525,7 +525,7 @@ LiveAct hardening (#335): backpressure, privacy, races, E2E contract...
 liveact-hardening-check OK
 Avatar V2 composition contract (#249): orthogonal axes + legacy mapping...
 avatar-v2-composition-contract-check PASS
-Avatar V2 modular GLB contract (#250): extras.sagadrive roles/slots...
+Avatar V2 modular GLB contract (#250): extras.sagatree roles/slots...
 avatar-v2-modular-glb-contract-check PASS
 Avatar V2 artifact pipeline (#251): source-neutral materialization...
 avatar-v2-artifact-pipeline-check OK
@@ -575,7 +575,7 @@ Avatar Meshy generation (#10): prompt job + SSRF + pending #6...
 avatar-meshy-generation-check PASS
 Avatar 3D generation (provider-agnostic): presets + Meshy adapter...
 avatar-3d-generation-check OK
-Avatar source selector (#14): sagadrive|import|meshy + legacy...
+Avatar source selector (#14): sagatree|import|meshy + legacy...
 avatar-source-selector-check PASS
 Shared avatar surfaces (#9): portrait/compact/full + bounds...
 shared-avatar-surfaces-check PASS
@@ -789,7 +789,7 @@ Gear/resources/load validation (#32): tools, traits, Traglast, affordability...
   node_modules/.cache/validate-gear-resources-load/rules-items.mjs  9.9kb
 
 ⚡ Done in 2ms
-validate-gear-resources-load OK — Findings: 0 (report /Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive-wt-loop/.qa/runs/validate-gear-resources-load-report.md)
+validate-gear-resources-load OK — Findings: 0 (report /Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree-wt-loop/.qa/runs/validate-gear-resources-load-report.md)
 Analog E2E playtest validation (#31): deterministic Phase G1 paper-play ledger...
 Analog E2E playtest validation passed: 3/3 sessions, 2 world profiles, Drive-off Session C, prior slices clean, 0 findings — report MD5 055611bfbcf47d3c6a9e5dff6e7c0bda at .qa/runs/validate-analog-end-to-end-playtest-report.md.
 Secrets diff scan passed.

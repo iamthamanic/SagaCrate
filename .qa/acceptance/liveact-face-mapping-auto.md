@@ -3,7 +3,7 @@
 <!-- #421 — liveact-face-mapping-auto -->
 
 ## Intent
-Auto Mapping rendert den Character frontal, erkennt Face-Landmarks mit einem **getrennten** lokalen MediaPipe FaceLandmarker im **IMAGE**-Modus und projiziert die 21 `SagaDriveFaceAnchorsV1` über dieselbe Raycast/Barycentric-Pipeline wie Manual Mapping. Ergebnis ist immer nur ein Vorschlag (`source=auto`, `reviewed=false`).
+Auto Mapping rendert den Character frontal, erkennt Face-Landmarks mit einem **getrennten** lokalen MediaPipe FaceLandmarker im **IMAGE**-Modus und projiziert die 21 `SagaTreeFaceAnchorsV1` über dieselbe Raycast/Barycentric-Pipeline wie Manual Mapping. Ergebnis ist immer nur ein Vorschlag (`source=auto`, `reviewed=false`).
 
 ## Happy Path
 - [x] **Auto Mapping** im Face-Mapping-Panel; kontrollierter Neutral-/Front-Capture; IMAGE-Landmarker (kein VIDEO-Reuse).

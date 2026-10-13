@@ -29,7 +29,7 @@ const SHAPE_N_RE = /^Shape_\d+$/i;
  * @returns {string}
  */
 export function defaultQtmeshCacheDir(root) {
-  return join(root, '.cache', 'sagadrive-tools', 'qtmesh');
+  return join(root, '.cache', 'sagatree-tools', 'qtmesh');
 }
 
 /**
@@ -59,11 +59,11 @@ export function resolveQtmeshBin(opts) {
     }
     return { bin: abs, source: 'flag' };
   }
-  const fromEnv = (env.SAGADRIVE_QTMESH_BIN || '').trim();
+  const fromEnv = (env.SAGATREE_QTMESH_BIN || '').trim();
   if (fromEnv) {
     const abs = resolve(fromEnv);
     if (!isExecutableFile(abs)) {
-      throw new Error(`SAGADRIVE_QTMESH_BIN not executable: ${abs}`);
+      throw new Error(`SAGATREE_QTMESH_BIN not executable: ${abs}`);
     }
     return { bin: abs, source: 'env' };
   }
@@ -79,7 +79,7 @@ export function resolveQtmeshBin(opts) {
     return { bin: cacheBin, source: 'cache' };
   }
   throw new Error(
-    'qtmesh not found. Set SAGADRIVE_QTMESH_BIN, install qtmesh on PATH, or run scripts/bootstrap-qtmesh-facerig.sh',
+    'qtmesh not found. Set SAGATREE_QTMESH_BIN, install qtmesh on PATH, or run scripts/bootstrap-qtmesh-facerig.sh',
   );
 }
 

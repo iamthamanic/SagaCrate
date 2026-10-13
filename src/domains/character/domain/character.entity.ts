@@ -2,9 +2,9 @@
  * character.entity — Core character domain value types.
  * Location: src/domains/character/domain/character.entity.ts
  */
-import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
-import type { SagaDriveFaceAnchorsManifestV1 } from '../avatar/face-anchor-contract';
-import type { SagaDriveAvatarMorphStateV1 } from '../avatar/morph-contract';
+import type { CharacterRulesetKey, SagaTreeSkillKey } from '../../rules/sagatree/character-creation';
+import type { SagaTreeFaceAnchorsManifestV1 } from '../avatar/face-anchor-contract';
+import type { SagaTreeAvatarMorphStateV1 } from '../avatar/morph-contract';
 
 export interface CharacterAttributesDto {
   strength: number;
@@ -25,7 +25,7 @@ export type CharacterAvatarFormat = 'vrm' | 'glb';
 
 /**
  * Compact appearance avatar DTO.
- * Optional `morph` follows SagaDriveAvatarMorphV1 (see domains/character/avatar/morph-contract).
+ * Optional `morph` follows SagaTreeAvatarMorphV1 (see domains/character/avatar/morph-contract).
  * Legacy readers ignore unknown fields; morph capabilities are never client-authoritative.
  */
 export interface CharacterAvatarDto {
@@ -34,9 +34,9 @@ export interface CharacterAvatarDto {
   provider: 'm3-character-studio';
   /**
    * Avatar origin — never a capability proof (#6 owns capabilities).
-   * Missing → resolve via resolveAvatarSource (legacy provider → sagadrive).
+   * Missing → resolve via resolveAvatarSource (legacy provider → sagatree).
    */
-  source?: 'sagadrive' | 'import' | 'meshy';
+  source?: 'sagatree' | 'import' | 'meshy';
   preset: string;
   model_format: CharacterAvatarFormat;
   model_url?: string;
@@ -44,9 +44,9 @@ export interface CharacterAvatarDto {
   /** hair/skin required for legacy; eyes optional until morph migration. */
   colors: { hair: string; skin: string; eyes?: string };
   body: { height: number; size: number };
-  morph_contract_version?: 'SagaDriveAvatarMorphV1';
+  morph_contract_version?: 'SagaTreeAvatarMorphV1';
   /** Validated morph state — prefer morph-contract helpers over raw writes. */
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
   /**
    * Avatar V2 template ingress (#260) — optional; ignored by legacy readers.
    * `template_id` e.g. `species-template:dwarf`; `body_family` from template pack.
@@ -62,10 +62,10 @@ export interface CharacterAvatarDto {
   starter_wardrobe?: readonly string[];
   /**
    * Manual Face Mapping bindings for this character (#persist).
-   * SagaDriveFaceAnchorsV1 — mesh triangle anchors only; never webcam landmarks.
+   * SagaTreeFaceAnchorsV1 — mesh triangle anchors only; never webcam landmarks.
    * Optional; ignored by legacy readers. Wins over sibling face-anchors.json sidecar.
    */
-  face_anchors?: SagaDriveFaceAnchorsManifestV1;
+  face_anchors?: SagaTreeFaceAnchorsManifestV1;
 }
 
 export type CharacterGenderReading = 'masculine-read' | 'feminine-read' | 'diverse';
@@ -124,4 +124,4 @@ export interface EmotionProfileDto {
   intensity: number;
 }
 
-export type { CharacterRulesetKey, SagaDriveSkillKey };
+export type { CharacterRulesetKey, SagaTreeSkillKey };

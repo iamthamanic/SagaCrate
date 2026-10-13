@@ -39,7 +39,7 @@ export function readLiveActMotionTestSignal(
 }
 
 export const LIVEACT_MOTION_TEST_CONTRACT =
-  'SagaDriveLiveActMotionTestV1' as const;
+  'SagaTreeLiveActMotionTestV1' as const;
 
 /** Minimum hold frames before a step can complete (~0.7 s at 30 fps). */
 export const LIVEACT_MOTION_TEST_MIN_FRAMES = 20 as const;

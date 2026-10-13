@@ -25,8 +25,8 @@ import type {
   CharacterAttributesDto,
   CharacterGenderReading,
   ItemDto,
-  SagaDriveProfileDto,
-  SagaDriveSpeciesTraitInstanceDto,
+  SagaTreeProfileDto,
+  SagaTreeSpeciesTraitInstanceDto,
 } from '../../../domains/character';
 import type { CharacterLoreContext } from '../../../domains/character/contracts/character-lore.types';
 import { AttributeD20Icon } from '../../../shared/ui/AttributeD20Icon';
@@ -65,69 +65,69 @@ import type { NpcPromotionPlan } from '../../../domains/npc-creature';
 import { promoteNpcCreatureCompactToFull } from '../../../infrastructure/npc-creature/npc-creature-service';
 import { assertValidSnapshot, characterPresetService } from '../../../infrastructure/character/character-preset-service';
 import type { CharacterPresetReleaseMode, CharacterPresetSnapshot } from '../../../domains/character/contracts/character-preset.types';
-import { buildSagaDriveDerivedStatCards } from './map-derived-stat-cards';
-import { getSagaDriveBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
+import { buildSagaTreeDerivedStatCards } from './map-derived-stat-cards';
+import { getSagaTreeBackgroundTemplate } from '../../../domains/rules/sagatree/background-templates';
 import {
-  getSagaDriveStartingTemplate,
-  validateSagaDriveStartingTemplate,
+  getSagaTreeStartingTemplate,
+  validateSagaTreeStartingTemplate,
 } from '../../../domains/rules/sagatree/starting-templates';
 import {
-  SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS,
-  SAGA_DRIVE_ATTRIBUTE_BONUS_CAP,
-  SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET,
-  SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP,
-  applySagaDriveAttributeAdvances,
-  canAssignSagaDriveAttributeAdvance,
-  getSagaDriveAttributeAdvanceBudget,
-  getSagaDriveAttributeAdvanceLevels,
-  getSagaDriveAttributeBonusLevelGuide,
-  getSagaDriveBaseAttributePointsUsed,
-  isValidSagaDriveAttributeBuild,
-  resolveSagaDriveAttributeBuildState,
-  type SagaDriveAttributeAdvanceLevel,
-  type SagaDriveAttributeAdvances,
+  SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS,
+  SAGA_TREE_ATTRIBUTE_BONUS_CAP,
+  SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET,
+  SAGA_TREE_START_ATTRIBUTE_BONUS_CAP,
+  applySagaTreeAttributeAdvances,
+  canAssignSagaTreeAttributeAdvance,
+  getSagaTreeAttributeAdvanceBudget,
+  getSagaTreeAttributeAdvanceLevels,
+  getSagaTreeAttributeBonusLevelGuide,
+  getSagaTreeBaseAttributePointsUsed,
+  isValidSagaTreeAttributeBuild,
+  resolveSagaTreeAttributeBuildState,
+  type SagaTreeAttributeAdvanceLevel,
+  type SagaTreeAttributeAdvances,
 } from '../../../domains/rules/sagatree/attribute-progression';
 import {
-  SAGA_DRIVE_SPECIES_TRAIT_BUDGET,
-  SAGA_DRIVE_START_FREE_SKILL_POINTS,
+  SAGA_TREE_SPECIES_TRAIT_BUDGET,
+  SAGA_TREE_START_FREE_SKILL_POINTS,
   characterRulesetOptions,
-  createEmptySagaDriveSkillRanks,
+  createEmptySagaTreeSkillRanks,
   getCharacterCreationOptionLabel,
-  getSagaDriveArchetype,
-  getSagaDriveEssence,
-  getSagaDriveSpeciesTrait,
-  getSagaDriveSpeciesTraitCost,
-  getSagaDriveSpeciesTraitKeysForRace,
+  getSagaTreeArchetype,
+  getSagaTreeEssence,
+  getSagaTreeSpeciesTrait,
+  getSagaTreeSpeciesTraitCost,
+  getSagaTreeSpeciesTraitKeysForRace,
   isCharacterRulesetKey,
-  isSagaDriveArchetypeKey,
-  isSagaDriveEssenceKey,
-  isSagaDriveSkillKey,
-  sagaDriveAttributeDefinitions,
-  sagaDriveRaceOptions,
-  sagaDriveSkillDefinitions,
+  isSagaTreeArchetypeKey,
+  isSagaTreeEssenceKey,
+  isSagaTreeSkillKey,
+  sagaTreeAttributeDefinitions,
+  sagaTreeRaceOptions,
+  sagaTreeSkillDefinitions,
   type CharacterRulesetKey,
-  type SagaDriveArchetypeKey,
-  type SagaDriveAttributeKey,
-  type SagaDriveEssenceKey,
-  type SagaDriveSkillKey,
+  type SagaTreeArchetypeKey,
+  type SagaTreeAttributeKey,
+  type SagaTreeEssenceKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import {
-  SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS,
+  SAGA_TREE_START_BACKGROUND_SKILL_POINTS,
   backgroundSkillPointsToTrainedSkills,
-  getSagaDriveExperienceBonus,
-  getSagaDriveSkillCap,
+  getSagaTreeExperienceBonus,
+  getSagaTreeSkillCap,
   isValidBackgroundSkillPoints,
-  isValidSagaDriveSkillDevelopment,
+  isValidSagaTreeSkillDevelopment,
   isValidStartSkillBuild,
   normalizeFreeSkillRanks,
-  resolveSagaDriveSkillBuildState,
-  resolveSagaDriveSkillRanksSafe,
+  resolveSagaTreeSkillBuildState,
+  resolveSagaTreeSkillRanksSafe,
   sumBackgroundSkillPointsUsed,
-  type SagaDriveBackgroundSkillPoints,
-  type SagaDriveSkillAdvanceDto,
-  type SagaDriveSpecializationRecordDto,
+  type SagaTreeBackgroundSkillPoints,
+  type SagaTreeSkillAdvanceDto,
+  type SagaTreeSpecializationRecordDto,
 } from '../../../domains/rules/sagatree/skill-progression';
-import { getSagaDriveSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
+import { getSagaTreeSpeciesTraitOptionCatalog } from '../../../domains/rules/sagatree/species-trait-options';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import { Card, CardContent, CardHeader } from '../../../shared/ui/card';
@@ -150,7 +150,7 @@ type EditorTab = 'info' | 'values' | 'appearance' | 'inventory' | 'settings';
 type ValuesSubTab = 'attributes' | 'background' | 'details' | 'archetype' | 'essenz';
 type SettingsSubTab = 'statistics' | 'preset';
 type ValidationProblem = { tab: EditorTab; message: string; valuesSubTab?: ValuesSubTab };
-type SkillSlot = SagaDriveSkillKey | '';
+type SkillSlot = SagaTreeSkillKey | '';
 type BackgroundSkillPool = [SkillSlot, SkillSlot, SkillSlot, SkillSlot];
 const INITIAL_ATTRIBUTES: CharacterAttributesDto = { strength: 4, dexterity: 3, endurance: 3, mind: 2, perception: 2, charisma: 1 };
 
@@ -171,19 +171,19 @@ function isSettingsSubTab(value: string): value is SettingsSubTab {
   return value === 'statistics' || value === 'preset';
 }
 
-function padBackgroundSkills(skills: readonly SagaDriveSkillKey[], size: 4): BackgroundSkillPool {
+function padBackgroundSkills(skills: readonly SagaTreeSkillKey[], size: 4): BackgroundSkillPool {
   const slots: SkillSlot[] = [...skills.slice(0, size)];
   while (slots.length < size) slots.push('');
   return slots as BackgroundSkillPool;
 }
 
 function syncBackgroundSpecialization(
-  specializations: readonly SagaDriveSpecializationRecordDto[],
+  specializations: readonly SagaTreeSpecializationRecordDto[],
   skill: SkillSlot,
   name: string,
-): SagaDriveSpecializationRecordDto[] {
+): SagaTreeSpecializationRecordDto[] {
   const withoutBackground = specializations.filter((entry) => entry.source !== 'background');
-  if (!isSagaDriveSkillKey(skill) || !name.trim()) return withoutBackground;
+  if (!isSagaTreeSkillKey(skill) || !name.trim()) return withoutBackground;
   return [...withoutBackground, { skill, name: name.trim(), source: 'background', acquiredAtLevel: 1 }];
 }
 
@@ -195,7 +195,7 @@ function parseStartAttribute(value: string): 0 | 1 | 2 | 3 | 4 {
   return 0;
 }
 
-function uniqueSkills(values: readonly SkillSlot[]): SagaDriveSkillKey[] { return Array.from(new Set(values.filter(isSagaDriveSkillKey))); }
+function uniqueSkills(values: readonly SkillSlot[]): SagaTreeSkillKey[] { return Array.from(new Set(values.filter(isSagaTreeSkillKey))); }
 
 /** Label -> data-derived-card Selector für den Bracket-Tree. */
 const DERIVED_SELECTOR_BY_LABEL: Record<string, string> = {
@@ -210,7 +210,7 @@ const DERIVED_SELECTOR_BY_LABEL: Record<string, string> = {
  * null = keine Zusatzwirkung bei diesem Wert.
  */
 function getAttributeOptionExtraDerivedHint(
-  attribute: SagaDriveAttributeKey,
+  attribute: SagaTreeAttributeKey,
   optionValue: number,
   attributes: CharacterAttributesDto,
   athleticsRank: number,
@@ -232,17 +232,17 @@ function getAttributeOptionExtraDerivedHint(
 }
 
 function areSpeciesTraitInstancesValid(
-  instances: readonly SagaDriveSpeciesTraitInstanceDto[],
+  instances: readonly SagaTreeSpeciesTraitInstanceDto[],
   allowedTraitKeys: ReadonlySet<string>,
 ): boolean {
   const nonRepeatableTraits = new Set<string>();
   const repeatableOptions = new Set<string>();
 
   for (const instance of instances) {
-    const trait = getSagaDriveSpeciesTrait(instance.trait);
+    const trait = getSagaTreeSpeciesTrait(instance.trait);
     if (!allowedTraitKeys.has(instance.trait) || trait.available === false) return false;
 
-    const catalog = getSagaDriveSpeciesTraitOptionCatalog(instance.trait);
+    const catalog = getSagaTreeSpeciesTraitOptionCatalog(instance.trait);
     if (!catalog) {
       if (nonRepeatableTraits.has(instance.trait)) return false;
       nonRepeatableTraits.add(instance.trait);
@@ -259,16 +259,16 @@ function areSpeciesTraitInstancesValid(
 }
 
 function retainSpeciesTraitInstancesForRace(
-  instances: readonly SagaDriveSpeciesTraitInstanceDto[],
+  instances: readonly SagaTreeSpeciesTraitInstanceDto[],
   allowedTraitKeys: ReadonlySet<string>,
-): SagaDriveSpeciesTraitInstanceDto[] {
-  const retained: SagaDriveSpeciesTraitInstanceDto[] = [];
+): SagaTreeSpeciesTraitInstanceDto[] {
+  const retained: SagaTreeSpeciesTraitInstanceDto[] = [];
   let usedPoints = 0;
 
   for (const instance of instances) {
-    const trait = getSagaDriveSpeciesTrait(instance.trait);
+    const trait = getSagaTreeSpeciesTrait(instance.trait);
     if (!allowedTraitKeys.has(instance.trait) || trait.available === false) continue;
-    if (usedPoints + trait.cost > SAGA_DRIVE_SPECIES_TRAIT_BUDGET) continue;
+    if (usedPoints + trait.cost > SAGA_TREE_SPECIES_TRAIT_BUDGET) continue;
     retained.push(instance);
     usedPoints += trait.cost;
   }
@@ -288,33 +288,33 @@ export function CharacterEditor() {
   const [ruleset, setRuleset] = useState<CharacterRulesetKey>('sagatree-core');
   const [characterName, setCharacterName] = useState('');
   const [description, setDescription] = useState('');
-  const [characterArchetype, setCharacterArchetype] = useState<SagaDriveArchetypeKey | undefined>();
+  const [characterArchetype, setCharacterArchetype] = useState<SagaTreeArchetypeKey | undefined>();
   const [characterRace, setCharacterRace] = useState('human');
   const [genderReading, setGenderReading] = useState<CharacterGenderReading | undefined>();
-  const [essenceProfile, setEssenceProfile] = useState<SagaDriveEssenceKey | undefined>();
-  const [speciesTraitInstances, setSpeciesTraitInstances] = useState<SagaDriveSpeciesTraitInstanceDto[]>([]);
+  const [essenceProfile, setEssenceProfile] = useState<SagaTreeEssenceKey | undefined>();
+  const [speciesTraitInstances, setSpeciesTraitInstances] = useState<SagaTreeSpeciesTraitInstanceDto[]>([]);
   const [speciesProfileName, setSpeciesProfileName] = useState('');
   const [speciesBodyDescription, setSpeciesBodyDescription] = useState('');
   const [presetReleaseMode, setPresetReleaseMode] = useState<CharacterPresetReleaseMode>('manual');
   const [appliedVorlage, setAppliedVorlage] = useState<AppliedVorlage | null>(null);
 
   const [baseAttributes, setBaseAttributes] = useState<CharacterAttributesDto>(INITIAL_ATTRIBUTES);
-  const [attributeAdvances, setAttributeAdvances] = useState<SagaDriveAttributeAdvances>({});
-  const [freeSkillRanks, setFreeSkillRanks] = useState(createEmptySagaDriveSkillRanks);
-  const [archetypeTrainingSkill, setArchetypeTrainingSkill] = useState<SagaDriveSkillKey | undefined>();
+  const [attributeAdvances, setAttributeAdvances] = useState<SagaTreeAttributeAdvances>({});
+  const [freeSkillRanks, setFreeSkillRanks] = useState(createEmptySagaTreeSkillRanks);
+  const [archetypeTrainingSkill, setArchetypeTrainingSkill] = useState<SagaTreeSkillKey | undefined>();
   const [backgroundTemplateId, setBackgroundTemplateId] = useState<string | null | undefined>(undefined);
   const [backgroundName, setBackgroundName] = useState('');
   const [backgroundSkillPool, setBackgroundSkillPool] = useState<BackgroundSkillPool>(['', '', '', '']);
-  const [backgroundSkillPoints, setBackgroundSkillPoints] = useState<SagaDriveBackgroundSkillPoints>({});
-  const [skillAdvances, setSkillAdvances] = useState<SagaDriveSkillAdvanceDto[]>([]);
-  const [specializations, setSpecializations] = useState<SagaDriveSpecializationRecordDto[]>([]);
+  const [backgroundSkillPoints, setBackgroundSkillPoints] = useState<SagaTreeBackgroundSkillPoints>({});
+  const [skillAdvances, setSkillAdvances] = useState<SagaTreeSkillAdvanceDto[]>([]);
+  const [specializations, setSpecializations] = useState<SagaTreeSpecializationRecordDto[]>([]);
   const [specializationSkill, setSpecializationSkill] = useState<SkillSlot>('');
   const [specializationName, setSpecializationName] = useState('');
   const [milieuAccess, setMilieuAccess] = useState('');
   const [contact, setContact] = useState('');
   const [complication, setComplication] = useState('');
   const [communication, setCommunication] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState<SagaDriveSkillKey | undefined>();
+  const [selectedSkill, setSelectedSkill] = useState<SagaTreeSkillKey | undefined>();
   const [editorUserId, setEditorUserId] = useState('');
   const [backgroundStory, setBackgroundStory] = useState('');
   const [personalityTraits, setPersonalityTraits] = useState<string[]>([]);
@@ -343,7 +343,7 @@ export function CharacterEditor() {
     avatarSource,
     meshyUi,
     setMeshyUi,
-    setSagaDriveDirty,
+    setSagaTreeDirty,
     avatarMorph,
     speciesTemplateId,
     starterWardrobeIds,
@@ -396,17 +396,17 @@ export function CharacterEditor() {
     handleResourcesChange,
     hydrateInventory,
   } = useCharacterInventoryEditor({
-    onDirty: () => setSagaDriveDirty(true),
+    onDirty: () => setSagaTreeDirty(true),
   });
 
-  const archetype = characterArchetype ? getSagaDriveArchetype(characterArchetype) : undefined;
-  const essence = essenceProfile ? getSagaDriveEssence(essenceProfile) : undefined;
-  const baseSpeciesLabel = getCharacterCreationOptionLabel(sagaDriveRaceOptions, characterRace);
+  const archetype = characterArchetype ? getSagaTreeArchetype(characterArchetype) : undefined;
+  const essence = essenceProfile ? getSagaTreeEssence(essenceProfile) : undefined;
+  const baseSpeciesLabel = getCharacterCreationOptionLabel(sagaTreeRaceOptions, characterRace);
   const speciesDisplayName = characterRace === 'alien' && speciesProfileName.trim() ? speciesProfileName.trim() : baseSpeciesLabel;
   const selectedBackgroundPool = useMemo(() => uniqueSkills(backgroundSkillPool), [backgroundSkillPool]);
   const backgroundPointsUsed = useMemo(() => sumBackgroundSkillPointsUsed(backgroundSkillPoints), [backgroundSkillPoints]);
   const attributes = useMemo(
-    () => applySagaDriveAttributeAdvances(baseAttributes, attributeAdvances, characterLevel),
+    () => applySagaTreeAttributeAdvances(baseAttributes, attributeAdvances, characterLevel),
     [attributeAdvances, baseAttributes, characterLevel],
   );
   const skillBuild = useMemo(() => ({
@@ -417,38 +417,38 @@ export function CharacterEditor() {
     specializations,
   }), [archetypeTrainingSkill, backgroundSkillPoints, freeSkillRanks, skillAdvances, specializations]);
   const finalSkillRanks = useMemo(
-    () => resolveSagaDriveSkillRanksSafe(skillBuild, characterLevel),
+    () => resolveSagaTreeSkillRanksSafe(skillBuild, characterLevel),
     [characterLevel, skillBuild],
   );
 
   const abilities = useMemo<AbilityDto[]>(() => {
     if (!archetype) return [];
-    return [{ id: `sagadrive-core-${archetype.value}`, name: archetype.coreAbility.name, description: archetype.coreAbility.description, type: archetype.value === 'fighter' ? 'combat' : 'skill', cost: 0, effect: archetype.coreAbility.effect, source: archetype.label, rank: archetype.coreAbility.rank, action_type: archetype.coreAbility.actionType }];
+    return [{ id: `sagatree-core-${archetype.value}`, name: archetype.coreAbility.name, description: archetype.coreAbility.description, type: archetype.value === 'fighter' ? 'combat' : 'skill', cost: 0, effect: archetype.coreAbility.effect, source: archetype.label, rank: archetype.coreAbility.rank, action_type: archetype.coreAbility.actionType }];
   }, [archetype]);
 
-  const freeSkillPointsUsed = useMemo(() => sagaDriveSkillDefinitions.reduce((sum, skill) => sum + freeSkillRanks[skill.key], 0), [freeSkillRanks]);
-  const skillCap = getSagaDriveSkillCap(characterLevel);
-  const skillOverflow = useMemo(() => sagaDriveSkillDefinitions.some((skill) => finalSkillRanks[skill.key] > skillCap), [finalSkillRanks, skillCap]);
-  const attributeAdvanceLevels = getSagaDriveAttributeAdvanceLevels(characterLevel);
-  const attributeAdvanceBudget = getSagaDriveAttributeAdvanceBudget(characterLevel);
+  const freeSkillPointsUsed = useMemo(() => sagaTreeSkillDefinitions.reduce((sum, skill) => sum + freeSkillRanks[skill.key], 0), [freeSkillRanks]);
+  const skillCap = getSagaTreeSkillCap(characterLevel);
+  const skillOverflow = useMemo(() => sagaTreeSkillDefinitions.some((skill) => finalSkillRanks[skill.key] > skillCap), [finalSkillRanks, skillCap]);
+  const attributeAdvanceLevels = getSagaTreeAttributeAdvanceLevels(characterLevel);
+  const attributeAdvanceBudget = getSagaTreeAttributeAdvanceBudget(characterLevel);
   const attributeAdvancesUsed = attributeAdvanceLevels.filter((advanceLevel) => Boolean(attributeAdvances[advanceLevel])).length;
-  const attributePointsUsed = getSagaDriveBaseAttributePointsUsed(baseAttributes);
-  const attributeDistributionValid = isValidSagaDriveAttributeBuild(baseAttributes, attributeAdvances, characterLevel);
-  const speciesTraitCost = getSagaDriveSpeciesTraitCost(speciesTraitInstances.map((instance) => instance.trait));
-  const allowedSpeciesTraitKeys = useMemo(() => new Set(getSagaDriveSpeciesTraitKeysForRace(characterRace)), [characterRace]);
+  const attributePointsUsed = getSagaTreeBaseAttributePointsUsed(baseAttributes);
+  const attributeDistributionValid = isValidSagaTreeAttributeBuild(baseAttributes, attributeAdvances, characterLevel);
+  const speciesTraitCost = getSagaTreeSpeciesTraitCost(speciesTraitInstances.map((instance) => instance.trait));
+  const allowedSpeciesTraitKeys = useMemo(() => new Set(getSagaTreeSpeciesTraitKeysForRace(characterRace)), [characterRace]);
   const speciesTraitInstancesValid = areSpeciesTraitInstancesValid(speciesTraitInstances, allowedSpeciesTraitKeys);
-  const speciesTraitsComplete = speciesTraitCost === SAGA_DRIVE_SPECIES_TRAIT_BUDGET
+  const speciesTraitsComplete = speciesTraitCost === SAGA_TREE_SPECIES_TRAIT_BUDGET
     && speciesTraitInstancesValid
     && (characterRace !== 'alien' || Boolean(speciesProfileName.trim()));
   const carryCapacity = 5 + 2 * attributes.strength;
   const overloaded = inventoryLoad > carryCapacity;
   const movement = overloaded ? 6 : 9;
-  const experienceBonus = getSagaDriveExperienceBonus(characterLevel);
+  const experienceBonus = getSagaTreeExperienceBonus(characterLevel);
   const health = 12 + 2 * attributes.endurance + 2 * experienceBonus;
   const defense = 10 + attributes.dexterity + experienceBonus + Math.max(finalSkillRanks.melee, finalSkillRanks.acrobatics);
   const recovery = attributes.endurance + experienceBonus;
   const derivedStatCards = useMemo(
-    () => buildSagaDriveDerivedStatCards({ attributes, finalSkillRanks, experienceBonus, level: characterLevel, overloaded }),
+    () => buildSagaTreeDerivedStatCards({ attributes, finalSkillRanks, experienceBonus, level: characterLevel, overloaded }),
     [attributes, characterLevel, experienceBonus, finalSkillRanks, overloaded],
   );
 
@@ -456,7 +456,7 @@ export function CharacterEditor() {
     && Boolean(backgroundName.trim())
     && selectedBackgroundPool.length === 4
     && isValidBackgroundSkillPoints(backgroundSkillPoints, selectedBackgroundPool)
-    && isSagaDriveSkillKey(specializationSkill)
+    && isSagaTreeSkillKey(specializationSkill)
     && (backgroundSkillPoints[specializationSkill] ?? 0) > 0
     && Boolean(specializationName.trim())
     && Boolean(milieuAccess.trim())
@@ -470,10 +470,10 @@ export function CharacterEditor() {
     archetypeTrainingSkill,
   }), [archetypeTrainingSkill, backgroundSkillPoints, freeSkillRanks]);
   const skillsComplete = Boolean(archetypeTrainingSkill)
-    && freeSkillPointsUsed === SAGA_DRIVE_START_FREE_SKILL_POINTS
-    && backgroundPointsUsed === SAGA_DRIVE_START_BACKGROUND_SKILL_POINTS
+    && freeSkillPointsUsed === SAGA_TREE_START_FREE_SKILL_POINTS
+    && backgroundPointsUsed === SAGA_TREE_START_BACKGROUND_SKILL_POINTS
     && isValidStartSkillBuild(startSkillBuild, selectedBackgroundPool, characterArchetype)
-    && isValidSagaDriveSkillDevelopment(startSkillBuild, skillAdvances, specializations, characterLevel)
+    && isValidSagaTreeSkillDevelopment(startSkillBuild, skillAdvances, specializations, characterLevel)
     && !skillOverflow;
   const archetypeComplete = Boolean(characterArchetype && archetypeTrainingSkill);
   const essenzComplete = Boolean(essenceProfile);
@@ -496,11 +496,11 @@ export function CharacterEditor() {
     if (!characterName.trim()) problems.push({ tab: 'info', message: 'Bitte gib deinem Charakter einen Namen.' });
     if (ruleset === 'dnd-5.5e') problems.push({ tab: 'info', message: 'D&D 5.5e ist in diesem Editor noch nicht verfügbar. Wähle SagaTree Core.' });
     if (!genderReadingComplete) problems.push({ tab: 'info', message: 'Bitte wähle, wie dein Charakter gelesen wird (männlich, weiblich oder divers).' });
-    if (speciesTraitCost !== SAGA_DRIVE_SPECIES_TRAIT_BUDGET) problems.push({ tab: 'info', message: `Wähle Speziesmerkmale im Wert von genau ${SAGA_DRIVE_SPECIES_TRAIT_BUDGET} Punkten.` });
+    if (speciesTraitCost !== SAGA_TREE_SPECIES_TRAIT_BUDGET) problems.push({ tab: 'info', message: `Wähle Speziesmerkmale im Wert von genau ${SAGA_TREE_SPECIES_TRAIT_BUDGET} Punkten.` });
     if (characterRace === 'alien' && !speciesProfileName.trim()) problems.push({ tab: 'info', message: 'Gib deinem Alien-Speziesprofil einen Namen.' });
     if (!speciesTraitInstancesValid) problems.push({ tab: 'info', message: 'Vervollständige alle Speziesmerkmale und verwende jede Unteroption höchstens einmal.' });
     if (!backgroundComplete) problems.push({ tab: 'values', valuesSubTab: 'background', message: 'Vervollständige deinen mechanischen Hintergrund unter Hintergrund.' });
-    if (!attributeDistributionValid) problems.push({ tab: 'values', valuesSubTab: 'attributes', message: `Verteile genau ${SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Basis-Bonuspunkte (+0 bis +4) und alle für Level ${characterLevel} verfügbaren Attributsteigerungen, ohne einen Endwert über +${SAGA_DRIVE_ATTRIBUTE_BONUS_CAP} zu erzeugen.` });
+    if (!attributeDistributionValid) problems.push({ tab: 'values', valuesSubTab: 'attributes', message: `Verteile genau ${SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Basis-Bonuspunkte (+0 bis +4) und alle für Level ${characterLevel} verfügbaren Attributsteigerungen, ohne einen Endwert über +${SAGA_TREE_ATTRIBUTE_BONUS_CAP} zu erzeugen.` });
     if (!characterArchetype) problems.push({ tab: 'values', valuesSubTab: 'archetype', message: 'Bitte wähle einen Archetyp.' });
     if (!skillsComplete) problems.push({ tab: 'values', valuesSubTab: 'attributes', message: 'Vervollständige die drei Startquellen (7 frei, 2 Hintergrund, 1 Archetyp) und alle Fertigkeitsentwicklungen bis zu deinem Level. Pro Entwicklungsstufe ist genau eine Entscheidung erlaubt; Spezialisierungen brauchen ihren Mindestrang (1/3/5) bereits zum Erwerbszeitpunkt.' });
     if (!essenceProfile) problems.push({ tab: 'values', valuesSubTab: 'essenz', message: 'Bitte wähle eine primäre Essenz.' });
@@ -512,7 +512,7 @@ export function CharacterEditor() {
     && Boolean(characterArchetype)
     && Boolean(essenceProfile)
     && Boolean(archetypeTrainingSkill)
-    && isSagaDriveSkillKey(specializationSkill)
+    && isSagaTreeSkillKey(specializationSkill)
     && Boolean(genderReading)
     && speciesTraitsComplete;
   const highlightGaps = validationAttempted;
@@ -543,7 +543,7 @@ export function CharacterEditor() {
       : undefined;
 
   const buildPresetSnapshot = (): CharacterPresetSnapshot => {
-    const sagaDriveProfile: SagaDriveProfileDto = {
+    const sagaTreeProfile: SagaTreeProfileDto = {
       archetype: characterArchetype,
       essence: essenceProfile,
       speciesTraitInstances: speciesTraitInstances.map((instance) => ({
@@ -559,7 +559,7 @@ export function CharacterEditor() {
         skillPool: selectedBackgroundPool,
         trainedSkills: backgroundSkillPointsToTrainedSkills(backgroundSkillPoints),
         backgroundSkillPoints,
-        specialization: isSagaDriveSkillKey(specializationSkill)
+        specialization: isSagaTreeSkillKey(specializationSkill)
           ? { skill: specializationSkill, name: specializationName.trim(), source: 'background', acquiredAtLevel: 1 }
           : undefined,
         milieuAccess: milieuAccess.trim(),
@@ -605,7 +605,7 @@ export function CharacterEditor() {
       },
       attributes,
       skills: finalSkillRanks,
-      sagatree_profile: sagaDriveProfile,
+      sagatree_profile: sagaTreeProfile,
       abilities,
       inventory,
       portrait_url: portraitUrl || undefined,
@@ -621,8 +621,8 @@ export function CharacterEditor() {
     level: number;
     race: string;
     attributes: CharacterAttributesDto;
-    skills: Record<SagaDriveSkillKey, number>;
-    profile: SagaDriveProfileDto;
+    skills: Record<SagaTreeSkillKey, number>;
+    profile: SagaTreeProfileDto;
     appearance: CharacterAppearanceDto;
     inventory?: ItemDto[];
     inventoryV2?: InventoryState;
@@ -639,7 +639,7 @@ export function CharacterEditor() {
     successMessage: string;
   }) => {
     const { profile, appearance } = payload;
-    const resolved = resolveSagaDriveAttributeBuildState(payload.attributes, profile);
+    const resolved = resolveSagaTreeAttributeBuildState(payload.attributes, profile);
     const hydratedFreeSkillRanks = normalizeFreeSkillRanks(profile.freeSkillRanks);
 
     setCharacterName(payload.name);
@@ -647,8 +647,8 @@ export function CharacterEditor() {
     setRuleset(payload.rulesetKey === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core');
     setCharacterLevel(payload.level);
     setCharacterRace(payload.race);
-    setCharacterArchetype(profile.archetype && isSagaDriveArchetypeKey(profile.archetype) ? profile.archetype : undefined);
-    setEssenceProfile(profile.essence && isSagaDriveEssenceKey(profile.essence) ? profile.essence : undefined);
+    setCharacterArchetype(profile.archetype && isSagaTreeArchetypeKey(profile.archetype) ? profile.archetype : undefined);
+    setEssenceProfile(profile.essence && isSagaTreeEssenceKey(profile.essence) ? profile.essence : undefined);
     setGenderReading(appearance.gender_reading);
     setPersonalLookProfileId(appearance.personal_look_profile_id ?? null);
     setLookRuntimeReady(false);
@@ -658,18 +658,18 @@ export function CharacterEditor() {
     setBaseAttributes(resolved.baseAttributes);
     setAttributeAdvances(resolved.attributeAdvances);
     setFreeSkillRanks(hydratedFreeSkillRanks);
-    setArchetypeTrainingSkill(profile.archetypeTrainingSkill && isSagaDriveSkillKey(profile.archetypeTrainingSkill) ? profile.archetypeTrainingSkill : undefined);
+    setArchetypeTrainingSkill(profile.archetypeTrainingSkill && isSagaTreeSkillKey(profile.archetypeTrainingSkill) ? profile.archetypeTrainingSkill : undefined);
     setBackgroundTemplateId(profile.backgroundTemplateId === undefined ? undefined : profile.backgroundTemplateId);
     setBackgroundName(profile.background?.name ?? '');
     setBackgroundSkillPool(padBackgroundSkills(profile.background?.skillPool ?? [], 4));
-    const resolvedSkills = resolveSagaDriveSkillBuildState({
+    const resolvedSkills = resolveSagaTreeSkillBuildState({
       freeSkillRanks: hydratedFreeSkillRanks,
       backgroundSkillPoints: profile.background?.backgroundSkillPoints,
       skillPool: profile.background?.skillPool,
-      archetypeTrainingSkill: profile.archetypeTrainingSkill && isSagaDriveSkillKey(profile.archetypeTrainingSkill) ? profile.archetypeTrainingSkill : undefined,
+      archetypeTrainingSkill: profile.archetypeTrainingSkill && isSagaTreeSkillKey(profile.archetypeTrainingSkill) ? profile.archetypeTrainingSkill : undefined,
       skillAdvances: profile.skillAdvances,
       specializations: profile.specializations,
-      backgroundSpecialization: profile.background?.specialization && isSagaDriveSkillKey(profile.background.specialization.skill)
+      backgroundSpecialization: profile.background?.specialization && isSagaTreeSkillKey(profile.background.specialization.skill)
         ? profile.background.specialization
         : undefined,
     });
@@ -677,7 +677,7 @@ export function CharacterEditor() {
     setSkillAdvances(resolvedSkills.skillAdvances ?? []);
     setSpecializations(resolvedSkills.specializations ?? []);
     const backgroundSpec = resolvedSkills.specializations?.find((entry) => entry.source === 'background');
-    setSpecializationSkill(backgroundSpec?.skill ?? (profile.background?.specialization?.skill && isSagaDriveSkillKey(profile.background.specialization.skill) ? profile.background.specialization.skill : ''));
+    setSpecializationSkill(backgroundSpec?.skill ?? (profile.background?.specialization?.skill && isSagaTreeSkillKey(profile.background.specialization.skill) ? profile.background.specialization.skill : ''));
     setSpecializationName(backgroundSpec?.name ?? profile.background?.specialization?.name ?? '');
     setMilieuAccess(profile.background?.milieuAccess ?? '');
     setContact(profile.background?.contact ?? '');
@@ -717,9 +717,9 @@ export function CharacterEditor() {
 
     const bootstrap = takeCharacterEditorBootstrap();
     const storedEditId = typeof sessionStorage !== 'undefined'
-      ? sessionStorage.getItem('sagadrive:character-edit-id')
+      ? sessionStorage.getItem('sagatree:character-edit-id')
       : null;
-    if (storedEditId) sessionStorage.removeItem('sagadrive:character-edit-id');
+    if (storedEditId) sessionStorage.removeItem('sagatree:character-edit-id');
     const editCharacterId = bootstrap?.kind === 'character-edit'
       ? bootstrap.characterId
       : storedEditId;
@@ -744,7 +744,7 @@ export function CharacterEditor() {
         race: snapshot.race,
         attributes: snapshot.attributes,
         skills: snapshot.skills,
-        profile: snapshot.sagatree_profile ?? snapshot.sagadrive_profile,
+        profile: snapshot.sagatree_profile,
         appearance: snapshot.appearance,
         inventory: snapshot.inventory,
         backgroundStory: snapshot.background_story,
@@ -765,14 +765,14 @@ export function CharacterEditor() {
 
     if (bootstrap?.kind === 'starting-template') {
       bootstrapAppliedRef.current = true;
-      const catalogEntry = getSagaDriveStartingTemplate(bootstrap.templateKey);
+      const catalogEntry = getSagaTreeStartingTemplate(bootstrap.templateKey);
       if (!catalogEntry) {
         console.error('Starting-template bootstrap rejected: unknown key', bootstrap.templateKey);
         toast.error(`Unbekanntes Starttemplate: ${bootstrap.templateKey}`);
         clearCharacterEditorBootstrap();
         return;
       }
-      const validation = validateSagaDriveStartingTemplate(catalogEntry);
+      const validation = validateSagaTreeStartingTemplate(catalogEntry);
       if (validation.ok === false) {
         console.error('Starting-template bootstrap rejected:', validation.message);
         toast.error(validation.message);
@@ -780,7 +780,7 @@ export function CharacterEditor() {
         return;
       }
       const template = validation.template;
-      const background = getSagaDriveBackgroundTemplate(template.backgroundTemplateId);
+      const background = getSagaTreeBackgroundTemplate(template.backgroundTemplateId);
       if (!background) {
         console.error('Starting-template background missing:', template.backgroundTemplateId);
         toast.error('Starttemplate-Hintergrund ungültig.');
@@ -878,7 +878,7 @@ export function CharacterEditor() {
           race: character.race,
           attributes: character.attributes,
           skills: character.skills,
-          profile: character.sagaDriveProfile,
+          profile: character.sagaTreeProfile,
           appearance: character.appearance,
           inventory: character.inventory,
           inventoryV2: inventoryV2State,
@@ -922,7 +922,7 @@ export function CharacterEditor() {
   const rulesetLabel = getCharacterCreationOptionLabel(characterRulesetOptions, ruleset);
 
   const applyRacePreset = (race: string, resetTraits = false) => {
-    const allowed = new Set(getSagaDriveSpeciesTraitKeysForRace(race));
+    const allowed = new Set(getSagaTreeSpeciesTraitKeysForRace(race));
     const retainedInstances = resetTraits ? [] : retainSpeciesTraitInstancesForRace(speciesTraitInstances, allowed);
     setSpeciesTraitInstances(retainedInstances);
     setCharacterRace(race);
@@ -946,7 +946,7 @@ export function CharacterEditor() {
     setCharacterArchetype(undefined);
     setEssenceProfile(undefined);
     setArchetypeTrainingSkill(undefined);
-    setFreeSkillRanks(createEmptySagaDriveSkillRanks());
+    setFreeSkillRanks(createEmptySagaTreeSkillRanks());
     setSkillAdvances([]);
     setSpecializations([]);
     setBackgroundTemplateId(undefined);
@@ -965,13 +965,13 @@ export function CharacterEditor() {
   };
 
   const handleArchetypeChange = (value: string) => {
-    if (!isSagaDriveArchetypeKey(value)) return;
-    const next = getSagaDriveArchetype(value);
+    if (!isSagaTreeArchetypeKey(value)) return;
+    const next = getSagaTreeArchetype(value);
     setCharacterArchetype(value);
     if (archetypeTrainingSkill && !next?.skills.includes(archetypeTrainingSkill)) setArchetypeTrainingSkill(undefined);
   };
 
-  const handleEssenceChange = (value: string) => { if (isSagaDriveEssenceKey(value)) setEssenceProfile(value); };
+  const handleEssenceChange = (value: string) => { if (isSagaTreeEssenceKey(value)) setEssenceProfile(value); };
 
   const applyBackgroundSpecialization = (skill: SkillSlot, name: string) => {
     setSpecializationSkill(skill);
@@ -986,7 +986,7 @@ export function CharacterEditor() {
       resetBackgroundMechanics();
       return;
     }
-    const template = getSagaDriveBackgroundTemplate(templateId);
+    const template = getSagaTreeBackgroundTemplate(templateId);
     if (!template) {
       setBackgroundTemplateId(null);
       resetBackgroundMechanics();
@@ -1000,9 +1000,9 @@ export function CharacterEditor() {
     setSpecializations((current) => current.filter((entry) => entry.source !== 'background'));
   };
 
-  const handleBackgroundSkillPointsChange = (points: SagaDriveBackgroundSkillPoints) => {
+  const handleBackgroundSkillPointsChange = (points: SagaTreeBackgroundSkillPoints) => {
     setBackgroundSkillPoints(points);
-    if (isSagaDriveSkillKey(specializationSkill) && (points[specializationSkill] ?? 0) <= 0) {
+    if (isSagaTreeSkillKey(specializationSkill) && (points[specializationSkill] ?? 0) <= 0) {
       setSpecializationSkill('');
       setSpecializationName('');
       setSpecializations((current) => current.filter((entry) => entry.source !== 'background'));
@@ -1010,7 +1010,7 @@ export function CharacterEditor() {
   };
 
   const updateBackgroundPool = (index: number, value: string) => {
-    if (!isSagaDriveSkillKey(value) || index < 0 || index > 3) return;
+    if (!isSagaTreeSkillKey(value) || index < 0 || index > 3) return;
     const previous = backgroundSkillPool[index];
     const next: BackgroundSkillPool = [backgroundSkillPool[0], backgroundSkillPool[1], backgroundSkillPool[2], backgroundSkillPool[3]];
     next[index] = value;
@@ -1031,23 +1031,23 @@ export function CharacterEditor() {
     }
   };
 
-  const setAttribute = (attribute: SagaDriveAttributeKey, value: string) => setBaseAttributes((current) => ({ ...current, [attribute]: parseStartAttribute(value) }));
-  const setAttributeAdvance = (advanceLevel: SagaDriveAttributeAdvanceLevel, attribute: SagaDriveAttributeKey) => {
-    if (!canAssignSagaDriveAttributeAdvance(baseAttributes, attributeAdvances, characterLevel, advanceLevel, attribute)) return;
+  const setAttribute = (attribute: SagaTreeAttributeKey, value: string) => setBaseAttributes((current) => ({ ...current, [attribute]: parseStartAttribute(value) }));
+  const setAttributeAdvance = (advanceLevel: SagaTreeAttributeAdvanceLevel, attribute: SagaTreeAttributeKey) => {
+    if (!canAssignSagaTreeAttributeAdvance(baseAttributes, attributeAdvances, characterLevel, advanceLevel, attribute)) return;
     setAttributeAdvances((current) => ({ ...current, [advanceLevel]: attribute }));
   };
 
   // --- Attribute -> abgeleitete Werte (Bracket-Tree im Attribute-Tab) ---
-  const [connectedAttribute, setConnectedAttribute] = useState<SagaDriveAttributeKey | null>(null);
-  const [hoveredAttribute, setHoveredAttribute] = useState<SagaDriveAttributeKey | null>(null);
+  const [connectedAttribute, setConnectedAttribute] = useState<SagaTreeAttributeKey | null>(null);
+  const [hoveredAttribute, setHoveredAttribute] = useState<SagaTreeAttributeKey | null>(null);
   const activeAttribute = hoveredAttribute ?? connectedAttribute;
   const attributeConnectorAnimated = activeAttribute !== null && activeAttribute === connectedAttribute;
 
   // Ziel-Selektoren pro Attribut. Manöverwiderstand dynamically targets the attribute that
   // currently dominates max(STÄ + Athletik, GES + Akrobatik) — handled separately below.
-  const attributeDerivedTargets: Partial<Record<SagaDriveAttributeKey, string[]>> = useMemo(() => {
+  const attributeDerivedTargets: Partial<Record<SagaTreeAttributeKey, string[]>> = useMemo(() => {
     const maneuverUsesStrength = attributes.strength + finalSkillRanks.athletics >= attributes.dexterity + finalSkillRanks.acrobatics;
-    const targets: Partial<Record<SagaDriveAttributeKey, string[]>> = {
+    const targets: Partial<Record<SagaTreeAttributeKey, string[]>> = {
       // Bewegung hängt indirekt an STÄ (Überlastung bei Last > Traglast).
       strength: ['carry-capacity', 'movement', ...(maneuverUsesStrength ? ['maneuver-resistance'] : [])],
       dexterity: ['reflex-resistance', 'defense', ...(maneuverUsesStrength ? [] : ['maneuver-resistance'])],
@@ -1111,7 +1111,7 @@ export function CharacterEditor() {
       && Boolean(characterArchetype)
       && Boolean(essenceProfile)
       && Boolean(archetypeTrainingSkill)
-      && isSagaDriveSkillKey(specializationSkill)
+      && isSagaTreeSkillKey(specializationSkill)
       && Boolean(genderReading)
       && speciesTraitsComplete;
     const sheetStatus: CharacterSheetStatus = isComplete ? 'complete' : 'incomplete';
@@ -1120,7 +1120,7 @@ export function CharacterEditor() {
       setValidationAttempted(true);
     }
 
-    const sagaDriveProfile: SagaDriveProfileDto = {
+    const sagaTreeProfile: SagaTreeProfileDto = {
       archetype: characterArchetype,
       essence: essenceProfile,
       speciesTraitInstances: speciesTraitInstances.map((instance) => ({
@@ -1136,7 +1136,7 @@ export function CharacterEditor() {
         skillPool: selectedBackgroundPool,
         trainedSkills: backgroundSkillPointsToTrainedSkills(backgroundSkillPoints),
         backgroundSkillPoints,
-        specialization: isSagaDriveSkillKey(specializationSkill)
+        specialization: isSagaTreeSkillKey(specializationSkill)
           ? { skill: specializationSkill, name: specializationName.trim(), source: 'background', acquiredAtLevel: 1 }
           : undefined,
         milieuAccess: milieuAccess.trim(),
@@ -1216,7 +1216,7 @@ export function CharacterEditor() {
         },
         attributes,
         skills: finalSkillRanks,
-        sagatree_profile: sagaDriveProfile,
+        sagatree_profile: sagaTreeProfile,
         abilities,
         inventory,
         inventory_v2: inventoryV2,
@@ -1230,16 +1230,16 @@ export function CharacterEditor() {
         : await characterService.createCharacter(savePayload);
       setSavedCharacterId(savedCharacter.id);
       setPersistedLevel(savedCharacter.level);
-      setSagaDriveDirty(false);
+      setSagaTreeDirty(false);
       if (!isComplete) {
         setValidationAttempted(true);
       }
       // Round-trip through service normalize so editor state matches persisted base vs advances.
-      const resolved = resolveSagaDriveAttributeBuildState(savedCharacter.attributes, savedCharacter.sagaDriveProfile);
+      const resolved = resolveSagaTreeAttributeBuildState(savedCharacter.attributes, savedCharacter.sagaTreeProfile);
       setBaseAttributes(resolved.baseAttributes);
       setAttributeAdvances(resolved.attributeAdvances);
-      if (savedCharacter.sagaDriveProfile.presetReleaseMode === 'auto' || savedCharacter.sagaDriveProfile.presetReleaseMode === 'manual') {
-        setPresetReleaseMode(savedCharacter.sagaDriveProfile.presetReleaseMode);
+      if (savedCharacter.sagaTreeProfile.presetReleaseMode === 'auto' || savedCharacter.sagaTreeProfile.presetReleaseMode === 'manual') {
+        setPresetReleaseMode(savedCharacter.sagaTreeProfile.presetReleaseMode);
       }
 
       if (isComplete && presetReleaseMode === 'auto' && savedCharacter.level > previousLevel) {
@@ -1422,7 +1422,7 @@ export function CharacterEditor() {
                 disabled={saving}
                 onSelect={requestAvatarSourceChange}
               />
-              {avatarSource === 'sagadrive' ? (
+              {avatarSource === 'sagatree' ? (
                 <AvatarSpeciesTemplatePicker
                   selectedSpeciesId={selectedTemplateSpeciesId}
                   onSelect={applySpeciesTemplate}
@@ -1478,7 +1478,7 @@ export function CharacterEditor() {
                 <div className="rounded-lg border border-border bg-muted/20 p-3"><p className="text-xs text-muted-foreground">Erholung</p><p className="mt-1 text-lg font-semibold">{recovery}</p></div>
               </div>
               <Separator />
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">{sagaDriveAttributeDefinitions.map((attribute) => <div key={attribute.key} className="flex items-center justify-between gap-2"><span className="text-muted-foreground">{attribute.shortLabel}</span><span className="font-semibold">+{attributes[attribute.key]}</span></div>)}</div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">{sagaTreeAttributeDefinitions.map((attribute) => <div key={attribute.key} className="flex items-center justify-between gap-2"><span className="text-muted-foreground">{attribute.shortLabel}</span><span className="font-semibold">+{attributes[attribute.key]}</span></div>)}</div>
               <Separator />
               <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Start-Fertigkeiten</span><span className="font-semibold">{totalStartSkillPoints} / 10</span></div>
               <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Inventarlast</span><span className={overloaded ? 'font-semibold text-destructive' : 'font-semibold'}>{inventoryLoad} / {carryCapacity}</span></div>
@@ -1622,28 +1622,28 @@ export function CharacterEditor() {
                               <RuleHelp label="Attributbonus" contentClassName="max-h-[min(24rem,70vh)] max-w-[min(22rem,90vw)] overflow-y-auto">
                                 <div className="space-y-2 text-xs leading-relaxed">
                                   <p>
-                                    Für jedes Grundattribut werden Bonuspunkte verteilt. Diese werden bei Attributschecks dem D20 Wurf dazu gerechnet. Auf Level 1 kannst du insgesamt {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Punkte verteilen. Je Attribut kann ein Bonus auf Level 1 maximal +{SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP} geben. Die Basisverteilung wird beim Levelaufstieg nicht neu verteilt. Auf Level {SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS[0]} wird das Cap auf +{SAGA_DRIVE_ATTRIBUTE_BONUS_CAP} angehoben und du kannst einen weiteren Bonuspunkt auf ein Attribut deiner Wahl verteilen. Auf Level {SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS[1]} erhältst du einen weiteren Bonuspunkt welchen du wieder auf ein Grundattribut deiner Wahl verteilen kannst.
+                                    Für jedes Grundattribut werden Bonuspunkte verteilt. Diese werden bei Attributschecks dem D20 Wurf dazu gerechnet. Auf Level 1 kannst du insgesamt {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Punkte verteilen. Je Attribut kann ein Bonus auf Level 1 maximal +{SAGA_TREE_START_ATTRIBUTE_BONUS_CAP} geben. Die Basisverteilung wird beim Levelaufstieg nicht neu verteilt. Auf Level {SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS[0]} wird das Cap auf +{SAGA_TREE_ATTRIBUTE_BONUS_CAP} angehoben und du kannst einen weiteren Bonuspunkt auf ein Attribut deiner Wahl verteilen. Auf Level {SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS[1]} erhältst du einen weiteren Bonuspunkt welchen du wieder auf ein Grundattribut deiner Wahl verteilen kannst.
                                   </p>
                                   <p>
                                     +0 bedeutet keinen positiven Bonus, nicht Handlungsunfähigkeit. Das bedeutet bei einem Check für dieses Attribut wird nur ein D20 gewürfelt und kein Bonus dazu gerechnet. Boni welche durch andere Mechaniken ausgelöst werden, sind davon nicht betroffen.
                                   </p>
                                   <p className="font-medium">Bonus-Obergrenzen nach Level:</p>
                                   <ul className="list-disc space-y-0.5 pl-4">
-                                    {getSagaDriveAttributeBonusLevelGuide().map(({ levelLabel, maxBonus, description }) => (
+                                    {getSagaTreeAttributeBonusLevelGuide().map(({ levelLabel, maxBonus, description }) => (
                                       <li key={levelLabel}>
                                         Level {levelLabel}: Bonus max. +{maxBonus} ({description})
                                       </li>
                                     ))}
                                   </ul>
                                   <p>
-                                    Wird ein Charakter auf einem höheren Level mit Bonuspunktveränderung erstellt gelten die entsprechenden Bonuspunkte-Regeln. Beispiel Charakter wird auf Level {SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS[0]} erstellt -&gt; Grundattribute können jeweils einen Bonus +{SAGA_DRIVE_ATTRIBUTE_BONUS_CAP} bekommen. Es bleiben {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Basis-Bonuspunkte (+0 bis +{SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP}) plus {getSagaDriveAttributeAdvanceBudget(SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS[0])} separater Entwicklungsslot — nicht {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET + getSagaDriveAttributeAdvanceBudget(SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS[0])} frei verteilbare Punkte.
+                                    Wird ein Charakter auf einem höheren Level mit Bonuspunktveränderung erstellt gelten die entsprechenden Bonuspunkte-Regeln. Beispiel Charakter wird auf Level {SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS[0]} erstellt -&gt; Grundattribute können jeweils einen Bonus +{SAGA_TREE_ATTRIBUTE_BONUS_CAP} bekommen. Es bleiben {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Basis-Bonuspunkte (+0 bis +{SAGA_TREE_START_ATTRIBUTE_BONUS_CAP}) plus {getSagaTreeAttributeAdvanceBudget(SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS[0])} separater Entwicklungsslot — nicht {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET + getSagaTreeAttributeAdvanceBudget(SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS[0])} frei verteilbare Punkte.
                                   </p>
                                 </div>
                               </RuleHelp>
                             </div>
-                            <p className="mt-1 text-sm text-muted-foreground">Verteile {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte auf Level 1. Diese werden immer als Bonus dem D20 Wurf dazugerechnet. Für weitere Infos klick auf das Fragezeichen.</p>
+                            <p className="mt-1 text-sm text-muted-foreground">Verteile {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte auf Level 1. Diese werden immer als Bonus dem D20 Wurf dazugerechnet. Für weitere Infos klick auf das Fragezeichen.</p>
                           </div>
-                          <div className="flex flex-wrap gap-2"><Badge variant={attributePointsUsed === SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET ? 'default' : 'destructive'}>{attributePointsUsed} / {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte</Badge>{attributeAdvanceBudget > 0 ? <Badge variant={attributeAdvancesUsed === attributeAdvanceBudget ? 'default' : 'destructive'}>{attributeAdvancesUsed} / {attributeAdvanceBudget} Entwicklung</Badge> : null}</div>
+                          <div className="flex flex-wrap gap-2"><Badge variant={attributePointsUsed === SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET ? 'default' : 'destructive'}>{attributePointsUsed} / {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte</Badge>{attributeAdvanceBudget > 0 ? <Badge variant={attributeAdvancesUsed === attributeAdvanceBudget ? 'default' : 'destructive'}>{attributeAdvancesUsed} / {attributeAdvanceBudget} Entwicklung</Badge> : null}</div>
                         </div>
                         <div className="grid gap-3 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
                           <div className="rounded-lg border border-border bg-muted/10 p-4">
@@ -1653,16 +1653,16 @@ export function CharacterEditor() {
                           </div>
                           <div className="rounded-lg border border-border bg-muted/10 p-4">
                             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Startverteilung</p>
-                            <p className="mt-1 text-sm font-medium">Level 1: {SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte gesamt, maximal +{SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP} pro Attribut.</p>
+                            <p className="mt-1 text-sm font-medium">Level 1: {SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET} Bonuspunkte gesamt, maximal +{SAGA_TREE_START_ATTRIBUTE_BONUS_CAP} pro Attribut.</p>
                             {attributeAdvanceBudget > 0 ? (
                               <p className="mt-2 text-sm text-muted-foreground">Auf Level {attributeAdvanceLevels.join(' und ')} kommt {attributeAdvanceBudget === 1 ? 'ein separater Entwicklungsslot' : `${attributeAdvanceBudget} separate Entwicklungsslots`} dazu. Diese Slots erhoehen bestehende Werte und sind keine freie Neuverteilung.</p>
                             ) : (
-                              <p className="mt-2 text-sm text-muted-foreground">Spaeter kommen auf Level {SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS.join(' und ')} separate Entwicklungsslots dazu. Diese erhoehen bestehende Werte und sind keine freie Neuverteilung.</p>
+                              <p className="mt-2 text-sm text-muted-foreground">Spaeter kommen auf Level {SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS.join(' und ')} separate Entwicklungsslots dazu. Diese erhoehen bestehende Werte und sind keine freie Neuverteilung.</p>
                             )}
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                          {sagaDriveAttributeDefinitions.map((attribute) => {
+                          {sagaTreeAttributeDefinitions.map((attribute) => {
                             return (
                             <div
                               key={attribute.key}
@@ -1681,7 +1681,7 @@ export function CharacterEditor() {
                                 event.preventDefault();
                                 setConnectedAttribute(attribute.key);
                               }}
-                              className={`relative flex h-full cursor-pointer flex-col pt-0.5 items-center justify-center gap-2 rounded-lg border bg-card p-3 text-center transition-colors ${connectedAttribute === attribute.key ? 'border-primary bg-primary/5' : selectedSkill && sagaDriveSkillDefinitions.find((skill) => skill.key === selectedSkill)?.attribute === attribute.key ? 'border-primary/60 bg-primary/5' : 'border-border hover:border-primary/60'}`}
+                              className={`relative flex h-full cursor-pointer flex-col pt-0.5 items-center justify-center gap-2 rounded-lg border bg-card p-3 text-center transition-colors ${connectedAttribute === attribute.key ? 'border-primary bg-primary/5' : selectedSkill && sagaTreeSkillDefinitions.find((skill) => skill.key === selectedSkill)?.attribute === attribute.key ? 'border-primary/60 bg-primary/5' : 'border-border hover:border-primary/60'}`}
                             >
                               <div className="flex w-full items-start justify-center"><span className="opacity-60 [&_svg]:size-3" onClick={(event) => event.stopPropagation()} onPointerDown={(event) => event.stopPropagation()}><RuleHelp label={attribute.label}>{attribute.description}</RuleHelp></span></div>
                               <div className="flex w-full flex-col items-center gap-1">
@@ -1694,7 +1694,7 @@ export function CharacterEditor() {
                                   const finalValue = value + advanceCount;
                                   const extraHint = getAttributeOptionExtraDerivedHint(attribute.key, finalValue, attributes, finalSkillRanks.athletics, finalSkillRanks.acrobatics);
                                   return (
-                                    <SelectItem key={value} value={String(value)} textValue={`+${value} Bonus`} disabled={finalValue > SAGA_DRIVE_ATTRIBUTE_BONUS_CAP} className={extraHint ? 'pr-10' : undefined}>
+                                    <SelectItem key={value} value={String(value)} textValue={`+${value} Bonus`} disabled={finalValue > SAGA_TREE_ATTRIBUTE_BONUS_CAP} className={extraHint ? 'pr-10' : undefined}>
                                       <SelectItemText>+{value} Bonus</SelectItemText>
                                       {extraHint ? (
                                         <Tooltip>
@@ -1726,10 +1726,10 @@ export function CharacterEditor() {
                             <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"><div><h4 className="font-medium">Permanente Attributentwicklung</h4><p className="text-sm text-muted-foreground">Ab Level 8 und 16 kannst du jeweils ein Attribut dauerhaft weiterentwickeln. Die Wahl erhöht deine bestehende Basis; sie erlaubt keine kostenlose Neuverteilung. Reguläres Maximum: +5.</p></div><Badge variant="outline">{attributeAdvanceBudget} Entwicklung durch Level</Badge></div>
                             <div className="mt-3 grid gap-3 sm:grid-cols-2">
                               {attributeAdvanceLevels.map((advanceLevel) => (
-                                <div key={advanceLevel} className="space-y-1.5"><Label>Permanente Entwicklung (Level {advanceLevel})</Label><Select value={attributeAdvances[advanceLevel]} onValueChange={(value) => { if (sagaDriveAttributeDefinitions.some((entry) => entry.key === value)) setAttributeAdvance(advanceLevel, value as SagaDriveAttributeKey); }}><SelectTrigger className="min-h-11"><SelectValue placeholder="Attribut wählen" /></SelectTrigger><SelectContent>{sagaDriveAttributeDefinitions.map((entry) => <SelectItem key={entry.key} value={entry.key} disabled={!canAssignSagaDriveAttributeAdvance(baseAttributes, attributeAdvances, characterLevel, advanceLevel, entry.key)}>{entry.label} · aktuell +{attributes[entry.key]}</SelectItem>)}</SelectContent></Select></div>
+                                <div key={advanceLevel} className="space-y-1.5"><Label>Permanente Entwicklung (Level {advanceLevel})</Label><Select value={attributeAdvances[advanceLevel]} onValueChange={(value) => { if (sagaTreeAttributeDefinitions.some((entry) => entry.key === value)) setAttributeAdvance(advanceLevel, value as SagaTreeAttributeKey); }}><SelectTrigger className="min-h-11"><SelectValue placeholder="Attribut wählen" /></SelectTrigger><SelectContent>{sagaTreeAttributeDefinitions.map((entry) => <SelectItem key={entry.key} value={entry.key} disabled={!canAssignSagaTreeAttributeAdvance(baseAttributes, attributeAdvances, characterLevel, advanceLevel, entry.key)}>{entry.label} · aktuell +{attributes[entry.key]}</SelectItem>)}</SelectContent></Select></div>
                               ))}
                             </div>
-                            {!attributeDistributionValid && attributePointsUsed === SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET ? <p className="mt-3 text-xs text-destructive">Vergib alle verfügbaren Entwicklungspunkte und achte darauf, dass kein Endwert +5 überschreitet.</p> : null}
+                            {!attributeDistributionValid && attributePointsUsed === SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET ? <p className="mt-3 text-xs text-destructive">Vergib alle verfügbaren Entwicklungspunkte und achte darauf, dass kein Endwert +5 überschreitet.</p> : null}
                           </div>
                         ) : null}
                         {activeAttribute === 'charisma' ? (
@@ -1786,7 +1786,7 @@ export function CharacterEditor() {
                             applyBackgroundSpecialization('', '');
                             return;
                           }
-                          const keepName = isSagaDriveSkillKey(specializationSkill) && specializationSkill === skill ? specializationName : '';
+                          const keepName = isSagaTreeSkillKey(specializationSkill) && specializationSkill === skill ? specializationName : '';
                           applyBackgroundSpecialization(skill, keepName);
                         }}
                         onSpecializationNameChange={(name) => {

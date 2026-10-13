@@ -23,11 +23,11 @@ import {
 } from './modular-glb-contract-v1';
 import {
   listMissingHumanoidBones,
-  type SagaDriveHumanoidBoneId,
+  type SagaTreeHumanoidBoneId,
 } from './rig-contract';
 
 export const AVATAR_STRUCTURE_ANALYZER_CONTRACT_VERSION =
-  'SagaDriveAvatarStructureAnalyzerV2' as const;
+  'SagaTreeAvatarStructureAnalyzerV2' as const;
 
 /** Analyzer-specific modularity before mapping onto composition modularity. */
 export const AVATAR_STRUCTURE_MODULARITY_KINDS = ['full', 'partial', 'baked'] as const;
@@ -78,7 +78,7 @@ export interface AvatarStructureEvidence {
   boneCount: number;
   morphTargetCount: number;
   /** Canonical humanoid bones detected (source names optional). */
-  humanoidBones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>;
+  humanoidBones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>;
   nodes: readonly AvatarStructureNodeEvidence[];
   meshes: readonly AvatarStructureMeshEvidence[];
   /** True when scanner hit a bound and stopped early. */
@@ -105,7 +105,7 @@ export interface AvatarStructureAnalysisResultV2 {
   modularity: AvatarV2Modularity;
   roles: readonly AvatarStructureRoleHit[];
   humanoidBoneCount: number;
-  missingHumanoidBones: readonly SagaDriveHumanoidBoneId[];
+  missingHumanoidBones: readonly SagaTreeHumanoidBoneId[];
   limitations: readonly string[];
   warnings: readonly string[];
   evidence: {
@@ -141,13 +141,13 @@ export function mapStructureModularityToComposition(
 }
 
 function countHumanoidBones(
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
 ): number {
   return Object.keys(bones).length;
 }
 
 function hasCoreHumanoidChain(
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
 ): boolean {
   return Boolean(bones.hips && bones.spine && bones.head);
 }
@@ -225,9 +225,9 @@ export function analyzeAvatarStructureFromEvidence(
   }
 
   if (metaValidation.status === 'invalid') {
-    warnings.push('SagaDrive-Metadaten ungültig — strukturelle Evidence hat Vorrang.');
+    warnings.push('SagaTree-Metadaten ungültig — strukturelle Evidence hat Vorrang.');
   } else if (metaValidation.status === 'needs-review') {
-    warnings.push('SagaDrive-Metadaten benötigen Review (Version/Felder).');
+    warnings.push('SagaTree-Metadaten benötigen Review (Version/Felder).');
   }
 
   const humanoidBoneCount = countHumanoidBones(evidence.humanoidBones);

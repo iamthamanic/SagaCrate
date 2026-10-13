@@ -13,11 +13,11 @@ import type {
   CharacterSummaryVm,
   CharacterVm,
 } from '../../domains/character/contracts/character.views';
-import { assertValidSagaDriveCharacterPersistence } from '../../domains/character/use-cases/assert-character-persistence';
+import { assertValidSagaTreeCharacterPersistence } from '../../domains/character/use-cases/assert-character-persistence';
 import {
   normalizeAttributes,
   normalizeInventory,
-  normalizeSagaDriveProfile,
+  normalizeSagaTreeProfile,
   normalizeSkills,
   normalizeTextBlocks,
 } from '../../domains/character/use-cases/normalize-character';
@@ -95,7 +95,7 @@ export class SupabaseCharacterRepository {
       appearance: normalizeCharacterAppearance(dto.appearance),
       attributes: normalizeAttributes(dto.attributes),
       skills: normalizeSkills(dto.skills),
-      sagaDriveProfile: normalizeSagaDriveProfile(dto.sagatree_profile ?? dto.sagadrive_profile),
+      sagaTreeProfile: normalizeSagaTreeProfile(dto.sagatree_profile),
       abilities: dto.abilities || [],
       inventory: normalizeInventory(dto.inventory),
       inventoryV2: inventoryRead.state,
@@ -195,14 +195,14 @@ export class SupabaseCharacterRepository {
     const rulesetKey = payload.ruleset_key ?? 'sagatree-core';
     const attributes = normalizeAttributes(payload.attributes);
     const level = payload.level || 1;
-    const sagadriveProfile = rulesetKey === 'sagatree-core'
-      ? normalizeSagaDriveProfile(payload.sagatree_profile ?? payload.sagadrive_profile)
+    const sagatreeProfile = rulesetKey === 'sagatree-core'
+      ? normalizeSagaTreeProfile(payload.sagatree_profile)
       : null;
     const skills = normalizeSkills(payload.skills);
     const sheetStatus = normalizeSheetStatus(payload.sheet_status);
     // Incomplete drafts skip full build asserts; complete sheets stay strict.
-    if (sagadriveProfile && sheetStatus === 'complete') {
-      assertValidSagaDriveCharacterPersistence(attributes, skills, sagadriveProfile, level);
+    if (sagatreeProfile && sheetStatus === 'complete') {
+      assertValidSagaTreeCharacterPersistence(attributes, skills, sagatreeProfile, level);
     }
     const inventoryV2 = payload.inventory_v2
       ? await assertWritableInventoryV2(payload.inventory_v2, null)
@@ -227,7 +227,7 @@ export class SupabaseCharacterRepository {
       appearance: normalizeCharacterAppearance(payload.appearance),
       attributes,
       skills: normalizeSkills(payload.skills),
-      sagatree_profile: sagadriveProfile,
+      sagatree_profile: sagatreeProfile,
       abilities: payload.abilities ?? [],
       inventory: normalizeInventory(payload.inventory),
       ...(inventoryV2
@@ -250,20 +250,19 @@ export class SupabaseCharacterRepository {
       ? { ruleset_key: payload.ruleset_key, dnd_background: payload.ruleset_key === 'dnd-5.5e' ? payload.dnd_background ?? null : null }
       : {};
     const attributes = payload.attributes ? normalizeAttributes(payload.attributes) : undefined;
-    const profilePatch = payload.sagatree_profile ?? payload.sagadrive_profile;
-    const sagadriveProfile = profilePatch ? normalizeSagaDriveProfile(profilePatch) : undefined;
+    const profilePatch = payload.sagatree_profile;
+    const sagatreeProfile = profilePatch ? normalizeSagaTreeProfile(profilePatch) : undefined;
     // Any SagaTree-relevant field in the patch triggers validation of the full
     // effective future state (patch values merged over the stored character).
-    const touchesSagaDriveState = Boolean(
+    const touchesSagaTreeState = Boolean(
       payload.attributes
         || payload.skills
         || payload.sagatree_profile
-        || payload.sagadrive_profile
         || typeof payload.level === 'number'
         || payload.ruleset_key
         || payload.sheet_status,
     );
-    if (touchesSagaDriveState) {
+    if (touchesSagaTreeState) {
       // Loaded exactly once; owner-scoped, so foreign characters stay unreachable.
       const existing = await this.getCharacterById(id);
       const effectiveRuleset = payload.ruleset_key ?? existing.rulesetKey;
@@ -271,10 +270,10 @@ export class SupabaseCharacterRepository {
         ? normalizeSheetStatus(payload.sheet_status)
         : existing.sheetStatus;
       if (effectiveRuleset === 'sagatree-core' && effectiveSheetStatus === 'complete') {
-        assertValidSagaDriveCharacterPersistence(
+        assertValidSagaTreeCharacterPersistence(
           attributes ?? existing.attributes,
           payload.skills ? normalizeSkills(payload.skills) : existing.skills,
-          sagadriveProfile ?? existing.sagaDriveProfile,
+          sagatreeProfile ?? existing.sagaTreeProfile,
           typeof payload.level === 'number' ? payload.level : existing.level,
         );
       }
@@ -299,7 +298,7 @@ export class SupabaseCharacterRepository {
       ...(payload.appearance ? { appearance: normalizeCharacterAppearance(payload.appearance) } : {}),
       ...(attributes ? { attributes } : {}),
       ...(payload.skills ? { skills: normalizeSkills(payload.skills) } : {}),
-      ...(sagadriveProfile ? { sagatree_profile: sagadriveProfile } : {}),
+      ...(sagatreeProfile ? { sagatree_profile: sagatreeProfile } : {}),
       ...(inventoryPatch ? { inventory: normalizeInventory(inventoryPatch) } : {}),
       ...(inventoryV2
         ? { inventory_v2: inventoryV2, inventory_schema_version: 2 as const }

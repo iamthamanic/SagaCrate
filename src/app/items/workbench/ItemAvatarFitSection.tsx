@@ -6,12 +6,12 @@
  */
 
 import {
-  SAGA_DRIVE_HUMANOID_ANCHORS,
+  SAGA_TREE_HUMANOID_ANCHORS,
   clampEquipmentTransform,
   defaultRigidFitTransform,
   resolveWorkbenchDefaultAnchor,
   type AvatarEquipmentLocalTransform,
-  type SagaDriveHumanoidAnchorId,
+  type SagaTreeHumanoidAnchorId,
 } from '../../../domains/character/avatar';
 import type { InventoryItemType } from '../../../domains/character/inventory-v2';
 import { Button } from '../../../shared/ui/button';
@@ -26,7 +26,7 @@ import {
 } from '../../../shared/ui/select';
 
 export interface ItemAvatarFitDraft {
-  anchor: SagaDriveHumanoidAnchorId;
+  anchor: SagaTreeHumanoidAnchorId;
   transform: AvatarEquipmentLocalTransform;
   dirty: boolean;
   status: 'idle' | 'no-3d' | 'ready' | 'needs-review' | 'incompatible';
@@ -42,7 +42,7 @@ interface ItemAvatarFitSectionProps {
   onChange: (next: ItemAvatarFitDraft) => void;
 }
 
-const ANCHOR_LABEL: Record<SagaDriveHumanoidAnchorId, string> = {
+const ANCHOR_LABEL: Record<SagaTreeHumanoidAnchorId, string> = {
   head: 'Kopf',
   chest: 'Brust',
   back: 'Rücken',
@@ -121,7 +121,7 @@ export function ItemAvatarFitSection({
         <div>
           <h3 className="text-sm font-medium">Avatar / Ausrichtung</h3>
           <p className="text-xs text-muted-foreground">
-            Starres Item an SagaDrive-Anker ausrichten (kein freier Bone-Editor).
+            Starres Item an SagaTree-Anker ausrichten (kein freier Bone-Editor).
           </p>
         </div>
         <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={reset}>
@@ -144,7 +144,7 @@ export function ItemAvatarFitSection({
             onValueChange={(value) =>
               onChange({
                 ...draft,
-                anchor: value as SagaDriveHumanoidAnchorId,
+                anchor: value as SagaTreeHumanoidAnchorId,
                 dirty: true,
                 status: hasModel3d ? 'ready' : 'no-3d',
               })
@@ -154,7 +154,7 @@ export function ItemAvatarFitSection({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {SAGA_DRIVE_HUMANOID_ANCHORS.map((anchor) => (
+              {SAGA_TREE_HUMANOID_ANCHORS.map((anchor) => (
                 <SelectItem key={anchor} value={anchor}>
                   {ANCHOR_LABEL[anchor]}
                 </SelectItem>

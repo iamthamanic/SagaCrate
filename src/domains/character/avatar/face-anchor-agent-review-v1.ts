@@ -6,7 +6,7 @@
  * Visual passes consume screenshot evidence; JSON alone cannot produce agent_reviewed.
  */
 
-import { SAGA_DRIVE_FACE_ANCHOR_IDS, type SagaDriveFaceAnchorId } from './face-anchor-contract';
+import { SAGA_TREE_FACE_ANCHOR_IDS, type SagaTreeFaceAnchorId } from './face-anchor-contract';
 
 export const FACE_ANCHOR_AGENT_REVIEW_PROTOCOL_VERSION = 'face-anchor-agent-review-v1' as const;
 
@@ -41,7 +41,7 @@ export const FACE_ANCHOR_VISUAL_STATUSES = ['pass', 'fail', 'uncertain'] as cons
 export type FaceAnchorVisualStatus = (typeof FACE_ANCHOR_VISUAL_STATUSES)[number];
 
 export interface FaceAnchorAgentReviewAnchorFindingV1 {
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
   readonly visualStatus: FaceAnchorVisualStatus;
   readonly anatomyStatus: FaceAnchorVisualStatus;
   readonly sideStatus: FaceAnchorVisualStatus;
@@ -151,7 +151,7 @@ export interface FaceAnchorAgentReviewAggregationV1 {
   readonly completedPasses: number;
   readonly deterministicPass: boolean;
   readonly evidenceManifestSha256: string;
-  readonly conflictingAnchorIds: readonly SagaDriveFaceAnchorId[];
+  readonly conflictingAnchorIds: readonly SagaTreeFaceAnchorId[];
   readonly reasons: readonly string[];
   readonly aggregatedAt: string;
 }
@@ -254,7 +254,7 @@ export function validateFaceAnchorAgentReviewPassReport(
     errors.push('topology_fingerprint_mismatch');
   }
   if (typeof r.reviewerId !== 'string' || !r.reviewerId.trim()) errors.push('missing_reviewer_id');
-  if (!Array.isArray(r.findings) || r.findings.length !== SAGA_DRIVE_FACE_ANCHOR_IDS.length) {
+  if (!Array.isArray(r.findings) || r.findings.length !== SAGA_TREE_FACE_ANCHOR_IDS.length) {
     errors.push('findings_count_mismatch');
   } else {
     const seen = new Set<string>();
@@ -265,7 +265,7 @@ export function validateFaceAnchorAgentReviewPassReport(
       }
       const row = f as Record<string, unknown>;
       const id = String(row.anchorId || '');
-      if (!(SAGA_DRIVE_FACE_ANCHOR_IDS as readonly string[]).includes(id)) {
+      if (!(SAGA_TREE_FACE_ANCHOR_IDS as readonly string[]).includes(id)) {
         errors.push(`unknown_anchor:${id}`);
       }
       if (seen.has(id)) errors.push(`duplicate_anchor:${id}`);
@@ -290,7 +290,7 @@ export function validateFaceAnchorAgentReviewPassReport(
         }
       }
     }
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       if (!seen.has(id)) errors.push(`missing_anchor:${id}`);
     }
   }
@@ -309,7 +309,7 @@ export function aggregateFaceAnchorAgentReviews(input: {
   aggregatedAt: string;
 }): FaceAnchorAgentReviewAggregationV1 {
   const reasons: string[] = [];
-  const conflicting = new Set<SagaDriveFaceAnchorId>();
+  const conflicting = new Set<SagaTreeFaceAnchorId>();
 
   if (!input.deterministic.pass) {
     reasons.push('deterministic_gates_failed');
@@ -358,7 +358,7 @@ export function aggregateFaceAnchorAgentReviews(input: {
   }
 
   // Cross-pass consensus: every anchor must be pass on all five reports.
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const statuses = input.passes.map((p) => p.findings.find((f) => f.anchorId === id));
     if (statuses.some((f) => !f || !findingPass(f))) {
       conflicting.add(id);
@@ -389,7 +389,7 @@ export function aggregateFaceAnchorAgentReviews(input: {
     completedPasses: input.passes.length,
     deterministicPass: input.deterministic.pass,
     evidenceManifestSha256: input.evidenceManifestSha256,
-    conflictingAnchorIds: [...conflicting].sort() as SagaDriveFaceAnchorId[],
+    conflictingAnchorIds: [...conflicting].sort() as SagaTreeFaceAnchorId[],
     reasons: [...new Set(reasons)].sort(),
     aggregatedAt: input.aggregatedAt,
   };
@@ -401,7 +401,7 @@ export function aggregateFaceAnchorAgentReviews(input: {
 export function buildAllPassAgentReviewFindings(
   evidenceViews: readonly FaceAnchorAgentReviewEvidenceView[] = FACE_ANCHOR_AGENT_REVIEW_EVIDENCE_VIEWS,
 ): FaceAnchorAgentReviewAnchorFindingV1[] {
-  return SAGA_DRIVE_FACE_ANCHOR_IDS.map((anchorId) => ({
+  return SAGA_TREE_FACE_ANCHOR_IDS.map((anchorId) => ({
     anchorId,
     visualStatus: 'pass' as const,
     anatomyStatus: 'pass' as const,

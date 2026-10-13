@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * avatar-morph-contract-check — deterministic tests for #212 SagaDriveAvatarMorphV1.
+ * avatar-morph-contract-check — deterministic tests for #212 SagaTreeAvatarMorphV1.
  * Location: scripts/avatar-morph-contract-check.mjs
  */
 import { readFileSync } from 'node:fs';
@@ -22,7 +22,7 @@ const index = read('src/domains/character/avatar/index.ts');
 const entity = read('src/domains/character/domain/character.entity.ts');
 
 check(/MORPH_CONTRACT_VERSION/.test(contract), 'morph contract version');
-check(/SagaDriveAvatarMorphStateV1/.test(contract), 'morph state type');
+check(/SagaTreeAvatarMorphStateV1/.test(contract), 'morph state type');
 check(/AVATAR_MORPH_BODY_KEYS/.test(contract), 'body keys');
 check(/AVATAR_MORPH_FACE_KEYS/.test(contract), 'face keys');
 check(/AVATAR_MORPH_PARAM_META/.test(contract), 'UI metadata');
@@ -79,7 +79,7 @@ function defaults() {
   const body = Object.fromEntries(BODY.map((k) => [k, 0]));
   const face = Object.fromEntries(FACE.map((k) => [k, 0]));
   return {
-    contractVersion: 'SagaDriveAvatarMorphV1',
+    contractVersion: 'SagaTreeAvatarMorphV1',
     body,
     face,
     colors: { skin: '#F5E6D3', eyes: '#3A2F28', hair: '#000000' },

@@ -33,8 +33,8 @@
 - OK `resources:level-4` — level 4 valid
 - OK `resources:level-5` — level 5 valid
 - OK `resources:level-6-invalid` — 6 invalid
-- OK `resources:parse-extensible` — JSONB sagadriveAbstract supports current+base
-- OK `resources:serialize` — serialize writes sagadriveAbstract.current
+- OK `resources:parse-extensible` — JSONB sagatreeAbstract supports current+base
+- OK `resources:serialize` — serialize writes sagatreeAbstract.current
 - OK `afford:under` — cost 1 < res 3 → allow-free
 - OK `afford:equal` — cost 3 = res 3 → require-purchase-choice
 - OK `afford:purchase-minus-1` — purchase at equal cost → resources 2

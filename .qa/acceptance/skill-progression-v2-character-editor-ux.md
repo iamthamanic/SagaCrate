@@ -9,7 +9,7 @@ Issue #91: Wire Character Editor to #90 domain contracts — three start sources
 ## Preconditions
 
 - #94 architecture merged; #90 skill-progression domain on `main`.
-- Editor loads/saves via owner-scoped character service and SagaDrive profile JSONB.
+- Editor loads/saves via owner-scoped character service and SagaTree profile JSONB.
 
 ## Happy Path
 
@@ -57,7 +57,7 @@ Issue #91: Wire Character Editor to #90 domain contracts — three start sources
 - **Acceptance:** `.qa/acceptance/skill-progression-v2-character-editor-ux.md`
 - **Background:** `CharacterBackgroundPanel` — 2 stackable framework points via −/+ on each `BackgroundSkillNode`; budget badge above the grid; graph collapses to occupied nodes after allocation.
 - **Skills:** `CharacterSkillsPanel` — 7/2/1 counters, `SkillCheckFormulaPanel` (provenance, global/applied EB, d20 formula), `SkillProgressionSlotsPanel` (levels 3–19).
-- **Editor state/save:** `backgroundSkillPoints`, `skillAdvances`, `specializations`, `skillProvenanceStatus: 'complete'`; ranks via `resolveSagaDriveSkillRanks`; legacy bootstrap via `resolveSagaDriveSkillBuildState`.
+- **Editor state/save:** `backgroundSkillPoints`, `skillAdvances`, `specializations`, `skillProvenanceStatus: 'complete'`; ranks via `resolveSagaTreeSkillRanks`; legacy bootstrap via `resolveSagaTreeSkillBuildState`.
 - **Removed:** min-6 trained skills gate; legacy 2-toggle background training UX.
 - **Regression:** `character-editor-regression-check.mjs`, `background-framework-regression-check.mjs` updated for v2 contracts.
 - **Validation:** `npm run test-gate` green (uncommitted working tree).

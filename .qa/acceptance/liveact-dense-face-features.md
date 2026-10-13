@@ -2,9 +2,9 @@
 
 ## Contract
 
-- [ ] `SagaDriveLiveActDenseFaceFeaturesV1` exists (provider-neutral)
+- [ ] `SagaTreeLiveActDenseFaceFeaturesV1` exists (provider-neutral)
 - [ ] No MediaPipe indices in domain contract / extractors
-- [ ] `SagaDriveLiveActFrameV1` unchanged (no landmarks / dense payload)
+- [ ] `SagaTreeLiveActFrameV1` unchanged (no landmarks / dense payload)
 - [ ] Every feature has `available` / `value: number|null` / `confidence` 0..1
 - [ ] Unavailable → null value (not fake 0); no NaN/Infinity outputs
 

@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #20 (Epic #18), Type: chore, Labels: P2, Validierung
-- Regeln: `docs/sagadrive core rules.md` §3 (Attribute), §4 (Charakterstruktur, Speziesmerkmale), §5 (Fertigkeiten/Spezialisierungen), §11 (Fähigkeitsränge/Investitionen), §12 (Essenz-Aktivierung), §13 (Stufenaufstieg, sekundäre Essenz, §13.3 höherstufige Erschaffung), §17 (Verbindliche Reihenfolge)
-- Validierungsplan: `docs/sagadrive core validation.md` A2
+- Regeln: `docs/sagatree core rules.md` §3 (Attribute), §4 (Charakterstruktur, Speziesmerkmale), §5 (Fertigkeiten/Spezialisierungen), §11 (Fähigkeitsränge/Investitionen), §12 (Essenz-Aktivierung), §13 (Stufenaufstieg, sekundäre Essenz, §13.3 höherstufige Erschaffung), §17 (Verbindliche Reihenfolge)
+- Validierungsplan: `docs/sagatree core validation.md` A2
 
 ## Preconditions
 - `scripts/lib/core-probe.mjs` existiert (Ränge/EB/Fertigkeitslimit als geteilte Wahrheit).

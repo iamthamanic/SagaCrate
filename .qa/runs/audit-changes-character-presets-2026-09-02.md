@@ -4,7 +4,7 @@
 - Verdict: **WARN**
 - Branch: `feat/character-presets`
 - HEAD: `b7458019865d20a7e94c6f016ac5abed5a7bb093`
-- PR: https://github.com/iamthamanic/sagadrive/pull/92
+- PR: https://github.com/iamthamanic/sagatree/pull/92
 
 ## Scope
 - Mode: pr (`origin/main...HEAD`)

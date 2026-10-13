@@ -3,12 +3,12 @@
  * Location: src/app/character/progression/skillRuleHelp.tsx
  */
 import {
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  type SagaDriveSkillKey,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 
-export function getSkillDerivedHints(skillKey: SagaDriveSkillKey): string[] {
+export function getSkillDerivedHints(skillKey: SagaTreeSkillKey): string[] {
   if (skillKey === 'melee' || skillKey === 'acrobatics') {
     return ['Erhöht die Verteidigung, wenn dieser Wert höher ist als die jeweilige Alternative.'];
   }
@@ -21,9 +21,9 @@ export function getSkillDerivedHints(skillKey: SagaDriveSkillKey): string[] {
   return [];
 }
 
-export function SkillRuleHelpContent({ skillKey }: { skillKey: SagaDriveSkillKey }) {
-  const skill = getSagaDriveSkill(skillKey);
-  const attribute = getSagaDriveAttribute(skill.attribute);
+export function SkillRuleHelpContent({ skillKey }: { skillKey: SagaTreeSkillKey }) {
+  const skill = getSagaTreeSkill(skillKey);
+  const attribute = getSagaTreeAttribute(skill.attribute);
   const derivedHints = getSkillDerivedHints(skillKey);
 
   return (

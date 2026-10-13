@@ -8,7 +8,7 @@ import {
   selectAttributeGroup,
 } from './helpers/character-editor';
 
-const EVIDENCE_DIR = '.qa/evidence/sagadrive-character-editor-core';
+const EVIDENCE_DIR = '.qa/evidence/sagatree-character-editor-core';
 const V2_EVIDENCE_DIR = '.qa/evidence/skill-progression-v2-character-editor-ux';
 
 
@@ -406,7 +406,7 @@ test('character editor exposes the SagaTree Core creation flow', async ({ page }
         skillAdvances?: Array<{ level: number; kind: string; skill: string }>;
         specializations?: Array<{ skill: string; name: string; source: string; acquiredAtLevel: number }>;
       };
-      sagadrive_profile?: {
+      sagatree_profile?: {
         archetype?: string;
         archetypeTrainingSkill?: string;
         freeSkillRanks?: Record<string, number>;
@@ -416,7 +416,7 @@ test('character editor exposes the SagaTree Core creation flow', async ({ page }
         specializations?: Array<{ skill: string; name: string; source: string; acquiredAtLevel: number }>;
       };
     };
-    const savedProfile = savedBody.sagatree_profile ?? savedBody.sagadrive_profile;
+    const savedProfile = savedBody.sagatree_profile ?? savedBody.sagatree_profile;
     expect(savedProfile?.skillProvenanceStatus).toBeUndefined();
     expect(savedProfile?.archetype).toBe('fighter');
     expect(savedProfile?.archetypeTrainingSkill).toBe('melee');

@@ -7,7 +7,7 @@
  * - FACE_LANDMARKS_RIGHT_IRIS → 469,470,471,472 (anatomical right contour)
  * Iris center = centroid(contour[4]). No undocumented center index hardcodes.
  *
- * Eye corners/lids reuse MediaPipeSagaDriveFaceAnchorMapV1 (#421/#445).
+ * Eye corners/lids reuse MediaPipeSagaTreeFaceAnchorMapV1 (#421/#445).
  */
 
 import {
@@ -17,10 +17,10 @@ import {
   type IrisPoint3,
 } from '../../../domains/character/liveact/liveact-iris-gaze-contract';
 import {
-  MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1,
+  MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1,
   type NormalizedLandmark2dLike,
   resolveMediaPipeAnchorSample,
-} from './mediapipe-sagadrive-face-anchor-map-v1';
+} from './mediapipe-sagatree-face-anchor-map-v1';
 
 export const MEDIAPIPE_IRIS_GEOMETRY_VERSION = 'MediaPipeIrisGeometryV1' as const;
 
@@ -63,7 +63,7 @@ function resolveAnchor(
   landmarks: readonly NormalizedLandmark2dLike[],
   anchorId: string,
 ): IrisPoint3 {
-  const entry = MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === anchorId);
+  const entry = MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === anchorId);
   if (!entry) return emptyPoint();
   const sample = resolveMediaPipeAnchorSample(landmarks, entry);
   if (!sample.available) return emptyPoint();

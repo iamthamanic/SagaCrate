@@ -3,14 +3,14 @@
  * (system starttemplate or user preset). Location: src/app/character/shared/AppliedVorlageBadge.tsx
  */
 import { Bookmark } from 'lucide-react';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaTreeStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 import { Badge } from '../../../shared/ui/badge';
 import { StartingTemplateIcon } from '../creation/StartingTemplateIcon';
 
 export type AppliedVorlage =
   | {
       kind: 'starting-template';
-      templateKey: SagaDriveStartingTemplateKey;
+      templateKey: SagaTreeStartingTemplateKey;
       labelDe: string;
     }
   | {

@@ -1,5 +1,5 @@
 /**
- * StartingTemplateIcon — Lucide icon per SagaDrive Level-1 starttemplate key.
+ * StartingTemplateIcon — Lucide icon per SagaTree Level-1 starttemplate key.
  * Location: src/app/character/creation/StartingTemplateIcon.tsx
  */
 import {
@@ -15,9 +15,9 @@ import {
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaTreeStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 
-const STARTING_TEMPLATE_ICONS: Record<SagaDriveStartingTemplateKey, LucideIcon> = {
+const STARTING_TEMPLATE_ICONS: Record<SagaTreeStartingTemplateKey, LucideIcon> = {
   berserker: Axe,
   vanguard: Crosshair,
   mage: Sparkles,
@@ -31,7 +31,7 @@ const STARTING_TEMPLATE_ICONS: Record<SagaDriveStartingTemplateKey, LucideIcon> 
 };
 
 type StartingTemplateIconProps = {
-  templateKey: SagaDriveStartingTemplateKey;
+  templateKey: SagaTreeStartingTemplateKey;
   className?: string;
 };
 

@@ -1,4 +1,4 @@
-# Feature: Inventory v2 — Complete setting-neutral SagaDrive Core item catalog
+# Feature: Inventory v2 — Complete setting-neutral SagaTree Core item catalog
 
 Issue: #108 (Parent: #105, Depends on: #106/#107) · Slug: `core-catalog`
 
@@ -56,4 +56,4 @@ Not applicable — no UI in this ticket.
 | `src/domains/character/inventory-v2/core-catalog.ts` | 35 deep-frozen Core definitions + `getCoreItemDefinition` / size constant |
 | `src/domains/character/inventory-v2/index.ts` | Re-exports `CORE_CATALOG_SIZE`, `getCoreItemDefinition` |
 | `scripts/inventory-core-catalog-check.mjs` | Snapshot, schema, coverage, uniqueness, resolve-by-id tests |
-| `docs/sagadrive core rules.md` | §10.0 Core-Gegenstandskatalog |
+| `docs/sagatree core rules.md` | §10.0 Core-Gegenstandskatalog |

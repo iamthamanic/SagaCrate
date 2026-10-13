@@ -30,7 +30,7 @@ const studio = read('src/infrastructure/character/avatar/character-studio-runtim
 const acceptance = read('.qa/acceptance/liveact-face-anchors-character-persist.md');
 
 check(/face_anchors\?:/.test(entity), 'DTO face_anchors field');
-check(/SagaDriveFaceAnchorsManifestV1/.test(entity), 'DTO uses manifest type');
+check(/SagaTreeFaceAnchorsManifestV1/.test(entity), 'DTO uses manifest type');
 check(/readFaceAnchorsFromAvatar/.test(contract), 'read helper');
 check(/readFaceAnchorsFromAvatar/.test(barrel), 'barrel export');
 check(/commitFaceAnchors/.test(hook), 'hook commitFaceAnchors');

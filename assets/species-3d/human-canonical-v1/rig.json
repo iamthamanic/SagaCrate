@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveHumanoidRigV1",
+  "contractVersion": "SagaTreeHumanoidRigV1",
   "bones": {
     "hips": "hips",
     "spine": "spine",

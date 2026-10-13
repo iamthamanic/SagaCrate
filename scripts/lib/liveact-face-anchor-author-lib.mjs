@@ -9,7 +9,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { NodeIO } from '@gltf-transform/core';
 import {
   FACE_ANCHORS_CONTRACT_VERSION,
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
+  SAGA_TREE_FACE_ANCHOR_IDS,
 } from './liveact-face-anchor-ids.mjs';
 import { findNodeByIdentity, listMeshedNodeIdentities } from './liveact-face-anchor-glb.mjs';
 import { authorHeuristicFaceAnchorsManifest } from './liveact-face-anchor-heuristic.mjs';
@@ -41,7 +41,7 @@ export function bootstrapMinimalFaceAnchorsManifest(document, opts = {}) {
 
   /** @type {Record<string, unknown>} */
   const anchors = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     anchors[id] = {
       nodeIdentity,
       primitiveIndex,

@@ -5,7 +5,7 @@
 - Verdict: CLEAR
 
 ## Event
-User completes Editierbar KI-Generate → SagaDrive materializes modular body + catalog wardrobe into CharacterEditor appearance (save/reload).
+User completes Editierbar KI-Generate → SagaTree materializes modular body + catalog wardrobe into CharacterEditor appearance (save/reload).
 
 ## Hops
 1. Provider job success (raw mesh) → `AvatarMeshyPanel.onSuccess`

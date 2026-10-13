@@ -1,5 +1,5 @@
 /**
- * ruleset-catalog types — Contracts for persisted ruleset catalog entities (not SagaDrive kernel rules).
+ * ruleset-catalog types — Contracts for persisted ruleset catalog entities (not SagaTree kernel rules).
  * Location: src/domains/rules/ruleset-catalog/types.ts
  */
 export interface Ruleset {

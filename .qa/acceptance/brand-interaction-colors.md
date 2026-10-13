@@ -1,10 +1,10 @@
 # Feature: Brand Interaction Colors
 
 ## Intent
-SagaDrive soll fuer aktive Auswahlzustaende und primaere CTAs eine eindeutige, wiederverwendbare Farbhierarchie haben, die dem Logo folgt. Cyan/Teal markiert die aktuell ausgewaehlte Option und die wichtigste Aktion. Gold/Amber dient als Hover-Feedback und Premium-Akzent.
+SagaTree soll fuer aktive Auswahlzustaende und primaere CTAs eine eindeutige, wiederverwendbare Farbhierarchie haben, die dem Logo folgt. Cyan/Teal markiert die aktuell ausgewaehlte Option und die wichtigste Aktion. Gold/Amber dient als Hover-Feedback und Premium-Akzent.
 
 ## Preconditions
-- Die bestehenden SagaDrive-CI-Farben bleiben erhalten: Cyan/Teal und Gold/Amber.
+- Die bestehenden SagaTree-CI-Farben bleiben erhalten: Cyan/Teal und Gold/Amber.
 - Bestehende Radix/shadcn-Primitives bleiben die zentrale UI-Basis.
 - Keine Produktlogik, Persistenz oder Avatar-Runtime wird veraendert.
 

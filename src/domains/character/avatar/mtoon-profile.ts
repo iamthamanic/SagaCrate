@@ -1,12 +1,12 @@
 /**
- * SagaDrive MToon visual style profile v1 — pure domain (no Three / React).
+ * SagaTree MToon visual style profile v1 — pure domain (no Three / React).
  * Location: src/domains/character/avatar/mtoon-profile.ts
  *
  * Central allowlisted render contract for lighting, materials, outline, and
  * performance presets. Runtime applies this profile; screens must not fork style.
  */
 
-export const MTOON_PROFILE_VERSION = 'SagaDriveMToonProfileV1' as const;
+export const MTOON_PROFILE_VERSION = 'SagaTreeMToonProfileV1' as const;
 
 export const MTOON_MATERIAL_CLASSES = [
   'skin',
@@ -76,7 +76,7 @@ export interface MtoonPerformanceProfile {
   outlineWidthScale: number;
 }
 
-export interface SagaDriveMToonProfileV1 {
+export interface SagaTreeMToonProfileV1 {
   contractVersion: typeof MTOON_PROFILE_VERSION;
   preferredPath: 'mtoon';
   fallbackPath: 'pbr-fallback';
@@ -189,7 +189,7 @@ const MATERIAL_PROFILES: Record<MtoonMaterialClass, MtoonMaterialClassProfile> =
   },
 };
 
-export function createSagaDriveMToonProfileV1(): SagaDriveMToonProfileV1 {
+export function createSagaTreeMToonProfileV1(): SagaTreeMToonProfileV1 {
   return {
     contractVersion: MTOON_PROFILE_VERSION,
     preferredPath: 'mtoon',
@@ -244,7 +244,7 @@ export function createSagaDriveMToonProfileV1(): SagaDriveMToonProfileV1 {
 
 export function classifyMtoonMaterialClass(
   materialOrMeshName: string,
-  profile: SagaDriveMToonProfileV1 = createSagaDriveMToonProfileV1(),
+  profile: SagaTreeMToonProfileV1 = createSagaTreeMToonProfileV1(),
 ): MtoonMaterialClass {
   const normalized = materialOrMeshName.toLowerCase();
   // Prefer more specific classes before broad ones (metal/cyber before cloth/skin).
@@ -287,8 +287,8 @@ export function resolveMtoonRenderPath(input: {
   return {
     path: 'pbr-fallback',
     noticeDe: input.isImportModel
-      ? 'Dieses Import-Modell unterstützt MToon nur eingeschränkt — SagaDrive nutzt den kontrollierten PBR-Fallback.'
-      : 'MToon-Materialien fehlen — SagaDrive nutzt den kontrollierten PBR-Fallback.',
+      ? 'Dieses Import-Modell unterstützt MToon nur eingeschränkt — SagaTree nutzt den kontrollierten PBR-Fallback.'
+      : 'MToon-Materialien fehlen — SagaTree nutzt den kontrollierten PBR-Fallback.',
   };
 }
 

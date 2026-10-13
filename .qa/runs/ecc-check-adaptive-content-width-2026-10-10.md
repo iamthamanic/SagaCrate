@@ -15,7 +15,7 @@
 ## Review findings (triaged)
 | Severity | Issue | Action |
 |----------|-------|--------|
-| Important | SessionJoin always showed „SagaDrive Native“ on every saga | **Fixed** — badge removed (no project-level native marker) |
+| Important | SessionJoin always showed „SagaTree Native“ on every saga | **Fixed** — badge removed (no project-level native marker) |
 | Minor | AgentShield medium: missing output-control defense in `.cursor/.claude/CLAUDE.md` | note later (pre-existing) |
 
 ## Ship notes

@@ -6,7 +6,7 @@
 Bibliothek-Tab **Welten** auf die shared `EntityBrowser`-Shell umstellen (Carousel ↔ Liste, Fallback-Thumbs, Meta-Chip Speziesentwicklung). Bestehender `WorldProfileEditorDialog` und `useWorldProfiles` CRUD bleiben; kein Cover-Schema.
 
 ## Preconditions
-- SagaDrive läuft lokal-only (`localhost:8000` / `sagadrive-db`, AGENTS.md Non-Negotiables).
+- SagaTree läuft lokal-only (`localhost:8000` / `sagatree-db`, AGENTS.md Non-Negotiables).
 - `EntityBrowser`/`EntityBrowserCard` existieren (Slice #48, PR #58); Abenteuer-Tab bereits migriert (#49, PR #59).
 - `useWorldProfiles` liefert `WorldProfileVm` (`name`, `description`, `modules`); kein Cover-Feld.
 - `getSpeciesDevelopmentMode` normalisiert unbekannte Modes auf `explicit` (fail-safe).

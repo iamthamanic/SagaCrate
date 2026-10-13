@@ -1,7 +1,7 @@
 # Acceptance — avatar-morphable-base-bodies-v1
 
 ## Intent
-Provide a versioned, allowlisted SagaDrive morphable humanoid base body that covers the full #212 morph contract and #6 rig versions, with species presets as morph/trait/color overlays.
+Provide a versioned, allowlisted SagaTree morphable humanoid base body that covers the full #212 morph contract and #6 rig versions, with species presets as morph/trait/color overlays.
 
 ## Preconditions
 - #212 morph contract and #6 rig contract on main.

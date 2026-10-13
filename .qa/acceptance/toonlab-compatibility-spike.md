@@ -1,7 +1,7 @@
 # Acceptance — toonlab-compatibility-spike (#341)
 
 ## Intent
-Prove with real SagaDrive avatar assets whether `@call-me-sensei/toonlab` can integrate with the current avatar renderer, and record an explicit GO or BLOCKED decision with a concrete integration path.
+Prove with real SagaTree avatar assets whether `@call-me-sensei/toonlab` can integrate with the current avatar renderer, and record an explicit GO or BLOCKED decision with a concrete integration path.
 
 ## Acceptance
 - [x] Spike tests `human-male` GLB plus an existing VRM/MToon fixture under a documented identical-camera PBR vs Toon matrix.

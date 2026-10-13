@@ -1,51 +1,51 @@
 import type { CharacterAttributesDto } from '../../../character/domain/character.entity';
-import { isSagaDriveAttributeKey, type SagaDriveAttributeKey } from '../character-creation';
+import { isSagaTreeAttributeKey, type SagaTreeAttributeKey } from '../character-creation';
 
-export const SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET = 15;
-export const SAGA_DRIVE_START_ATTRIBUTE_BONUS_MIN = 0;
-export const SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP = 4;
-export const SAGA_DRIVE_ATTRIBUTE_BONUS_CAP = 5;
-export const SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS = [8, 16] as const;
+export const SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET = 15;
+export const SAGA_TREE_START_ATTRIBUTE_BONUS_MIN = 0;
+export const SAGA_TREE_START_ATTRIBUTE_BONUS_CAP = 4;
+export const SAGA_TREE_ATTRIBUTE_BONUS_CAP = 5;
+export const SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS = [8, 16] as const;
 
-export type SagaDriveAttributeAdvanceLevel = (typeof SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS)[number];
-export type SagaDriveAttributeAdvances = Partial<Record<SagaDriveAttributeAdvanceLevel, SagaDriveAttributeKey>>;
+export type SagaTreeAttributeAdvanceLevel = (typeof SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS)[number];
+export type SagaTreeAttributeAdvances = Partial<Record<SagaTreeAttributeAdvanceLevel, SagaTreeAttributeKey>>;
 
-export type SagaDrivePersistedAttributeBuild = {
+export type SagaTreePersistedAttributeBuild = {
   baseAttributes?: CharacterAttributesDto;
-  attributeAdvances?: SagaDriveAttributeAdvances;
+  attributeAdvances?: SagaTreeAttributeAdvances;
 };
 
-export type SagaDriveResolvedAttributeBuild = {
+export type SagaTreeResolvedAttributeBuild = {
   baseAttributes: CharacterAttributesDto;
-  attributeAdvances: SagaDriveAttributeAdvances;
+  attributeAdvances: SagaTreeAttributeAdvances;
 };
 
-export function getSagaDriveAttributeAdvanceLevels(level: number): readonly SagaDriveAttributeAdvanceLevel[] {
+export function getSagaTreeAttributeAdvanceLevels(level: number): readonly SagaTreeAttributeAdvanceLevel[] {
   const normalizedLevel = Math.min(20, Math.max(1, Math.round(level)));
-  return SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS.filter((advanceLevel) => normalizedLevel >= advanceLevel);
+  return SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS.filter((advanceLevel) => normalizedLevel >= advanceLevel);
 }
 
-export function getSagaDriveAttributeAdvanceBudget(level: number): number {
-  return getSagaDriveAttributeAdvanceLevels(level).length;
+export function getSagaTreeAttributeAdvanceBudget(level: number): number {
+  return getSagaTreeAttributeAdvanceLevels(level).length;
 }
 
-export function getSagaDriveBaseAttributePointsUsed(attributes: CharacterAttributesDto): number {
+export function getSagaTreeBaseAttributePointsUsed(attributes: CharacterAttributesDto): number {
   return Object.values(attributes).reduce((sum, value) => sum + value, 0);
 }
 
-export function isValidSagaDriveBaseAttributeDistribution(attributes: CharacterAttributesDto): boolean {
+export function isValidSagaTreeBaseAttributeDistribution(attributes: CharacterAttributesDto): boolean {
   const values = Object.values(attributes);
-  return values.every((value) => Number.isInteger(value) && value >= SAGA_DRIVE_START_ATTRIBUTE_BONUS_MIN && value <= SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP)
-    && getSagaDriveBaseAttributePointsUsed(attributes) === SAGA_DRIVE_START_ATTRIBUTE_BONUS_BUDGET;
+  return values.every((value) => Number.isInteger(value) && value >= SAGA_TREE_START_ATTRIBUTE_BONUS_MIN && value <= SAGA_TREE_START_ATTRIBUTE_BONUS_CAP)
+    && getSagaTreeBaseAttributePointsUsed(attributes) === SAGA_TREE_START_ATTRIBUTE_BONUS_BUDGET;
 }
 
-export function applySagaDriveAttributeAdvances(
+export function applySagaTreeAttributeAdvances(
   baseAttributes: CharacterAttributesDto,
-  advances: SagaDriveAttributeAdvances,
+  advances: SagaTreeAttributeAdvances,
   level: number,
 ): CharacterAttributesDto {
   const result = { ...baseAttributes };
-  for (const advanceLevel of getSagaDriveAttributeAdvanceLevels(level)) {
+  for (const advanceLevel of getSagaTreeAttributeAdvanceLevels(level)) {
     const attribute = advances[advanceLevel];
     if (!attribute) continue;
     result[attribute] += 1;
@@ -53,28 +53,28 @@ export function applySagaDriveAttributeAdvances(
   return result;
 }
 
-export function isValidSagaDriveAttributeBuild(
+export function isValidSagaTreeAttributeBuild(
   baseAttributes: CharacterAttributesDto,
-  advances: SagaDriveAttributeAdvances,
+  advances: SagaTreeAttributeAdvances,
   level: number,
 ): boolean {
-  if (!isValidSagaDriveBaseAttributeDistribution(baseAttributes)) return false;
+  if (!isValidSagaTreeBaseAttributeDistribution(baseAttributes)) return false;
 
-  const requiredLevels = getSagaDriveAttributeAdvanceLevels(level);
+  const requiredLevels = getSagaTreeAttributeAdvanceLevels(level);
   if (requiredLevels.some((advanceLevel) => !advances[advanceLevel])) return false;
 
-  const finalAttributes = applySagaDriveAttributeAdvances(baseAttributes, advances, level);
-  return Object.values(finalAttributes).every((value) => value <= SAGA_DRIVE_ATTRIBUTE_BONUS_CAP);
+  const finalAttributes = applySagaTreeAttributeAdvances(baseAttributes, advances, level);
+  return Object.values(finalAttributes).every((value) => value <= SAGA_TREE_ATTRIBUTE_BONUS_CAP);
 }
 
 /** Normalize persisted advance map (JSON keys may be strings). Unknown keys are dropped. */
-export function normalizeSagaDriveAttributeAdvances(value: unknown): SagaDriveAttributeAdvances {
+export function normalizeSagaTreeAttributeAdvances(value: unknown): SagaTreeAttributeAdvances {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return {};
   const record = value as Record<string, unknown>;
-  const result: SagaDriveAttributeAdvances = {};
-  for (const advanceLevel of SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS) {
+  const result: SagaTreeAttributeAdvances = {};
+  for (const advanceLevel of SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS) {
     const raw = record[String(advanceLevel)] ?? record[advanceLevel as unknown as string];
-    if (typeof raw === 'string' && isSagaDriveAttributeKey(raw)) result[advanceLevel] = raw;
+    if (typeof raw === 'string' && isSagaTreeAttributeKey(raw)) result[advanceLevel] = raw;
   }
   return result;
 }
@@ -83,10 +83,10 @@ export function normalizeSagaDriveAttributeAdvances(value: unknown): SagaDriveAt
  * Reconstruct editor state from persisted profile + final attributes.
  * Old profiles without baseAttributes: treat current attributes as base, advances empty.
  */
-export function resolveSagaDriveAttributeBuildState(
+export function resolveSagaTreeAttributeBuildState(
   finalAttributes: CharacterAttributesDto,
-  persisted?: SagaDrivePersistedAttributeBuild | null,
-): SagaDriveResolvedAttributeBuild {
+  persisted?: SagaTreePersistedAttributeBuild | null,
+): SagaTreeResolvedAttributeBuild {
   if (persisted?.baseAttributes) {
     return {
       baseAttributes: { ...persisted.baseAttributes },
@@ -99,48 +99,48 @@ export function resolveSagaDriveAttributeBuildState(
   };
 }
 
-export function canAssignSagaDriveAttributeAdvance(
+export function canAssignSagaTreeAttributeAdvance(
   baseAttributes: CharacterAttributesDto,
-  advances: SagaDriveAttributeAdvances,
+  advances: SagaTreeAttributeAdvances,
   level: number,
-  advanceLevel: SagaDriveAttributeAdvanceLevel,
-  attribute: SagaDriveAttributeKey,
+  advanceLevel: SagaTreeAttributeAdvanceLevel,
+  attribute: SagaTreeAttributeKey,
 ): boolean {
   if (level < advanceLevel) return false;
   const candidate = { ...advances, [advanceLevel]: attribute };
-  const finalAttributes = applySagaDriveAttributeAdvances(baseAttributes, candidate, level);
-  return finalAttributes[attribute] <= SAGA_DRIVE_ATTRIBUTE_BONUS_CAP;
+  const finalAttributes = applySagaTreeAttributeAdvances(baseAttributes, candidate, level);
+  return finalAttributes[attribute] <= SAGA_TREE_ATTRIBUTE_BONUS_CAP;
 }
 
-export type SagaDriveAttributeBonusLevelGuideEntry = {
+export type SagaTreeAttributeBonusLevelGuideEntry = {
   levelLabel: string;
   maxBonus: number;
   description: string;
 };
 
-function formatSagaDriveAttributeBonusLevelLabel(minLevel: number, maxLevel: number): string {
+function formatSagaTreeAttributeBonusLevelLabel(minLevel: number, maxLevel: number): string {
   if (minLevel === maxLevel) return String(minLevel);
   if (maxLevel >= 20) return `${minLevel}+`;
   return `${minLevel}–${maxLevel}`;
 }
 
 /** Gruppierte Übersicht: nur Level-Bereiche mit geändertem Bonus-Cap oder neuer permanenter Entwicklung. */
-export function getSagaDriveAttributeBonusLevelGuide(): readonly SagaDriveAttributeBonusLevelGuideEntry[] {
-  const [firstAdvanceLevel, secondAdvanceLevel] = SAGA_DRIVE_ATTRIBUTE_ADVANCE_LEVELS;
+export function getSagaTreeAttributeBonusLevelGuide(): readonly SagaTreeAttributeBonusLevelGuideEntry[] {
+  const [firstAdvanceLevel, secondAdvanceLevel] = SAGA_TREE_ATTRIBUTE_ADVANCE_LEVELS;
   return [
     {
-      levelLabel: formatSagaDriveAttributeBonusLevelLabel(1, firstAdvanceLevel - 1),
-      maxBonus: SAGA_DRIVE_START_ATTRIBUTE_BONUS_CAP,
+      levelLabel: formatSagaTreeAttributeBonusLevelLabel(1, firstAdvanceLevel - 1),
+      maxBonus: SAGA_TREE_START_ATTRIBUTE_BONUS_CAP,
       description: 'Basisverteilung',
     },
     {
-      levelLabel: formatSagaDriveAttributeBonusLevelLabel(firstAdvanceLevel, secondAdvanceLevel - 1),
-      maxBonus: SAGA_DRIVE_ATTRIBUTE_BONUS_CAP,
+      levelLabel: formatSagaTreeAttributeBonusLevelLabel(firstAdvanceLevel, secondAdvanceLevel - 1),
+      maxBonus: SAGA_TREE_ATTRIBUTE_BONUS_CAP,
       description: '1 zusätzlicher Bonuspunkt darf auf ein Grundattribut verteilt werden',
     },
     {
-      levelLabel: formatSagaDriveAttributeBonusLevelLabel(secondAdvanceLevel, 20),
-      maxBonus: SAGA_DRIVE_ATTRIBUTE_BONUS_CAP,
+      levelLabel: formatSagaTreeAttributeBonusLevelLabel(secondAdvanceLevel, 20),
+      maxBonus: SAGA_TREE_ATTRIBUTE_BONUS_CAP,
       description: '1 zusätzlicher Bonuspunkt darf auf ein Grundattribut verteilt werden.',
     },
   ];

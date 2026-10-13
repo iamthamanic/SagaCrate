@@ -61,7 +61,7 @@ function rowToArtifact(row: ArtifactRow): AvatarArtifactV2 {
     storagePath: row.storage_path,
   });
   return {
-    contractVersion: 'SagaDriveAvatarArtifactV2',
+    contractVersion: 'SagaTreeAvatarArtifactV2',
     artifactId: row.id,
     ownerUserId: row.owner_user_id,
     characterId: row.character_id,
@@ -305,7 +305,7 @@ export async function materializeArtifactFromGenerateJob(input: {
   return createAvatarArtifact(draft);
 }
 
-/** Map a SagaDrive template selection into a V2 artifact. */
+/** Map a SagaTree template selection into a V2 artifact. */
 export async function materializeArtifactFromTemplate(input: {
   artifactId: string;
   templateId: string;

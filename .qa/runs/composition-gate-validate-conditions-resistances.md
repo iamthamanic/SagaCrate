@@ -21,7 +21,7 @@
 **CLEAR** — NZUI (nicht-UI-Diff). Single-hop Validierungsskript; keine Composition über UI/Service/DB.
 
 ## Hop chain
-`docs/sagadrive core rules.md` §2.5/§6.5/§7.4/§8.5/§9 (read-only Referenz) → `scripts/validate-conditions-resistances.mjs` (Zustands-State-Machine, Advantage-Folding, Widerstandsformeln, 7 Pflichtkombos) → Assertions (kein Stack, d20Count=1, observer-relatives Verborgen, Erschöpfung>3→Schaden, Lockouts=0) → `.qa/runs/validate-conditions-resistances-report.md` → `scripts/test-gate.mjs` (`checkConditionsResistancesValidation()`).
+`docs/sagatree core rules.md` §2.5/§6.5/§7.4/§8.5/§9 (read-only Referenz) → `scripts/validate-conditions-resistances.mjs` (Zustands-State-Machine, Advantage-Folding, Widerstandsformeln, 7 Pflichtkombos) → Assertions (kein Stack, d20Count=1, observer-relatives Verborgen, Erschöpfung>3→Schaden, Lockouts=0) → `.qa/runs/validate-conditions-resistances-report.md` → `scripts/test-gate.mjs` (`checkConditionsResistancesValidation()`).
 
 ## Simulations
 | Case | Intended | Composed | Result |

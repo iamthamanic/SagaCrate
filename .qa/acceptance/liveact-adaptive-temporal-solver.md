@@ -14,7 +14,7 @@ solver that reduces jitter without killing performance dynamics.
 
 ## Happy Path
 
-- [ ] `SagaDriveLiveActTemporalV1` contract + policy version
+- [ ] `SagaTreeLiveActTemporalV1` contract + policy version
 - [ ] Production path uses adaptive temporal (Diagnostics SMOOTHED = adaptive)
 - [ ] V1 fixed EMA unchanged and used for fair A/B
 - [ ] Per-group policies: head / gaze / blink / lips / brows / cheeksNose / default
@@ -58,7 +58,7 @@ solver that reduces jitter without killing performance dynamics.
 
 ## Implementation Notes
 
-- Contract: `SagaDriveLiveActTemporalV1` / policy `liveact-temporal-policy-v1`
+- Contract: `SagaTreeLiveActTemporalV1` / policy `liveact-temporal-policy-v1`
 - Algorithm: adaptive continuous-time one-pole; production via `stepLiveActCalibratedFrame` default `adaptive`
 - V1 baseline: `smoothLiveActFrame(α=0.35)` via `mode: 'v1-fixed'`
 - Lifecycle: lost face neutral + head/eyes ease; reacquire rebases; `bindOutput` clears `pipelineStep`

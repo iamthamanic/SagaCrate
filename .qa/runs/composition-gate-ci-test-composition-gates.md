@@ -6,7 +6,7 @@
 - Verdict: SKIPPED
 
 ## Event
-The repository verification workflow is extended with technical Test Gate and Composition Gate enforcement; no SagaDrive business event is produced or consumed.
+The repository verification workflow is extended with technical Test Gate and Composition Gate enforcement; no SagaTree business event is produced or consumed.
 
 ## Hop chain
 GitHub push/PR → checkout of the real branch head → repository-local Test Gate → repository-local Composition Gate → CI status only.

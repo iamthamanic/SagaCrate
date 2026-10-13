@@ -3,7 +3,7 @@
 **Primary adapter V1:** QtMeshEditor FaceRig (offline CLI)  
 **Licenses / notices:** `FACE-AUTHORING-THIRD-PARTY.md`  
 **Pinned upstream:** `fernandotonon/QtMeshEditor` @ `8720dc91bd7426908b9218673fbd74d544dd908c`  
-**SagaDrive contract:** `SagaDriveLiveActFaceAssetV1` (`core-v1` / `full-v1`) — #382  
+**SagaTree contract:** `SagaTreeLiveActFaceAssetV1` (`core-v1` / `full-v1`) — #382  
 **Validator:** `scripts/liveact-face-asset-check.mjs` — #383 (+ semantic V2 #401 with `--anchors`; + functional V1 #422 with `--authoring`)  
 
 QtMeshEditor is **not** a runtime dependency. Domain code must not name QtMeshEditor / ICT-FaceKit / Blender / Faceit.
@@ -13,7 +13,7 @@ QtMeshEditor is **not** a runtime dependency. Domain code must not name QtMeshEd
 ## CLI
 
 ```bash
-# Optional once per machine (local tool cache under .cache/sagadrive-tools/qtmesh/)
+# Optional once per machine (local tool cache under .cache/sagatree-tools/qtmesh/)
 bash scripts/bootstrap-qtmesh-facerig.sh
 
 node scripts/liveact-face-authoring-qtmesh.mjs \
@@ -24,7 +24,7 @@ node scripts/liveact-face-authoring-qtmesh.mjs \
   --profile core-v1
 ```
 
-Binary resolution: `SAGADRIVE_QTMESH_BIN` → PATH `qtmesh` → `.cache/sagadrive-tools/qtmesh/bin/qtmesh`.
+Binary resolution: `SAGATREE_QTMESH_BIN` → PATH `qtmesh` → `.cache/sagatree-tools/qtmesh/bin/qtmesh`.
 
 `npm run test-gate` must **not** download QtMesh; adapter unit tests use a fake CLI.
 
@@ -34,11 +34,11 @@ Binary resolution: `SAGADRIVE_QTMESH_BIN` → PATH `qtmesh` → `.cache/sagadriv
 
 Head isolation (rig prior on skinned full-body) → landmark anchoring (offline) → NRICP → ICT-FaceKit deformation transfer → ARKit-style morph targets → GLB with `mesh.extras.targetNames`.
 
-Pass the **full** skinned baseline GLB. Do not pre-cut the head in SagaDrive.
+Pass the **full** skinned baseline GLB. Do not pre-cut the head in SagaTree.
 
 ---
 
-## SagaDrive rules (unchanged)
+## SagaTree rules (unchanged)
 
 | Topic | Rule |
 |-------|------|
@@ -52,7 +52,7 @@ Pass the **full** skinned baseline GLB. Do not pre-cut the head in SagaDrive.
 
 ---
 
-## Face anchors (SagaDriveFaceAnchorsV1)
+## Face anchors (SagaTreeFaceAnchorsV1)
 
 Per run, emit `face-anchors.json` beside the face GLB (semantic mouth/eye/brow/nose/chin/forehead mesh bindings).
 
@@ -64,10 +64,10 @@ Per run, emit `face-anchors.json` beside the face GLB (semantic mouth/eye/brow/n
 Author `face-anchors.json` per run with `liveact-face-anchor-author.mjs` (**head-normalized + anatomic refine**; optional QtMesh 13-marker positions). Do **not** place anchors from morph extrema (breaks circular Semantic QA). Validate with:
 
 1. topology (`liveact-face-anchor-validate`)
-2. **Anatomy QA** (`SagaDriveFaceAnchorAnatomyQaV1` / `liveact-face-anchor-anatomy-check.mjs`)
-3. reviewed Ground Truth (`SagaDriveFaceMappingAuthoringV1` — see below)
+2. **Anatomy QA** (`SagaTreeFaceAnchorAnatomyQaV1` / `liveact-face-anchor-anatomy-check.mjs`)
+3. reviewed Ground Truth (`SagaTreeFaceMappingAuthoringV1` — see below)
 4. Semantic Morph QA V2 (`liveact-face-asset-check.mjs --anchors …`)
-5. **Functional Face QA V1** (`SagaDriveLiveActFaceFunctionalQaV1` — `--authoring` or sibling `face-mapping-authoring.json`)
+5. **Functional Face QA V1** (`SagaTreeLiveActFaceFunctionalQaV1` — `--authoring` or sibling `face-mapping-authoring.json`)
 
 Semantic QA is blocked unless Anatomy QA passes. Functional QA in **publish** mode is blocked when reviewed authoring provenance is missing or fails identity/fingerprint checks. Use `functionalMode: 'diagnostic'` / `--functional-mode diagnostic` only for semantic-only lab checks — never for publish eligibility. Anchors alone are never treated as reviewed GT.
 
@@ -77,9 +77,9 @@ CLI pairing: `--authoring` requires `--anchors`. Morph-inventory calls without `
 
 Runtime resolves sidecars via `listFaceAnchorsManifestUrlCandidates(modelUrl)`. The model URL’s cache-bust query (`?v=…`) **must** be copied onto every sidecar candidate (`{stem}-face-anchors.json`, then `face-anchors.json`). Never strip `search` — a new VRM must not reuse a stale CDN-cached sidecar.
 
-### Ground-truth provenance (`SagaDriveFaceMappingAuthoringV1`)
+### Ground-truth provenance (`SagaTreeFaceMappingAuthoringV1`)
 
-Runtime bindings stay in `SagaDriveFaceAnchorsV1`. Authoring provenance is a **separate** sibling file:
+Runtime bindings stay in `SagaTreeFaceAnchorsV1`. Authoring provenance is a **separate** sibling file:
 
 - Path: `face-mapping-authoring.json` next to `face-anchors.json` (or `{stem}-face-mapping-authoring.json` next to `{stem}-face-anchors.json`)
 - Contract: `src/domains/character/avatar/face-mapping-authoring-contract.ts`
@@ -119,7 +119,7 @@ Functional Face QA (#422) additionally requires:
 
 Insufficient or mismatched fingerprints block Functional QA (fail-closed). No m5/f5 filename exceptions.
 
-### Functional Face QA (`SagaDriveLiveActFaceFunctionalQaV1`)
+### Functional Face QA (`SagaTreeLiveActFaceFunctionalQaV1`)
 
 Offline, browser-independent. Profile: `liveact-face-functional-profile-v1`.
 
@@ -147,7 +147,7 @@ Minimum in `run.json`:
 - `faceTemplate.provider` / `license` / `checksum`
 - `input` / `output` path + checksum
 - `faceRig.shapeCount` / `fitResidual` / `gazeMode` / profiles
-- `validation` Khronos + SagaDrive (+ `semanticQa` when `face-anchors.json` present; + `functionalQa` when reviewed authoring provenance is present)
+- `validation` Khronos + SagaTree (+ `semanticQa` when `face-anchors.json` present; + `functionalQa` when reviewed authoring provenance is present)
 - `beforeAfter` bytes/triangles/morphs/skins/bones/materials/textures
 
 Example: `human/runs/quality-20260921-m5-face1/`.

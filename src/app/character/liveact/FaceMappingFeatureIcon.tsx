@@ -6,7 +6,7 @@
  * on a simple feature silhouette (eye / mouth / brow / nose / chin / forehead).
  */
 
-import type { SagaDriveFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
 
 export type FaceMappingFeatureKind =
   | 'eyeLeft'
@@ -18,7 +18,7 @@ export type FaceMappingFeatureKind =
   | 'chin'
   | 'forehead';
 
-export function resolveFaceMappingFeatureKind(anchorId: SagaDriveFaceAnchorId): FaceMappingFeatureKind {
+export function resolveFaceMappingFeatureKind(anchorId: SagaTreeFaceAnchorId): FaceMappingFeatureKind {
   if (anchorId.startsWith('eyeLeft')) return 'eyeLeft';
   if (anchorId.startsWith('eyeRight')) return 'eyeRight';
   if (anchorId.startsWith('browLeft')) return 'browLeft';
@@ -50,7 +50,7 @@ const BROW_SLOTS: Record<string, { x: number; y: number }> = {
   Outer: { x: 34, y: 26 },
 };
 
-function eyeSlot(anchorId: SagaDriveFaceAnchorId): { x: number; y: number } | null {
+function eyeSlot(anchorId: SagaTreeFaceAnchorId): { x: number; y: number } | null {
   if (anchorId.includes('Inner')) return EYE_SLOTS.Inner;
   if (anchorId.includes('Outer')) return EYE_SLOTS.Outer;
   if (anchorId.includes('Upper')) return EYE_SLOTS.Upper;
@@ -58,7 +58,7 @@ function eyeSlot(anchorId: SagaDriveFaceAnchorId): { x: number; y: number } | nu
   return null;
 }
 
-function browSlot(anchorId: SagaDriveFaceAnchorId): { x: number; y: number } | null {
+function browSlot(anchorId: SagaTreeFaceAnchorId): { x: number; y: number } | null {
   if (anchorId.includes('Inner')) return BROW_SLOTS.Inner;
   if (anchorId.includes('Center')) return BROW_SLOTS.Center;
   if (anchorId.includes('Outer')) return BROW_SLOTS.Outer;
@@ -67,7 +67,7 @@ function browSlot(anchorId: SagaDriveFaceAnchorId): { x: number; y: number } | n
 
 function highlightSlot(
   kind: FaceMappingFeatureKind,
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
 ): { x: number; y: number } | null {
   switch (kind) {
     case 'eyeLeft':
@@ -90,7 +90,7 @@ function highlightSlot(
 }
 
 interface FaceMappingFeatureIconProps {
-  anchorId: SagaDriveFaceAnchorId;
+  anchorId: SagaTreeFaceAnchorId;
   /** Larger icon for detail card. */
   size?: 'sm' | 'lg';
   pulse?: boolean;

@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDrive423GtMorphSpikeV1",
+  "contractVersion": "SagaTree423GtMorphSpikeV1",
   "optionUnderTest": "B_base_plus_gt_aware_repair",
   "note": "Temporary offline probe only. Not production. Additive repair on existing jawOpen using reviewed-anchor falloff neighborhoods.",
   "requiredMouthGapDelta": 0.06,

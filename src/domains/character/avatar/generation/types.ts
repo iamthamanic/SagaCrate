@@ -6,7 +6,7 @@
  * Capabilities are never inferred from provider success (#6 owns rig analysis).
  */
 
-export const AVATAR_3D_GENERATION_CONTRACT_VERSION = 'SagaDriveAvatar3dGenerationV1' as const;
+export const AVATAR_3D_GENERATION_CONTRACT_VERSION = 'SagaTreeAvatar3dGenerationV1' as const;
 
 /** Wired avatar 3D generators — add Tripo etc. here when adapters ship. */
 export const AVATAR_3D_GENERATION_PROVIDER_IDS = ['meshy'] as const;
@@ -18,7 +18,7 @@ export function isAvatar3dGenerationProviderId(value: string): value is Avatar3d
 
 export type Avatar3dGenerationMode = 'text' | 'image';
 
-/** SagaDrive-level quality knobs — providers translate these. */
+/** SagaTree-level quality knobs — providers translate these. */
 export type GeometryQuality = 'low' | 'standard' | 'high' | 'maximum' | 'smart-topology';
 export type TextureQuality = 'standard' | '2k' | '4k' | '8k';
 export type PoseMode = 'a-pose' | 't-pose' | 'none';
@@ -40,7 +40,7 @@ export interface Avatar3dGenerationSettings {
   readonly initialRemesh: boolean;
   readonly targetPolycount: number;
   readonly outputFormat: OutputFormat;
-  /** When true, SagaDrive keeps a high-detail master before runtime optimize. */
+  /** When true, SagaTree keeps a high-detail master before runtime optimize. */
   readonly keepMaster: boolean;
   /** After master: remesh/optimize toward this polycount for runtime LOD0. */
   readonly runtimePolycount: number;

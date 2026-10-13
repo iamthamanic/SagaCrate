@@ -17,9 +17,9 @@ import {
 import {
   machtgradLabelForLevel,
   normalizeCombatRoleForProfile,
-  type SagaDriveCombatProfile,
-  type SagaDriveCombatRole,
-  type SagaDriveNpcLevel,
+  type SagaTreeCombatProfile,
+  type SagaTreeCombatRole,
+  type SagaTreeNpcLevel,
 } from '../../domains/rules/sagatree/npc-creature-power';
 import { createNpcCreatureDefinition } from '../../infrastructure/npc-creature/npc-creature-service';
 import { clearCharacterEditorBootstrap } from '../character';
@@ -43,7 +43,7 @@ import { Textarea } from '../../shared/ui/textarea';
 
 type CreateStep = 'kind' | 'mode' | 'quick';
 
-const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
+const COMBAT_PROFILES: readonly SagaTreeCombatProfile[] = [
   'noncombat',
   'balanced',
   'tough',
@@ -53,9 +53,9 @@ const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
   'control_support',
 ];
 
-const COMBAT_ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
+const COMBAT_ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
 
-const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaDriveNpcLevel);
+const LEVELS = Array.from({ length: 20 }, (_, index) => (index + 1) as SagaTreeNpcLevel);
 
 export interface NpcCreatureCreateScreenProps {
   onBack: () => void;
@@ -76,9 +76,9 @@ export function NpcCreatureCreateScreen({
   const [kind, setKind] = useState<NpcCreatureKind | null>(null);
   const [name, setName] = useState('');
   const [category, setCategory] = useState<NpcCreatureCategory>('npc');
-  const [level, setLevel] = useState<SagaDriveNpcLevel>(1);
-  const [combatProfile, setCombatProfile] = useState<SagaDriveCombatProfile>('balanced');
-  const [combatRole, setCombatRole] = useState<SagaDriveCombatRole>('standard');
+  const [level, setLevel] = useState<SagaTreeNpcLevel>(1);
+  const [combatProfile, setCombatProfile] = useState<SagaTreeCombatProfile>('balanced');
+  const [combatRole, setCombatRole] = useState<SagaTreeCombatRole>('standard');
   const [worldId, setWorldId] = useState<string>('personal');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -277,7 +277,7 @@ export function NpcCreatureCreateScreen({
               <div className="space-y-1">
                 <p className="text-lg font-semibold">Vollständiger Charakter</p>
                 <p className="text-sm text-muted-foreground">
-                  Kompletter SagaDrive-Charakterbogen
+                  Kompletter SagaTree-Charakterbogen
                 </p>
               </div>
             </button>
@@ -342,7 +342,7 @@ export function NpcCreatureCreateScreen({
               <Label htmlFor="npc-create-level">Stufe</Label>
               <Select
                 value={String(level)}
-                onValueChange={(value) => setLevel(Number(value) as SagaDriveNpcLevel)}
+                onValueChange={(value) => setLevel(Number(value) as SagaTreeNpcLevel)}
               >
                 <SelectTrigger id="npc-create-level" className="h-11 min-h-11" data-npc-create-level>
                   <SelectValue />
@@ -366,7 +366,7 @@ export function NpcCreatureCreateScreen({
               <Label htmlFor="npc-create-profile">Kampfprofil</Label>
               <Select
                 value={combatProfile}
-                onValueChange={(value) => setCombatProfile(value as SagaDriveCombatProfile)}
+                onValueChange={(value) => setCombatProfile(value as SagaTreeCombatProfile)}
               >
                 <SelectTrigger id="npc-create-profile" className="h-11 min-h-11" data-npc-create-profile>
                   <SelectValue />
@@ -386,7 +386,7 @@ export function NpcCreatureCreateScreen({
                 <Label htmlFor="npc-create-role">Kampfrolle</Label>
                 <Select
                   value={combatRole}
-                  onValueChange={(value) => setCombatRole(value as SagaDriveCombatRole)}
+                  onValueChange={(value) => setCombatRole(value as SagaTreeCombatRole)}
                 >
                   <SelectTrigger id="npc-create-role" className="h-11 min-h-11" data-npc-create-role>
                     <SelectValue />

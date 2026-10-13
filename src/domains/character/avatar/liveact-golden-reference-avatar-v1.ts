@@ -2,8 +2,8 @@
  * liveact-golden-reference-avatar-v1 — diagnostic Golden Reference VRM catalog entry.
  * Location: src/domains/character/avatar/liveact-golden-reference-avatar-v1.ts
  *
- * Single known-good external ARKit52 VRM for LiveAct A/B vs SagaDrive Human, plus the Human
- * mesh variant list (SagaDrive Human / Reference / Saga Human Canonical V1 candidate).
+ * Single known-good external ARKit52 VRM for LiveAct A/B vs SagaTree Human, plus the Human
+ * mesh variant list (SagaTree Human / Reference / Saga Human Canonical V1 candidate).
  * Pure domain: allowlisted relative path + provenance. No React / Three / fetch.
  */
 
@@ -13,13 +13,13 @@ import {
 } from './saga-human-canonical-v1';
 
 export const LIVEACT_GOLDEN_REFERENCE_CONTRACT_VERSION =
-  'SagaDriveLiveActGoldenReferenceAvatarV1' as const;
+  'SagaTreeLiveActGoldenReferenceAvatarV1' as const;
 
 /** Stable product id for Human Vorlage select — never a default for new characters. */
 export const LIVEACT_GOLDEN_REFERENCE_AVATAR_ID = 'reference-vrm-arkit52' as const;
 
 export type LiveActHumanMeshVariantId =
-  | 'sagadrive-human'
+  | 'sagatree-human'
   | typeof LIVEACT_GOLDEN_REFERENCE_AVATAR_ID
   | typeof SAGA_HUMAN_CANONICAL_V1_ID;
 
@@ -27,7 +27,7 @@ export type LiveActHumanMeshVariantId =
 export const LIVEACT_GOLDEN_REFERENCE_PUBLIC_PATH =
   '/assets/avatars/reference/valid-white-m1-default.vrm' as const;
 
-/** Served file is a reproducible SagaDrive derivative of the pinned upstream original. */
+/** Served file is a reproducible SagaTree derivative of the pinned upstream original. */
 export interface LiveActGoldenReferenceDerivativeV1 {
   readonly id: 'saga-teeth-binds-v1';
   readonly sha256: string;
@@ -79,7 +79,7 @@ export const LIVEACT_GOLDEN_REFERENCE_EXPECTED_CHANNELS = [
 
 export function isLiveActHumanMeshVariantId(value: string): value is LiveActHumanMeshVariantId {
   return (
-    value === 'sagadrive-human' ||
+    value === 'sagatree-human' ||
     value === LIVEACT_GOLDEN_REFERENCE_AVATAR_ID ||
     value === SAGA_HUMAN_CANONICAL_V1_ID
   );
@@ -89,7 +89,7 @@ export function resolveLiveActGoldenReferenceModelUrl(): string {
   return LIVEACT_GOLDEN_REFERENCE_PUBLIC_PATH;
 }
 
-/** Comparison mesh URL for a variant; null = SagaDrive Human (species template resolves it). */
+/** Comparison mesh URL for a variant; null = SagaTree Human (species template resolves it). */
 export function resolveLiveActHumanMeshVariantModelUrl(id: LiveActHumanMeshVariantId): string | null {
   if (id === LIVEACT_GOLDEN_REFERENCE_AVATAR_ID) return resolveLiveActGoldenReferenceModelUrl();
   if (id === SAGA_HUMAN_CANONICAL_V1_ID) return resolveSagaHumanCanonicalV1ModelUrl();
@@ -102,7 +102,7 @@ export function listLiveActHumanMeshVariantOptions(): readonly {
   hintDe?: string;
 }[] {
   return [
-    { id: 'sagadrive-human', labelDe: 'SagaDrive Human' },
+    { id: 'sagatree-human', labelDe: 'SagaTree Human' },
     {
       id: LIVEACT_GOLDEN_REFERENCE_AVATAR_ID,
       labelDe: 'Reference VRM (ARKit52)',

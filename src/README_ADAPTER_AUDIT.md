@@ -1,4 +1,4 @@
-# SagaDrive Adapter-Audit (Kurzversion)
+# SagaTree Adapter-Audit (Kurzversion)
 
 **Datum:** 2025-10-23  
 **Status:** ❌ Direkte Supabase-Kopplung  
@@ -8,7 +8,7 @@
 
 ## 🎯 Executive Summary
 
-SagaDrive nutzt **direkt** den Supabase SDK in allen Services. **Kein** Adapter-Pattern vorhanden. Migration zu anderem Backend (Auth0, Convex, Self-Hosted Postgres) erfordert **vollständiges Refactoring** aller Services.
+SagaTree nutzt **direkt** den Supabase SDK in allen Services. **Kein** Adapter-Pattern vorhanden. Migration zu anderem Backend (Auth0, Convex, Self-Hosted Postgres) erfordert **vollständiges Refactoring** aller Services.
 
 ---
 
@@ -206,4 +206,4 @@ constructor(private db: IDbAdapter, private auth: IAuthAdapter) {}
 
 **Erstellt:** 2025-10-23  
 **Version:** 1.0  
-**Autor:** SagaDrive Development Team
+**Autor:** SagaTree Development Team

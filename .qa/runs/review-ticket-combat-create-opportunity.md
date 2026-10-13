@@ -18,7 +18,7 @@ Small, scoped rules+docs slice. New pure kernel module mirrors existing probe/to
 No Critical / Important findings.
 
 ## Architecture
-- Lives under `src/domains/rules/sagadrive/**` (#94)
+- Lives under `src/domains/rules/sagatree/**` (#94)
 - No React/Supabase; barrel export only
 - Docs stay normative source; kernel encodes mechanical limits
 

@@ -6,14 +6,14 @@
 
 ## Event
 
-User picks a SagaDrive-Starttemplate in CreateCharacterEntryDialog. Editor
+User picks a SagaTree-Starttemplate in CreateCharacterEntryDialog. Editor
 opens with mechanical Level-1 fields applied once from the domain catalog.
 
 ## Hop chain
 
 `StartingTemplatePicker` click → `setCharacterEditorBootstrap({ kind:
 'starting-template', templateKey })` → `CharacterEditor` one-shot
-`getSagaDriveStartingTemplate` + `validateSagaDriveStartingTemplate` →
+`getSagaTreeStartingTemplate` + `validateSagaTreeStartingTemplate` →
 atomic state setters (attrs/skills/bg/archetype/essence/spec). No persist
 hop until user Speichern. No species/appearance/inventory mutation.
 
@@ -21,7 +21,7 @@ hop until user Speichern. No species/appearance/inventory mutation.
 
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| N-actors | Same ten labels from catalog | `listSagaDriveStartingTemplates` | pass |
+| N-actors | Same ten labels from catalog | `listSagaTreeStartingTemplates` | pass |
 | Invalid/missing | Unknown key / invalid build fails closed | toast + clear bootstrap; no partial apply | pass |
 | Two consumers | Dialog bootstrap + editor resolve same catalog | key-only handoff; no CharacterPresetSnapshot | pass |
 

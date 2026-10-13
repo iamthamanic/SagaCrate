@@ -70,7 +70,7 @@ check(/liveact-character-face-mapping-unavailable/.test(settings), 'settings cap
 check(/liveact-pip-metrics-panel|LiveActPipMetricsPanel/.test(read('src/app/character/liveact/LiveActCameraPreview.tsx')), 'PiP hosts side metrics panel');
 check(/liveact-pip-metrics-panel/.test(read('src/app/character/liveact/LiveActPipMetricsPanel.tsx')), 'pip metrics panel component');
 check(/checkLiveActCharacterFaceOverlay/.test(gate), 'test-gate wiring');
-check(/SagaDriveFaceAnchorsV1|face-anchors/.test(acceptance), 'acceptance mentions anchors');
+check(/SagaTreeFaceAnchorsV1|face-anchors/.test(acceptance), 'acceptance mentions anchors');
 
 const metricsOut = join(root, '.qa/runs/liveact-character-face-metrics-anchor-bundle.mjs');
 await build({

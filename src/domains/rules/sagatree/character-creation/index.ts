@@ -1,6 +1,6 @@
 export type CharacterRulesetKey = 'sagatree-core' | 'dnd-5.5e';
 
-export type SagaDriveAttributeKey =
+export type SagaTreeAttributeKey =
   | 'strength'
   | 'dexterity'
   | 'endurance'
@@ -8,10 +8,10 @@ export type SagaDriveAttributeKey =
   | 'perception'
   | 'charisma';
 
-export type SagaDriveArchetypeKey = 'fighter' | 'thinker' | 'healer' | 'rebel' | 'diplomat';
-export type SagaDriveEssenceKey = 'physical' | 'mental' | 'spiritual' | 'bound' | 'technological';
-export type SagaDriveRaceKey = 'human' | 'elf' | 'dwarf' | 'halfling' | 'orc' | 'cyborg' | 'alien';
-export type SagaDriveSkillKey =
+export type SagaTreeArchetypeKey = 'fighter' | 'thinker' | 'healer' | 'rebel' | 'diplomat';
+export type SagaTreeEssenceKey = 'physical' | 'mental' | 'spiritual' | 'bound' | 'technological';
+export type SagaTreeRaceKey = 'human' | 'elf' | 'dwarf' | 'halfling' | 'orc' | 'cyborg' | 'alien';
+export type SagaTreeSkillKey =
   | 'athletics'
   | 'acrobatics'
   | 'sleight'
@@ -31,7 +31,7 @@ export type SagaDriveSkillKey =
   | 'intimidation'
   | 'performance';
 
-export type SagaDriveSpeciesTraitKey =
+export type SagaTreeSpeciesTraitKey =
   | 'sharpened-sense'
   | 'natural-weapon'
   | 'narrow-resistance'
@@ -52,19 +52,19 @@ export interface CharacterCreationOption {
   label: string;
 }
 
-export interface SagaDriveRaceOption extends CharacterCreationOption {
-  value: SagaDriveRaceKey;
+export interface SagaTreeRaceOption extends CharacterCreationOption {
+  value: SagaTreeRaceKey;
   description: string;
 }
 
-export interface SagaDriveAttributeDefinition {
-  key: SagaDriveAttributeKey;
+export interface SagaTreeAttributeDefinition {
+  key: SagaTreeAttributeKey;
   label: string;
   shortLabel: string;
   description: string;
 }
 
-export interface SagaDriveCoreAbilityDefinition {
+export interface SagaTreeCoreAbilityDefinition {
   name: string;
   rank: 'I';
   actionType: 'Passiv' | 'Hauptaktion';
@@ -72,32 +72,32 @@ export interface SagaDriveCoreAbilityDefinition {
   effect: string;
 }
 
-export interface SagaDriveArchetypeOption extends CharacterCreationOption {
-  value: SagaDriveArchetypeKey;
+export interface SagaTreeArchetypeOption extends CharacterCreationOption {
+  value: SagaTreeArchetypeKey;
   summary: string;
   /** What this archetype is and what choosing it changes at character creation. */
   description: string;
-  skills: readonly SagaDriveSkillKey[];
-  coreAbility: SagaDriveCoreAbilityDefinition;
+  skills: readonly SagaTreeSkillKey[];
+  coreAbility: SagaTreeCoreAbilityDefinition;
 }
 
-export interface SagaDriveEssenceOption extends CharacterCreationOption {
-  value: SagaDriveEssenceKey;
+export interface SagaTreeEssenceOption extends CharacterCreationOption {
+  value: SagaTreeEssenceKey;
   summary: string;
   description: string;
 }
 
-export interface SagaDriveSkillDefinition {
-  key: SagaDriveSkillKey;
+export interface SagaTreeSkillDefinition {
+  key: SagaTreeSkillKey;
   label: string;
-  attribute: SagaDriveAttributeKey;
+  attribute: SagaTreeAttributeKey;
   summary: string;
   excludes?: string;
   specializations: readonly string[];
 }
 
-export interface SagaDriveSpeciesTraitDefinition {
-  key: SagaDriveSpeciesTraitKey;
+export interface SagaTreeSpeciesTraitDefinition {
+  key: SagaTreeSpeciesTraitKey;
   label: string;
   cost: 1 | 2 | 3;
   description: string;
@@ -108,19 +108,19 @@ export interface SagaDriveSpeciesTraitDefinition {
   unavailableReason?: string;
 }
 
-export const SAGA_DRIVE_START_ATTRIBUTE_ARRAY = [4, 3, 3, 2, 2, 1] as const;
-export const SAGA_DRIVE_START_FREE_SKILL_POINTS = 7;
-export const SAGA_DRIVE_START_TOTAL_SKILL_POINTS = 10;
-export const SAGA_DRIVE_START_SKILL_CAP = 3;
-export const SAGA_DRIVE_EXPERIENCE_BONUS_LEVEL_1 = 1;
-export const SAGA_DRIVE_SPECIES_TRAIT_BUDGET = 3;
+export const SAGA_TREE_START_ATTRIBUTE_ARRAY = [4, 3, 3, 2, 2, 1] as const;
+export const SAGA_TREE_START_FREE_SKILL_POINTS = 7;
+export const SAGA_TREE_START_TOTAL_SKILL_POINTS = 10;
+export const SAGA_TREE_START_SKILL_CAP = 3;
+export const SAGA_TREE_EXPERIENCE_BONUS_LEVEL_1 = 1;
+export const SAGA_TREE_SPECIES_TRAIT_BUDGET = 3;
 
 export const characterRulesetOptions: readonly CharacterCreationOption[] = [
   { value: 'sagatree-core', label: 'SagaTree Core' },
   { value: 'dnd-5.5e', label: 'Dungeons & Dragons 5.5e' },
 ];
 
-export const sagaDriveAttributeDefinitions: readonly SagaDriveAttributeDefinition[] = [
+export const sagaTreeAttributeDefinitions: readonly SagaTreeAttributeDefinition[] = [
   { key: 'strength', label: 'Stärke', shortLabel: 'STÄ', description: 'Körperkraft, unmittelbare physische Leistung und Kraftübertragung.' },
   { key: 'dexterity', label: 'Geschicklichkeit', shortLabel: 'GES', description: 'Koordination, Präzision, Beweglichkeit und Reaktionskontrolle.' },
   { key: 'endurance', label: 'Ausdauer', shortLabel: 'AUS', description: 'Körperliche Widerstandsfähigkeit, Belastbarkeit und Durchhaltevermögen.' },
@@ -129,7 +129,7 @@ export const sagaDriveAttributeDefinitions: readonly SagaDriveAttributeDefinitio
   { key: 'charisma', label: 'Charisma', shortLabel: 'CHA', description: 'Präsenz, Ausdruck, Einfluss und soziale Durchsetzung.' },
 ];
 
-export const sagaDriveArchetypeOptions: readonly SagaDriveArchetypeOption[] = [
+export const sagaTreeArchetypeOptions: readonly SagaTreeArchetypeOption[] = [
   {
     value: 'fighter', label: 'Kämpfer', summary: 'Konflikt · Schutz · Druck', skills: ['athletics', 'melee', 'ranged', 'intimidation'],
     description: 'Du bist die Figur für direkten Konflikt: Gegner binden, Verbündete schützen und Druck aufbauen. Die Wahl gibt dir die Kernfähigkeit „Kampfroutine“ und legt den Pool aus Athletik, Nahkampf, Fernkampf und Einschüchtern fest — daraus wählst du genau einen Archetyp-Startpunkt (+1). Attribute, Spezies und Essenz bleiben unabhängig; der Archetyp ist keine Klasse mit eigenen Stufen.',
@@ -157,7 +157,7 @@ export const sagaDriveArchetypeOptions: readonly SagaDriveArchetypeOption[] = [
   },
 ];
 
-export const sagaDriveRaceOptions: readonly SagaDriveRaceOption[] = [
+export const sagaTreeRaceOptions: readonly SagaTreeRaceOption[] = [
   { value: 'human', label: 'Mensch', description: 'Vielseitige Standardspezies. Menschliche Speziesmerkmale bilden Sinne, Widerstandsfähigkeit, Anpassung und Ruhebedarf ab.' },
   { value: 'elf', label: 'Elf', description: 'Fein und beweglich im Erscheinungsbild. Zusätzlich zu den allgemeinen humanoiden Merkmalen sind erweitertes Klettern und besondere Sichtformen möglich.' },
   { value: 'dwarf', label: 'Zwerg', description: 'Kompakt und widerstandsfähig im Körperbau. Zusätzlich zu den allgemeinen humanoiden Merkmalen sind natürlicher Schutz und besondere Sichtformen möglich.' },
@@ -167,11 +167,11 @@ export const sagaDriveRaceOptions: readonly SagaDriveRaceOption[] = [
   { value: 'alien', label: 'Alien', description: 'Freier Spezies-Builder für nicht-menschliche oder hybride Biologien. Das Speziesprofil wird frei benannt und kann den vollständigen Merkmalskatalog nutzen.' },
 ];
 
-export const sagaDriveSettingOptions: readonly CharacterCreationOption[] = [
+export const sagaTreeSettingOptions: readonly CharacterCreationOption[] = [
   { value: 'fantasy', label: 'Fantasy' }, { value: 'real', label: 'Gegenwart' }, { value: 'scifi', label: 'Sci-Fi' }, { value: 'custom', label: 'Eigenes Weltprofil' },
 ];
 
-export const sagaDriveEssenceOptions: readonly SagaDriveEssenceOption[] = [
+export const sagaTreeEssenceOptions: readonly SagaTreeEssenceOption[] = [
   { value: 'physical', label: 'Körperlich', summary: 'Körper · Training · Biologie', description: 'Besondere Wirkungen entstehen durch Körper, Biologie, Training oder körperliche Veränderung.' },
   { value: 'mental', label: 'Mental', summary: 'Geist · Fokus · Projektion', description: 'Besondere Wirkungen entstehen durch Geist, Fokus, Wahrnehmung oder mentale Projektion.' },
   { value: 'spiritual', label: 'Spirituell', summary: 'Seele · Glauben · Geister', description: 'Besondere Wirkungen entstehen durch Seele, Glauben, Geister oder metaphysische Verbindung.' },
@@ -179,7 +179,7 @@ export const sagaDriveEssenceOptions: readonly SagaDriveEssenceOption[] = [
   { value: 'technological', label: 'Technologisch', summary: 'Geräte · Systeme · Konstruktionen', description: 'Besondere Wirkungen entstehen durch Geräte, Systeme, Konstruktionen oder technische Veränderung.' },
 ];
 
-export const sagaDriveSkillDefinitions: readonly SagaDriveSkillDefinition[] = [
+export const sagaTreeSkillDefinitions: readonly SagaTreeSkillDefinition[] = [
   { key: 'athletics', label: 'Athletik', attribute: 'strength', summary: 'Klettern, Schwimmen, Springen, Sprinten und kontrollierte Kraftanwendung.', excludes: 'Balance und kontrollierte Landungen gehören zu Akrobatik.', specializations: ['Klettern', 'Schwimmen', 'Tauchen', 'Springen', 'Sprinten', 'Kraftakt', 'Rettung'] },
   { key: 'acrobatics', label: 'Akrobatik', attribute: 'dexterity', summary: 'Balance, kontrollierte Stürze, Landungen, Parkour und bewegliches Entkommen.', excludes: 'Kraftakte und Klettern gehören zu Athletik.', specializations: ['Balance', 'Parkour', 'Fallen', 'Entkommen', 'Luftakrobatik'] },
   { key: 'sleight', label: 'Fingerfertigkeit', attribute: 'dexterity', summary: 'Taschendiebstahl, Fingertricks, Verbergen kleiner Gegenstände und manuelle Präzision.', excludes: 'Technische Analyse, Konstruktion und Reparatur gehören zu Technik.', specializations: ['Taschendiebstahl', 'Schlösser', 'Tricks', 'Feinmechanik', 'Verbergen'] },
@@ -201,7 +201,7 @@ export const sagaDriveSkillDefinitions: readonly SagaDriveSkillDefinition[] = [
 ];
 
 /** Short German blurbs for catalog specialization names (persisted value stays the name string). */
-export const sagaDriveSpecializationDescriptions: Readonly<Record<string, string>> = {
+export const sagaTreeSpecializationDescriptions: Readonly<Record<string, string>> = {
   Klettern: 'Seile, Wände und schwierige Aufstiege sicher bewältigen.',
   Schwimmen: 'Sich im Wasser fortbewegen und gegen Strömung behaupten.',
   Tauchen: 'Unter Wasser agieren, atmen und Orientierung behalten.',
@@ -297,13 +297,13 @@ export const sagaDriveSpecializationDescriptions: Readonly<Record<string, string
   Comedy: 'Humor und Timing nutzen, um Publikum zu gewinnen.',
 };
 
-export function getSagaDriveSpecializationDescription(name: string): string | undefined {
+export function getSagaTreeSpecializationDescription(name: string): string | undefined {
   const trimmed = name.trim();
   if (!trimmed) return undefined;
-  return sagaDriveSpecializationDescriptions[trimmed];
+  return sagaTreeSpecializationDescriptions[trimmed];
 }
 
-export const sagaDriveSpeciesTraitDefinitions: readonly SagaDriveSpeciesTraitDefinition[] = [
+export const sagaTreeSpeciesTraitDefinitions: readonly SagaTreeSpeciesTraitDefinition[] = [
   { key: 'sharpened-sense', label: 'Geschärfter Sinn', cost: 1, description: 'Wähle einen Sinn. Du erhältst Vorteil auf Wahrnehmungschecks, bei denen dieser Sinn entscheidend ist.', detailLabel: 'Geschärfter Sinn', detailPlaceholder: 'z. B. Gehör, Geruch, Tastsinn', detailRequired: true },
   { key: 'natural-weapon', label: 'Natürliche Waffe', cost: 1, description: 'Unbewaffneter Schaden steigt von d4+1 auf d6+1. Die Form kann z. B. Klauen, Zähne oder Hörner sein.' },
   { key: 'narrow-resistance', label: 'Enge Resistenz', cost: 1, description: 'Wähle eine klar eingegrenzte Gefahrenart. Du erhältst Vorteil auf passende Checks und Widerstände gegen diese Gefahr.', detailLabel: 'Gefahrenart', detailPlaceholder: 'z. B. Gift, Krankheit, Strahlung', detailRequired: true },
@@ -320,7 +320,7 @@ export const sagaDriveSpeciesTraitDefinitions: readonly SagaDriveSpeciesTraitDef
   { key: 'exceptional-body', label: 'Außergewöhnlicher Körperbau', cost: 3, description: 'Stark abweichende Anatomie mit einer fest definierten mechanischen Wirkung. Die zulässigen Varianten werden noch festgelegt.', available: false, unavailableReason: 'Noch nicht verfügbar' },
 ];
 
-const HUMAN_TRAITS: readonly SagaDriveSpeciesTraitKey[] = [
+const HUMAN_TRAITS: readonly SagaTreeSpeciesTraitKey[] = [
   'sharpened-sense',
   'narrow-resistance',
   'environment-adaptation',
@@ -328,14 +328,14 @@ const HUMAN_TRAITS: readonly SagaDriveSpeciesTraitKey[] = [
   'low-rest-need',
 ];
 
-export const sagaDriveSpeciesTraitKeysByRace: Readonly<Record<SagaDriveRaceKey, readonly SagaDriveSpeciesTraitKey[]>> = {
+export const sagaTreeSpeciesTraitKeysByRace: Readonly<Record<SagaTreeRaceKey, readonly SagaTreeSpeciesTraitKey[]>> = {
   human: HUMAN_TRAITS,
   elf: [...HUMAN_TRAITS, 'enhanced-climbing', 'enhanced-sight'],
   dwarf: [...HUMAN_TRAITS, 'natural-protection', 'enhanced-sight'],
   halfling: ['sharpened-sense', 'narrow-resistance', 'environment-adaptation', 'enduring-organism', 'enhanced-climbing'],
   orc: ['sharpened-sense', 'natural-weapon', 'narrow-resistance', 'environment-adaptation', 'enduring-organism', 'natural-protection', 'exceptional-body'],
   cyborg: ['sharpened-sense', 'natural-weapon', 'narrow-resistance', 'environment-adaptation', 'low-rest-need', 'natural-protection', 'enhanced-climbing', 'enhanced-swimming', 'enhanced-sight', 'extreme-environment', 'exceptional-body'],
-  alien: sagaDriveSpeciesTraitDefinitions.map((trait) => trait.key),
+  alien: sagaTreeSpeciesTraitDefinitions.map((trait) => trait.key),
 };
 
 export const dnd55ClassOptions: readonly CharacterCreationOption[] = [
@@ -350,43 +350,43 @@ export const dnd55BackgroundOptions: readonly CharacterCreationOption[] = [
   { value: 'acolyte', label: 'Acolyte' }, { value: 'artisan', label: 'Artisan' }, { value: 'charlatan', label: 'Charlatan' }, { value: 'criminal', label: 'Criminal' }, { value: 'entertainer', label: 'Entertainer' }, { value: 'farmer', label: 'Farmer' }, { value: 'guard', label: 'Guard' }, { value: 'guide', label: 'Guide' }, { value: 'hermit', label: 'Hermit' }, { value: 'merchant', label: 'Merchant' }, { value: 'noble', label: 'Noble' }, { value: 'sage', label: 'Sage' }, { value: 'sailor', label: 'Sailor' }, { value: 'scribe', label: 'Scribe' }, { value: 'soldier', label: 'Soldier' }, { value: 'wayfarer', label: 'Wayfarer' },
 ];
 
-export function isCharacterRulesetKey(value: string): value is CharacterRulesetKey | 'sagadrive-core' {
-  return value === 'sagatree-core' || value === 'sagadrive-core' || value === 'dnd-5.5e';
+export function isCharacterRulesetKey(value: string): value is CharacterRulesetKey {
+  return value === 'sagatree-core' || value === 'dnd-5.5e';
 }
-export function isSagaDriveArchetypeKey(value: string): value is SagaDriveArchetypeKey { return sagaDriveArchetypeOptions.some((option) => option.value === value); }
-export function isSagaDriveAttributeKey(value: string): value is SagaDriveAttributeKey { return sagaDriveAttributeDefinitions.some((definition) => definition.key === value); }
-export function isSagaDriveEssenceKey(value: string): value is SagaDriveEssenceKey { return sagaDriveEssenceOptions.some((option) => option.value === value); }
-export function isSagaDriveRaceKey(value: string): value is SagaDriveRaceKey { return sagaDriveRaceOptions.some((option) => option.value === value); }
-export function isSagaDriveSkillKey(value: string): value is SagaDriveSkillKey { return sagaDriveSkillDefinitions.some((skill) => skill.key === value); }
-export function isSagaDriveSpeciesTraitKey(value: string): value is SagaDriveSpeciesTraitKey { return sagaDriveSpeciesTraitDefinitions.some((trait) => trait.key === value); }
+export function isSagaTreeArchetypeKey(value: string): value is SagaTreeArchetypeKey { return sagaTreeArchetypeOptions.some((option) => option.value === value); }
+export function isSagaTreeAttributeKey(value: string): value is SagaTreeAttributeKey { return sagaTreeAttributeDefinitions.some((definition) => definition.key === value); }
+export function isSagaTreeEssenceKey(value: string): value is SagaTreeEssenceKey { return sagaTreeEssenceOptions.some((option) => option.value === value); }
+export function isSagaTreeRaceKey(value: string): value is SagaTreeRaceKey { return sagaTreeRaceOptions.some((option) => option.value === value); }
+export function isSagaTreeSkillKey(value: string): value is SagaTreeSkillKey { return sagaTreeSkillDefinitions.some((skill) => skill.key === value); }
+export function isSagaTreeSpeciesTraitKey(value: string): value is SagaTreeSpeciesTraitKey { return sagaTreeSpeciesTraitDefinitions.some((trait) => trait.key === value); }
 
 export function getCharacterCreationOptionLabel(options: readonly CharacterCreationOption[], value: string): string { return options.find((option) => option.value === value)?.label ?? value; }
-export function getSagaDriveArchetype(value: string): SagaDriveArchetypeOption | undefined { return sagaDriveArchetypeOptions.find((option) => option.value === value); }
-export function getSagaDriveEssence(value: string): SagaDriveEssenceOption | undefined { return sagaDriveEssenceOptions.find((option) => option.value === value); }
-export function getSagaDriveSkill(value: SagaDriveSkillKey): SagaDriveSkillDefinition { const skill = sagaDriveSkillDefinitions.find((definition) => definition.key === value); if (!skill) throw new Error(`Unknown SagaDrive skill: ${value}`); return skill; }
-export function getSagaDriveAttribute(value: SagaDriveAttributeKey): SagaDriveAttributeDefinition { const attribute = sagaDriveAttributeDefinitions.find((definition) => definition.key === value); if (!attribute) throw new Error(`Unknown SagaDrive attribute: ${value}`); return attribute; }
-export function getSagaDriveSpeciesTrait(value: SagaDriveSpeciesTraitKey): SagaDriveSpeciesTraitDefinition { const trait = sagaDriveSpeciesTraitDefinitions.find((definition) => definition.key === value); if (!trait) throw new Error(`Unknown SagaDrive species trait: ${value}`); return trait; }
-export function getSagaDriveSpeciesTraitKeysForRace(value: string): readonly SagaDriveSpeciesTraitKey[] { return isSagaDriveRaceKey(value) ? sagaDriveSpeciesTraitKeysByRace[value] : []; }
-export function getSagaDriveSpeciesTraitsForRace(value: string): readonly SagaDriveSpeciesTraitDefinition[] { const allowed = new Set(getSagaDriveSpeciesTraitKeysForRace(value)); return sagaDriveSpeciesTraitDefinitions.filter((trait) => allowed.has(trait.key)); }
-export function getSagaDriveSpeciesTraitCost(values: readonly SagaDriveSpeciesTraitKey[]): number { return values.reduce((sum, key) => sum + getSagaDriveSpeciesTrait(key).cost, 0); }
+export function getSagaTreeArchetype(value: string): SagaTreeArchetypeOption | undefined { return sagaTreeArchetypeOptions.find((option) => option.value === value); }
+export function getSagaTreeEssence(value: string): SagaTreeEssenceOption | undefined { return sagaTreeEssenceOptions.find((option) => option.value === value); }
+export function getSagaTreeSkill(value: SagaTreeSkillKey): SagaTreeSkillDefinition { const skill = sagaTreeSkillDefinitions.find((definition) => definition.key === value); if (!skill) throw new Error(`Unknown SagaTree skill: ${value}`); return skill; }
+export function getSagaTreeAttribute(value: SagaTreeAttributeKey): SagaTreeAttributeDefinition { const attribute = sagaTreeAttributeDefinitions.find((definition) => definition.key === value); if (!attribute) throw new Error(`Unknown SagaTree attribute: ${value}`); return attribute; }
+export function getSagaTreeSpeciesTrait(value: SagaTreeSpeciesTraitKey): SagaTreeSpeciesTraitDefinition { const trait = sagaTreeSpeciesTraitDefinitions.find((definition) => definition.key === value); if (!trait) throw new Error(`Unknown SagaTree species trait: ${value}`); return trait; }
+export function getSagaTreeSpeciesTraitKeysForRace(value: string): readonly SagaTreeSpeciesTraitKey[] { return isSagaTreeRaceKey(value) ? sagaTreeSpeciesTraitKeysByRace[value] : []; }
+export function getSagaTreeSpeciesTraitsForRace(value: string): readonly SagaTreeSpeciesTraitDefinition[] { const allowed = new Set(getSagaTreeSpeciesTraitKeysForRace(value)); return sagaTreeSpeciesTraitDefinitions.filter((trait) => allowed.has(trait.key)); }
+export function getSagaTreeSpeciesTraitCost(values: readonly SagaTreeSpeciesTraitKey[]): number { return values.reduce((sum, key) => sum + getSagaTreeSpeciesTrait(key).cost, 0); }
 
-export function createEmptySagaDriveSkillRanks(): Record<SagaDriveSkillKey, number> {
+export function createEmptySagaTreeSkillRanks(): Record<SagaTreeSkillKey, number> {
   return { athletics: 0, acrobatics: 0, sleight: 0, stealth: 0, melee: 0, ranged: 0, awareness: 0, insight: 0, survival: 0, investigation: 0, knowledge: 0, technology: 0, medicine: 0, driving: 0, persuasion: 0, deception: 0, intimidation: 0, performance: 0 };
 }
 
 /** Total attribute points available for standard distribution at a given character level. */
-export function getSagaDriveAttributePointBudget(level: number): number {
+export function getSagaTreeAttributePointBudget(level: number): number {
   const normalizedLevel = Math.min(20, Math.max(1, Math.round(level)));
-  const baseTotal = SAGA_DRIVE_START_ATTRIBUTE_ARRAY.reduce((sum, value) => sum + value, 0);
+  const baseTotal = SAGA_TREE_START_ATTRIBUTE_ARRAY.reduce((sum, value) => sum + value, 0);
   const levelUpBonuses = (normalizedLevel >= 16 ? 2 : normalizedLevel >= 8 ? 1 : 0);
   return baseTotal + levelUpBonuses;
 }
-/** Map legacy `sagadrive-core` to canonical `sagatree-core`. */
+/** Normalize ruleset key to canonical SagaTree / D&D keys. */
 export function normalizeCharacterRulesetKey(value: string | null | undefined): CharacterRulesetKey {
   if (value === 'dnd-5.5e') return 'dnd-5.5e';
   return 'sagatree-core';
 }
 
 export function isSagaTreeCoreRuleset(value: string | null | undefined): boolean {
-  return value === 'sagatree-core' || value === 'sagadrive-core' || value == null || value === '';
+  return value === 'sagatree-core' || value == null || value === '';
 }

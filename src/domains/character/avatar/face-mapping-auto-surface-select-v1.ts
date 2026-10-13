@@ -9,7 +9,7 @@
  * No absolute world-unit floors — asset scale must not change selection semantics.
  */
 
-import type { SagaDriveFaceAnchorId } from './face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from './face-anchor-contract';
 import {
   classifyFaceMappingSurfaceFromNodeIdentity,
   isFaceMappingSurfaceSemanticsOk,
@@ -17,7 +17,7 @@ import {
 } from './face-mapping-surface-semantics-v1';
 
 export const FACE_MAPPING_AUTO_SURFACE_SELECT_VERSION =
-  'SagaDriveFaceMappingAutoSurfaceSelectV1' as const;
+  'SagaTreeFaceMappingAutoSurfaceSelectV1' as const;
 
 /** Strict same-ray gate as fraction of measured face width (~eyelid/skin sheet). */
 export const FACE_MAPPING_SURFACE_SELECT_STRICT_FACE_WIDTH_RATIO = 0.08 as const;
@@ -136,7 +136,7 @@ export function resolveFaceMappingSameRayExpandedMaxDepthDelta(
  */
 export function selectFaceMappingSurfaceAwareCandidate(
   candidates: readonly FaceMappingSurfaceSelectCandidateInputV1[],
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
   options?: {
     faceWidthWorld?: number | null;
     maxDepthDelta?: number;
@@ -234,7 +234,7 @@ export type FaceMappingScreenSnapBiasV1 = 'up' | 'down' | 'radial';
 
 /** Preferred local search bias for lid/canthus screen snap. */
 export function faceMappingScreenSnapBiasForAnchor(
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
 ): FaceMappingScreenSnapBiasV1 {
   if (anchorId === 'eyeLeftUpper' || anchorId === 'eyeRightUpper') return 'up';
   if (anchorId === 'eyeLeftLower' || anchorId === 'eyeRightLower') return 'down';

@@ -22,16 +22,16 @@ Generate
     → NRICP
     → deformation transfer
     → ARKit-style morph targets
-→ SagaDrive channel normalization (aliases / profiles)
+→ SagaTree channel normalization (aliases / profiles)
 → Khronos validation
-→ SagaDrive face validation (`scripts/liveact-face-asset-check.mjs`)
+→ SagaTree face validation (`scripts/liveact-face-asset-check.mjs`)
 → visual/combination QA
 → publish
 → ledger
 ```
 
 QtMeshEditor FaceRig is the **primary Face Authoring Adapter V1** (offline MIT tooling).  
-Future providers (Meshy/Tripo facial rig, …) are allowed only if their output passes the same `SagaDriveLiveActFaceAssetV1` contract + validator — no domain fork.
+Future providers (Meshy/Tripo facial rig, …) are allowed only if their output passes the same `SagaTreeLiveActFaceAssetV1` contract + validator — no domain fork.
 
 ---
 
@@ -130,7 +130,7 @@ Summary:
 - Soft-real / Palworld×Overwatch prompt forks as primary look  
 - Shipping Meshy-rig GLB **without** PBR rebind  
 - **Blender / Faceit as primary face authoring**  
-- Manual head isolation / custom facial AI in the SagaDrive repo  
+- Manual head isolation / custom facial AI in the SagaTree repo  
 
 Reference ledgers:  
 - Body: `human/runs/quality-20260921-m5/run.json`  

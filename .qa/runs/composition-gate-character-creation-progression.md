@@ -9,7 +9,7 @@
 Ein Entwickler führt den Test Gate bzw. `node scripts/validate-character-creation-progression.mjs` aus; die Engine baut die 6 Pflichtkonzepte als §17-Basen, levelt B1/B2/B3 nach §13 auf Stufe 20, prüft die §13.3-Äquivalenz und 19 Negativpfade, und schreibt den Report nach `.qa/runs/validate-character-creation-progression-report.md`.
 
 ## Hop chain
-`docs/sagadrive core rules.md` §3–5, §11–13, §17 kodieren Erschaffungs-/Progressionsregeln → `scripts/lib/core-probe.mjs`-Konsistenz (Rang/EB/Cap in `rankRowFor` gespiegelt) → `scripts/validate-character-creation-progression.mjs` (fail-closed `requireCondition` mit Regelstellen; `RuleViolation` trägt `rule`) → Snapshot-Vergleich (§13.3) → Report-Artefakt → `scripts/test-gate.mjs` (`checkCharacterCreationValidation()`).
+`docs/sagatree core rules.md` §3–5, §11–13, §17 kodieren Erschaffungs-/Progressionsregeln → `scripts/lib/core-probe.mjs`-Konsistenz (Rang/EB/Cap in `rankRowFor` gespiegelt) → `scripts/validate-character-creation-progression.mjs` (fail-closed `requireCondition` mit Regelstellen; `RuleViolation` trägt `rule`) → Snapshot-Vergleich (§13.3) → Report-Artefakt → `scripts/test-gate.mjs` (`checkCharacterCreationValidation()`).
 
 ## Simulations
 | Case | Intended | Composed | Result |

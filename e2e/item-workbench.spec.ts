@@ -139,7 +139,7 @@ test('item workbench create landing, type picker, editor, and core readonly fork
     el.scrollTop = el.scrollHeight;
   });
   await expect(forge.locator('[data-item-workbench-rules]')).toBeVisible();
-  await expect(forge.getByText('SagaDrive-Regeln')).toBeVisible();
+  await expect(forge.getByText('SagaTree-Regeln')).toBeVisible();
 
   await page.getByRole('button', { name: 'Speichern' }).click();
   await expect(page).toHaveURL(/\/items\/personal(%3A|:)/, { timeout: 20_000 });

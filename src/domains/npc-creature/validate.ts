@@ -6,10 +6,10 @@
  */
 
 import {
-  isSagaDriveNpcLevel,
+  isSagaTreeNpcLevel,
   normalizeCombatRoleForProfile,
-  type SagaDriveCombatProfile,
-  type SagaDriveCombatRole,
+  type SagaTreeCombatProfile,
+  type SagaTreeCombatRole,
 } from '../rules/sagatree/npc-creature-power';
 import type { NpcCreatureDefinition } from './definition';
 import {
@@ -19,7 +19,7 @@ import {
   isNpcCreatureSheetMode,
 } from './taxonomy';
 
-const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
+const COMBAT_PROFILES: readonly SagaTreeCombatProfile[] = [
   'noncombat',
   'balanced',
   'tough',
@@ -29,7 +29,7 @@ const COMBAT_PROFILES: readonly SagaDriveCombatProfile[] = [
   'control_support',
 ];
 
-const COMBAT_ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
+const COMBAT_ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
 
 const MAX_NAME_LEN = 120;
 const MAX_DESCRIPTION_LEN = 4000;
@@ -136,11 +136,11 @@ export type NpcCreatureValidationResult =
   | { ok: true }
   | { ok: false; errors: string[] };
 
-function isCombatProfile(value: unknown): value is SagaDriveCombatProfile {
+function isCombatProfile(value: unknown): value is SagaTreeCombatProfile {
   return typeof value === 'string' && (COMBAT_PROFILES as readonly string[]).includes(value);
 }
 
-function isCombatRole(value: unknown): value is SagaDriveCombatRole {
+function isCombatRole(value: unknown): value is SagaTreeCombatRole {
   return typeof value === 'string' && (COMBAT_ROLES as readonly string[]).includes(value);
 }
 
@@ -178,7 +178,7 @@ export function validateNpcCreatureDefinition(
   pushIf(errors, !isNpcCreatureKind(def.kind), 'Ungültige Art (NPC/Kreatur).');
   pushIf(errors, !isNpcCreatureCategory(def.category), 'Ungültige Kategorie.');
   pushIf(errors, !isNpcCreatureSheetMode(def.sheetMode), 'Ungültiger Darstellungsmodus.');
-  pushIf(errors, !isSagaDriveNpcLevel(def.level), 'Stufe muss zwischen 1 und 20 liegen.');
+  pushIf(errors, !isSagaTreeNpcLevel(def.level), 'Stufe muss zwischen 1 und 20 liegen.');
   pushIf(errors, !isCombatProfile(def.combatProfile), 'Ungültiges Kampfprofil.');
   pushIf(errors, !isCombatRole(def.combatRole), 'Ungültige Kampfrolle.');
 
@@ -261,7 +261,7 @@ export function validateNpcCreatureDefinition(
   const bannedKeys = ['challenge_rating', 'armor_class', 'hit_dice', 'cr', 'ac', 'dnd'];
   for (const key of bannedKeys) {
     if (Object.prototype.hasOwnProperty.call(def, key)) {
-      errors.push(`Legacy-Feld "${key}" ist in SagaDrive-Definitionen nicht erlaubt.`);
+      errors.push(`Legacy-Feld "${key}" ist in SagaTree-Definitionen nicht erlaubt.`);
     }
   }
 

@@ -13,7 +13,7 @@ fields only.
 ## Hop chain
 
 Static source (`starting-templates/catalog.ts`) →
-`validateSagaDriveStartingTemplate` / `validateSagaDriveStartingTemplateCatalog`
+`validateSagaTreeStartingTemplate` / `validateSagaTreeStartingTemplateCatalog`
 (attr + skill validators) → `scripts/character-starting-templates-v1-check.mjs`
 (test-gate). No persist hop; no UI apply in this PR.
 
@@ -21,9 +21,9 @@ Static source (`starting-templates/catalog.ts`) →
 
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| N-actors | Same ten keys for every consumer | `SAGA_DRIVE_STARTING_TEMPLATE_KEYS` + frozen catalog list | pass |
-| Invalid/missing | Cap-3 / attr / bg-spec failures fail closed | `isValidSagaDriveBaseAttributeDistribution`, `isValidStartSkillBuild`, `isValidSagaDriveSkillDevelopment` | pass |
-| Two consumers | Check script and future #464 UI read the same catalog | Barrel export via `sagadrive/starting-templates` | pass |
+| N-actors | Same ten keys for every consumer | `SAGA_TREE_STARTING_TEMPLATE_KEYS` + frozen catalog list | pass |
+| Invalid/missing | Cap-3 / attr / bg-spec failures fail closed | `isValidSagaTreeBaseAttributeDistribution`, `isValidStartSkillBuild`, `isValidSagaTreeSkillDevelopment` | pass |
+| Two consumers | Check script and future #464 UI read the same catalog | Barrel export via `sagatree/starting-templates` | pass |
 
 ## Flags
 

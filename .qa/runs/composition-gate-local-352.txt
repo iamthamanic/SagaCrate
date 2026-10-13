@@ -1,5 +1,5 @@
 
-> SagaDrive@0.1.0 composition-gate
+> SagaTree@0.1.0 composition-gate
 > node scripts/composition-gate.mjs
 
 ## Composition Gate — CLEAR

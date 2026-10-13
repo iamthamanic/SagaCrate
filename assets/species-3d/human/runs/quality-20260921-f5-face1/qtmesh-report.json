@@ -3,13 +3,13 @@
   "repository": "fernandotonon/QtMeshEditor",
   "commit": "8720dc91bd7426908b9218673fbd74d544dd908c",
   "license": "MIT",
-  "bin": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/.cache/sagadrive-tools/qtmesh/bin/qtmesh",
+  "bin": "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/.cache/sagatree-tools/qtmesh/bin/qtmesh",
   "binSource": "cache",
   "argv": [
     "facerig",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/public/assets/avatars/species/human-female-quality-20260921-f5.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/public/assets/avatars/species/human-female-quality-20260921-f5.glb",
     "-o",
-    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagadrive/sagadrive/assets/species-3d/human/runs/quality-20260921-f5-face2/human-female-quality-20260921-f5-face2.glb",
+    "/Users/halteverbotsocialmacpro/Desktop/arsvivai/2-DEV-PROJEKTE/sagatree/sagatree/assets/species-3d/human/runs/quality-20260921-f5-face2/human-female-quality-20260921-f5-face2.glb",
     "--json",
     "--max-residual",
     "8"

@@ -1,5 +1,5 @@
 /**
- * speciesSketches — Meshy-generated minimal fashion-sketch line-art per SagaDrive Spezies.
+ * speciesSketches — Meshy-generated minimal fashion-sketch line-art per SagaTree Spezies.
  * Style: #94A3B8 (muted-foreground) ink lines on transparent background, simple universal clothing.
  * Location: src/app/character/creation/speciesSketches.ts
  */

@@ -9,9 +9,9 @@ GM mutates typed adventure playthrough (flag/clock/consequence/definitionRef) �
 ## Hop chain
 AdventureRuntimeControls / GmActionPalette set-adventure-flag
 → useAdventureRuntime.applyCommand(kind=adventure)
-→ adventure-runtime-state pure apply + SQL sagadrive_resolve_adventure_command
+→ adventure-runtime-state pure apply + SQL sagatree_resolve_adventure_command
 → sessions.world_state.shared.adventure + projects.adventure_runtime
-→ get_session_runtime_snapshot via sagadrive_project_shared_adventure
+→ get_session_runtime_snapshot via sagatree_project_shared_adventure
 
 ## Simulations
 - N-actors: multiple sessions of same project hydrate shared saga adventure_runtime independently without mutating definition tables.

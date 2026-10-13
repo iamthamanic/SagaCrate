@@ -3,7 +3,7 @@
 <!-- finalized with user on 2026-09-14 -->
 
 ## Intent
-SagaDrive erhält innerhalb der bestehenden Bibliothek einen neuen Bereich **NPCs & Kreaturen**. Nutzer sollen gewöhnliche NPCs/Kreaturen in wenigen Schritten als kompakten Statblock anlegen können, ohne den vollständigen CharacterEditor durchlaufen zu müssen. Gleichzeitig bleibt jede Figur grundsätzlich zu einem vollständigen spielbaren Charakter ausbaubar.
+SagaTree erhält innerhalb der bestehenden Bibliothek einen neuen Bereich **NPCs & Kreaturen**. Nutzer sollen gewöhnliche NPCs/Kreaturen in wenigen Schritten als kompakten Statblock anlegen können, ohne den vollständigen CharacterEditor durchlaufen zu müssen. Gleichzeitig bleibt jede Figur grundsätzlich zu einem vollständigen spielbaren Charakter ausbaubar.
 
 ## Information Architecture
 
@@ -13,7 +13,7 @@ Library tabs, exact order:
 Charaktere | NPCs & Kreaturen | Abenteuer | Welten | Items
 ```
 
-Die äußere Bibliothek-/Sidebar-Struktur bleibt unverändert. Der neue Bereich nutzt den bestehenden `EntityBrowser`-Ansatz und die kanonischen SagaDrive-UI-Primitives.
+Die äußere Bibliothek-/Sidebar-Struktur bleibt unverändert. Der neue Bereich nutzt den bestehenden `EntityBrowser`-Ansatz und die kanonischen SagaTree-UI-Primitives.
 
 ## User-facing terminology
 - `compact` wird in der UI **Statblock** genannt.
@@ -97,7 +97,7 @@ Default selected:
 - **Schnell erstellen** — kompakter spielbereiter Statblock
 
 Alternative:
-- **Vollständiger Charakter** — kompletter SagaDrive-Charakterbogen
+- **Vollständiger Charakter** — kompletter SagaTree-Charakterbogen
 
 Vollständiger Charakter routet in den bestehenden CharacterEditor/Creation Flow und setzt die Rolle/Quelle passend, statt einen zweiten Full-Editor zu bauen.
 
@@ -238,7 +238,7 @@ Follow `AGENTS.md`/THEME_GUIDE:
 EntityBrowser keeps its established mobile carousel/list behavior where already implemented; do not create a second browser pattern.
 
 ## Visual system
-Reuse shared UI and canonical SagaDrive tokens:
+Reuse shared UI and canonical SagaTree tokens:
 - Cyan/Teal = active/selected/primary CTA
 - Gold/Amber = hover/premium accent
 - red only destructive/invalid

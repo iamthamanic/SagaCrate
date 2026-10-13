@@ -1,4 +1,4 @@
-# Vectorize SagaDrive item icons (PNG → SVG via VTracer).
+# Vectorize SagaTree item icons (PNG → SVG via VTracer).
 # Main supported path for icon vectorization. Does not auto-commit.
 #
 # Triggers:

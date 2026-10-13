@@ -191,7 +191,7 @@ function buildCombo(setting, index, speciesId) {
     {
       schema_version: 1,
       provider: 'm3-character-studio',
-      source: 'sagadrive',
+      source: 'sagatree',
       preset: speciesPreset.legacyPresetId,
       model_format: 'glb',
       traits: { head, ears, hair, clothing, accessory },
@@ -323,9 +323,9 @@ check(
   'golden refs differ',
 );
 
-const mtoonProfile = mtoon.createSagaDriveMToonProfileV1();
+const mtoonProfile = mtoon.createSagaTreeMToonProfileV1();
 check(
-  mtoonProfile.contractVersion === 'SagaDriveMToonProfileV1',
+  mtoonProfile.contractVersion === 'SagaTreeMToonProfileV1',
   'mtoon profile version',
 );
 const desktopPerf = mtoon.resolveMtoonPerformancePreset({ isMobile: false });
@@ -382,7 +382,7 @@ check(reloaded.golden[1].fingerprint === goldenSciFi.fingerprint, 'sci-fi golden
 
 // ── E · Source + capability flows ────────────────────────────────────────────
 section('E · Source / morph / import-meshy capability flows');
-check(source.resolveAvatarSource({ provider: 'm3-character-studio' }) === 'sagadrive', 'legacy→sagadrive');
+check(source.resolveAvatarSource({ provider: 'm3-character-studio' }) === 'sagatree', 'legacy→sagatree');
 check(
   source.resolveAvatarSource({ modelUrl: 'owner/x.glb' }) === 'import',
   'modelUrl→import',
@@ -393,8 +393,8 @@ const fullCaps = morph.resolveAvatarMorphCapabilities({
   hasBodyMorphTargets: true,
   hasFaceMorphTargets: true,
 });
-check(fullCaps.flags.includes('morph-body-v1'), 'sagadrive body morph');
-check(fullCaps.flags.includes('morph-face-v1'), 'sagadrive face morph');
+check(fullCaps.flags.includes('morph-body-v1'), 'sagatree body morph');
+check(fullCaps.flags.includes('morph-face-v1'), 'sagatree face morph');
 const importCaps = morph.resolveAvatarMorphCapabilities({
   hasBodyMorphTargets: false,
   hasFaceMorphTargets: false,
@@ -402,9 +402,9 @@ const importCaps = morph.resolveAvatarMorphCapabilities({
 check(importCaps.flags.length === 0, 'import without targets → no morph flags');
 
 const switchDirty = source.evaluateAvatarSourceSwitch({
-  from: 'sagadrive',
+  from: 'sagatree',
   to: 'meshy',
-  dirtySagaDrive: true,
+  dirtySagaTree: true,
 });
 check(switchDirty.needsConfirm === true, 'dirty switch confirms');
 const capSummary = source.describeAvatarSourceCapabilities({

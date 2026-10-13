@@ -26,7 +26,7 @@ function check(cond, msg) {
 }
 
 const autoDomain = read('src/domains/character/avatar/face-mapping-auto-v1.ts');
-const mapSrc = read('src/infrastructure/character/liveact/mediapipe-sagadrive-face-anchor-map-v1.ts');
+const mapSrc = read('src/infrastructure/character/liveact/mediapipe-sagatree-face-anchor-map-v1.ts');
 const imageSrc = read('src/infrastructure/character/liveact/mediapipe-face-image-landmarker.ts');
 const pipeSrc = read('src/infrastructure/character/avatar/face-mapping-auto-pipeline.ts');
 const studio = read('src/infrastructure/character/avatar/character-studio-runtime.ts');
@@ -39,7 +39,7 @@ const gate = read('scripts/test-gate.mjs');
 const acceptance = read('.qa/acceptance/liveact-face-mapping-auto.md');
 const design = read('.qa/design/liveact-face-mapping-auto-mediapipe-map-v1.md');
 
-check(/SagaDriveFaceMappingAutoV1|FACE_MAPPING_AUTO_CONTRACT_VERSION/.test(autoDomain), 'auto domain contract');
+check(/SagaTreeFaceMappingAutoV1|FACE_MAPPING_AUTO_CONTRACT_VERSION/.test(autoDomain), 'auto domain contract');
 check(/applyAutoMappingToDraft/.test(autoDomain), 'merge apply');
 check(/isProtectedFaceMappingAnchor/.test(autoDomain), 'manual_override protection');
 check(/evaluateAutoVsManualScreenPoints/.test(autoDomain), 'auto-vs-manual eval');
@@ -47,8 +47,8 @@ check(/needs-calibration/.test(autoDomain), 'non-normative thresholds');
 check(!/from ['"]three['"]/.test(autoDomain), 'auto domain pure');
 check(!/mediapipe|@mediapipe/.test(autoDomain), 'auto domain no MediaPipe');
 
-check(/MediaPipeSagaDriveFaceAnchorMapV1/.test(mapSrc), 'map version');
-check(/MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1/.test(mapSrc), 'map table');
+check(/MediaPipeSagaTreeFaceAnchorMapV1/.test(mapSrc), 'map version');
+check(/MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1/.test(mapSrc), 'map table');
 check(/FACE_ANCHOR_MAP_V1_LIMITATIONS/.test(mapSrc), 'V1 limits documented');
 check(/mouthCornerLeft[\s\S]*mouthLeft|laterality: 'left'/.test(mapSrc), 'L/R laterality');
 check(/no_iris_pupil_representation/.test(mapSrc), 'iris out of scope');
@@ -99,7 +99,7 @@ check(
 check(/FaceMappingOverlayViewMode|viewMode|autoBindingsRef/.test(layer), 'marker layer view mode');
 check(/drawAutoGhosts|AUTO_STROKE|viewModeRef/.test(layer), 'auto ghost draw');
 check(/stringifyFaceMappingCompareExport|buildFaceMappingCompareExport/.test(autoDomain), 'compare export builder');
-check(/SagaDriveFaceMappingCompareV1|FACE_MAPPING_COMPARE_EXPORT_KIND/.test(autoDomain), 'compare export kind');
+check(/SagaTreeFaceMappingCompareV1|FACE_MAPPING_COMPARE_EXPORT_KIND/.test(autoDomain), 'compare export kind');
 check(/createMediaPipeFaceImageLandmarker/.test(controls), 'controls use IMAGE landmarker');
 check(/autoCoordsFromSession|projectManualCoords|manualCoords/.test(controls), 'coord projection wired');
 check(/applyAutoMappingToDraft/.test(controls), 'controls merge');
@@ -164,7 +164,7 @@ check(
 check(/MediaPipe|mouthCornerLeft|291/.test(design), 'design map table');
 check(/Auto Mapping|IMAGE|Ground Truth|validForGroundTruthComparison/.test(acceptance), 'acceptance');
 const semanticsDesign = read('.qa/design/liveact-face-anchor-semantics-v1.md');
-check(/SagaDriveFaceAnchorSemanticsV1|mouthUpper|chin pad|oral_interior/.test(semanticsDesign), 'semantics V1 design contract');
+check(/SagaTreeFaceAnchorSemanticsV1|mouthUpper|chin pad|oral_interior/.test(semanticsDesign), 'semantics V1 design contract');
 check(/kind: 'midpoint'|midpoint/.test(mapSrc), 'map supports midpoint derived samples');
 check(/oral_interior/.test(read('src/domains/character/avatar/face-mapping-surface-semantics-v1.ts')), 'oral_interior surface class');
 check(/same_ray_expanded_depth|resolveFaceMappingSameRayExpandedMaxDepthDelta/.test(read('src/domains/character/avatar/face-mapping-auto-surface-select-v1.ts')), 'same-ray expanded depth before snap');
@@ -179,7 +179,7 @@ mkdirSync(fixturesDir, { recursive: true });
 
 const mapOut = join(runsDir, 'liveact-face-mapping-auto-map-bundle.mjs');
 await build({
-  entryPoints: [join(root, 'src/infrastructure/character/liveact/mediapipe-sagadrive-face-anchor-map-v1.ts')],
+  entryPoints: [join(root, 'src/infrastructure/character/liveact/mediapipe-sagatree-face-anchor-map-v1.ts')],
   bundle: true,
   format: 'esm',
   platform: 'neutral',
@@ -187,13 +187,13 @@ await build({
   logLevel: 'silent',
 });
 const mapMod = await import(`${mapOut}?t=${Date.now()}`);
-check(mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.length === 21, '21 map entries');
-mapMod.assertMediaPipeSagaDriveFaceAnchorMapComplete();
+check(mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.length === 21, '21 map entries');
+mapMod.assertMediaPipeSagaTreeFaceAnchorMapComplete();
 
-const leftMouth = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthCornerLeft');
-const rightMouth = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthCornerRight');
-const leftEyeOuter = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'eyeLeftOuter');
-const rightEyeOuter = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'eyeRightOuter');
+const leftMouth = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthCornerLeft');
+const rightMouth = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthCornerRight');
+const leftEyeOuter = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'eyeLeftOuter');
+const rightEyeOuter = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'eyeRightOuter');
 check(leftMouth?.laterality === 'left' && rightMouth?.laterality === 'right', 'mouth L/R laterality');
 // Anatomical LEFT = MediaPipe FACE_LANDMARKS_LEFT_* (291 / 263), not historic LiveAct mouthLeft=61.
 check(leftMouth.landmarkIndices[0] === 291 && rightMouth.landmarkIndices[0] === 61, 'mouth MediaPipe anatomical indices');
@@ -311,25 +311,25 @@ check(
 );
 // Swap detection: if map indices for left inner/outer were swapped, orientation fails above.
 const mpLeftBrow = connectionIndices(FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW);
-const leftOuterIdx = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find(
+const leftOuterIdx = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find(
   (e) => e.anchorId === 'browLeftOuter',
 ).landmarkIndices[0];
-const leftInnerIdx = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find(
+const leftInnerIdx = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find(
   (e) => e.anchorId === 'browLeftInner',
 ).landmarkIndices[0];
 check(mpLeftBrow.has(leftOuterIdx) && mpLeftBrow.has(leftInnerIdx), 'LEFT brow endpoints ∈ LEFT_EYEBROW');
 check(leftOuterIdx === 300 && leftInnerIdx === 336, 'LEFT brow outer=300 inner=336 (MediaPipe topology)');
 const mpRightBrow = connectionIndices(FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW);
-const rightOuterIdx = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find(
+const rightOuterIdx = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find(
   (e) => e.anchorId === 'browRightOuter',
 ).landmarkIndices[0];
-const rightInnerIdx = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find(
+const rightInnerIdx = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find(
   (e) => e.anchorId === 'browRightInner',
 ).landmarkIndices[0];
 check(mpRightBrow.has(rightOuterIdx) && mpRightBrow.has(rightInnerIdx), 'RIGHT brow endpoints ∈ RIGHT_EYEBROW');
 check(rightOuterIdx === 70 && rightInnerIdx === 107, 'RIGHT brow outer=70 inner=107 (MediaPipe topology)');
-const mouthEntryU = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthUpper');
-const mouthEntryL = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthLower');
+const mouthEntryU = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthUpper');
+const mouthEntryL = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'mouthLower');
 check(
   mouthEntryU.kind === 'midpoint' &&
     mouthEntryU.landmarkIndices.includes(0) &&
@@ -343,10 +343,10 @@ check(
     mouthEntryL.landmarkIndices.includes(17),
   'mouthLower is midpoint 14+17 not single 14',
 );
-const chinEntry = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'chin');
+const chinEntry = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'chin');
 check(!chinEntry.landmarkIndices.includes(152), 'chin not oval-bottom 152');
 check(chinEntry.landmarkIndices.includes(175) && chinEntry.landmarkIndices.includes(199), 'chin uses 175+199');
-const browCenterEntry = mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'browLeftCenter');
+const browCenterEntry = mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1.find((e) => e.anchorId === 'browLeftCenter');
 check(
   browCenterEntry.kind === 'centroid' &&
     browCenterEntry.landmarkIndices.length >= 3 &&
@@ -1233,7 +1233,7 @@ character.add(nestedBody);
 scene.add(character);
 check(rayMod.isFaceMappingAllowlistedMesh(nestedBody), 'Body under Scene/Character allowlisted');
 
-// Precise SagaDrive equipment roots + explicit markers still exclude descendants.
+// Precise SagaTree equipment roots + explicit markers still exclude descendants.
 const sagaRigid = new THREE.Group();
 sagaRigid.name = 'saga-rigid-equipment';
 const rigidMesh = new THREE.Mesh(geom.clone(), new THREE.MeshBasicMaterial());
@@ -1269,11 +1269,11 @@ check(
 
 const excludeParent = new THREE.Group();
 excludeParent.name = 'Outfit';
-excludeParent.userData = { sagadriveExcludeFaceMapping: true };
+excludeParent.userData = { sagatreeExcludeFaceMapping: true };
 const excludeChild = new THREE.Mesh(geom.clone(), new THREE.MeshBasicMaterial());
 excludeChild.name = 'Body';
 excludeParent.add(excludeChild);
-check(!rayMod.isFaceMappingAllowlistedMesh(excludeChild), 'Body under sagadriveExcludeFaceMapping excluded');
+check(!rayMod.isFaceMappingAllowlistedMesh(excludeChild), 'Body under sagatreeExcludeFaceMapping excluded');
 
 const helperParent = new THREE.Group();
 helperParent.name = 'HelperRoot';
@@ -1297,7 +1297,7 @@ writeFileSync(
   join(fixturesDir, 'synthetic-landmarks-summary.json'),
   `${JSON.stringify(
     {
-      mapVersion: mapMod.MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+      mapVersion: mapMod.MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
       sampleCount: samples.length,
       leftMouthX: sampleLeft.x,
       rightMouthX: sampleRight.x,

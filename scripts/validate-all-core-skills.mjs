@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive All Core Skills Validation (#28, Epic #18)
+ * SagaTree All Core Skills Validation (#28, Epic #18)
  *
  * Deterministic validation of Core §5 (skills & specializations):
  * - exactly 18 universal Core skills (§5.1), no 19th Core skill required,
@@ -440,7 +440,7 @@ function auditCatalogShape() {
 
 function auditDomainSync() {
   const source = readFileSync(join(ROOT, DOMAIN_SKILLS_PATH), 'utf8');
-  const blockMatch = source.match(/export const sagaDriveSkillDefinitions[\s\S]*?=\s*\[([\s\S]*?)\];/);
+  const blockMatch = source.match(/export const sagaTreeSkillDefinitions[\s\S]*?=\s*\[([\s\S]*?)\];/);
   check(Boolean(blockMatch), `Domain-Skillkatalog nicht gefunden in ${DOMAIN_SKILLS_PATH}.`);
   if (!blockMatch) return;
 
@@ -473,7 +473,7 @@ function auditDomainSync() {
 
   ROWS.push({
     section: 'domain',
-    name: 'sagaDriveSkillDefinitions',
+    name: 'sagaTreeSkillDefinitions',
     detail: `${entries.length}/18 synced with Core §5.1`,
   });
 }
@@ -819,7 +819,7 @@ function auditAutomaticActions() {
 
 function buildReport() {
   const lines = [];
-  lines.push('# SagaDrive All Core Skills Report (#28)');
+  lines.push('# SagaTree All Core Skills Report (#28)');
   lines.push('');
   lines.push(
     'Deterministische Prüfung aller 18 universellen Core-Fertigkeiten (§5.1–§5.8): Zuständigkeiten, Spezialisierung +2, Fachhandlungen, alternative Attribute, Caps/Training und Pflichtabgrenzungen. Kein RNG.',

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Enemy, Encounter & Boss Balance Validation (#24, Epic #18)
+ * SagaTree Enemy, Encounter & Boss Balance Validation (#24, Epic #18)
  *
  * Seeded deterministic Monte-Carlo simulation of the §15 encounter system over
  * the shared core probe (scripts/lib/core-probe.mjs):
@@ -426,7 +426,7 @@ function runBossScenarios() {
 function buildReport(matrixRows, matrixFindings, bossRows, bossFindings) {
   const findings = [...matrixFindings, ...bossFindings];
   const lines = [];
-  lines.push('# SagaDrive Enemy, Encounter & Boss Balance Report (#24)');
+  lines.push('# SagaTree Enemy, Encounter & Boss Balance Report (#24)');
   lines.push('');
   lines.push('Seeded Monte-Carlo (400 runs per cell, fixed seed) over §15 encounter rules.');
   lines.push('');

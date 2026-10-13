@@ -4,7 +4,7 @@
  * Location: src/domains/character/avatar/rigging-provider-contract.ts
  */
 
-export const RIGGING_PROVIDER_CONTRACT_VERSION = 'SagaDriveAvatarRiggingProviderV1' as const;
+export const RIGGING_PROVIDER_CONTRACT_VERSION = 'SagaTreeAvatarRiggingProviderV1' as const;
 
 export const RIGGING_PROVIDER_IDS = ['meshy', 'skintokens'] as const;
 export type AvatarRiggingProviderId = (typeof RIGGING_PROVIDER_IDS)[number];

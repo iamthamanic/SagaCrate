@@ -6,7 +6,7 @@
 Reisen, Verfolgungsjagden und Fahrzeug-/Maßstabsregeln werden deterministisch zusammen geprüft, damit dieselbe Distanzlogik für Fuß-, Tier- und Fahrzeugverfolgungen gilt, Reise-Fehlschläge Fail-Forward erzeugen und Maßstab/Schutz Personen von Fahrzeugen/Strukturen trennen — ohne Core-Doc-Änderung.
 
 ## Preconditions
-- Regelquelle: `docs/sagadrive core rules.md` §2.6 (vergleichende Checks / Gleichstand), §10.4 (Fahrzeuge / Größenmaßstab), §14.2 (Reisen), §14.10 (Verfolgungsjagden).
+- Regelquelle: `docs/sagatree core rules.md` §2.6 (vergleichende Checks / Gleichstand), §10.4 (Fahrzeuge / Größenmaßstab), §14.2 (Reisen), §14.10 (Verfolgungsjagden).
 - Validierungsplan E2 (#29): 6 Pflichtszenarien; Distanz Start=2 / eingeholt=0 / entkommen=5.
 - Shared Probe: `scripts/lib/core-probe.mjs` (`GRADES`) verfügbar; kein RNG.
 - Branch `chore/29-validate-travel-chase-vehicles` aus main; Fix-Policy Script-only (keine Core-Doc-Edits).
@@ -30,7 +30,7 @@ Reisen, Verfolgungsjagden und Fahrzeug-/Maßstabsregeln werden deterministisch z
 
 ## Regression
 - [x] Bestehende validate-*-Scripts und Test Gate bleiben grün.
-- [x] Keine Änderung an `docs/sagadrive core rules.md`.
+- [x] Keine Änderung an `docs/sagatree core rules.md`.
 
 ## Assumptions
 - Contested Chase-Runden in diesem Validator vergleichen Erfolgsgrade (Script-Sequenzen); volle Gleichstände frieren die Distanz.

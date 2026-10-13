@@ -6,7 +6,7 @@
 Alle Core-Zustände und §6.5-Widerstände werden deterministisch einzeln und in Pflichtkombinationen geprüft, damit Stapelung, Advantage-Folding, observer-relatives Verborgen, Erschöpfung >3 und Lockout-Counter vorhersehbar bleiben und keine permanente Sperre ohne Gegenaktion entsteht.
 
 ## Preconditions
-- Regelquelle: `docs/sagadrive core rules.md` §2.5 (Vorteil/Nachteil), §6.5 (Widerstände), §6.6 (Erholung), §7.2/§7.4 (Reaktion/Bereithalten), §8.5 (0 HP → Kampfunfähig), §9 (Zustände).
+- Regelquelle: `docs/sagatree core rules.md` §2.5 (Vorteil/Nachteil), §6.5 (Widerstände), §6.6 (Erholung), §7.2/§7.4 (Reaktion/Bereithalten), §8.5 (0 HP → Kampfunfähig), §9 (Zustände).
 - Validierungsplan C3 (#33): alle Core-Zustände + 7 Pflichtkombinationen.
 - Shared Probe: `scripts/lib/core-probe.mjs` (`GRADES`, `resolveGrade`) verfügbar; kein RNG.
 - Branch `chore/33-validate-conditions-resistances` aus main; Fix-Policy Script-only (keine Core-Doc-Edits).
@@ -31,7 +31,7 @@ Alle Core-Zustände und §6.5-Widerstände werden deterministisch einzeln und in
 
 ## Regression
 - [ ] Bestehende validate-*-Scripts und Test Gate bleiben grün.
-- [ ] Keine Änderung an `docs/sagadrive core rules.md`.
+- [ ] Keine Änderung an `docs/sagatree core rules.md`.
 
 ## Assumptions
 - „d20Count: 1“ bedeutet: nach Folding bleibt höchstens ein Advantage-/Disadvantage-Würfelpaar (2d20 keep high/low), nie N zusätzliche Würfel.

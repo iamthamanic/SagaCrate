@@ -1,7 +1,7 @@
 # Debug Report — `meshy-avatar-not-configured-ui`
 
 **Date:** 2026-09-18  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** full  
 
@@ -75,7 +75,7 @@ disabled={busy || !config?.meshyConfigured || prompt.trim().length < 8}
 
 - [x] Repo grep: `AvatarMeshyPanel.tsx:58,179,227` — null-config + prompt gate
 - [x] Edge: `character-avatar-meshy` config + `isMeshyConfiguredForUser` — live OK
-- [ ] GitHub: kein spezielles sagadrive-Issue zu diesem False-Positive
+- [ ] GitHub: kein spezielles sagatree-Issue zu diesem False-Positive
 - [ ] LightRAG: n/a
 
 ---

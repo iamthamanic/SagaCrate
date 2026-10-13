@@ -7,7 +7,7 @@
  */
 
 export const AVATAR_V2_FINAL_ACCEPTANCE_VERSION =
-  'SagaDriveAvatarV2FinalAcceptanceV1' as const;
+  'SagaTreeAvatarV2FinalAcceptanceV1' as const;
 
 export const AVATAR_V2_GOLDEN_JOURNEY_IDS = [
   'native-human',
@@ -148,7 +148,7 @@ export const AVATAR_V2_GOLDEN_MATRIX_V1: readonly AvatarV2GoldenJourneyV1[] = [
     fixtureRef: 'fixtures/avatar-v2/modular-glb-v1.valid.json',
     requiredChecks: ['avatar-v2-modular-glb-contract-check.mjs'],
     expectedOutcome: 'ready',
-    notesDe: 'extras.sagadrive annotated.',
+    notesDe: 'extras.sagatree annotated.',
   },
   {
     journeyId: 'import-invalid-glb',
@@ -226,8 +226,8 @@ export const AVATAR_V2_SECURITY_MATRIX_V1: readonly AvatarV2SecurityCaseV1[] = [
     notesDe: 'RLS/owner scope — mindestens zwei Owner in Tests.',
   },
   {
-    caseId: 'manipulated-extras-sagadrive',
-    labelDe: 'Manipulierte extras.sagadrive Capabilities',
+    caseId: 'manipulated-extras-sagatree',
+    labelDe: 'Manipulierte extras.sagatree Capabilities',
     expect: 'fail-closed',
     notesDe: 'Metadata nie autoritative Capabilities.',
   },

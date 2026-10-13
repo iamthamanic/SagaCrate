@@ -3,15 +3,15 @@
  * Spezies is intentionally omitted from this card.
  * Location: src/app/character/shared/IdentityPreviewPills.tsx
  */
-import type { SagaDriveArchetypeKey, SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeArchetypeKey, SagaTreeEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 import { ArchetypeIcon } from '../creation/ArchetypeIcon';
 import { EssenceIcon } from '../creation/EssenceIcon';
 import { Badge } from '../../../shared/ui/badge';
 
 type IdentityPreviewPillsProps = {
-  essenceKey?: SagaDriveEssenceKey;
+  essenceKey?: SagaTreeEssenceKey;
   essenceLabel?: string;
-  archetypeKey?: SagaDriveArchetypeKey;
+  archetypeKey?: SagaTreeArchetypeKey;
   archetypeLabel?: string;
   className?: string;
 };

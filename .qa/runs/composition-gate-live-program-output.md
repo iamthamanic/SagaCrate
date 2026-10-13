@@ -12,7 +12,7 @@ GM switches Program source/layout; display/viewer consume public Program Output 
 ```text
 ProgramGmControls
 → applyCommand kind=program
-→ sagadrive_build_program_presentation
+→ sagatree_build_program_presentation
 → shared.programPresentation
 → buildProgramPresentationReadModel
 → ProgramDisplayShell (/live/display)

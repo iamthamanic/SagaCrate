@@ -3,11 +3,11 @@
 <!-- #419 — liveact-face-anchor-ground-truth -->
 
 ## Intent
-Model-URL und Face-Anchor-Sidecar bleiben versionskonsistent (`?v=`). Heuristische Anchors dürfen ohne Review nicht als Production-Ground-Truth gelten. Runtime bleibt `SagaDriveFaceAnchorsV1`; Provenance ist `SagaDriveFaceMappingAuthoringV1`.
+Model-URL und Face-Anchor-Sidecar bleiben versionskonsistent (`?v=`). Heuristische Anchors dürfen ohne Review nicht als Production-Ground-Truth gelten. Runtime bleibt `SagaTreeFaceAnchorsV1`; Provenance ist `SagaTreeFaceMappingAuthoringV1`.
 
 ## Happy Path
 - [x] `listFaceAnchorsManifestUrlCandidates()` kopiert den Cache-Bust-Query auf Stem- und Generic-Sidecar.
-- [x] `SagaDriveFaceMappingAuthoringV1` dokumentiert `source: auto|manual|manual_override`, `reviewed`, Asset/Topology-Fingerprint.
+- [x] `SagaTreeFaceMappingAuthoringV1` dokumentiert `source: auto|manual|manual_override`, `reviewed`, Asset/Topology-Fingerprint.
 - [x] `isReviewedFaceMappingGroundTruth()` fail-closed: `human_reviewed` (manual*) **or** `agent_reviewed` with `face-anchor-agent-review-v1` provenance.
 - [x] Heuristic author schreibt sibling `face-mapping-authoring.json` als `auto` + `reviewed=false`.
 - [x] `FACE-AUTHORING.md` dokumentiert Review-Policy.
@@ -18,7 +18,7 @@ Model-URL und Face-Anchor-Sidecar bleiben versionskonsistent (`?v=`). Heuristisc
 - [x] `auto` + `reviewed=true` wird von Validator und Ground-Truth-Helper abgelehnt.
 
 ## Regression
-- [x] `SagaDriveFaceAnchorsV1` unverändert (separater Contract).
+- [x] `SagaTreeFaceAnchorsV1` unverändert (separater Contract).
 
 ## Assumptions
 - Kein Face-Setup-UI in diesem Slice (#420).

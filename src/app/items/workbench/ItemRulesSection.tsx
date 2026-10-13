@@ -1,5 +1,5 @@
 /**
- * ItemRulesSection — type-dependent SagaDrive mechanical fields (#139).
+ * ItemRulesSection — type-dependent SagaTree mechanical fields (#139).
  * Progressive disclosure: only relevant controls for the current inventory type.
  * Location: src/app/items/workbench/ItemRulesSection.tsx
  */
@@ -32,7 +32,7 @@ export function ItemRulesSection({ form, readOnly, onChange }: ItemRulesSectionP
   return (
     <section className="space-y-4" data-item-workbench-rules aria-labelledby="wb-rules">
       <h2 id="wb-rules" className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-        SagaDrive-Regeln
+        SagaTree-Regeln
       </h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

@@ -1,5 +1,5 @@
 /**
- * Apply SagaDriveMToonProfileV1 to Three.js scene/materials (no React).
+ * Apply SagaTreeMToonProfileV1 to Three.js scene/materials (no React).
  * Location: src/infrastructure/character/avatar/mtoon-style-applier.ts
  *
  * Prefers existing MToon materials; otherwise applies controlled PBR fallback.
@@ -8,13 +8,13 @@
 import * as THREE from 'three';
 import {
   classifyMtoonMaterialClass,
-  createSagaDriveMToonProfileV1,
+  createSagaTreeMToonProfileV1,
   resolveMtoonPerformancePreset,
   resolveMtoonRenderPath,
   type MtoonMaterialClass,
   type MtoonPerformancePreset,
   type MtoonStyleCompatibility,
-  type SagaDriveMToonProfileV1,
+  type SagaTreeMToonProfileV1,
 } from '../../../domains/character/avatar/mtoon-profile';
 
 export interface MtoonStyleLights {
@@ -66,7 +66,7 @@ export function detectHasMtoonMaterials(root: THREE.Object3D): boolean {
 }
 
 export function createMtoonStyleLights(
-  profile: SagaDriveMToonProfileV1 = createSagaDriveMToonProfileV1(),
+  profile: SagaTreeMToonProfileV1 = createSagaTreeMToonProfileV1(),
 ): MtoonStyleLights {
   const light = profile.light;
   const hemisphere = new THREE.HemisphereLight(
@@ -91,7 +91,7 @@ export function createMtoonStyleLights(
 
 export function applyMtoonProfileToRenderer(
   renderer: THREE.WebGLRenderer,
-  profile: SagaDriveMToonProfileV1 = createSagaDriveMToonProfileV1(),
+  profile: SagaTreeMToonProfileV1 = createSagaTreeMToonProfileV1(),
   performancePreset: MtoonPerformancePreset = resolveMtoonPerformancePreset(),
 ): void {
   const perf = profile.performance[performancePreset];
@@ -106,7 +106,7 @@ export function applyMtoonProfileToRenderer(
 export function applyMtoonProfileToScene(
   scene: THREE.Scene,
   lights: MtoonStyleLights,
-  profile: SagaDriveMToonProfileV1 = createSagaDriveMToonProfileV1(),
+  profile: SagaTreeMToonProfileV1 = createSagaTreeMToonProfileV1(),
   performancePreset: MtoonPerformancePreset = resolveMtoonPerformancePreset(),
 ): void {
   const perf = profile.performance[performancePreset];
@@ -136,8 +136,8 @@ export function applyMtoonProfileToScene(
 function applyMtoonClassToMaterial(
   material: THREE.Material,
   classId: MtoonMaterialClass,
-  profile: SagaDriveMToonProfileV1,
-  perf: SagaDriveMToonProfileV1['performance'][MtoonPerformancePreset],
+  profile: SagaTreeMToonProfileV1,
+  perf: SagaTreeMToonProfileV1['performance'][MtoonPerformancePreset],
   baseColorHex?: string,
 ): void {
   const classProfile = profile.materials[classId];
@@ -222,12 +222,12 @@ function applyMtoonClassToMaterial(
 
 export function applyMtoonProfileToModel(input: {
   root: THREE.Object3D;
-  profile?: SagaDriveMToonProfileV1;
+  profile?: SagaTreeMToonProfileV1;
   performancePreset?: MtoonPerformancePreset;
   isImportModel?: boolean;
   colors?: { skin?: string; hair?: string; clothing?: string; eyes?: string };
 }): MtoonStyleCompatibility {
-  const profile = input.profile ?? createSagaDriveMToonProfileV1();
+  const profile = input.profile ?? createSagaTreeMToonProfileV1();
   const perfPreset =
     input.performancePreset ??
     resolveMtoonPerformancePreset({
@@ -261,7 +261,7 @@ export function capturePortraitFromRenderer(renderer: THREE.WebGLRenderer): stri
   return renderer.domElement.toDataURL('image/png');
 }
 
-/** Snapshot of style-relevant fields before SagaDrive MToon profile mutates materials. */
+/** Snapshot of style-relevant fields before SagaTree MToon profile mutates materials. */
 export interface MaterialStyleSnapshot {
   material: THREE.Material;
   color?: string;

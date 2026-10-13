@@ -5,14 +5,14 @@
  * Skill provenance lives on sagatree_profile (freeSkillRanks, backgroundSkillPoints,
  * archetypeTrainingSkill, skillAdvances, specializations) — no parallel top-level freeSkillRanks.
  */
-import type { CharacterRulesetKey, SagaDriveSkillKey } from '../../rules/sagatree/character-creation';
+import type { CharacterRulesetKey, SagaTreeSkillKey } from '../../rules/sagatree/character-creation';
 import type {
   AbilityDto,
   CharacterAppearanceDto,
   CharacterAttributesDto,
   ItemDto,
 } from '../domain/character.entity';
-import type { SagaDriveProfileDto } from '../domain/sagadrive-profile.entity';
+import type { SagaTreeProfileDto } from '../domain/sagatree-profile.entity';
 
 export type CharacterPresetOrigin = 'user' | 'system';
 export type CharacterPresetReleaseMode = 'manual' | 'auto';
@@ -34,10 +34,8 @@ export interface CharacterPresetSnapshot {
   flaws?: string[];
   appearance: CharacterAppearanceDto;
   attributes: CharacterAttributesDto;
-  skills: Record<SagaDriveSkillKey, number>;
-  sagatree_profile: SagaDriveProfileDto;
-  /** @deprecated Legacy snapshot key — still accepted on import. */
-  sagadrive_profile?: SagaDriveProfileDto;
+  skills: Record<SagaTreeSkillKey, number>;
+  sagatree_profile: SagaTreeProfileDto;
   abilities: AbilityDto[];
   inventory: ItemDto[];
   portrait_url?: string;

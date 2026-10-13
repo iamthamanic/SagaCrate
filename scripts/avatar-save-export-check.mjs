@@ -72,8 +72,8 @@ function encodeMinimalGlb(payload) {
     asset: { version: '2.0' },
     scenes: [{ nodes: [0] }],
     scene: 0,
-    nodes: [{ name: 'SagaDriveAvatarExport' }],
-    extras: { sagadriveAvatarExport: payload },
+    nodes: [{ name: 'SagaTreeAvatarExport' }],
+    extras: { sagatreeAvatarExport: payload },
   });
   const jsonBytes = new TextEncoder().encode(json);
   const jsonPadding = (4 - (jsonBytes.byteLength % 4)) % 4;
@@ -95,12 +95,12 @@ const samplePayload = {
   contractVersion: 'AvatarSaveExportV1',
   runtimeOverlays: [],
   baseTraits: { clothing: 'casual' },
-  morph: { contractVersion: 'SagaDriveAvatarMorphV1' },
+  morph: { contractVersion: 'SagaTreeAvatarMorphV1' },
 };
 const glb = encodeMinimalGlb(samplePayload);
 check(glb[0] === 0x67 && glb[1] === 0x6c && glb[2] === 0x54 && glb[3] === 0x46, 'GLB magic');
 const decoded = new TextDecoder().decode(glb.subarray(20, glb.byteLength)).trim();
-check(decoded.includes('sagadriveAvatarExport'), 'extras embed export');
+check(decoded.includes('sagatreeAvatarExport'), 'extras embed export');
 check(decoded.includes('"runtimeOverlays":[]'), 'no overlays in encoded extras');
 check(!decoded.includes('helmet'), 'inventory overlay id not present');
 

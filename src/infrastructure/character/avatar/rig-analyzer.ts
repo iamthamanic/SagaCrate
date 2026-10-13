@@ -1,5 +1,5 @@
 /**
- * Analyze a loaded Three.js avatar graph into SagaDriveHumanoidRigV1 capabilities.
+ * Analyze a loaded Three.js avatar graph into SagaTreeHumanoidRigV1 capabilities.
  * Location: src/infrastructure/character/avatar/rig-analyzer.ts
  *
  * Bounded traversal only. Never upgrades capabilities from provider success strings.
@@ -12,9 +12,9 @@ import {
   resolveAvatarRigCapabilities,
   summarizeRigAnalysisStatus,
   type AvatarRigAnalysisResult,
-  type SagaDriveHumanoidAnchorId,
-  type SagaDriveHumanoidBoneId,
-  type SagaDriveHumanoidRigV1,
+  type SagaTreeHumanoidAnchorId,
+  type SagaTreeHumanoidBoneId,
+  type SagaTreeHumanoidRigV1,
 } from '../../../domains/character/avatar';
 import {
   RIG_ANALYSIS_MAX_BONES,
@@ -23,9 +23,9 @@ import {
 } from './rig-bone-aliases';
 
 function deriveAnchors(
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
-): Partial<Record<SagaDriveHumanoidAnchorId, string>> {
-  const anchors: Partial<Record<SagaDriveHumanoidAnchorId, string>> = {};
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
+): Partial<Record<SagaTreeHumanoidAnchorId, string>> {
+  const anchors: Partial<Record<SagaTreeHumanoidAnchorId, string>> = {};
   if (bones.head) anchors.head = bones.head;
   if (bones.chest) {
     anchors.chest = bones.chest;
@@ -46,7 +46,7 @@ export function analyzeAvatarRigFromObject3D(
   // claimedProviderSuccess is intentionally ignored (fail-closed against client/provider lies).
   void options.claimedProviderSuccess;
 
-  const mappedBones: Partial<Record<SagaDriveHumanoidBoneId, string>> = {};
+  const mappedBones: Partial<Record<SagaTreeHumanoidBoneId, string>> = {};
   let boneCount = 0;
   let nodeCount = 0;
   let hasSkinnedMesh = false;
@@ -88,7 +88,7 @@ export function analyzeAvatarRigFromObject3D(
   const hasVrmHumanoid = Boolean(vrm?.humanoid);
   if (vrm?.humanoid) {
     const humanoid = vrm.humanoid;
-    const vrmMap: Array<[SagaDriveHumanoidBoneId, string]> = [
+    const vrmMap: Array<[SagaTreeHumanoidBoneId, string]> = [
       ['hips', 'hips'],
       ['spine', 'spine'],
       ['chest', 'chest'],
@@ -140,7 +140,7 @@ export function analyzeAvatarRigFromObject3D(
     : [...capabilities.limitations];
   const finalCapabilities = { ...capabilities, limitations };
 
-  const rig: SagaDriveHumanoidRigV1 = {
+  const rig: SagaTreeHumanoidRigV1 = {
     contractVersion: RIG_CONTRACT_VERSION,
     bones: mappedBones,
     anchors: deriveAnchors(mappedBones),

@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveFaceAnchorsV1",
+  "contractVersion": "SagaTreeFaceAnchorsV1",
   "anchors": {
     "mouthUpper": {
       "nodeIdentity": "human-female-quality-20260921-f5_mesh",

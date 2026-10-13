@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDrive423StageBDebugRootCauseV1",
+  "contractVersion": "SagaTree423StageBDebugRootCauseV1",
   "issue": 423,
   "phase": "debug_only",
   "channel": "jawOpen",
@@ -9,7 +9,7 @@
   ],
   "stoppedAt": "2026-10-01T11:02:18.240Z",
   "publishAllowed": false,
-  "singleRootCauseClass": "FaceRig never consumes reviewed SagaDrive anchors; MARKER_SIM=2 regenerates deterministic ICT-template morphs (identical to face1) whose jawOpen deltas do not open the mouth at reviewed lip/chin anchors",
+  "singleRootCauseClass": "FaceRig never consumes reviewed SagaTree anchors; MARKER_SIM=2 regenerates deterministic ICT-template morphs (identical to face1) whose jawOpen deltas do not open the mouth at reviewed lip/chin anchors",
   "ruledOut": [
     {
       "candidate": "exporter exports original mesh datablock / drops new morphs",
@@ -36,7 +36,7 @@
   "rootCauseDetail": {
     "hopWhereIntendedRepairIsImpossible": "1_face_authoring_config → 3_facerig_marker_driver",
     "mechanism": [
-      "SagaDrive adapter buildFacerigArgv never passes face-anchors.json / reviewed GT into qtmesh",
+      "SagaTree adapter buildFacerigArgv never passes face-anchors.json / reviewed GT into qtmesh",
       "QTMESH_FACERIG_MARKER_SIM=2 drives an internal 13-marker ICT FaceKit fit ([sim] markers=13)",
       "m5 MediaPipe seed residual 0.241 → proportional defaults (seedConfident=0)",
       "FaceRig warps ICT template shapes onto the body mesh → writes real morph accessors",
@@ -100,7 +100,7 @@
   },
   "markerSim": [
     "MARKER_SIM is NOT a dry-run/no-op: it attaches 51 real morph shapes (shapes_attached=51) and writes jawOpen deltas.",
-    "It IS a marker-simulation / marker-sim path that drives FaceRig from 13 ICT-style markers (detected or proportional defaults), not from SagaDrive reviewed 21-anchor JSON.",
+    "It IS a marker-simulation / marker-sim path that drives FaceRig from 13 ICT-style markers (detected or proportional defaults), not from SagaTree reviewed 21-anchor JSON.",
     "When MediaPipe constellation residual is too high (m5: 0.241), FaceRig falls back to proportional defaults (seedConfident=0) — still produces morphs, but from default landmark layout."
   ],
   "historical": "No historical run produced different jawOpen POSITION buffers for m5. face1 created morphs via QtMesh MARKER_SIM=2; face2 only re-shipped anchors/VRM; face3 regenerates byte-identical morphs (and file-identical to face1 run output). The QtMesh FaceRig path is a deterministic morph generator, not a functional morph repair path relative to reviewed GT.",
@@ -112,7 +112,7 @@
   },
   "implications": [
     "Re-running the same QtMesh FaceRig recipe cannot repair Functional QA — it regenerates face1 morphs.",
-    "Existing QtMesh FaceRig path (as wired in SagaDrive) is a deterministic morph generator from internal markers, NOT a reviewed-GT-driven morph reauthoring path.",
+    "Existing QtMesh FaceRig path (as wired in SagaTree) is a deterministic morph generator from internal markers, NOT a reviewed-GT-driven morph reauthoring path.",
     "A future fix requires either: (a) feed reviewed markers into FaceRig if upstream supports it, or (b) a different authoring step that bakes GT-relative functional deltas — both are OUT OF SCOPE for this debug phase."
   ],
   "notDone": [

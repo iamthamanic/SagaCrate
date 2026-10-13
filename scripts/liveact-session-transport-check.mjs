@@ -100,7 +100,7 @@ const frame = {
 };
 
 const encoded = net.encodeLiveActNetworkFrame(frame);
-check(encoded.contractVersion === 'SagaDriveLiveActNetworkFrameV1', 'encode version');
+check(encoded.contractVersion === 'SagaTreeLiveActNetworkFrameV1', 'encode version');
 check(encoded.face.jawOpen === 0.4, 'sparse face');
 check(encoded.landmarks === undefined, 'no landmarks');
 
@@ -224,7 +224,7 @@ b.subscribeData((msg) => {
 await a.publish([{ kind: 'liveact-data', enabled: true }]);
 await a.publishData('liveact-data', net.serializeLiveActNetworkFrame(encoded));
 check(received?.publisherIdentity === 'user:ua', 'fan-out identity');
-check(received?.payload.includes('SagaDriveLiveActNetworkFrameV1'), 'fan-out payload');
+check(received?.payload.includes('SagaTreeLiveActNetworkFrameV1'), 'fan-out payload');
 
 const evidenceDir = join(root, '.qa/evidence/liveact-session-transport');
 mkdirSync(evidenceDir, { recursive: true });

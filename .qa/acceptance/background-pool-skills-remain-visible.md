@@ -8,7 +8,7 @@ Nach dem Verteilen der 2 Hintergrundpunkte sollen alle 4 Pool-Skill-Nodes sichtb
 Roadmap: Fortsetzung PR #103 (`feat/background-skill-points-in-nodes`).
 
 ## Preconditions
-- Character Editor läuft mit SagaDrive Core.
+- Character Editor läuft mit SagaTree Core.
 - Ein Background-Template mit 4 Pool-Skills ist gewählt.
 - Regeln: 2 stackbare Hintergrundpunkte, 1 Spezialisierung auf einem Skill mit Punkten.
 

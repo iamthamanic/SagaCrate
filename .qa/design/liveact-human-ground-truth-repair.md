@@ -28,7 +28,7 @@ Create separate 21/21 human-reviewed Ground Truth for m5 and f5, run the current
 - **Resolved:** resolver → `human-*-…-face3.vrm?v=quality5-face3-coupled1` (Coupled-Shell final). Generic `*-m5/f5.glb` fallback preserved; historic face1 retained.
 - `scripts/liveact-face-authoring-qtmesh.mjs` is the existing reproducible QtMesh authoring path.
 - `scripts/lib/avatar-vrm-pack.mjs` packages validated GLB into VRM 1.0 without changing morph geometry.
-- #422 provides `SagaDriveLiveActFaceFunctionalQaV1` and reviewed provenance gating.
+- #422 provides `SagaTreeLiveActFaceFunctionalQaV1` and reviewed provenance gating.
 - Historical #402 established immutable public asset versions and same-recipe m5/f5 policy.
 - #424 explicitly requires Functional Asset PASS before retarget tuning.
 
@@ -182,7 +182,7 @@ No QtMesh rerun and no publish before the reviewed files exist.
 ## B1. Ingest and identity gate
 For each asset:
 - 21/21 bindings required.
-- `SagaDriveFaceMappingAuthoringV1`.
+- `SagaTreeFaceMappingAuthoringV1`.
 - source = `manual | manual_override`.
 - `reviewed=true`.
 - canonical `reviewedAt`.
@@ -500,7 +500,7 @@ Stage B Functional repair is **not** achievable by re-running the existing QtMes
 ## Root Cause (proven)
 The wired QtMesh FaceRig path (`qtmesh facerig <file> [-o] [--max-shapes] [--max-residual] [--json]` + `QTMESH_FACERIG_MARKER_SIM=2`) is a **deterministic ICT-template morph generator**. It:
 
-- never receives SagaDrive `face-anchors.json` (`buildFacerigArgv` has no anchor flag; CLI has no marker-file input — binary usage string evidence);
+- never receives SagaTree `face-anchors.json` (`buildFacerigArgv` has no anchor flag; CLI has no marker-file input — binary usage string evidence);
 - drives 13 internal ICT markers / proportional defaults;
 - regenerates face1-identical morph POSITION buffers for m5/f5 face3;
 - creates real morphs that still fail Functional QA at reviewed anchors (e.g. jawOpen chin Δ=0, parallel lip translation).
@@ -526,7 +526,7 @@ canonicalize + Structural/Anatomy/Semantic/Functional/Combination QA
 VRM pack + resolver (only if functionalQa.pass === true)
 ```
 
-- **Not Option A:** FaceRig CLI cannot consume external SagaDrive markers without forking/patching QtMeshEditor (out of scope; high coupling).
+- **Not Option A:** FaceRig CLI cannot consume external SagaTree markers without forking/patching QtMeshEditor (out of scope; high coupling).
 - **Not full Option C for all 51:** YAGNI — only seven Functional-required channels need GT-correct deltas; keep FaceRig inventory for the rest unless Semantic/Functional demands otherwise.
 - **Not additive-only Option B:** f5 spike showed FaceRig jawOpen nose/forehead leakage survives additive repair; **per-channel rewrite** of the seven targets is required.
 
@@ -537,7 +537,7 @@ One offline lib owns GT→delta authoring:
 
 (+ thin CLI `scripts/liveact-face-functional-morph-author.mjs`)
 
-Responsibility: given Document + reviewed `SagaDriveFaceAnchorsV1` + channel contracts → rewrite named morph POSITION accessors. No runtime imports. No threshold-lock loops against the validator.
+Responsibility: given Document + reviewed `SagaTreeFaceAnchorsV1` + channel contracts → rewrite named morph POSITION accessors. No runtime imports. No threshold-lock loops against the validator.
 
 QA (`liveact-face-functional-validate.mjs`) stays an independent consumer.
 

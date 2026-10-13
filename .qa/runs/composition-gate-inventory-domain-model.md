@@ -13,7 +13,7 @@ A character gains, stores, equips, quick-assigns and consumes an item — the In
 
 Caller (future catalog/UI/persistence, #107–#113) → `operations.ts` (`addItems` / `splitStack` / `mergeStacks` / `moveIntoContainer` / `equipItem` / `assignQuickSlot` / `consumeItem` / `removeItem`) → new `InventoryState` value → consumers reading the same state: `state.ts` (`calculateTotalLoad`, `findInstanceLocation`, `listPlacements`) for the carry-capacity label, and `validation.ts` (`validateInventory` / `normalizeInventory`) as the persistence boundary guard → UI labels `Last x / n` and quick-slot rendering.
 
-The producer is new and both consumers are new in this diff, but the load consumer (`5 + 2 × Stärke` in `src/domains/rules/sagadrive/derived-stats` and `CharacterInventoryPanel`) is pre-existing and unchanged — this ticket only supplies the summed number, so the existing consumer was read, not assumed.
+The producer is new and both consumers are new in this diff, but the load consumer (`5 + 2 × Stärke` in `src/domains/rules/sagatree/derived-stats` and `CharacterInventoryPanel`) is pre-existing and unchanged — this ticket only supplies the summed number, so the existing consumer was read, not assumed.
 
 ## Simulations
 

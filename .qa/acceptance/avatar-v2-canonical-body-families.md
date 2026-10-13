@@ -7,7 +7,7 @@ Drei versionierte Base Bodies standard/compact/heavy mit shared Rig/Morph/MToon;
 
 ## Happy Path
 - [x] sd_body_standard|compact|heavy_v1 Manifeste + Allowlist
-- [x] Legacy sagadrive-base-humanoid → standard
+- [x] Legacy sagatree-base-humanoid → standard
 - [x] Publish gate: morph/region/material/underwear
 - [x] Golden visual ref JSON pro Family
 - [x] Catalog unterstützt Family-Parameter

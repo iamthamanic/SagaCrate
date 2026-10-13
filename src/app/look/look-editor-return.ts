@@ -5,7 +5,7 @@
  * World (and other hosts) set a return path before opening Library Look Editor;
  * Look Edit screen consumes it on Zurück so the GM lands back in context.
  */
-const STORAGE_KEY = 'sagadrive:look-editor-return';
+const STORAGE_KEY = 'sagatree:look-editor-return';
 
 export function setLookEditorReturnPath(path: string): void {
   if (typeof sessionStorage === 'undefined') return;

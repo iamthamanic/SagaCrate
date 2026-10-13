@@ -18,10 +18,10 @@ import {
   type CanonicalBodyFamilyId,
 } from './canonical-body-families-v1';
 import type { AssetAuthoringProvenanceV1 } from './asset-authoring-contract-v1';
-import type { SagaDriveAvatarMorphStateV1 } from './morph-contract';
+import type { SagaTreeAvatarMorphStateV1 } from './morph-contract';
 
 export const SPECIES_TEMPLATE_PACK_CONTRACT_VERSION =
-  'SagaDriveSpeciesTemplatePackV1' as const;
+  'SagaTreeSpeciesTemplatePackV1' as const;
 
 export const SPECIES_TEMPLATE_PACK_VERSION = '1.0.0' as const;
 
@@ -47,7 +47,7 @@ export interface SpeciesTemplateV1 {
   baseBodyAssetId: string;
   /** Existing species preset id (reused). */
   speciesPresetId: BaseBodySpeciesId;
-  morphState: SagaDriveAvatarMorphStateV1;
+  morphState: SagaTreeAvatarMorphStateV1;
   traits: BaseBodySpeciesPresetV1['traits'];
   goldenPreviewRef: string;
   provenance: AssetAuthoringProvenanceV1;
@@ -76,7 +76,7 @@ export function createSpeciesTemplateV1(speciesId: BaseBodySpeciesId): SpeciesTe
     goldenPreviewRef: `fixtures/avatar-v2/golden/species-${speciesId}.json`,
     provenance: {
       license: 'first-party',
-      attributionDe: `SagaDrive Species Template ${preset.labelDe}`,
+      attributionDe: `SagaTree Species Template ${preset.labelDe}`,
     },
     lookSummaryDe: lookSummaryFor(speciesId),
   };

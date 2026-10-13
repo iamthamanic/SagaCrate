@@ -4,7 +4,7 @@
 Der Character Editor soll in den Stats-, Skills- und Inventar-Bereichen nicht nur konsistent aussehen, sondern voll bedienbar sein. Interaktive Elemente muessen ihre Reichweite, Prioritaet und Zustaende klar kommunizieren und die vom Nutzer bearbeiteten Skills/Inventargegenstaende beim Speichern des Charakters mitpersistieren.
 
 ## Preconditions
-- Die bestehenden SagaDrive-Designregeln gelten: Gold/Amber fuer primaere CTA und aktive Auswahl, Cyan/Teal fuer funktionale Orientierung, Progress und Focus.
+- Die bestehenden SagaTree-Designregeln gelten: Gold/Amber fuer primaere CTA und aktive Auswahl, Cyan/Teal fuer funktionale Orientierung, Progress und Focus.
 - Bestehende Radix/shadcn-Primitives werden wiederverwendet; keine neue UI-Bibliothek oder Dependency.
 - Character-DTO und bestehende `abilities`/`inventory`-Felder bleiben die Datenquelle; keine Schema-Migration.
 - Character-Owner-Isolation im bestehenden `characterService` bleibt unveraendert.

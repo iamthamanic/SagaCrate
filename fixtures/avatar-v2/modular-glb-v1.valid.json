@@ -4,8 +4,8 @@
     {
       "name": "Body_Base",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "body",
           "slot": "body_base",
           "bodyFamily": "standard",
@@ -16,8 +16,8 @@
     {
       "name": "Wearable_Torso",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "wearable",
           "slot": "torso",
           "bodyFamily": "standard",
@@ -28,8 +28,8 @@
     {
       "name": "Prop_Sword",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "prop",
           "slot": "prop_main",
           "attachmentAnchor": "rightHand"

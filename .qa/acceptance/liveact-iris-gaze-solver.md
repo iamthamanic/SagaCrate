@@ -2,7 +2,7 @@
 
 ## Contract / Solver
 
-- [x] `SagaDriveLiveActIrisGazeV1` with per-eye yaw/pitch/x/y/confidence/available
+- [x] `SagaTreeLiveActIrisGazeV1` with per-eye yaw/pitch/x/y/confidence/available
 - [x] Iris center = centroid of API contour (474–477 / 469–472); no undocumented centers
 - [x] No MediaPipe indices in domain solver
 - [x] Eyeball-sphere geometric solve (not free degree multipliers)

@@ -1,7 +1,7 @@
 # Debug Report — meshy-avatar-confirm-layout-jitter
 
 **Date:** 2026-09-18  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** partial (vite-only, code-path evidence; no paid Meshy run)
 

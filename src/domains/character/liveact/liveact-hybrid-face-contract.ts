@@ -1,5 +1,5 @@
 /**
- * liveact-hybrid-face-contract — SagaDrive Hybrid Face V1 (#447).
+ * liveact-hybrid-face-contract — SagaTree Hybrid Face V1 (#447).
  * Location: src/domains/character/liveact/liveact-hybrid-face-contract.ts
  *
  * Provider-neutral semantic performance controls fused from ARKit-style channels
@@ -12,7 +12,7 @@ import {
   type LiveActFaceChannelPartial,
 } from './liveact-face-contract';
 
-export const LIVEACT_HYBRID_FACE_CONTRACT = 'SagaDriveLiveActHybridFaceV1' as const;
+export const LIVEACT_HYBRID_FACE_CONTRACT = 'SagaTreeLiveActHybridFaceV1' as const;
 
 /** Per-control evidence classification — never hidden. */
 export type LiveActHybridFaceSourceState =

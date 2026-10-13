@@ -17,9 +17,9 @@ import {
 } from '../../domains/npc-creature';
 import {
   normalizeCombatRoleForProfile,
-  type SagaDriveCombatProfile,
-  type SagaDriveCombatRole,
-  type SagaDriveNpcLevel,
+  type SagaTreeCombatProfile,
+  type SagaTreeCombatRole,
+  type SagaTreeNpcLevel,
 } from '../../domains/rules/sagatree/npc-creature-power';
 import {
   getNpcCreatureDefinition,
@@ -35,9 +35,9 @@ export type NpcCreatureEditorDraft = {
   description: string;
   kind: NpcCreatureKind;
   category: NpcCreatureCategory;
-  level: SagaDriveNpcLevel;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole: SagaDriveCombatRole;
+  level: SagaTreeNpcLevel;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole: SagaTreeCombatRole;
   tagsText: string;
   notes: string;
   advancedOpen: boolean;

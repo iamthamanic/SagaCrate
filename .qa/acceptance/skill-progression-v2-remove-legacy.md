@@ -4,7 +4,7 @@
 
 ## Intent
 
-Remove all Skill Progression legacy compatibility. V2 provenance is the only canonical skill state. Every SagaDrive-core character must have complete V2 data (7 free / 2 background / 1 archetype, background pool of 4, one background specialization, filled development slots). Incomplete data fails persistence — never “legacy”. No productive legacy character data exists; no migration or backfill.
+Remove all Skill Progression legacy compatibility. V2 provenance is the only canonical skill state. Every SagaTree-core character must have complete V2 data (7 free / 2 background / 1 archetype, background pool of 4, one background specialization, filled development slots). Incomplete data fails persistence — never “legacy”. No productive legacy character data exists; no migration or backfill.
 
 Roadmap: Skill Progression v2 post-#101 — fail-closed only.
 
@@ -18,7 +18,7 @@ Roadmap: Skill Progression v2 post-#101 — fail-closed only.
 
 - [ ] Complete V2 start build (7 free + 2 background + 1 archetype + background spec) persists and reloads with the same ranks.
 - [ ] Archetype key and archetype training skill are mandatory; training skill must belong to the archetype.
-- [ ] Final ranks always come from `resolveSagaDriveSkillRanksSafe` (never stored-final fallback).
+- [ ] Final ranks always come from `resolveSagaTreeSkillRanksSafe` (never stored-final fallback).
 - [ ] Save payload contains complete V2 sources and does not emit `skillProvenanceStatus` or `legacy-unresolved`.
 - [ ] Editor and skills panel show no legacy character hint.
 
@@ -53,11 +53,11 @@ Roadmap: Skill Progression v2 post-#101 — fail-closed only.
 
 ## Implementation Notes
 
-- Files touched: `src/domains/rules/sagadrive/skill-progression/index.ts` (removed `legacy-unresolved`, `hasCompleteSkillProvenance`, `normalizeLegacyBackgroundSkillPoints`, provenance bypass; archetype mandatory), `assert-character-persistence.ts`, `normalize-character.ts`, `sagadrive-profile.entity.ts`, CharacterEditor / CharacterSkillsPanel / SkillCheckFormulaPanel (no legacy UI/state), `characterPreset.service.ts` (validates `backgroundSkillPoints`, not `trainedSkills`), domain/regression/e2e checks, README Recent changes.
+- Files touched: `src/domains/rules/sagatree/skill-progression/index.ts` (removed `legacy-unresolved`, `hasCompleteSkillProvenance`, `normalizeLegacyBackgroundSkillPoints`, provenance bypass; archetype mandatory), `assert-character-persistence.ts`, `normalize-character.ts`, `sagatree-profile.entity.ts`, CharacterEditor / CharacterSkillsPanel / SkillCheckFormulaPanel (no legacy UI/state), `characterPreset.service.ts` (validates `backgroundSkillPoints`, not `trainedSkills`), domain/regression/e2e checks, README Recent changes.
 - `skillProvenanceStatus` removed from the canonical contract (Option A). Existing JSONB keys are ignored; new saves do not emit them. No SQL migration.
 - `trainedSkills` remains a derived display array from `backgroundSkillPoints` (editor save + background connector UI). Never a source of truth.
 - Tests: `scripts/skill-progression-domain-check.mjs` (fail-closed cases 1–25), regression forbids leftover legacy patterns, `e2e/character-editor.spec.ts` asserts complete V2 save/reload and no legacy UI.
-- Partial-update guard from #101 preserved in `supabase-character.repository.ts` (`touchesSagaDriveState` merge-then-validate).
+- Partial-update guard from #101 preserved in `supabase-character.repository.ts` (`touchesSagaTreeState` merge-then-validate).
 - Migration 014 unchanged. No data backfill.
 
 ## Composition Gate

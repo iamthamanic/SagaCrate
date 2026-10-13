@@ -37,7 +37,7 @@ const barrel = read('src/domains/character/avatar/index.ts');
 const gate = read('scripts/test-gate.mjs');
 const acceptance = read('.qa/acceptance/liveact-face-mapping-manual.md');
 
-check(/SagaDriveFaceMappingDraftV1/.test(draftSrc), 'draft contract');
+check(/SagaTreeFaceMappingDraftV1/.test(draftSrc), 'draft contract');
 check(/FACE_MAPPING_MARKER_GROUP_DEFS/.test(draftSrc), 'marker groups');
 check(/resolveFaceMappingMarkerStatus/.test(draftSrc), 'marker status');
 check(/faceMappingDraftToManifest/.test(draftSrc), 'draft → manifest');
@@ -49,7 +49,7 @@ check(/isFaceMappingAllowlistedMesh/.test(raycastSrc), 'mesh allowlist');
 check(/barycentric/.test(raycastSrc), 'barycentric binding');
 check(/getVertexPosition/.test(raycastSrc), 'deformed vertex barycentric');
 check(/normalizeFaceMappingBarycentric/.test(raycastSrc), 'barycentric clamp/renorm');
-check(/EXCLUDE_NAME_RE|sagadriveExcludeFaceMapping/.test(raycastSrc), 'exclude helpers');
+check(/EXCLUDE_NAME_RE|sagatreeExcludeFaceMapping/.test(raycastSrc), 'exclude helpers');
 
 check(/setFaceMappingAuthoringActive/.test(studio), 'studio authoring mode');
 check(/faceMappingSuspendReason/.test(studio), 'authoring suspend reason independent of LiveAct');
@@ -84,7 +84,7 @@ check(!/setDraft\(/.test(layer), 'layer no draft setState');
 
 check(/face-mapping-draft-v1/.test(barrel), 'barrel export');
 check(/checkLiveActFaceMappingManual|liveact-face-mapping-manual-check/.test(gate), 'test-gate');
-check(/Face Mapping|SagaDriveFaceMappingDraftV1/.test(acceptance), 'acceptance');
+check(/Face Mapping|SagaTreeFaceMappingDraftV1/.test(acceptance), 'acceptance');
 
 const runsDir = join(root, '.qa/runs');
 mkdirSync(runsDir, { recursive: true });

@@ -5,11 +5,11 @@
 Issue: #139 · Slug: `item-workbench` · Parent: #132 · Depends on: #133, #134, #135, #136
 
 ## Intent
-SagaDrive erhält den zentralen `/items/create`- und `/items/:itemId`-Workbench-Flow zum Erstellen und Bearbeiten von Gegenstandsdefinitionen. Der Screen nutzt die Werkbank-Metapher, progressive Offenlegung typabhängiger Felder und die Domain-/Rules-/Persistenz-Verträge aus #134/#135/#136 statt eigener React-Regellogik.
+SagaTree erhält den zentralen `/items/create`- und `/items/:itemId`-Workbench-Flow zum Erstellen und Bearbeiten von Gegenstandsdefinitionen. Der Screen nutzt die Werkbank-Metapher, progressive Offenlegung typabhängiger Felder und die Domain-/Rules-/Persistenz-Verträge aus #134/#135/#136 statt eigener React-Regellogik.
 
 ## Preconditions
 - Routing foundation (#133): `/items/create`, `/items/:id`, `setNavigationBlocker`
-- Item domain taxonomy (#134) + SagaDrive item rules (#135)
+- Item domain taxonomy (#134) + SagaTree item rules (#135)
 - Persistence (#136): catalog service create/update/archive/fork + RLS
 - Authenticated user behind AuthGate
 

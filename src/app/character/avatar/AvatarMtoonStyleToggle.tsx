@@ -1,5 +1,5 @@
 /**
- * AvatarMtoonStyleToggle — viewport overlay to compare SagaDrive MToon vs raw PBR.
+ * AvatarMtoonStyleToggle — viewport overlay to compare SagaTree MToon vs raw PBR.
  * Location: src/app/character/avatar/AvatarMtoonStyleToggle.tsx
  *
  * Editor-only; state is runtime-ephemeral (not saved on appearance.avatar).

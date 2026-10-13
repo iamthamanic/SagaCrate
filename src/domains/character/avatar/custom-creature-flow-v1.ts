@@ -22,7 +22,7 @@ import type { AvatarRigCapabilityFlagV2 } from './rig-capability-contract-v2';
 import { resolveMorphEvidenceForComposition } from './editor-surface-resolver-v1';
 
 export const CUSTOM_CREATURE_FLOW_CONTRACT_VERSION =
-  'SagaDriveCustomCreatureFlowV1' as const;
+  'SagaTreeCustomCreatureFlowV1' as const;
 
 export interface CustomCreatureFlowGuidanceV1 {
   contractVersion: typeof CUSTOM_CREATURE_FLOW_CONTRACT_VERSION;
@@ -32,7 +32,7 @@ export interface CustomCreatureFlowGuidanceV1 {
   wardrobeLimitationDe: string;
   autoRigOptionalDe: string;
   conversionInterpretationDe: string;
-  /** Never force SagaDrive morph edit-norm on custom mesh. */
+  /** Never force SagaTree morph edit-norm on custom mesh. */
   allowHumanoidMorph: false;
   /** Prefer import-existing per #265 benchmark. */
   preferredRigPath: 'import-existing-rig';
@@ -74,15 +74,15 @@ export function buildCustomCreatureFlowGuidance(): CustomCreatureFlowGuidanceV1 
     headlineDe: 'Eigener Körper — Original behalten empfohlen',
     detailDe:
       'Dieser Körper ist kein Standard/Compact/Heavy. Du kannst ihn als Original nutzen; ' +
-      'SagaDrive aktiviert nur tatsächlich erkannte Fähigkeiten.',
+      'SagaTree aktiviert nur tatsächlich erkannte Fähigkeiten.',
     wardrobeLimitationDe:
-      'Standard-SagaDrive-Kleidung (Family-Wearables) passt nicht automatisch auf diesen Körper.',
+      'Standard-SagaTree-Kleidung (Family-Wearables) passt nicht automatisch auf diesen Körper.',
     autoRigOptionalDe:
       path.autoRigOptional
         ? 'Auto-Rig ist optional. Fehlt ein brauchbares Rig, bleibt der Avatar eingeschränkt nutzbar — kein Abbruch.'
         : 'Auto-Rig folgt der Benchmark-Entscheidung.',
     conversionInterpretationDe:
-      '„Auf SagaDrive-Körper übertragen“ ist eine humanoide Interpretation — die Silhouette ändert sich deutlich.',
+      '„Auf SagaTree-Körper übertragen“ ist eine humanoide Interpretation — die Silhouette ändert sich deutlich.',
     allowHumanoidMorph: false,
     preferredRigPath: 'import-existing-rig',
     autoRigOptional: true,
@@ -125,7 +125,7 @@ export function runFarukLikeOriginalKeepSlice(): {
 } {
   const summary = buildImportAnalysisSummary({
     analysis: {
-      contractVersion: 'SagaDriveAvatarStructureAnalyzerV2',
+      contractVersion: 'SagaTreeAvatarStructureAnalyzerV2',
       status: 'ready',
       anatomy: 'custom-creature',
       modularityKind: 'baked',
@@ -149,7 +149,7 @@ export function runFarukLikeOriginalKeepSlice(): {
       authoritative: false,
     },
     compatibility: {
-      contractVersion: 'SagaDriveBodyProfileV1',
+      contractVersion: 'SagaTreeBodyProfileV1',
       status: 'custom',
       recommendedFamily: 'custom',
       scores: [],
@@ -214,7 +214,7 @@ export function assertCustomCreatureFlowInvariants(): {
     issues.push('wardrobe limitation copy');
   }
   const seed = buildCustomCreatureEditorSeed({
-    contractVersion: 'SagaDriveImportOriginalFlowV1',
+    contractVersion: 'SagaTreeImportOriginalFlowV1',
     modelUrl: 'https://example.invalid/m',
     artifactId: 'a',
     importAssetId: 'i',

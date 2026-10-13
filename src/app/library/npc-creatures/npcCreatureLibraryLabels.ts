@@ -9,9 +9,9 @@ import type {
   NpcCreatureSheetMode,
 } from '../../../domains/npc-creature';
 import type {
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
-  SagaDriveMachtgrad,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
+  SagaTreeMachtgrad,
 } from '../../../domains/rules/sagatree/npc-creature-power';
 
 export const NPC_CREATURE_KIND_LABELS: Record<NpcCreatureKind, string> = {
@@ -41,13 +41,13 @@ export const LIBRARY_NPC_SOURCE_LABELS: Record<LibraryNpcCreatureSource, string>
   world: 'Welt',
 };
 
-export const NPC_COMBAT_ROLE_LABELS: Record<SagaDriveCombatRole, string> = {
+export const NPC_COMBAT_ROLE_LABELS: Record<SagaTreeCombatRole, string> = {
   standard: 'Standard',
   elite: 'Elite',
   boss: 'Boss',
 };
 
-export const NPC_COMBAT_PROFILE_LABELS: Record<SagaDriveCombatProfile, string> = {
+export const NPC_COMBAT_PROFILE_LABELS: Record<SagaTreeCombatProfile, string> = {
   noncombat: 'Nichtkämpferisch',
   balanced: 'Ausgewogen',
   tough: 'Zäh',
@@ -57,7 +57,7 @@ export const NPC_COMBAT_PROFILE_LABELS: Record<SagaDriveCombatProfile, string> =
   control_support: 'Kontrolle & Support',
 };
 
-export const NPC_MACHTGRAD_LABELS: Record<SagaDriveMachtgrad, string> = {
+export const NPC_MACHTGRAD_LABELS: Record<SagaTreeMachtgrad, string> = {
   gering: 'Gering',
   mittel: 'Mittel',
   hoch: 'Hoch',
@@ -75,12 +75,12 @@ export const NPC_ATTRIBUTE_SHORT_LABELS = [
 ] as const;
 
 export const NPC_CREATURE_LIBRARY_VIEW_MODE_STORAGE_KEY =
-  'sagadrive_library_npc_creatures_view_mode';
+  'sagatree_library_npc_creatures_view_mode';
 
 /** Card combat meta: Nichtkämpferisch or Kampfrolle · Kampfprofil. */
 export function formatNpcCombatMetaLine(
-  combatProfile: SagaDriveCombatProfile,
-  combatRole: SagaDriveCombatRole,
+  combatProfile: SagaTreeCombatProfile,
+  combatRole: SagaTreeCombatRole,
 ): string {
   if (combatProfile === 'noncombat') return NPC_COMBAT_PROFILE_LABELS.noncombat;
   return `${NPC_COMBAT_ROLE_LABELS[combatRole]} · ${NPC_COMBAT_PROFILE_LABELS[combatProfile]}`;

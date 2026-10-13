@@ -17,7 +17,7 @@ Charaktere · Sessions · Welten — für Spielleitung und Spieler
 </p>
 
 <p align="center">
-  <a href="https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive">Figma Design</a> ·
+  <a href="https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaTree">Figma Design</a> ·
   <a href="src/THEME_GUIDE.md">Theme Guide</a> ·
   <a href="README_SELFHOST.md">Self-Host</a> ·
   <a href="src/ARCHITECTURE.md">Architektur</a>
@@ -49,7 +49,7 @@ Charaktere · Sessions · Welten — für Spielleitung und Spieler
 
 ### Produkt & Stack
 
-Marke und Regelwerk: **SagaTree** / **SagaTree Core** (Ruleset-ID `sagatree-core`; Legacy-Alias `sagadrive-core` bleibt lesbar).
+Marke und Regelwerk: **SagaTree** / **SagaTree Core** (Ruleset-ID `sagatree-core`).
 
 Dieses Repo: **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** (Auth, Postgres, Storage, Realtime, Edge) und Schichten `domains` → `infrastructure` → `app` · UI in `shared/ui`.
 
@@ -175,10 +175,10 @@ src/
 
 SagaTree Core ist kein umbenanntes D&D: Begriffe wie **Spezies**, **Archetyp**, **Essenz**, **Ausdauer**, **Verstand**, **Wahrnehmung**; Startverteilung `4,3,3,2,2,1`; 18 Core-Fertigkeiten; Speziesmerkmale `3/3` Punkte. Inventar v2: **20 Basisplätze** + Ausrüstung, Traglast `5 + 2 × Stärke`.
 
-Persistenz (Auszug): `attributes` · `skills` · `sagadrive_profile` · `background_story` · `notes`  
+Persistenz (Auszug): `attributes` · `skills` · `sagatree_profile` · `background_story` · `notes`  
 Legacy-Keys (`constitution` → Ausdauer usw.) werden beim Lesen normalisiert.
 
-Regeln & Validierung: [`docs/sagadrive core rules.md`](docs/sagadrive%20core%20rules.md) · [`docs/inventory-v2.md`](docs/inventory-v2.md)
+Regeln & Validierung: [`docs/sagatree core rules.md`](docs/sagatree%20core%20rules.md) · [`docs/inventory-v2.md`](docs/inventory-v2.md)
 
 ---
 
@@ -222,7 +222,7 @@ Relevante Character-/Asset-Migrationen (Reihenfolge):
 004_project_membership_security.sql
 005_character_ruleset_metadata.sql
 006_character_portrait_storage.sql
-007_sagadrive_character_profile.sql
+007_sagatree_character_profile.sql
 008_world_profiles.sql
 009_character_adventure_arcs.sql
 010_characters_v3_columns.sql
@@ -266,7 +266,7 @@ Agent-Konfiguration: [`.cursor/`](.cursor/) — vor Änderungen: `npx ecc-agents
 ## Projektstruktur
 
 ```text
-SagaTree/                 # Repo (historisch auch sagadrive/ lokal)
+SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 ├── src/                 # Frontend (app · domains · infrastructure · shared · lib)
 ├── supabase/            # migrations · functions · config
 ├── public/              # Favicons, MediaPipe, Item-/NPC-Assets
@@ -314,7 +314,7 @@ SagaTree/                 # Repo (historisch auch sagadrive/ lokal)
 
 - `npm run dev` öffnet den Browser automatisch (`server.open = true`).
 - Port `3004` belegt → Prozess beenden oder Port in `vite.config.ts` anpassen.
-- Original Design-Basis: [Figma](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaDrive)
+- Original Design-Basis: [Figma](https://www.figma.com/design/XyboDSHba8TNFw0Bb5uUs4/SagaTree)
 
 <p align="center">
   <img src="docs/brand/mark.png" width="40" alt="SagaTree" /><br />

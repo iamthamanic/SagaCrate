@@ -25,7 +25,7 @@ const runtime = read('src/infrastructure/character/avatar/character-studio-runti
 const panel = read('src/app/character/avatar/AvatarRigCapabilityPanel.tsx');
 const canvas = read('src/app/character/avatar/AvatarCanvas.tsx');
 
-check(/SagaDriveHumanoidRigV1/.test(contract), 'rig contract type');
+check(/SagaTreeHumanoidRigV1/.test(contract), 'rig contract type');
 check(/RIG_CONTRACT_VERSION/.test(contract), 'contract version');
 check(/resolveAvatarRigCapabilities/.test(contract), 'capability resolver');
 check(/'static'/.test(contract) && /'humanoid'/.test(contract) && /'vrm-ready'/.test(contract), 'capability flags');

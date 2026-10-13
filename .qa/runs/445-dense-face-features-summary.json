@@ -1,6 +1,6 @@
 {
-  "contractVersion": "SagaDriveLiveActDenseFaceFeaturesV1",
-  "geometryContractVersion": "SagaDriveLiveActDenseSemanticGeometryV1",
+  "contractVersion": "SagaTreeLiveActDenseFaceFeaturesV1",
+  "geometryContractVersion": "SagaTreeLiveActDenseSemanticGeometryV1",
   "fixtureIds": [
     "canonical-neutral",
     "mouth-open",

@@ -8,7 +8,7 @@
 
 import {
   createDefaultAvatarMorphState,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from './morph-contract';
 import {
   buildIdentityTransferConversionPlan,
@@ -24,7 +24,7 @@ import type { CanonicalBodyFamilyId } from './canonical-body-families-v1';
 import { isCanonicalBodyFamilyId } from './canonical-body-families-v1';
 
 export const BODY_CONVERSION_FLOW_CONTRACT_VERSION =
-  'SagaDriveBodyConversionFlowV1' as const;
+  'SagaTreeBodyConversionFlowV1' as const;
 
 export const BODY_CONVERSION_TARGET_FAMILIES = [
   'standard',
@@ -61,7 +61,7 @@ export interface BodyConversionResultV1 {
   status: BodyConversionStatus;
   targetFamily: BodyConversionTargetFamily;
   approachIds: readonly IdentityTransferApproachId[];
-  morphState: SagaDriveAvatarMorphStateV1;
+  morphState: SagaTreeAvatarMorphStateV1;
   anatomy: 'humanoid';
   modularity: 'modular-parts';
   bodyCompatibility: BodyConversionTargetFamily;
@@ -127,7 +127,7 @@ export function listBodyConversionFamilyOptions(input: {
 
 function morphApproxForFamily(
   family: BodyConversionTargetFamily,
-): SagaDriveAvatarMorphStateV1 {
+): SagaTreeAvatarMorphStateV1 {
   const base = createDefaultAvatarMorphState();
   if (family === 'compact') {
     return {
@@ -227,7 +227,7 @@ export function planBodyConversion(
     traits: defaultTraitsForFamily(request.targetFamily),
     colors: { hair: '#3f2a1d', skin: '#c58c6a' },
     tradeoffCopyDe:
-      'Look wird auf den SagaDrive-Körper übertragen. Proportionen können sich ändern — dafür volle Kleidung- und Körperbearbeitung der Family.',
+      'Look wird auf den SagaTree-Körper übertragen. Proportionen können sich ändern — dafür volle Kleidung- und Körperbearbeitung der Family.',
     limitationsDe,
     usesCanonicalBody: true,
     sourceArtifactId: request.sourceArtifactId,

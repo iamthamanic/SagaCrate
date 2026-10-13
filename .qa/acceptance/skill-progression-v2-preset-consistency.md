@@ -4,20 +4,20 @@
 
 ## Intent
 
-Close V2 consistency gaps on PR #102 without re-architecting: presets must use the same central character persistence rules (no leftover min-6 trained-skills rule), background specializations must be acquired at level 1, and preset skill provenance must have exactly one source of truth (`sagadrive_profile`). Roadmap: Skill Progression v2 follow-up on `fix/skill-progression-v2-remove-legacy`.
+Close V2 consistency gaps on PR #102 without re-architecting: presets must use the same central character persistence rules (no leftover min-6 trained-skills rule), background specializations must be acquired at level 1, and preset skill provenance must have exactly one source of truth (`sagatree_profile`). Roadmap: Skill Progression v2 follow-up on `fix/skill-progression-v2-remove-legacy`.
 
 ## Preconditions
 
 - Branch `fix/skill-progression-v2-remove-legacy` / PR #102 already has V2-only skill progression.
-- `assertValidSagaDriveCharacterPersistence` is the persistence authority for attributes + skills.
+- `assertValidSagaTreeCharacterPersistence` is the persistence authority for attributes + skills.
 - Migration 014 unchanged. No legacy compatibility, no balance change, no UI redesign.
 
 ## Happy Path
 
 - [ ] A legal V2 level-1 build with fewer than 6 distinct trained skills (Athletics 3, Medicine 3, Insight 3, Melee 1) passes character persistence and preset snapshot validation.
-- [ ] Preset snapshot validation calls central `assertValidSagaDriveCharacterPersistence` instead of re-checking skill progression with old rules.
+- [ ] Preset snapshot validation calls central `assertValidSagaTreeCharacterPersistence` instead of re-checking skill progression with old rules.
 - [ ] Background specialization with `acquiredAtLevel === 1` persists.
-- [ ] Preset skill provenance has exactly one source: `sagadrive_profile` (`freeSkillRanks`, `backgroundSkillPoints`, `archetypeTrainingSkill`, `skillAdvances`, `specializations`). No parallel `snapshot.freeSkillRanks`.
+- [ ] Preset skill provenance has exactly one source: `sagatree_profile` (`freeSkillRanks`, `backgroundSkillPoints`, `archetypeTrainingSkill`, `skillAdvances`, `specializations`). No parallel `snapshot.freeSkillRanks`.
 
 ## Edge Cases
 
@@ -36,9 +36,9 @@ Close V2 consistency gaps on PR #102 without re-architecting: presets must use t
 
 ## Assumptions
 
-- `SAGA_DRIVE_START_MIN_TRAINED_SKILLS` has no remaining V2 consumer and is deleted from the catalog.
+- `SAGA_TREE_START_MIN_TRAINED_SKILLS` has no remaining V2 consumer and is deleted from the catalog.
 - Preset-specific checks (schema, ruleset, name, appearance, essence, background text, species budget) stay in the preset service.
-- `SagaDriveProfileDto.freeSkillRanks` and domain helpers (`normalizeFreeSkillRanks`, etc.) remain; only parallel snapshot storage is removed.
+- `SagaTreeProfileDto.freeSkillRanks` and domain helpers (`normalizeFreeSkillRanks`, etc.) remain; only parallel snapshot storage is removed.
 
 ## Screenshots
 
@@ -48,7 +48,7 @@ Close V2 consistency gaps on PR #102 without re-architecting: presets must use t
 
 ## Implementation Notes
 
-- Files touched: `src/modules/characters/types/characterPreset.types.ts` (removed top-level `freeSkillRanks`), `src/modules/characters/services/characterPreset.service.ts` (no top-level freeSkillRanks read; central persistence), `src/app/character/edit/CharacterEditor.tsx` (snapshot + hydrate from profile only), `src/domains/rules/sagadrive/skill-progression/index.ts` (background spec `acquiredAtLevel === 1`; sanitizer discards other levels), `src/domains/rules/sagadrive/character-creation/index.ts` (deleted `SAGA_DRIVE_START_MIN_TRAINED_SKILLS`).
+- Files touched: `src/modules/characters/types/characterPreset.types.ts` (removed top-level `freeSkillRanks`), `src/modules/characters/services/characterPreset.service.ts` (no top-level freeSkillRanks read; central persistence), `src/app/character/edit/CharacterEditor.tsx` (snapshot + hydrate from profile only), `src/domains/rules/sagatree/skill-progression/index.ts` (background spec `acquiredAtLevel === 1`; sanitizer discards other levels), `src/domains/rules/sagatree/character-creation/index.ts` (deleted `SAGA_TREE_START_MIN_TRAINED_SKILLS`).
 - Tests: `scripts/skill-progression-domain-check.mjs` (four-skill stacked V2 persistence + preset pass; no top-level freeSkillRanks; top-level cannot rescue missing/invalid profile ranks; preset rejects tampered finals / missing archetype training; background spec 1 pass / 3 and 19 fail; sanitizer discards invalid background specs), `scripts/skill-progression-regression-check.mjs` and `scripts/character-presets-regression-check.mjs` static contracts.
 - Migration 014 unchanged. No balance change, no UI redesign, no legacy fallback.
 

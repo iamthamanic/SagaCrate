@@ -5,7 +5,7 @@
  * Read-first character + runtime state. Session play surface only (no full sheet editor).
  */
 import { useState } from 'react';
-import type { SagaDriveSkillKey } from '../../domains/rules/sagatree/character-creation';
+import type { SagaTreeSkillKey } from '../../domains/rules/sagatree/character-creation';
 import type { ProbeGrade } from '../../domains/rules/sagatree/probe';
 import { playerPanelCheckSkillOptions } from '../../domains/session/contracts/player-panel';
 import type { RollMode } from '../../domains/session/contracts/shared-rolls';
@@ -67,7 +67,7 @@ export function PlayerPanel({
     setCheckBusy(true);
     setCheckMessage(null);
     try {
-      const ok = await requestCheck(effectiveSkill as SagaDriveSkillKey, {
+      const ok = await requestCheck(effectiveSkill as SagaTreeSkillKey, {
         mode: selectedMode,
         useDrive,
       });

@@ -62,7 +62,7 @@ check(/reference-vrm-arkit52/.test(domain), 'golden id');
 check(/valid-white-m1-default\.vrm/.test(domain), 'public path');
 check(/3a79e95bc81655a3e1ec020538c67e7e17551b6f/.test(domain), 'pinned commit');
 check(/CC-BY-4\.0/.test(domain), 'license in domain');
-check(/human-male-quality-20260921-m5-face3\.vrm/.test(models), 'SagaDrive human unchanged');
+check(/human-male-quality-20260921-m5-face3\.vrm/.test(models), 'SagaTree human unchanged');
 check(/LIVEACT_GOLDEN_REFERENCE_AVATAR_ID/.test(hook), 'hook wires reference');
 check(/avatarForPersist/.test(hook), 'persist strips reference URL');
 check(/human-mesh-variant-slot/.test(picker), 'picker hosts human mesh slot above grid');
@@ -142,7 +142,7 @@ check(path === 'lookAt', 'single gaze path lookAt for reference capabilities');
 const sidecarRel = 'public/assets/avatars/reference/valid-white-m1-default-face-anchors.json';
 check(existsSync(join(root, sidecarRel)), 'reference face-anchors sidecar committed');
 const sidecar = JSON.parse(read(sidecarRel));
-check(sidecar.contractVersion === 'SagaDriveFaceAnchorsV1', 'sidecar contract version');
+check(sidecar.contractVersion === 'SagaTreeFaceAnchorsV1', 'sidecar contract version');
 check(Object.keys(sidecar.anchors ?? {}).length === 21, 'sidecar has all 21 anchors');
 const authoring = JSON.parse(
   read('public/assets/avatars/reference/valid-white-m1-default-face-mapping-authoring.json'),
@@ -171,7 +171,7 @@ check(
 );
 check(
   !/next === LIVEACT_GOLDEN_REFERENCE_AVATAR_ID\) \{\s*[^}]*setFaceAnchorsManifest\(null\)/.test(avatarEditorHook),
-  'switching to reference keeps SagaDrive face mapping',
+  'switching to reference keeps SagaTree face mapping',
 );
 
 const binary = join(root, 'public/assets/avatars/reference/valid-white-m1-default.vrm');

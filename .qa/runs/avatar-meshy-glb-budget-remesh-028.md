@@ -20,7 +20,7 @@ Raise store/download ceilings and remesh oversized Meshy avatar GLBs so **text**
 
 ## Verified
 - [x] Migration `028_character_avatar_meshy_glb_budget.sql` applied (`remesh_task_id` + bucket `104857600`)
-- [x] `sagadrive-edge` force-recreated
+- [x] `sagatree-edge` force-recreated
 - [x] `avatar-meshy-generation-check` PASS
 - [x] `deno test` `avatar-meshy-remesh_test.ts` 7/7 PASS
 

@@ -1,5 +1,5 @@
 /**
- * sagadrive rules kernel — public API for SagaDrive rules slices.
+ * sagatree rules kernel — public API for SagaTree rules slices.
  * Location: src/domains/rules/sagatree/index.ts
  */
 export * from './character-creation';

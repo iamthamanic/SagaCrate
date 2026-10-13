@@ -24,7 +24,7 @@ import {
   type AvatarFitRangeV1,
   type AvatarFitStatus,
 } from './fit-range-contract';
-import { MORPH_CONTRACT_VERSION, type SagaDriveAvatarMorphStateV1 } from './morph-contract';
+import { MORPH_CONTRACT_VERSION, type SagaTreeAvatarMorphStateV1 } from './morph-contract';
 import { RIG_CONTRACT_VERSION } from './rig-contract';
 import { BASE_BODY_ASSET_VERSION } from './base-body-contract';
 import type { AssetAuthoringProvenanceV1 } from './asset-authoring-contract-v1';
@@ -32,7 +32,7 @@ import { SPECIES_DEFAULT_BODY_FAMILY } from './species-template-pack-v1';
 import type { BaseBodySpeciesId } from './base-body-contract';
 
 export const STARTER_WARDROBE_CONTRACT_VERSION =
-  'SagaDriveStarterWardrobeManifestV1' as const;
+  'SagaTreeStarterWardrobeManifestV1' as const;
 
 export const STARTER_WARDROBE_PACK_VERSION = '1.0.0' as const;
 
@@ -114,7 +114,7 @@ export interface ResolvedStarterWearableFitV1 {
 
 const SHARED_PROVENANCE: AssetAuthoringProvenanceV1 = {
   license: 'first-party',
-  attributionDe: 'SagaDrive Starter Wardrobe v1',
+  attributionDe: 'SagaTree Starter Wardrobe v1',
 };
 
 const PRIMARY_BOUNDS: readonly AvatarFitMorphBound[] = [
@@ -275,7 +275,7 @@ export function getStarterWearableManifest(
 export function resolveStarterWearableFit(input: {
   wearableId: StarterWearableId;
   bodyFamily: CanonicalBodyFamilyId;
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
   /** Optional incomplete catalog for fail-closed tests. */
   catalog?: readonly StarterWearableManifestV1[];
 }): ResolvedStarterWearableFitV1 {
@@ -357,7 +357,7 @@ export function resolveStarterWearableFit(input: {
 export function resolveStarterWearableFitForSpecies(input: {
   wearableId: StarterWearableId;
   speciesId: BaseBodySpeciesId;
-  morph?: SagaDriveAvatarMorphStateV1;
+  morph?: SagaTreeAvatarMorphStateV1;
 }): ResolvedStarterWearableFitV1 {
   const bodyFamily = SPECIES_DEFAULT_BODY_FAMILY[input.speciesId];
   return resolveStarterWearableFit({

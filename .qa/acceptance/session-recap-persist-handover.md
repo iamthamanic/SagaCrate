@@ -6,10 +6,10 @@
 Persistiere Session-Recaps als Episoden und übernehme den Spielstand automatisch beim Anlegen der nächsten Session — ohne manuellen `hydrate_from_project`-Knopf.
 
 ## Happy Path
-- [x] Nach Complete existiert `session_recaps` Row (`set_session_status` → `sagadrive_upsert_session_recap`).
+- [x] Nach Complete existiert `session_recaps` Row (`set_session_status` → `sagatree_upsert_session_recap`).
 - [x] Neue Session startet mit kopiertem `adventure_runtime` vom Project (`create_project_session` hydrate).
 - [x] Highlights der Episode N zeigen Events aus N (domain window + newest-first), nicht global älteste.
-- [x] Player sieht keine gm_only Highlights (`get_session_recap` + overview snippet via `sagadrive_build_recap_highlight_lines`).
+- [x] Player sieht keine gm_only Highlights (`get_session_recap` + overview snippet via `sagatree_build_recap_highlight_lines`).
 - [x] Check-Script + test-gate grün (`session-recap-persist-handover-check.mjs`).
 - [x] Touched files: zero type escape hatches.
 

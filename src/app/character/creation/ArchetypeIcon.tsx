@@ -1,5 +1,5 @@
 /**
- * ArchetypeIcon — Lucide icon for each SagaDrive primary archetype option.
+ * ArchetypeIcon — Lucide icon for each SagaTree primary archetype option.
  * Location: src/app/character/creation/ArchetypeIcon.tsx
  */
 import {
@@ -10,9 +10,9 @@ import {
   VenetianMask,
   type LucideIcon,
 } from 'lucide-react';
-import type { SagaDriveArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeArchetypeKey } from '../../../domains/rules/sagatree/character-creation';
 
-const ARCHETYPE_ICONS: Record<SagaDriveArchetypeKey, LucideIcon> = {
+const ARCHETYPE_ICONS: Record<SagaTreeArchetypeKey, LucideIcon> = {
   fighter: Swords,
   thinker: Brain,
   healer: HeartPulse,
@@ -21,7 +21,7 @@ const ARCHETYPE_ICONS: Record<SagaDriveArchetypeKey, LucideIcon> = {
 };
 
 type ArchetypeIconProps = {
-  archetypeKey: SagaDriveArchetypeKey;
+  archetypeKey: SagaTreeArchetypeKey;
   className?: string;
 };
 

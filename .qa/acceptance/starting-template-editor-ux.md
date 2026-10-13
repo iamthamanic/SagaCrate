@@ -1,7 +1,7 @@
 # Feature: Starttemplate editor UX (picker icons, Vorlage badge, tab hints)
 
 ## Intent
-Improve create/editor discoverability for SagaDrive starttemplates and presets:
+Improve create/editor discoverability for SagaTree starttemplates and presets:
 icons + playstyle tooltips in the picker, Vorlage badge in the sticky card header,
 and pulsing incomplete-tab hints with hover copy for open validation gaps.
 

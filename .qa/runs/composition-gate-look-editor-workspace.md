@@ -15,7 +15,7 @@ LookEditorWorkspace / useLookEditor → look-service (`createLookProfile` | `app
 ## Simulations
 - N-actors: concurrent save → repository conflict message surfaced once in UI (no double version claim).
 - Invalid/archived: append rejected; UI read-only for archived.
-- Two consumers: Library browser only lists/links; no second authoring controls; knobs round-trip via `sagadrive:look-knobs-v1:` reference only.
+- Two consumers: Library browser only lists/links; no second authoring controls; knobs round-trip via `sagatree:look-knobs-v1:` reference only.
 
 ## Flags
 none

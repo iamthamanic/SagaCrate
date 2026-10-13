@@ -1,6 +1,6 @@
 # Human golden style refs
 
-Canonical SagaDrive character look: **Palworld × Overwatch, soft-real**.
+Canonical SagaTree character look: **Palworld × Overwatch, soft-real**.
 
 | File | Role |
 |------|------|

@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #27 (Epic #18), Type: chore, Labels: P1, Validierung
-- Regeln: `docs/sagadrive core rules.md` §2.8 (unterstützte Einzel-/Gruppen-/Gemeinschaftsproben), §14.1–14.9 (Erkundung, Recherche, Haltung, sozialer Konflikt, Gefahren, Kontakte, Ruf), Fail Forward
-- Validierungsplan: `docs/sagadrive core validation.md` E1
+- Regeln: `docs/sagatree core rules.md` §2.8 (unterstützte Einzel-/Gruppen-/Gemeinschaftsproben), §14.1–14.9 (Erkundung, Recherche, Haltung, sozialer Konflikt, Gefahren, Kontakte, Ruf), Fail Forward
+- Validierungsplan: `docs/sagatree core validation.md` E1
 
 ## Preconditions
 - `scripts/lib/core-probe.mjs` (`resolveGrade`, `GRADES`) für deterministische Probengrade.
@@ -25,7 +25,7 @@
 
 ## Gütekriterien
 - 0 Findings; deterministisch; byte-reproduzierbarer Report.
-- Keine Änderung an `docs/sagadrive core rules.md`.
+- Keine Änderung an `docs/sagatree core rules.md`.
 - Script im Test-Gate verdrahtet.
 
 ## Security Coverage

@@ -12,7 +12,7 @@ import {
   type FacialCanonicalKey,
 } from './facial-contract';
 
-export const FACE_TRACKING_CONTRACT_VERSION = 'SagaDriveAvatarFaceTrackingV1' as const;
+export const FACE_TRACKING_CONTRACT_VERSION = 'SagaTreeAvatarFaceTrackingV1' as const;
 
 export const FACE_TRACKING_STATUSES = [
   'idle',

@@ -1,5 +1,5 @@
 /**
- * face-anchor-runtime — evaluate SagaDriveFaceAnchorsV1 on deformed Three.js meshes (#399).
+ * face-anchor-runtime — evaluate SagaTreeFaceAnchorsV1 on deformed Three.js meshes (#399).
  * Location: src/infrastructure/character/avatar/face-anchor-runtime.ts
  *
  * Reads skinned + morphed vertex positions; missing/invalid bindings → unavailable (no synthetic fallback).
@@ -7,9 +7,9 @@
 
 import * as THREE from 'three';
 import type {
-  SagaDriveFaceAnchorId,
-  SagaDriveFaceAnchorTriangleBinding,
-  SagaDriveFaceAnchorsManifestV1,
+  SagaTreeFaceAnchorId,
+  SagaTreeFaceAnchorTriangleBinding,
+  SagaTreeFaceAnchorsManifestV1,
 } from '../../../domains/character/avatar/face-anchor-contract';
 import { validateFaceAnchorTriangleBinding } from '../../../domains/character/avatar/face-anchor-contract';
 
@@ -17,7 +17,7 @@ export type FaceAnchorEvaluationStatus = 'available' | 'unavailable';
 
 export interface FaceAnchorWorldPositionV1 {
   readonly status: 'available';
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
   readonly x: number;
   readonly y: number;
   readonly z: number;
@@ -25,13 +25,13 @@ export interface FaceAnchorWorldPositionV1 {
 
 export interface FaceAnchorUnavailableV1 {
   readonly status: 'unavailable';
-  readonly anchorId: SagaDriveFaceAnchorId;
+  readonly anchorId: SagaTreeFaceAnchorId;
 }
 
 export type FaceAnchorEvaluationV1 = FaceAnchorWorldPositionV1 | FaceAnchorUnavailableV1;
 
 export interface FaceAnchorRuntimeSnapshotV1 {
-  readonly evaluations: Readonly<Partial<Record<SagaDriveFaceAnchorId, FaceAnchorEvaluationV1>>>;
+  readonly evaluations: Readonly<Partial<Record<SagaTreeFaceAnchorId, FaceAnchorEvaluationV1>>>;
 }
 
 const _vertex = new THREE.Vector3();
@@ -137,7 +137,7 @@ function readDeformedVertex(mesh: THREE.Mesh, vertexIndex: number, target: THREE
 
 function resolveMeshForBinding(
   nodeIndex: ReadonlyMap<string, THREE.Object3D>,
-  binding: SagaDriveFaceAnchorTriangleBinding,
+  binding: SagaTreeFaceAnchorTriangleBinding,
 ): THREE.Mesh | null {
   const node = nodeIndex.get(binding.nodeIdentity.trim());
   if (!node || !(node instanceof THREE.Mesh)) return null;
@@ -150,8 +150,8 @@ function resolveMeshForBinding(
  */
 export function evaluateFaceAnchorWorldPosition(
   nodeIndex: ReadonlyMap<string, THREE.Object3D>,
-  anchorId: SagaDriveFaceAnchorId,
-  binding: SagaDriveFaceAnchorTriangleBinding,
+  anchorId: SagaTreeFaceAnchorId,
+  binding: SagaTreeFaceAnchorTriangleBinding,
   target?: THREE.Vector3,
 ): FaceAnchorEvaluationV1 {
   const validated = validateFaceAnchorTriangleBinding(binding, anchorId);
@@ -199,15 +199,15 @@ export function evaluateFaceAnchorWorldPosition(
 
 export function evaluateFaceAnchorsManifest(
   root: THREE.Object3D,
-  manifest: SagaDriveFaceAnchorsManifestV1,
+  manifest: SagaTreeFaceAnchorsManifestV1,
 ): FaceAnchorRuntimeSnapshotV1 {
   root.updateMatrixWorld(true);
   const nodeIndex = buildFaceAnchorNodeIndex(root);
-  const evaluations: Partial<Record<SagaDriveFaceAnchorId, FaceAnchorEvaluationV1>> = {};
+  const evaluations: Partial<Record<SagaTreeFaceAnchorId, FaceAnchorEvaluationV1>> = {};
 
   for (const [id, binding] of Object.entries(manifest.anchors)) {
     if (!binding) continue;
-    const anchorId = id as SagaDriveFaceAnchorId;
+    const anchorId = id as SagaTreeFaceAnchorId;
     evaluations[anchorId] = evaluateFaceAnchorWorldPosition(nodeIndex, anchorId, binding);
   }
 

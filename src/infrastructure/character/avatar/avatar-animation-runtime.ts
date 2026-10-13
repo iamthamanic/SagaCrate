@@ -2,7 +2,7 @@
  * avatar-animation-runtime — Three.js AnimationMixer retargeted via #6 bone handles.
  * Location: src/infrastructure/character/avatar/avatar-animation-runtime.ts
  *
- * Procedural allowlisted preview clips; tracks bind only to mapped SagaDriveHumanoidRigV1 bones.
+ * Procedural allowlisted preview clips; tracks bind only to mapped SagaTreeHumanoidRigV1 bones.
  * Rigid attachment fixture follows the catalog attachment anchor.
  * Editor preview stays in rest pose until the user picks Idle/Walk/… — no autoplay on bind.
  */
@@ -19,7 +19,7 @@ import {
 } from '../../../domains/character/avatar/animation-contract';
 import type {
   AvatarRigAnalysisResult,
-  SagaDriveHumanoidBoneId,
+  SagaTreeHumanoidBoneId,
 } from '../../../domains/character/avatar/rig-contract';
 
 export interface AvatarAnimationRuntimeState {
@@ -49,7 +49,7 @@ function findBoneObject(
  */
 function buildProceduralClip(
   actionId: AvatarAnimationActionId,
-  mappedBones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
+  mappedBones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
 ): THREE.AnimationClip | null {
   const entry = getAnimationCatalogEntry(actionId);
   if (!entry || !isAllowlistedAnimationClipId(entry.clipId)) return null;
@@ -58,7 +58,7 @@ function buildProceduralClip(
   const duration = actionId === 'emote' ? 1.2 : 1.0;
 
   const pushQuatTrack = (
-    boneId: SagaDriveHumanoidBoneId,
+    boneId: SagaTreeHumanoidBoneId,
     times: number[],
     values: number[],
   ) => {
@@ -292,7 +292,7 @@ export class AvatarAnimationRuntime {
       new THREE.BoxGeometry(0.08, 0.08, 0.18),
       new THREE.MeshStandardMaterial({ color: '#F59E0B', roughness: 0.45, metalness: 0.2 }),
     );
-    mesh.name = 'SagaDriveAnimationAttachmentFixture';
+    mesh.name = 'SagaTreeAnimationAttachmentFixture';
     this.attachment = mesh;
     const defaultAnchor =
       getAnimationCatalogEntry(this.support.defaultAction ?? 'idle')?.attachmentAnchor ?? 'hips';
@@ -300,11 +300,11 @@ export class AvatarAnimationRuntime {
   }
 
   private rebindAttachment(
-    anchorId: import('../../../domains/character/avatar/rig-contract').SagaDriveHumanoidAnchorId,
+    anchorId: import('../../../domains/character/avatar/rig-contract').SagaTreeHumanoidAnchorId,
     analysis: AvatarRigAnalysisResult | undefined = this.analysis,
   ): void {
     if (!this.attachment || !this.root || !analysis) return;
-    const sourceName = analysis.rig.anchors[anchorId] ?? analysis.rig.bones[anchorId as SagaDriveHumanoidBoneId];
+    const sourceName = analysis.rig.anchors[anchorId] ?? analysis.rig.bones[anchorId as SagaTreeHumanoidBoneId];
     const parent = findBoneObject(this.root, sourceName);
     if (!parent) return;
     if (this.attachmentParent === parent) return;

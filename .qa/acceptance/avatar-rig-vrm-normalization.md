@@ -1,7 +1,7 @@
 # Acceptance — avatar-rig-vrm-normalization
 
 ## Intent
-Normalize imported / loaded avatar skeletons into SagaDriveHumanoidRigV1 capabilities so later equipment and animation tickets consume flags, not raw bone names or provider success claims.
+Normalize imported / loaded avatar skeletons into SagaTreeHumanoidRigV1 capabilities so later equipment and animation tickets consume flags, not raw bone names or provider success claims.
 
 ## Preconditions
 - Character studio can load a GLB/VRM into CharacterStudioRuntime.
@@ -35,7 +35,7 @@ Out: Auto-rig jobs (#161), equipment UI, face tracking, animation assets (#8).
 - Proof: `.qa/runs/composition-gate-avatar-rig-vrm-normalization.md`
 
 ## Implementation Notes
-- Domain: `rig-contract.ts` — SagaDriveHumanoidRigV1, capability ladder, DE labels.
+- Domain: `rig-contract.ts` — SagaTreeHumanoidRigV1, capability ladder, DE labels.
 - Infra: `rig-bone-aliases.ts` + `rig-analyzer.ts`; wired into CharacterStudioRuntime after load.
 - App: AvatarRigCapabilityPanel under canvas.
 - Check: `avatar-rig-normalization-check.mjs`.

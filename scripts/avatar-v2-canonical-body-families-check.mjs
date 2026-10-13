@@ -33,7 +33,7 @@ check(/separate-neutral/.test(domain), 'underwear policy');
 check(!/from ['"]react['"]/.test(domain), 'no react');
 check(/listCanonicalBodyFamilyManifests/.test(index), 'barrel');
 check(/allowlistedCanonicalBodyPaths/.test(catalog), 'catalog uses families');
-check(/getSagaDriveBaseBodyManifest\(/.test(catalog), 'catalog family arg');
+check(/getSagaTreeBaseBodyManifest\(/.test(catalog), 'catalog family arg');
 
 for (const f of ['standard', 'compact', 'heavy']) {
   check(
@@ -57,7 +57,7 @@ const m = await import(outfile + `?t=${Date.now()}`);
 
 const list = m.listCanonicalBodyFamilyManifests();
 check(list.length === 3, 'three families');
-check(m.resolveCanonicalBodyFamilyId('sagadrive-base-humanoid-v1') === 'standard', 'legacy→standard');
+check(m.resolveCanonicalBodyFamilyId('sagatree-base-humanoid-v1') === 'standard', 'legacy→standard');
 
 const morphBundle = await build({
   entryPoints: [join(root, 'src/domains/character/avatar/base-body-contract.ts')],
@@ -92,6 +92,6 @@ check(bakedFail.ok === false, 'baked clothing rejected');
 
 const paths = m.allowlistedCanonicalBodyPaths();
 check(paths.includes('sd_body_standard_v1.vrm'), 'path standard');
-check(paths.includes('sagadrive-base-humanoid-v1.vrm'), 'legacy path kept');
+check(paths.includes('sagatree-base-humanoid-v1.vrm'), 'legacy path kept');
 
 console.log('avatar-v2-canonical-body-families-check OK');

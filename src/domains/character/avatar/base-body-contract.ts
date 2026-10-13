@@ -1,5 +1,5 @@
 /**
- * SagaDrive morphable base-body contract v1 — pure domain (no Three / React).
+ * SagaTree morphable base-body contract v1 — pure domain (no Three / React).
  * Location: src/domains/character/avatar/base-body-contract.ts
  *
  * Declares required morph targets (#212), material slots, trait sockets,
@@ -19,12 +19,12 @@ import {
   type AvatarMorphColorsV1,
   type AvatarMorphFaceKey,
   type AvatarMorphParamKey,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from './morph-contract';
 import { RIG_CONTRACT_VERSION } from './rig-contract';
 
-export const BASE_BODY_CONTRACT_VERSION = 'SagaDriveBaseBodyV1' as const;
-export const BASE_BODY_ASSET_VERSION = 'sagadrive-base-humanoid-v1.0.0' as const;
+export const BASE_BODY_CONTRACT_VERSION = 'SagaTreeBaseBodyV1' as const;
+export const BASE_BODY_ASSET_VERSION = 'sagatree-base-humanoid-v1.0.0' as const;
 
 export const BASE_BODY_MATERIAL_SLOTS = [
   'skin',
@@ -69,19 +69,19 @@ export interface BaseBodyFitRange {
 }
 
 export interface BaseBodyProvenance {
-  licenseSpdx: 'CC0-1.0' | 'LicenseRef-SagaDrive-Internal';
+  licenseSpdx: 'CC0-1.0' | 'LicenseRef-SagaTree-Internal';
   licenseUrl: string;
   source: string;
   notes: string;
 }
 
-export interface SagaDriveBaseBodyManifestV1 {
+export interface SagaTreeBaseBodyManifestV1 {
   contractVersion: typeof BASE_BODY_CONTRACT_VERSION;
-  /** Version string — legacy `sagadrive-base-humanoid-v1.0.0` or family `sd_body_*_v1.0.0`. */
+  /** Version string — legacy `sagatree-base-humanoid-v1.0.0` or family `sd_body_*_v1.0.0`. */
   assetVersion: string;
   rigVersion: typeof RIG_CONTRACT_VERSION;
   morphContractVersion: typeof MORPH_CONTRACT_VERSION;
-  /** Legacy `sagadrive-base-humanoid-v1` or canonical `sd_body_{standard|compact|heavy}_v1`. */
+  /** Legacy `sagatree-base-humanoid-v1` or canonical `sd_body_{standard|compact|heavy}_v1`. */
   assetId: string;
   displayNameDe: string;
   /** Allowlisted self-hosted relative path (no remote arbitrary URLs). */
@@ -126,7 +126,7 @@ export interface BaseBodyMorphCapabilityReport {
   limitations: readonly string[];
 }
 
-/** Canonical morph target names for the SagaDrive base body mesh. */
+/** Canonical morph target names for the SagaTree base body mesh. */
 export function createCanonicalMorphTargetMap(): BaseBodyMorphTargetMap {
   const body = {} as Record<AvatarMorphBodyKey, string>;
   for (const key of AVATAR_MORPH_BODY_KEYS) {
@@ -181,24 +181,24 @@ export const DEFAULT_BASE_BODY_FIT_RANGES: readonly BaseBodyFitRange[] = [
   },
 ];
 
-export function createSagaDriveBaseBodyManifestV1(): SagaDriveBaseBodyManifestV1 {
+export function createSagaTreeBaseBodyManifestV1(): SagaTreeBaseBodyManifestV1 {
   return {
     contractVersion: BASE_BODY_CONTRACT_VERSION,
     assetVersion: BASE_BODY_ASSET_VERSION,
     rigVersion: RIG_CONTRACT_VERSION,
     morphContractVersion: MORPH_CONTRACT_VERSION,
-    assetId: 'sagadrive-base-humanoid-v1',
-    displayNameDe: 'SagaDrive Basis-Humanoid',
-    selfHostedPath: 'sagadrive-base-humanoid-v1.vrm',
+    assetId: 'sagatree-base-humanoid-v1',
+    displayNameDe: 'SagaTree Basis-Humanoid',
+    selfHostedPath: 'sagatree-base-humanoid-v1.vrm',
     format: 'vrm',
     morphTargets: createCanonicalMorphTargetMap(),
     materialSlots: [...BASE_BODY_MATERIAL_SLOTS],
     traitSockets: [...BASE_BODY_TRAIT_SOCKETS],
     fitRanges: DEFAULT_BASE_BODY_FIT_RANGES,
     provenance: {
-      licenseSpdx: 'LicenseRef-SagaDrive-Internal',
-      licenseUrl: 'https://github.com/iamthamanic/sagadrive/blob/main/LICENSE',
-      source: 'SagaDrive authored base body v1 (morph targets per SagaDriveAvatarMorphV1)',
+      licenseSpdx: 'LicenseRef-SagaTree-Internal',
+      licenseUrl: 'https://github.com/iamthamanic/sagatree/blob/main/LICENSE',
+      source: 'SagaTree authored base body v1 (morph targets per SagaTreeAvatarMorphV1)',
       notes:
         'Allowlisted self-hosted asset. Morph capabilities require all declared targets present on the mesh.',
     },
@@ -352,7 +352,7 @@ export function getBaseBodySpeciesPreset(id: BaseBodySpeciesId): BaseBodySpecies
  * Deterministic species → morph state. Does not clobber an existing user morph
  * unless the caller explicitly applies this result (preset apply / reset).
  */
-export function deriveSpeciesMorphState(id: BaseBodySpeciesId): SagaDriveAvatarMorphStateV1 {
+export function deriveSpeciesMorphState(id: BaseBodySpeciesId): SagaTreeAvatarMorphStateV1 {
   const preset = getBaseBodySpeciesPreset(id);
   return mergeAvatarMorphPresets(createDefaultAvatarMorphState(), {
     contractVersion: MORPH_CONTRACT_VERSION,
@@ -365,10 +365,10 @@ export function deriveSpeciesMorphState(id: BaseBodySpeciesId): SagaDriveAvatarM
  * Missing required targets → capabilities empty / limited (fail closed).
  */
 export function resolveBaseBodyMorphCapabilities(input: {
-  manifest?: SagaDriveBaseBodyManifestV1;
+  manifest?: SagaTreeBaseBodyManifestV1;
   presentMorphTargetNames: readonly string[];
 }): BaseBodyMorphCapabilityReport {
-  const manifest = input.manifest ?? createSagaDriveBaseBodyManifestV1();
+  const manifest = input.manifest ?? createSagaTreeBaseBodyManifestV1();
   const present = new Set(input.presentMorphTargetNames);
   const missingBody: AvatarMorphBodyKey[] = [];
   const missingFace: AvatarMorphFaceKey[] = [];
@@ -406,9 +406,9 @@ export function isBaseBodyCacheCompatible(input: {
   cachedAssetVersion: string;
   cachedMorphContractVersion: string;
   cachedRigVersion: string;
-  manifest?: SagaDriveBaseBodyManifestV1;
+  manifest?: SagaTreeBaseBodyManifestV1;
 }): boolean {
-  const manifest = input.manifest ?? createSagaDriveBaseBodyManifestV1();
+  const manifest = input.manifest ?? createSagaTreeBaseBodyManifestV1();
   return (
     input.cachedAssetVersion === manifest.assetVersion &&
     input.cachedMorphContractVersion === manifest.morphContractVersion &&
@@ -423,7 +423,7 @@ export function isBaseBodyCacheCompatible(input: {
 export interface BaseBodyMorphFixtureCase {
   id: string;
   labelDe: string;
-  morph: SagaDriveAvatarMorphStateV1;
+  morph: SagaTreeAvatarMorphStateV1;
 }
 
 export function buildBaseBodyMorphFixtureCases(): readonly BaseBodyMorphFixtureCase[] {
@@ -482,7 +482,7 @@ export const BASE_BODY_CAMERA_SAFE_BOUNDS = {
 } as const;
 
 export function assertMorphFixtureCameraSafe(
-  _morph: SagaDriveAvatarMorphStateV1,
+  _morph: SagaTreeAvatarMorphStateV1,
 ): typeof BASE_BODY_CAMERA_SAFE_BOUNDS {
   // Framing constants are independent of morph magnitude by contract (mesh authored
   // so extremes stay inside the capsule). Fixture asserts the constants themselves.

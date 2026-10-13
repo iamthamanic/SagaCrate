@@ -2,7 +2,7 @@
  * mediapipe-dense-semantic-points-v1 — MediaPipe indices → dense semantic geometry (#445).
  * Location: src/infrastructure/character/liveact/mediapipe-dense-semantic-points-v1.ts
  *
- * Provider-specific indices stay here. Reuses MediaPipeSagaDriveFaceAnchorMapV1 for shared
+ * Provider-specific indices stay here. Reuses MediaPipeSagaTreeFaceAnchorMapV1 for shared
  * eye/brow/mouth/nose/chin/forehead slots. Extension table only for denser lip/cheek/nasolabial/jaw.
  */
 
@@ -13,20 +13,20 @@ import {
   type DenseSemanticPoint3,
   type DenseSemanticPointId,
 } from '../../../domains/character/liveact/liveact-dense-face-features-contract';
-import type { SagaDriveFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
 import {
-  MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1,
+  MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1,
   type MediaPipeFaceAnchorMapEntryV1,
   type NormalizedLandmark2dLike,
   resolveMediaPipeAnchorSample,
-} from './mediapipe-sagadrive-face-anchor-map-v1';
+} from './mediapipe-sagatree-face-anchor-map-v1';
 
 export const MEDIAPIPE_DENSE_SEMANTIC_POINTS_VERSION =
   'MediaPipeDenseSemanticPointsV1' as const;
 
 /** AnchorId → DenseSemanticPointId for shared #421 map entries. */
 const ANCHOR_TO_DENSE: Readonly<
-  Partial<Record<SagaDriveFaceAnchorId, DenseSemanticPointId>>
+  Partial<Record<SagaTreeFaceAnchorId, DenseSemanticPointId>>
 > = {
   eyeLeftOuter: 'eyeOuterLeft',
   eyeLeftInner: 'eyeInnerLeft',
@@ -169,7 +169,7 @@ export function mapMediaPipeLandmarksToDenseSemanticGeometry(input: {
     };
   }
 
-  for (const entry of MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_V1) {
+  for (const entry of MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_V1) {
     const denseId = ANCHOR_TO_DENSE[entry.anchorId];
     if (!denseId) continue;
     points[denseId] = resolveAnchorPoint(landmarks, entry);

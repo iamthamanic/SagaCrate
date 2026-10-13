@@ -4,7 +4,7 @@ import path from 'node:path';
 import { ensureLoggedIn } from './helpers/auth';
 
 const EVIDENCE_DIR = '.qa/evidence/library-entity-browser';
-const VIEW_MODE_STORAGE_KEY = 'sagadrive_library_characters_view_mode';
+const VIEW_MODE_STORAGE_KEY = 'sagatree_library_characters_view_mode';
 
 type StoredCharacter = {
   id: string;

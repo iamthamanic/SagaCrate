@@ -11,7 +11,7 @@ import {
   type LiveActFaceChannelId,
 } from './liveact-face-contract';
 
-export const LIVEACT_FACE_ASSET_CONTRACT_VERSION = 'SagaDriveLiveActFaceAssetV1' as const;
+export const LIVEACT_FACE_ASSET_CONTRACT_VERSION = 'SagaTreeLiveActFaceAssetV1' as const;
 
 export type LiveActFaceAssetProfileId = 'core-v1' | 'full-v1';
 

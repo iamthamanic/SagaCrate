@@ -1,13 +1,13 @@
 /**
- * SagaDrive humanoid rig contract v1 — pure domain (no Three / React).
+ * SagaTree humanoid rig contract v1 — pure domain (no Three / React).
  * Location: src/domains/character/avatar/rig-contract.ts
  *
  * Capabilities are derived only from validated bone/anchor evidence — never from client claims.
  */
 
-export const RIG_CONTRACT_VERSION = 'SagaDriveHumanoidRigV1' as const;
+export const RIG_CONTRACT_VERSION = 'SagaTreeHumanoidRigV1' as const;
 
-export const SAGA_DRIVE_HUMANOID_BONES = [
+export const SAGA_TREE_HUMANOID_BONES = [
   'root',
   'hips',
   'spine',
@@ -28,9 +28,9 @@ export const SAGA_DRIVE_HUMANOID_BONES = [
   'rightFoot',
 ] as const;
 
-export type SagaDriveHumanoidBoneId = (typeof SAGA_DRIVE_HUMANOID_BONES)[number];
+export type SagaTreeHumanoidBoneId = (typeof SAGA_TREE_HUMANOID_BONES)[number];
 
-export const SAGA_DRIVE_HUMANOID_ANCHORS = [
+export const SAGA_TREE_HUMANOID_ANCHORS = [
   'head',
   'chest',
   'back',
@@ -41,7 +41,7 @@ export const SAGA_DRIVE_HUMANOID_ANCHORS = [
   'rightFoot',
 ] as const;
 
-export type SagaDriveHumanoidAnchorId = (typeof SAGA_DRIVE_HUMANOID_ANCHORS)[number];
+export type SagaTreeHumanoidAnchorId = (typeof SAGA_TREE_HUMANOID_ANCHORS)[number];
 
 /** Ordered capability ladder — higher never implied by lower alone. */
 export type AvatarRigCapabilityFlag =
@@ -54,12 +54,12 @@ export type AvatarRigCapabilityFlag =
 
 export type AvatarRigAnalysisUiStatus = 'analyzing' | 'ready' | 'limited' | 'failed';
 
-export interface SagaDriveHumanoidRigV1 {
+export interface SagaTreeHumanoidRigV1 {
   contractVersion: typeof RIG_CONTRACT_VERSION;
   /** Canonical bone → source bone name that mapped (unique). */
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>;
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>;
   /** Canonical anchor → source node name. */
-  anchors: Readonly<Partial<Record<SagaDriveHumanoidAnchorId, string>>>;
+  anchors: Readonly<Partial<Record<SagaTreeHumanoidAnchorId, string>>>;
   upAxis: 'y';
   forwardAxis: 'z';
   unit: 'meter';
@@ -69,7 +69,7 @@ export interface SagaDriveHumanoidRigV1 {
 export interface AvatarRigCapabilities {
   flags: readonly AvatarRigCapabilityFlag[];
   /** Missing humanoid bones when partially rigged. */
-  missingBones: readonly SagaDriveHumanoidBoneId[];
+  missingBones: readonly SagaTreeHumanoidBoneId[];
   /** Human-readable DE reasons for limited/unsupported features. */
   limitations: readonly string[];
 }
@@ -77,11 +77,11 @@ export interface AvatarRigCapabilities {
 export interface AvatarRigAnalysisResult {
   status: AvatarRigAnalysisUiStatus;
   capabilities: AvatarRigCapabilities;
-  rig: SagaDriveHumanoidRigV1;
+  rig: SagaTreeHumanoidRigV1;
   message: string;
 }
 
-const CORE_HUMANOID: readonly SagaDriveHumanoidBoneId[] = [
+const CORE_HUMANOID: readonly SagaTreeHumanoidBoneId[] = [
   'hips',
   'spine',
   'chest',
@@ -102,8 +102,8 @@ const CORE_HUMANOID: readonly SagaDriveHumanoidBoneId[] = [
 ];
 
 export function listMissingHumanoidBones(
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
-): SagaDriveHumanoidBoneId[] {
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
+): SagaTreeHumanoidBoneId[] {
   return CORE_HUMANOID.filter((id) => !bones[id]);
 }
 
@@ -112,13 +112,13 @@ export function listMissingHumanoidBones(
  */
 export function resolveAvatarRigCapabilities(input: {
   boneCount: number;
-  mappedBones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>;
+  mappedBones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>;
   hasVrmHumanoid: boolean;
   hasSkinnedMesh: boolean;
   scaleFactor: number;
 }): AvatarRigCapabilities {
   const missingBones = listMissingHumanoidBones(input.mappedBones);
-  const mappedCount = SAGA_DRIVE_HUMANOID_BONES.filter((id) => input.mappedBones[id]).length;
+  const mappedCount = SAGA_TREE_HUMANOID_BONES.filter((id) => input.mappedBones[id]).length;
   const limitations: string[] = [];
   const flags: AvatarRigCapabilityFlag[] = ['static'];
 

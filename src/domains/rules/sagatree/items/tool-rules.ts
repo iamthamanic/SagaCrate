@@ -1,5 +1,5 @@
 /**
- * sagadrive tool rules — §5.7 Werkzeugsemantik as a pure check contract.
+ * sagatree tool rules — §5.7 Werkzeugsemantik as a pure check contract.
  * Location: src/domains/rules/sagatree/items/tool-rules.ts
  *
  * High-quality tools never invent a numeric bonus; advantage applies only when

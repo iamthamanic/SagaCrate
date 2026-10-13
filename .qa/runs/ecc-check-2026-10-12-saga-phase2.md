@@ -6,7 +6,7 @@
 ## Phase A — test-gate
 - `node scripts/saga-permission-grants-check.mjs` PASS
 - `npm run typecheck` PASS (changed TS)
-- Migration `075` applied on sagadrive-db (41 keys, 2 bundles, grants backfilled)
+- Migration `075` applied on sagatree-db (41 keys, 2 bundles, grants backfilled)
 
 ## Phase B — verify-ticket
 - Acceptance Intent covered: catalog+bundles migration, Settings Rechte, reveal control, Lore timeline

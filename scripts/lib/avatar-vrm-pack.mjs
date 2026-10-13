@@ -16,7 +16,7 @@ import {
   VRMC_VRM_SPEC_VERSION,
 } from './gltf-transform-vrm1-extension.mjs';
 
-/** SagaDrive / VRM shared humanoid bone ids that map 1:1 into VRMC_vrm.humanoid. */
+/** SagaTree / VRM shared humanoid bone ids that map 1:1 into VRMC_vrm.humanoid. */
 export const VRM1_HUMANOID_BONE_IDS = [
   'hips',
   'spine',
@@ -56,7 +56,7 @@ const EYE_LOOK_CHANNELS = new Set([
   'eyeLookUpRight',
 ]);
 
-/** Lowercase bone name → SagaDrive/VRM humanoid id (subset of runtime alias table). */
+/** Lowercase bone name → SagaTree/VRM humanoid id (subset of runtime alias table). */
 export const PACK_BONE_ALIASES = Object.freeze({
   hips: 'hips',
   j_hips: 'hips',
@@ -249,7 +249,7 @@ function buildLookAt(gazeMode, humanBones, overrides = null) {
     rangeMapVerticalDown: rangeMap(),
     rangeMapVerticalUp: rangeMap(),
     extras: {
-      sagaDriveGazeMode: gazeMode,
+      sagaTreeGazeMode: gazeMode,
       hasLeftEyeBone: humanBones.leftEye != null,
       hasRightEyeBone: humanBones.rightEye != null,
     },
@@ -325,7 +325,7 @@ export async function packAvatarVrm1(opts) {
   } = opts;
 
   const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'));
-  if (inventory.version !== 'SagaDriveLiveActFaceInventoryV1') {
+  if (inventory.version !== 'SagaTreeLiveActFaceInventoryV1') {
     throw new Error(`Unsupported inventory version: ${inventory.version}`);
   }
   if (inventory.structuralPass !== true) {
@@ -338,7 +338,7 @@ export async function packAvatarVrm1(opts) {
   let rigBones = null;
   if (rigPath) {
     const rig = JSON.parse(readFileSync(rigPath, 'utf8'));
-    if (rig.contractVersion !== 'SagaDriveHumanoidRigV1') {
+    if (rig.contractVersion !== 'SagaTreeHumanoidRigV1') {
       throw new Error(`Unsupported rig contract: ${rig.contractVersion}`);
     }
     rigBones = rig.bones || null;
@@ -372,7 +372,7 @@ export async function packAvatarVrm1(opts) {
     meta: {
       name: metaName || String(inventory.input || basename(inputGlbPath)).replace(/\.glb$/i, ''),
       version: '1.0',
-      authors: ['SagaDrive'],
+      authors: ['SagaTree'],
       licenseUrl,
       avatarPermission: 'onlyAuthor',
       allowExcessivelyViolentUsage: false,
@@ -398,7 +398,7 @@ export async function packAvatarVrm1(opts) {
   writeFileSync(outputVrmPath, binary);
 
   const manifest = {
-    contractVersion: 'SagaDriveAvatarVrmPackV1',
+    contractVersion: 'SagaTreeAvatarVrmPackV1',
     packedAt: new Date().toISOString(),
     inputGlbPath,
     inventoryPath,

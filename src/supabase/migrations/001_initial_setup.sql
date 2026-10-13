@@ -1,4 +1,4 @@
--- Initial Setup Migration for SagaDrive
+-- Initial Setup Migration for SagaTree
 -- This ensures Email Auth is enabled and creates demo user
 
 -- Note: Email Auth should be enabled in Supabase Dashboard:

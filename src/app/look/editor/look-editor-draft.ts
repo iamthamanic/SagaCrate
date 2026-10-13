@@ -2,7 +2,7 @@
  * look-editor-draft — UI draft ↔ LookProfileWriteDraft for #344 / #353.
  * Location: src/app/look/editor/look-editor-draft.ts
  *
- * SagaDrive knobs only — no ToonLab raw blobs on the write path.
+ * SagaTree knobs only — no ToonLab raw blobs on the write path.
  * Knobs round-trip via a structured style reference URI (not provider JSON).
  */
 import type { LookReferenceAnalysisDraft } from '../../../domains/look';
@@ -16,7 +16,7 @@ import type {
 
 export type LookEditorUiDraft = {
   displayName: string;
-  /** Character: stylization 0–100 (SagaDrive term). */
+  /** Character: stylization 0–100 (SagaTree term). */
   characterStylization: number;
   /** Character: outline emphasis 0–100. */
   characterOutline: number;
@@ -34,10 +34,10 @@ export type LookEditorUiDraft = {
   source: LookSource;
 };
 
-const KNOBS_REF_ID = 'ref.sagadrive-knobs-v1';
-const KNOBS_URI_PREFIX = 'sagadrive:look-knobs-v1:';
+const KNOBS_REF_ID = 'ref.sagatree-knobs-v1';
+const KNOBS_URI_PREFIX = 'sagatree:look-knobs-v1:';
 const NOTE_REF_ID = 'ref.advanced-note';
-const NOTE_URI_PREFIX = 'sagadrive:look-note:';
+const NOTE_URI_PREFIX = 'sagatree:look-note:';
 
 function clamp01to100(value: number, fallback: number): number {
   if (!Number.isFinite(value)) return fallback;
@@ -134,7 +134,7 @@ export function toLookProfileWriteDraft(ui: LookEditorUiDraft): LookProfileWrite
       id: KNOBS_REF_ID,
       kind: 'style',
       uri: `${KNOBS_URI_PREFIX}${encodeURIComponent(JSON.stringify(knobsPayload))}`,
-      label: 'SagaDrive Look-Regler',
+      label: 'SagaTree Look-Regler',
     },
   ];
   const note = ui.advancedNote.trim();

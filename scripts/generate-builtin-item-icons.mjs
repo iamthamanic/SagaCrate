@@ -1,6 +1,6 @@
 /**
  * generate-builtin-item-icons.mjs
- * Writes flat SagaDrive inventory SVGs for all builtin-standard catalog items
+ * Writes flat SagaTree inventory SVGs for all builtin-standard catalog items
  * (+ core footwear). Style matches public/assets/items/iron-longsword.svg.
  *
  * Usage: node scripts/generate-builtin-item-icons.mjs
@@ -37,7 +37,7 @@ const F = {
 
 function svg(label, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="${escapeXml(label)}">
-  <!-- SagaDrive item icon: ${escapeXml(label)}. Flat vector, transparent bg, ≤6 colors. -->
+  <!-- SagaTree item icon: ${escapeXml(label)}. Flat vector, transparent bg, ≤6 colors. -->
   <g stroke="${STROKE}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
 ${body}
   </g>

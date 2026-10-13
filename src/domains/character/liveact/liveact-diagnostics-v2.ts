@@ -1,5 +1,5 @@
 /**
- * liveact-diagnostics-v2 — SagaDriveLiveActDiagnosticsV2 stage trace (pure domain).
+ * liveact-diagnostics-v2 — SagaTreeLiveActDiagnosticsV2 stage trace (pure domain).
  * Location: src/domains/character/liveact/liveact-diagnostics-v2.ts
  *
  * Stages: RAW → MAPPED → SMOOTHED → CALIBRATED → RETARGETED → APPLIED.
@@ -13,7 +13,7 @@ import {
 } from './liveact-face-contract';
 import type { LiveActFrameV1, LiveActSourceSample } from './liveact-contract';
 
-export const LIVEACT_DIAGNOSTICS_V2_VERSION = 'SagaDriveLiveActDiagnosticsV2' as const;
+export const LIVEACT_DIAGNOSTICS_V2_VERSION = 'SagaTreeLiveActDiagnosticsV2' as const;
 
 export const LIVEACT_DIAGNOSTICS_V2_STAGES = [
   'raw',

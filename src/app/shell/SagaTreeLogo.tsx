@@ -29,5 +29,3 @@ export function SagaTreeLogo({ className = 'w-32 h-32', alt = 'SagaTree Logo' }:
   );
 }
 
-/** @deprecated Use SagaTreeLogo — kept for transitional imports. */
-export const SagaDriveLogo = SagaTreeLogo;

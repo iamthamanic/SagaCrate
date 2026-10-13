@@ -10,18 +10,18 @@ import {
   normalizeCombatRoleForProfile,
 } from './combat-roles';
 import { shiftNpcDamageStep } from './damage-steps';
-import { assertSagaDriveNpcLevel, machtgradLabelForLevel } from './machtgrad';
+import { assertSagaTreeNpcLevel, machtgradLabelForLevel } from './machtgrad';
 import { applyResistanceSlotDeltas, profileAdjustmentsFor } from './profiles';
 import type {
-  SagaDriveCompactStatblockBenchmarks,
-  SagaDriveCompactStatblockInput,
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
+  SagaTreeCompactStatblockBenchmarks,
+  SagaTreeCompactStatblockInput,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
 } from './types';
 
 const DEFAULT_MOVEMENT_METERS = 9;
 
-const PROFILES: readonly SagaDriveCombatProfile[] = [
+const PROFILES: readonly SagaTreeCombatProfile[] = [
   'noncombat',
   'balanced',
   'tough',
@@ -31,18 +31,18 @@ const PROFILES: readonly SagaDriveCombatProfile[] = [
   'control_support',
 ];
 
-const ROLES: readonly SagaDriveCombatRole[] = ['standard', 'elite', 'boss'];
+const ROLES: readonly SagaTreeCombatRole[] = ['standard', 'elite', 'boss'];
 
-function assertProfile(value: string): SagaDriveCombatProfile {
+function assertProfile(value: string): SagaTreeCombatProfile {
   if ((PROFILES as readonly string[]).includes(value)) {
-    return value as SagaDriveCombatProfile;
+    return value as SagaTreeCombatProfile;
   }
   throw new Error(`Unbekanntes Kampfprofil: ${value}`);
 }
 
-function assertRole(value: string): SagaDriveCombatRole {
+function assertRole(value: string): SagaTreeCombatRole {
   if ((ROLES as readonly string[]).includes(value)) {
-    return value as SagaDriveCombatRole;
+    return value as SagaTreeCombatRole;
   }
   throw new Error(`Unbekannte Kampfrolle: ${value}`);
 }
@@ -53,9 +53,9 @@ function assertRole(value: string): SagaDriveCombatRole {
  * Combat role never changes attack, defense, resistances, or base damage.
  */
 export function computeCompactStatblockBenchmarks(
-  input: SagaDriveCompactStatblockInput,
-): SagaDriveCompactStatblockBenchmarks {
-  const level = assertSagaDriveNpcLevel(input.level);
+  input: SagaTreeCompactStatblockInput,
+): SagaTreeCompactStatblockBenchmarks {
+  const level = assertSagaTreeNpcLevel(input.level);
   const combatProfile = assertProfile(input.combatProfile);
   const combatRole = normalizeCombatRoleForProfile(combatProfile, assertRole(input.combatRole));
   const base = levelBenchmark(level);

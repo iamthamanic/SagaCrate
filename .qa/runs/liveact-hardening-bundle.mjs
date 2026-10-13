@@ -1,5 +1,5 @@
 // src/domains/character/liveact/liveact-face-contract.ts
-var LIVEACT_FACE_CONTRACT_VERSION = "SagaDriveLiveActFaceV1";
+var LIVEACT_FACE_CONTRACT_VERSION = "SagaTreeLiveActFaceV1";
 var LIVEACT_FACE_CHANNELS = [
   "_neutral",
   "browDownLeft",
@@ -89,7 +89,7 @@ function assertLiveActFaceChannelsLocalOnly(channels) {
 }
 
 // src/domains/character/liveact/liveact-contract.ts
-var LIVEACT_CONTRACT_VERSION = "SagaDriveLiveActFrameV1";
+var LIVEACT_CONTRACT_VERSION = "SagaTreeLiveActFrameV1";
 var LIVEACT_STATUSES = [
   "idle",
   "starting",
@@ -321,7 +321,7 @@ function assertLiveActFrameLocalOnly(frame) {
 }
 
 // src/domains/character/liveact/liveact-capabilities.ts
-var LIVEACT_CAPABILITIES_VERSION = "SagaDriveLiveActCapabilitiesV1";
+var LIVEACT_CAPABILITIES_VERSION = "SagaTreeLiveActCapabilitiesV1";
 function createEmptyLiveActAvatarFaceSupport() {
   const out = {};
   for (const id of LIVEACT_FACE_CHANNELS) {
@@ -445,7 +445,7 @@ function resolveLiveActChannelTargets(presentTargetNames) {
 }
 
 // src/domains/character/liveact/liveact-face-diagnostics.ts
-var LIVEACT_FACE_DIAGNOSTICS_VERSION = "SagaDriveLiveActFaceDiagnosticsV1";
+var LIVEACT_FACE_DIAGNOSTICS_VERSION = "SagaTreeLiveActFaceDiagnosticsV1";
 function createEmptyLiveActFaceDiagnosticsFrame(input) {
   const empty = [];
   return {

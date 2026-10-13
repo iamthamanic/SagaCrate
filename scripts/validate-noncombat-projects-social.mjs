@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * SagaDrive Noncombat / Projects / Social Validation (#27, Epic #18)
+ * SagaTree Noncombat / Projects / Social Validation (#27, Epic #18)
  *
  * Deterministic validation of §2.8 (collaboration), §14.1–14.9 (exploration,
  * research, social attitude/conflict, hazards, contacts, reputation) and
  * fail-forward outside combat. Covers all 7 mandatory E1 scenarios from
- * docs/sagadrive core validation.md without RNG.
+ * docs/sagatree core validation.md without RNG.
  *
  * Location: scripts/validate-noncombat-projects-social.mjs
  */
@@ -631,7 +631,7 @@ function assertDistinguishability(samples, findings) {
 
 function buildReport({ scenarios, findings, freeNumberBonuses, deadEnds, bounds }) {
   const lines = [];
-  lines.push('# SagaDrive Noncombat / Projects / Social Report (#27)');
+  lines.push('# SagaTree Noncombat / Projects / Social Report (#27)');
   lines.push('');
   lines.push('Deterministische Prüfung von §2.8 + §14.1–14.9 (E1). Kein RNG.');
   lines.push('');

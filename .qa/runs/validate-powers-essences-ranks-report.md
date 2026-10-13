@@ -1,4 +1,4 @@
-# SagaDrive Powers, Essences & Ranks Report (#25)
+# SagaTree Powers, Essences & Ranks Report (#25)
 
 Deterministische Prüfung des §12-Kraftmodells über Ränge I–V und alle fünf Essenzen (§12.6 Budget, §12.2 Aktivierung, §12.4 Aufrechterhaltung, §12.5 Gegenwirkung, §12.3 Begrenzungen).
 

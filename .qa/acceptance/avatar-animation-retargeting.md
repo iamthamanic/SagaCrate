@@ -7,7 +7,7 @@ Humanoid-kompatible Avatare spielen Idle, Walk, Combat und Emotes über denselbe
 
 ## Preconditions
 - #7 Avatar Save Export auf `main`.
-- `SagaDriveHumanoidRigV1` + AvatarCanvas Runtime vorhanden.
+- `SagaTreeHumanoidRigV1` + AvatarCanvas Runtime vorhanden.
 
 ## Happy Path
 - [ ] Domain Animation-Contract + allowlisted Katalog (Idle/Walk/Combat/Emote).

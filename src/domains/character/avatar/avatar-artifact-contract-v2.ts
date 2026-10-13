@@ -13,7 +13,7 @@ import {
 } from './composition-contract-v2';
 import type { AvatarSource } from './avatar-source';
 
-export const AVATAR_ARTIFACT_CONTRACT_VERSION = 'SagaDriveAvatarArtifactV2' as const;
+export const AVATAR_ARTIFACT_CONTRACT_VERSION = 'SagaTreeAvatarArtifactV2' as const;
 
 export const AVATAR_ARTIFACT_FORMATS = ['vrm', 'glb', 'template'] as const;
 export type AvatarArtifactFormat = (typeof AVATAR_ARTIFACT_FORMATS)[number];
@@ -360,8 +360,8 @@ export function mapTemplateToArtifactInput(input: {
     artifactId: input.artifactId,
     ownerUserId: input.ownerUserId,
     characterId: input.characterId,
-    origin: 'sagadrive',
-    legacySource: 'sagadrive',
+    origin: 'sagatree',
+    legacySource: 'sagatree',
     format: input.format ?? 'template',
     storagePath: input.storagePath,
     templateId: input.templateId,

@@ -34,9 +34,9 @@ import {
   type MtoonStyleLights,
 } from './mtoon-style-applier';
 import {
-  createSagaDriveMToonProfileV1,
+  createSagaTreeMToonProfileV1,
   type MtoonStyleCompatibility,
-  type SagaDriveMToonProfileV1,
+  type SagaTreeMToonProfileV1,
 } from '../../../domains/character/avatar/mtoon-profile';
 import {
   AvatarAnimationRuntime,
@@ -68,9 +68,9 @@ import {
 } from '../liveact/liveact-character-face-debug';
 import { listFaceAnchorsManifestUrlCandidates } from '../liveact/face-anchors-manifest-url';
 import type {
-  SagaDriveFaceAnchorId,
-  SagaDriveFaceAnchorTriangleBinding,
-  SagaDriveFaceAnchorsManifestV1,
+  SagaTreeFaceAnchorId,
+  SagaTreeFaceAnchorTriangleBinding,
+  SagaTreeFaceAnchorsManifestV1,
 } from '../../../domains/character/avatar/face-anchor-contract';
 import {
   buildFaceAnchorNodeIndex,
@@ -181,13 +181,13 @@ export class CharacterStudioRuntime {
   private lastRigAnalysis?: AvatarRigAnalysisResult;
   private loadVersion = 0;
   private disposed = false;
-  private readonly styleProfile: SagaDriveMToonProfileV1 = createSagaDriveMToonProfileV1();
+  private readonly styleProfile: SagaTreeMToonProfileV1 = createSagaTreeMToonProfileV1();
   private readonly styleLights: MtoonStyleLights;
   private styleCompatibility: MtoonStyleCompatibility = {
     path: 'pbr-fallback',
     noticeDe: null,
   };
-  /** Editor preview: SagaDrive MToon profile on/off. Default off until loadModel sets VRM vs GLB. Not persisted. */
+  /** Editor preview: SagaTree MToon profile on/off. Default off until loadModel sets VRM vs GLB. Not persisted. */
   private mtoonStyleEnabled = false;
   private materialStyleSnapshots: MaterialStyleSnapshot[] = [];
   /** Provider-neutral LookRuntime (#342) — ToonLab never imported here. */
@@ -212,7 +212,7 @@ export class CharacterStudioRuntime {
   /** Model URL whose anchors are bound; null until the current model is ready. */
   private faceAnchorsModelUrl: string | null = null;
   /** Last bound `avatar.face_anchors` reference — hydration can change it without a model reload. */
-  private faceAnchorsOverrideSource: SagaDriveFaceAnchorsManifestV1 | null = null;
+  private faceAnchorsOverrideSource: SagaTreeFaceAnchorsManifestV1 | null = null;
   /** When true, LiveAct drive application is suppressed for Face Setup (#420). */
   private faceMappingAuthoringActive = false;
   /** Nested base-face capture scopes (equipment hidden / masked bases revealed). */
@@ -434,7 +434,7 @@ export class CharacterStudioRuntime {
     return this.styleCompatibility;
   }
 
-  getStyleProfile(): SagaDriveMToonProfileV1 {
+  getStyleProfile(): SagaTreeMToonProfileV1 {
     return this.styleProfile;
   }
 
@@ -615,15 +615,15 @@ export class CharacterStudioRuntime {
     return this.liveActCharacterFaceDebug.getHandle();
   }
 
-  /** Bound SagaDriveFaceAnchorsV1 for the current model (may be null). */
-  getFaceAnchorsManifest(): SagaDriveFaceAnchorsManifestV1 | null {
+  /** Bound SagaTreeFaceAnchorsV1 for the current model (may be null). */
+  getFaceAnchorsManifest(): SagaTreeFaceAnchorsManifestV1 | null {
     return this.liveActCharacterFaceDebug.getManifest();
   }
 
   /**
    * Session-local rebind for Face Mapping „Übernehmen“ — does not write disk/network.
    */
-  bindFaceAnchorsManifestSession(manifest: SagaDriveFaceAnchorsManifestV1 | null): void {
+  bindFaceAnchorsManifestSession(manifest: SagaTreeFaceAnchorsManifestV1 | null): void {
     if (this.disposed) return;
     this.liveActCharacterFaceDebug.bindManifest(manifest);
   }
@@ -741,8 +741,8 @@ export class CharacterStudioRuntime {
    * (Auto MediaPipe outer-eye samples). Returns null when scale cannot be measured.
    */
   resolveFaceMappingFaceWidthWorld(input?: {
-    readonly leftOuterBinding?: SagaDriveFaceAnchorTriangleBinding | null;
-    readonly rightOuterBinding?: SagaDriveFaceAnchorTriangleBinding | null;
+    readonly leftOuterBinding?: SagaTreeFaceAnchorTriangleBinding | null;
+    readonly rightOuterBinding?: SagaTreeFaceAnchorTriangleBinding | null;
     readonly leftOuterCanvas?: { readonly x: number; readonly y: number } | null;
     readonly rightOuterCanvas?: { readonly x: number; readonly y: number } | null;
   }): number | null {
@@ -779,11 +779,11 @@ export class CharacterStudioRuntime {
     canvasX: number,
     canvasY: number,
     options?: {
-      readonly anchorId?: SagaDriveFaceAnchorId;
+      readonly anchorId?: SagaTreeFaceAnchorId;
       readonly faceWidthWorld?: number | null;
       /** Draft outer-eye bindings used when faceWidthWorld is omitted. */
-      readonly leftOuterBinding?: SagaDriveFaceAnchorTriangleBinding | null;
-      readonly rightOuterBinding?: SagaDriveFaceAnchorTriangleBinding | null;
+      readonly leftOuterBinding?: SagaTreeFaceAnchorTriangleBinding | null;
+      readonly rightOuterBinding?: SagaTreeFaceAnchorTriangleBinding | null;
     },
   ): FaceMappingRaycastHitV1 | null {
     if (this.disposed || !this.currentRoot) return null;
@@ -871,8 +871,8 @@ export class CharacterStudioRuntime {
 
   /** Evaluate a draft binding to world coordinates (null if unavailable). */
   evaluateFaceMappingBindingWorld(
-    binding: SagaDriveFaceAnchorTriangleBinding,
-    anchorId: SagaDriveFaceAnchorId = 'noseTip',
+    binding: SagaTreeFaceAnchorTriangleBinding,
+    anchorId: SagaTreeFaceAnchorId = 'noseTip',
   ): { x: number; y: number; z: number } | null {
     if (this.disposed || !this.currentRoot) return null;
     const index = buildFaceAnchorNodeIndex(this.currentRoot);
@@ -975,13 +975,13 @@ export class CharacterStudioRuntime {
   }
 
   /**
-   * Hide objects explicitly marked sagadriveExcludeFaceMapping for one capture frame.
+   * Hide objects explicitly marked sagatreeExcludeFaceMapping for one capture frame.
    * Complements rigid/skinned runtime groups (same exclude contract as raycast).
    */
   private beginFaceMappingExcludedMarkerCapture(root: THREE.Object3D): () => void {
     const hide: THREE.Object3D[] = [];
     root.traverse((obj) => {
-      if (obj.userData?.sagadriveExcludeFaceMapping === true) {
+      if (obj.userData?.sagatreeExcludeFaceMapping === true) {
         hide.push(obj);
       }
     });
@@ -1346,7 +1346,7 @@ export class CharacterStudioRuntime {
 
   private async loadFaceAnchorsManifestForModel(
     modelUrl: string,
-    characterOverride: SagaDriveFaceAnchorsManifestV1 | null = null,
+    characterOverride: SagaTreeFaceAnchorsManifestV1 | null = null,
   ): Promise<void> {
     const token = ++this.faceAnchorManifestLoadToken;
     // Character-persisted anchors win over asset sidecar (#persist).

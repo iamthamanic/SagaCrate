@@ -1,5 +1,5 @@
 /**
- * Avatar core types — pure SagaDrive CharacterStudio contracts (no React / Three / network).
+ * Avatar core types — pure SagaTree CharacterStudio contracts (no React / Three / network).
  * Location: src/domains/character/avatar/types.ts
  *
  * Adapted from M3 CharacterStudio lifecycle ideas (MIT). No Wallet/NFT/Web3 concepts.

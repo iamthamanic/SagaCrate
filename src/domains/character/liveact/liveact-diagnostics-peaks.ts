@@ -16,7 +16,7 @@ import {
 } from './liveact-diagnostics-v2';
 import { LIVEACT_MIRROR_AVATAR } from './liveact-mediapipe-sample';
 
-export const LIVEACT_DIAGNOSTICS_PEAKS_VERSION = 'SagaDriveLiveActDiagnosticsPeaksV1' as const;
+export const LIVEACT_DIAGNOSTICS_PEAKS_VERSION = 'SagaTreeLiveActDiagnosticsPeaksV1' as const;
 
 /** Signals whose extremes stay inside ±this are left out of the export (idle channels). */
 const EXPORT_MIN_MAGNITUDE = 0.05;

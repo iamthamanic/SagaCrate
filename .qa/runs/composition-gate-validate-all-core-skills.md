@@ -7,7 +7,7 @@
 - **UI-Flows:** keiner berührt (Diff nur `scripts/`, `.qa/`)
 - **Service-Schicht:** keine
 - **Backend/Persistenz:** keine Migration, kein Schema-Diff
-- **Domain-Regeln:** KEINE Laufzeitänderung — Validator liest `sagaDriveSkillDefinitions` nur als Sync-Assert; Core-Doc unverändert
+- **Domain-Regeln:** KEINE Laufzeitänderung — Validator liest `sagaTreeSkillDefinitions` nur als Sync-Assert; Core-Doc unverändert
 
 ## Risiko-Matrix
 | Fluss | Risiko | Befund |

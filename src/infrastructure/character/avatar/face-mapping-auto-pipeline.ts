@@ -18,13 +18,13 @@ import {
   faceMappingScreenSnapBiasForAnchor,
   selectFaceMappingSurfaceAwareCandidate,
 } from '../../../domains/character/avatar/face-mapping-auto-surface-select-v1';
-import type { SagaDriveFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
+import type { SagaTreeFaceAnchorId } from '../../../domains/character/avatar/face-anchor-contract';
 import type { FaceMappingRaycastCandidateV1 } from './face-mapping-raycast';
 import {
-  MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+  MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
   resolveAllMediaPipeAnchorSamples,
   type NormalizedLandmark2dLike,
-} from '../liveact/mediapipe-sagadrive-face-anchor-map-v1';
+} from '../liveact/mediapipe-sagatree-face-anchor-map-v1';
 
 export interface FaceMappingAutoPipelineInput {
   readonly landmarks: readonly NormalizedLandmark2dLike[];
@@ -67,7 +67,7 @@ function messageForStatus(
 
 function trySelectFromCandidates(
   candidates: readonly FaceMappingRaycastCandidateV1[],
-  anchorId: SagaDriveFaceAnchorId,
+  anchorId: SagaTreeFaceAnchorId,
   faceWidthWorld: number | null | undefined,
 ): {
   candidate: FaceMappingRaycastCandidateV1 | null;
@@ -110,7 +110,7 @@ export function runFaceMappingAutoPipeline(
       faceCount: 0,
       messageDe: messageForStatus('no_face', 0),
       anchors: [],
-      mapVersion: MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+      mapVersion: MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
     };
   }
 
@@ -121,7 +121,7 @@ export function runFaceMappingAutoPipeline(
       faceCount,
       messageDe: messageForStatus('multi_face', 0),
       anchors: [],
-      mapVersion: MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+      mapVersion: MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
     };
   }
 
@@ -132,7 +132,7 @@ export function runFaceMappingAutoPipeline(
       faceCount,
       messageDe: messageForStatus('failed', 0),
       anchors: [],
-      mapVersion: MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+      mapVersion: MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
     };
   }
 
@@ -403,6 +403,6 @@ export function runFaceMappingAutoPipeline(
     faceCount: 1,
     messageDe: messageForStatus(status, mapped),
     anchors,
-    mapVersion: MEDIAPIPE_SAGADRIVE_FACE_ANCHOR_MAP_VERSION,
+    mapVersion: MEDIAPIPE_SAGATREE_FACE_ANCHOR_MAP_VERSION,
   };
 }

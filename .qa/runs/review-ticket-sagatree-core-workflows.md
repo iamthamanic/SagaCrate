@@ -1,7 +1,7 @@
 # review-ticket — sagatree-core-workflows-real-apis (#606)
 
 ## Summary
-Adds live core-workflow proof against regular sagadrive compose (Auth → Project →
+Adds live core-workflow proof against regular sagatree compose (Auth → Project →
 Session join → mutate → Storage → Edge member) plus static contract for CI.
 
 ## Risk

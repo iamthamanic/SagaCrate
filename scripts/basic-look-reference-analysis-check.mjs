@@ -160,11 +160,11 @@ section('4 · domain smoke');
       'content ref preserved as content',
     );
     check(
-      okPayload.writeDraft.references.some((r) => r.id === 'ref.sagadrive-palette-v1'),
+      okPayload.writeDraft.references.some((r) => r.id === 'ref.sagatree-palette-v1'),
       'palette structured ref',
     );
     check(
-      okPayload.writeDraft.references.some((r) => r.id === 'ref.sagadrive-knobs-v1'),
+      okPayload.writeDraft.references.some((r) => r.id === 'ref.sagatree-knobs-v1'),
       'knobs structured ref',
     );
   }

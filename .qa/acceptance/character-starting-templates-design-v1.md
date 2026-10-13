@@ -1,7 +1,7 @@
-# Feature: Finale 10 SagaDrive-Starttemplates als Level-1-Build-Vertrag (#465)
+# Feature: Finale 10 SagaTree-Starttemplates als Level-1-Build-Vertrag (#465)
 
 ## Intent
-Fixiere vor der Implementierung den finalen SagaDrive-Core-Vertrag für die zehn vorkonfigurierten Level-1-Starttemplates.
+Fixiere vor der Implementierung den finalen SagaTree-Core-Vertrag für die zehn vorkonfigurierten Level-1-Starttemplates.
 
 ## Happy Path
 - [x] Design-Datei enthält exakt: Berserker, Vanguard, Zauberer, Technomant, Medicus, Mystiker, Assassine, Mechanom, Mentalist, Herold; keine Wächter/Waldläufer.

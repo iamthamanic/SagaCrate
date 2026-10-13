@@ -1,4 +1,4 @@
--- SagaDrive Database Schema V2
+-- SagaTree Database Schema V2
 -- Updated terminology: Projects (campaigns) contain Sessions (individual play sessions)
 
 -- ============================================

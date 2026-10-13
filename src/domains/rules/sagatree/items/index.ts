@@ -1,5 +1,5 @@
 /**
- * sagadrive items rules slice — public API for §5.7 / §8.3 / §10 item mechanics.
+ * sagatree items rules slice — public API for §5.7 / §8.3 / §10 item mechanics.
  * Location: src/domains/rules/sagatree/items/index.ts
  *
  * Inventory v2 re-exports rule types for compatibility; this barrel is the

@@ -1,5 +1,5 @@
 -- ============================================
--- SagaDrive - COMPLETE DATABASE SCHEMA V3
+-- SagaTree - COMPLETE DATABASE SCHEMA V3
 -- D&D-Style TTRPG Platform with flexible rulesets
 -- ============================================
 

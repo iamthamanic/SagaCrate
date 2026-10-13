@@ -1,8 +1,8 @@
 /**
- * SagaDrive Modular Avatar GLB v1 — pure domain metadata contract (#250).
+ * SagaTree Modular Avatar GLB v1 — pure domain metadata contract (#250).
  * Location: src/domains/character/avatar/modular-glb-contract-v1.ts
  *
- * Validates `extras.sagadrive` on glTF nodes/assets. Never trusts foreign extras blindly.
+ * Validates `extras.sagatree` on glTF nodes/assets. Never trusts foreign extras blindly.
  * Names are human-readable fallback only — machine truth is extras + role enums.
  */
 
@@ -16,11 +16,11 @@ import {
   isAvatarV2BodyFamily,
 } from './composition-contract-v2';
 import {
-  SAGA_DRIVE_HUMANOID_ANCHORS,
-  type SagaDriveHumanoidAnchorId,
+  SAGA_TREE_HUMANOID_ANCHORS,
+  type SagaTreeHumanoidAnchorId,
 } from './rig-contract';
 
-export const MODULAR_AVATAR_GLB_CONTRACT_VERSION = 'SagaDriveModularAvatarGlbV1' as const;
+export const MODULAR_AVATAR_GLB_CONTRACT_VERSION = 'SagaTreeModularAvatarGlbV1' as const;
 
 export const MODULAR_AVATAR_GLB_NODE_ROLES = ['body', 'wearable', 'trait', 'prop'] as const;
 export type ModularAvatarGlbNodeRole = (typeof MODULAR_AVATAR_GLB_NODE_ROLES)[number];
@@ -48,7 +48,7 @@ export const MODULAR_AVATAR_GLB_STATUSES = [
 ] as const;
 export type ModularAvatarGlbStatus = (typeof MODULAR_AVATAR_GLB_STATUSES)[number];
 
-/** Machine-readable SagaDrive extras blob (glTF extras.sagadrive). */
+/** Machine-readable SagaTree extras blob (glTF extras.sagatree). */
 export interface ModularAvatarGlbExtrasV1 {
   contractVersion: typeof MODULAR_AVATAR_GLB_CONTRACT_VERSION;
   role: ModularAvatarGlbNodeRole;
@@ -56,7 +56,7 @@ export interface ModularAvatarGlbExtrasV1 {
   /** Body family hint for wearables/body; custom allowed. */
   bodyFamily?: AvatarV2BodyFamily;
   /** Rigid/prop attachment anchor when role is prop or wearable-rigid. */
-  attachmentAnchor?: SagaDriveHumanoidAnchorId;
+  attachmentAnchor?: SagaTreeHumanoidAnchorId;
   hideRegions?: readonly EquipmentHideRegion[];
   /** Optional human label — never used as validation authority. */
   displayName?: string;
@@ -96,19 +96,19 @@ function isHideRegion(value: unknown): value is EquipmentHideRegion {
   return typeof value === 'string' && (EQUIPMENT_HIDE_REGIONS as readonly string[]).includes(value);
 }
 
-function isAnchor(value: unknown): value is SagaDriveHumanoidAnchorId {
+function isAnchor(value: unknown): value is SagaTreeHumanoidAnchorId {
   return (
-    typeof value === 'string' && (SAGA_DRIVE_HUMANOID_ANCHORS as readonly string[]).includes(value)
+    typeof value === 'string' && (SAGA_TREE_HUMANOID_ANCHORS as readonly string[]).includes(value)
   );
 }
 
 /**
- * Parse a single `extras.sagadrive` object. Unknown contract versions → needs-review payload
+ * Parse a single `extras.sagatree` object. Unknown contract versions → needs-review payload
  * is signaled by returning null + issues (caller aggregates).
  */
 export function parseModularAvatarGlbExtras(
   extrasRoot: unknown,
-  pathPrefix = 'extras.sagadrive',
+  pathPrefix = 'extras.sagatree',
 ): {
   extras: ModularAvatarGlbExtrasV1 | null;
   issues: ModularAvatarGlbValidationIssue[];
@@ -123,33 +123,33 @@ export function parseModularAvatarGlbExtras(
     issues.push({
       code: 'extras-not-object',
       path: pathPrefix,
-      messageDe: 'extras.sagadrive muss ein Objekt sein.',
+      messageDe: 'extras.sagatree muss ein Objekt sein.',
     });
     return { extras: null, issues, versionMismatch: false };
   }
 
   const bag = extrasRoot as Record<string, unknown>;
-  const sagadrive = bag.sagadrive !== undefined ? bag.sagadrive : bag;
+  const sagatree = bag.sagatree !== undefined ? bag.sagatree : bag;
   const root =
-    bag.sagadrive !== undefined && typeof bag.sagadrive === 'object' && !Array.isArray(bag.sagadrive)
-      ? (bag.sagadrive as Record<string, unknown>)
+    bag.sagatree !== undefined && typeof bag.sagatree === 'object' && !Array.isArray(bag.sagatree)
+      ? (bag.sagatree as Record<string, unknown>)
       : bag;
 
-  // Prefer nested extras.sagadrive; also accept already-unwrapped objects with contractVersion.
+  // Prefer nested extras.sagatree; also accept already-unwrapped objects with contractVersion.
   const meta =
-    bag.sagadrive !== undefined
+    bag.sagatree !== undefined
       ? root
       : 'contractVersion' in bag || 'role' in bag
         ? bag
-        : typeof sagadrive === 'object' && sagadrive !== null && !Array.isArray(sagadrive)
-          ? (sagadrive as Record<string, unknown>)
+        : typeof sagatree === 'object' && sagatree !== null && !Array.isArray(sagatree)
+          ? (sagatree as Record<string, unknown>)
           : null;
 
   if (!meta) {
     issues.push({
-      code: 'extras-missing-sagadrive',
+      code: 'extras-missing-sagatree',
       path: pathPrefix,
-      messageDe: 'Kein gültiges extras.sagadrive gefunden.',
+      messageDe: 'Kein gültiges extras.sagatree gefunden.',
     });
     return { extras: null, issues, versionMismatch: false };
   }
@@ -199,7 +199,7 @@ export function parseModularAvatarGlbExtras(
     }
   }
 
-  let attachmentAnchor: SagaDriveHumanoidAnchorId | undefined;
+  let attachmentAnchor: SagaTreeHumanoidAnchorId | undefined;
   if (meta.attachmentAnchor !== undefined) {
     if (!isAnchor(meta.attachmentAnchor)) {
       issues.push({
@@ -304,9 +304,9 @@ export function validateModularAvatarGlbNodes(
   } else if (extrasPresent === 0) {
     status = 'limited';
     issues.push({
-      code: 'no-sagadrive-extras',
+      code: 'no-sagatree-extras',
       path: 'nodes',
-      messageDe: 'Keine extras.sagadrive — Analyzer darf nur heuristisch ableiten.',
+      messageDe: 'Keine extras.sagatree — Analyzer darf nur heuristisch ableiten.',
     });
   } else if (parsedNodes.every((node) => node.role !== 'body')) {
     status = 'limited';
@@ -335,4 +335,4 @@ export const MODULAR_AVATAR_GLB_ROLE_SLOT_HINTS: Readonly<
   prop: ['prop_main', 'prop_off', 'accessory'],
 };
 
-export { AVATAR_V2_BODY_FAMILIES, EQUIPMENT_HIDE_REGIONS, SAGA_DRIVE_HUMANOID_ANCHORS };
+export { AVATAR_V2_BODY_FAMILIES, EQUIPMENT_HIDE_REGIONS, SAGA_TREE_HUMANOID_ANCHORS };

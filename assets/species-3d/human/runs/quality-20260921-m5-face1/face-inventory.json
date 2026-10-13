@@ -1,5 +1,5 @@
 {
-  "version": "SagaDriveLiveActFaceInventoryV1",
+  "version": "SagaTreeLiveActFaceInventoryV1",
   "input": "human-male-quality-20260921-m5-face1.glb",
   "baselineFile": "human-male-quality-20260921-m5.glb",
   "profile": "core-v1",
@@ -10,7 +10,7 @@
     "numErrors": 0,
     "numWarnings": 4
   },
-  "sagaDrive": {
+  "sagaTree": {
     "pass": true,
     "errors": [],
     "missingRequired": [],
@@ -143,7 +143,7 @@
     "byteCount": 86172992
   },
   "semanticQa": {
-    "contractVersion": "SagaDriveLiveActFaceSemanticQaV1",
+    "contractVersion": "SagaTreeLiveActFaceSemanticQaV1",
     "profileVersion": "liveact-face-semantic-profile-v1",
     "pass": true,
     "skipped": false,

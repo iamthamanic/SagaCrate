@@ -23,7 +23,7 @@ import {
   type LiveActFaceChannels,
 } from './liveact-face-contract';
 
-export const LIVEACT_NETWORK_FRAME_CONTRACT = 'SagaDriveLiveActNetworkFrameV1' as const;
+export const LIVEACT_NETWORK_FRAME_CONTRACT = 'SagaTreeLiveActNetworkFrameV1' as const;
 export const LIVEACT_NETWORK_TOPIC = 'liveact-data' as const;
 /** Max publish rate (Hz) — aligns with desktop LiveAct FPS cap. */
 export const LIVEACT_NETWORK_MAX_SEND_HZ = 30 as const;

@@ -6,22 +6,22 @@ import { useCallback, useEffect, useState } from 'react';
 import { Badge } from '../../../shared/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../shared/ui/accordion';
 import {
-  SAGA_DRIVE_START_FREE_SKILL_POINTS,
-  createEmptySagaDriveSkillRanks,
-  getSagaDriveSkill,
-  sagaDriveAttributeDefinitions,
-  sagaDriveSkillDefinitions,
-  type SagaDriveAttributeKey,
-  type SagaDriveSkillKey,
+  SAGA_TREE_START_FREE_SKILL_POINTS,
+  createEmptySagaTreeSkillRanks,
+  getSagaTreeSkill,
+  sagaTreeAttributeDefinitions,
+  sagaTreeSkillDefinitions,
+  type SagaTreeAttributeKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import type { CharacterAttributesDto } from '../../../domains/character';
 import {
-  getSagaDriveSkillCap,
-  resolveSagaDriveSkillRanksSafe,
-  type SagaDriveBackgroundSkillPoints,
-  type SagaDriveSkillAdvanceDto,
-  type SagaDriveSpecializationRecordDto,
-  type SagaDriveStartSkillBuild,
+  getSagaTreeSkillCap,
+  resolveSagaTreeSkillRanksSafe,
+  type SagaTreeBackgroundSkillPoints,
+  type SagaTreeSkillAdvanceDto,
+  type SagaTreeSpecializationRecordDto,
+  type SagaTreeStartSkillBuild,
 } from '../../../domains/rules/sagatree/skill-progression';
 import type { CarouselScrollPhase } from '../../../app/character/shared/carousel.types';
 import { AttributeSkillConnector } from './AttributeSkillConnector';
@@ -33,22 +33,22 @@ import { SkillProgressionSlotsPanel } from './SkillProgressionSlotsPanel';
 interface CharacterSkillsPanelProps {
   characterLevel: number;
   attributes: CharacterAttributesDto;
-  freeRanks: Record<SagaDriveSkillKey, number>;
-  onFreeRanksChange: (ranks: Record<SagaDriveSkillKey, number>) => void;
-  backgroundPoolSkills: readonly SagaDriveSkillKey[];
-  backgroundSkillPoints: SagaDriveBackgroundSkillPoints;
-  archetypeTrainingSkill?: SagaDriveSkillKey;
-  skillAdvances: SagaDriveSkillAdvanceDto[];
-  onSkillAdvancesChange: (advances: SagaDriveSkillAdvanceDto[]) => void;
-  specializations: SagaDriveSpecializationRecordDto[];
-  onSpecializationsChange: (entries: SagaDriveSpecializationRecordDto[]) => void;
-  selectedSkill?: SagaDriveSkillKey;
-  onSelectedSkillChange?: (skill: SagaDriveSkillKey) => void;
+  freeRanks: Record<SagaTreeSkillKey, number>;
+  onFreeRanksChange: (ranks: Record<SagaTreeSkillKey, number>) => void;
+  backgroundPoolSkills: readonly SagaTreeSkillKey[];
+  backgroundSkillPoints: SagaTreeBackgroundSkillPoints;
+  archetypeTrainingSkill?: SagaTreeSkillKey;
+  skillAdvances: SagaTreeSkillAdvanceDto[];
+  onSkillAdvancesChange: (advances: SagaTreeSkillAdvanceDto[]) => void;
+  specializations: SagaTreeSpecializationRecordDto[];
+  onSpecializationsChange: (entries: SagaTreeSpecializationRecordDto[]) => void;
+  selectedSkill?: SagaTreeSkillKey;
+  onSelectedSkillChange?: (skill: SagaTreeSkillKey) => void;
 }
 
-function attributeForSkill(skill: SagaDriveSkillKey | undefined): SagaDriveAttributeKey {
-  if (!skill) return sagaDriveAttributeDefinitions[0]?.key ?? 'strength';
-  return getSagaDriveSkill(skill).attribute;
+function attributeForSkill(skill: SagaTreeSkillKey | undefined): SagaTreeAttributeKey {
+  if (!skill) return sagaTreeAttributeDefinitions[0]?.key ?? 'strength';
+  return getSagaTreeSkill(skill).attribute;
 }
 
 export function CharacterSkillsPanel({
@@ -66,23 +66,23 @@ export function CharacterSkillsPanel({
   selectedSkill,
   onSelectedSkillChange,
 }: CharacterSkillsPanelProps) {
-  const freeUsed = sagaDriveSkillDefinitions.reduce((sum, skill) => sum + freeRanks[skill.key], 0);
-  const startBuild: SagaDriveStartSkillBuild = {
+  const freeUsed = sagaTreeSkillDefinitions.reduce((sum, skill) => sum + freeRanks[skill.key], 0);
+  const startBuild: SagaTreeStartSkillBuild = {
     freeSkillRanks: freeRanks,
     backgroundSkillPoints,
     archetypeTrainingSkill,
   };
-  const finalRanks = resolveSagaDriveSkillRanksSafe(
+  const finalRanks = resolveSagaTreeSkillRanksSafe(
     { ...startBuild, skillAdvances, specializations },
     characterLevel,
   );
-  const skillCap = getSagaDriveSkillCap(characterLevel);
-  const selected = selectedSkill ? getSagaDriveSkill(selectedSkill) : undefined;
+  const skillCap = getSagaTreeSkillCap(characterLevel);
+  const selected = selectedSkill ? getSagaTreeSkill(selectedSkill) : undefined;
   const backgroundSpec = specializations.find((entry) => entry.source === 'background');
 
-  const [activeAttribute, setActiveAttribute] = useState<SagaDriveAttributeKey>(() => attributeForSkill(selectedSkill));
+  const [activeAttribute, setActiveAttribute] = useState<SagaTreeAttributeKey>(() => attributeForSkill(selectedSkill));
   const [scrollPhase, setScrollPhase] = useState<CarouselScrollPhase>('settled');
-  const [hoveredSkill, setHoveredSkill] = useState<SagaDriveSkillKey | null>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<SagaTreeSkillKey | null>(null);
   const [isFormulaOpen, setIsFormulaOpen] = useState(false);
 
   useEffect(() => {
@@ -107,19 +107,19 @@ export function CharacterSkillsPanel({
     setScrollPhase('settled');
   }, []);
 
-  const changeFreeRank = (skill: SagaDriveSkillKey, delta: -1 | 1) => {
+  const changeFreeRank = (skill: SagaTreeSkillKey, delta: -1 | 1) => {
     const currentFree = freeRanks[skill];
     const currentFinal = finalRanks[skill];
-    if (delta > 0 && (freeUsed >= SAGA_DRIVE_START_FREE_SKILL_POINTS || currentFinal >= skillCap)) return;
+    if (delta > 0 && (freeUsed >= SAGA_TREE_START_FREE_SKILL_POINTS || currentFinal >= skillCap)) return;
     if (delta < 0 && currentFree <= 0) return;
     onFreeRanksChange({ ...freeRanks, [skill]: currentFree + delta });
   };
 
-  const attributeSkills = sagaDriveSkillDefinitions.filter((skill) => skill.attribute === activeAttribute);
+  const attributeSkills = sagaTreeSkillDefinitions.filter((skill) => skill.attribute === activeAttribute);
   const rankedSkills = attributeSkills
     .filter((skill) => finalRanks[skill.key] > 0)
     .map((skill) => skill.key);
-  const activeAttributeDef = sagaDriveAttributeDefinitions.find((entry) => entry.key === activeAttribute);
+  const activeAttributeDef = sagaTreeAttributeDefinitions.find((entry) => entry.key === activeAttribute);
   const connectorActiveSkill = hoveredSkill ?? (selectedSkill && attributeForSkill(selectedSkill) === activeAttribute ? selectedSkill : null);
 
   return (
@@ -143,8 +143,8 @@ export function CharacterSkillsPanel({
               Wähle ein Attribut im Karussell. Darunter liegen die verbundenen Fertigkeiten.
             </p>
           </div>
-          <Badge variant={freeUsed >= SAGA_DRIVE_START_FREE_SKILL_POINTS ? 'default' : 'outline'}>
-            {freeUsed} / {SAGA_DRIVE_START_FREE_SKILL_POINTS} Punkte
+          <Badge variant={freeUsed >= SAGA_TREE_START_FREE_SKILL_POINTS ? 'default' : 'outline'}>
+            {freeUsed} / {SAGA_TREE_START_FREE_SKILL_POINTS} Punkte
           </Badge>
         </div>
 
@@ -204,7 +204,7 @@ export function CharacterSkillsPanel({
                       developmentSpecializationNames={devSpecs.map((entry) => entry.name)}
                       focused={selectedSkill === skill.key}
                       canDecreaseFree={freeRank > 0}
-                      canIncreaseFree={freeUsed < SAGA_DRIVE_START_FREE_SKILL_POINTS && finalRank < skillCap}
+                      canIncreaseFree={freeUsed < SAGA_TREE_START_FREE_SKILL_POINTS && finalRank < skillCap}
                       onSelect={() => onSelectedSkillChange?.(skill.key)}
                       onHoverChange={setHoveredSkill}
                       onChangeFreeRank={(delta) => changeFreeRank(skill.key, delta)}
@@ -262,4 +262,4 @@ export function CharacterSkillsPanel({
   );
 }
 
-export { createEmptySagaDriveSkillRanks, resolveSagaDriveSkillRanksSafe };
+export { createEmptySagaTreeSkillRanks, resolveSagaTreeSkillRanksSafe };

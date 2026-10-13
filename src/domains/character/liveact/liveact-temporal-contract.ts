@@ -1,5 +1,5 @@
 /**
- * liveact-temporal-contract — SagaDrive Adaptive Temporal Solver V1 (#448).
+ * liveact-temporal-contract — SagaTree Adaptive Temporal Solver V1 (#448).
  * Location: src/domains/character/liveact/liveact-temporal-contract.ts
  *
  * Time-based, signal-group policies. No MediaPipe/React/Three.
@@ -9,7 +9,7 @@
 import type { LiveActFaceChannelId } from './liveact-face-contract';
 import { LIVEACT_FACE_CHANNELS } from './liveact-face-contract';
 
-export const LIVEACT_TEMPORAL_CONTRACT = 'SagaDriveLiveActTemporalV1' as const;
+export const LIVEACT_TEMPORAL_CONTRACT = 'SagaTreeLiveActTemporalV1' as const;
 export const LIVEACT_TEMPORAL_POLICY_VERSION = 'liveact-temporal-policy-v1' as const;
 
 /** Signal groups with shared continuous-time one-pole policies. */

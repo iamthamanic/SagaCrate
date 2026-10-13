@@ -2,9 +2,9 @@
  * Standard / Elite / Boss combat-role overlay (durability + impulses only).
  * Location: src/domains/rules/sagatree/npc-creature-power/combat-roles.ts
  */
-import type { SagaDriveCombatProfile, SagaDriveCombatRole, SagaDriveCombatRoleRules } from './types';
+import type { SagaTreeCombatProfile, SagaTreeCombatRole, SagaTreeCombatRoleRules } from './types';
 
-export const SAGADRIVE_COMBAT_ROLE_RULES: Record<SagaDriveCombatRole, SagaDriveCombatRoleRules> = {
+export const SAGATREE_COMBAT_ROLE_RULES: Record<SagaTreeCombatRole, SagaTreeCombatRoleRules> = {
   standard: {
     role: 'standard',
     healthMultiplier: 1,
@@ -34,15 +34,15 @@ export const SAGADRIVE_COMBAT_ROLE_RULES: Record<SagaDriveCombatRole, SagaDriveC
   },
 };
 
-export function combatRoleRulesFor(role: SagaDriveCombatRole): SagaDriveCombatRoleRules {
-  return SAGADRIVE_COMBAT_ROLE_RULES[role];
+export function combatRoleRulesFor(role: SagaTreeCombatRole): SagaTreeCombatRoleRules {
+  return SAGATREE_COMBAT_ROLE_RULES[role];
 }
 
 /** Nichtkämpferisch hides/defaults Standard; Elite/Boss impulses remain combat-only. */
 export function normalizeCombatRoleForProfile(
-  profile: SagaDriveCombatProfile,
-  role: SagaDriveCombatRole,
-): SagaDriveCombatRole {
+  profile: SagaTreeCombatProfile,
+  role: SagaTreeCombatRole,
+): SagaTreeCombatRole {
   if (profile === 'noncombat') return 'standard';
   return role;
 }
@@ -61,7 +61,7 @@ export function combineHealth(
   return Math.ceil(baseHealth * profileMultiplier * roleMultiplier);
 }
 
-export function impulsesAllowed(role: SagaDriveCombatRole, incapacitated: boolean): boolean {
+export function impulsesAllowed(role: SagaTreeCombatRole, incapacitated: boolean): boolean {
   if (incapacitated) return false;
   return combatRoleRulesFor(role).impulsesPerRound > 0;
 }

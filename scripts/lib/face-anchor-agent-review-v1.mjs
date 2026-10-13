@@ -24,8 +24,8 @@ export const FACE_ANCHOR_AGENT_REVIEW_EVIDENCE_VIEWS = [
 
 export const FACE_ANCHOR_VISUAL_STATUSES = ['pass', 'fail', 'uncertain'];
 
-/** Same 21 ids as SagaDriveFaceAnchorsV1 — duplicated for offline scripts. */
-export const SAGA_DRIVE_FACE_ANCHOR_IDS = [
+/** Same 21 ids as SagaTreeFaceAnchorsV1 — duplicated for offline scripts. */
+export const SAGA_TREE_FACE_ANCHOR_IDS = [
   'mouthUpper',
   'mouthLower',
   'mouthCornerLeft',
@@ -199,7 +199,7 @@ export function validateFaceAnchorAgentReviewPassReport(raw, expected) {
     errors.push('topology_fingerprint_mismatch');
   }
   if (typeof r.reviewerId !== 'string' || !r.reviewerId.trim()) errors.push('missing_reviewer_id');
-  if (!Array.isArray(r.findings) || r.findings.length !== SAGA_DRIVE_FACE_ANCHOR_IDS.length) {
+  if (!Array.isArray(r.findings) || r.findings.length !== SAGA_TREE_FACE_ANCHOR_IDS.length) {
     errors.push('findings_count_mismatch');
   } else {
     const seen = new Set();
@@ -210,7 +210,7 @@ export function validateFaceAnchorAgentReviewPassReport(raw, expected) {
       }
       const row = /** @type {Record<string, unknown>} */ (f);
       const id = String(row.anchorId || '');
-      if (!SAGA_DRIVE_FACE_ANCHOR_IDS.includes(id)) errors.push(`unknown_anchor:${id}`);
+      if (!SAGA_TREE_FACE_ANCHOR_IDS.includes(id)) errors.push(`unknown_anchor:${id}`);
       if (seen.has(id)) errors.push(`duplicate_anchor:${id}`);
       seen.add(id);
       for (const key of ['visualStatus', 'anatomyStatus', 'sideStatus', 'surfaceStatus']) {
@@ -235,7 +235,7 @@ export function validateFaceAnchorAgentReviewPassReport(raw, expected) {
         }
       }
     }
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       if (!seen.has(id)) errors.push(`missing_anchor:${id}`);
     }
   }
@@ -306,7 +306,7 @@ export function aggregateFaceAnchorAgentReviews(input) {
     }
   }
 
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const statuses = input.passes.map((p) => {
       const findings = /** @type {Array<Record<string, unknown>>} */ (p.findings || []);
       return findings.find((f) => f.anchorId === id);
@@ -352,7 +352,7 @@ export function aggregateFaceAnchorAgentReviews(input) {
 export function buildAllPassAgentReviewFindings(
   evidenceViews = FACE_ANCHOR_AGENT_REVIEW_EVIDENCE_VIEWS,
 ) {
-  return SAGA_DRIVE_FACE_ANCHOR_IDS.map((anchorId) => ({
+  return SAGA_TREE_FACE_ANCHOR_IDS.map((anchorId) => ({
     anchorId,
     visualStatus: 'pass',
     anatomyStatus: 'pass',

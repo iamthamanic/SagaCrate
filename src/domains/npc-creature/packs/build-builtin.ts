@@ -8,9 +8,9 @@
 import type { NpcCreatureDefinition } from '../definition';
 import type { NpcCreatureCategory, NpcCreatureKind } from '../taxonomy';
 import type {
-  SagaDriveCombatProfile,
-  SagaDriveCombatRole,
-  SagaDriveNpcLevel,
+  SagaTreeCombatProfile,
+  SagaTreeCombatRole,
+  SagaTreeNpcLevel,
 } from '../../rules/sagatree/npc-creature-power';
 import { normalizeCombatRoleForProfile } from '../../rules/sagatree/npc-creature-power';
 
@@ -20,9 +20,9 @@ export interface BuiltinNpcCreatureInput {
   description: string;
   kind: NpcCreatureKind;
   category: NpcCreatureCategory;
-  level: SagaDriveNpcLevel;
-  combatProfile: SagaDriveCombatProfile;
-  combatRole?: SagaDriveCombatRole;
+  level: SagaTreeNpcLevel;
+  combatProfile: SagaTreeCombatProfile;
+  combatRole?: SagaTreeCombatRole;
   tags?: readonly string[];
   notes?: string;
   /**

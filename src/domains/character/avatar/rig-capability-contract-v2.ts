@@ -9,18 +9,18 @@
 
 import {
   RIG_CONTRACT_VERSION,
-  SAGA_DRIVE_HUMANOID_ANCHORS,
-  SAGA_DRIVE_HUMANOID_BONES,
+  SAGA_TREE_HUMANOID_ANCHORS,
+  SAGA_TREE_HUMANOID_BONES,
   listMissingHumanoidBones,
   resolveAvatarRigCapabilities,
   type AvatarRigCapabilityFlag,
-  type SagaDriveHumanoidAnchorId,
-  type SagaDriveHumanoidBoneId,
-  type SagaDriveHumanoidRigV1,
+  type SagaTreeHumanoidAnchorId,
+  type SagaTreeHumanoidBoneId,
+  type SagaTreeHumanoidRigV1,
 } from './rig-contract';
 
 export const RIG_CAPABILITY_CONTRACT_V2_VERSION =
-  'SagaDriveAvatarRigCapabilityV2' as const;
+  'SagaTreeAvatarRigCapabilityV2' as const;
 
 /** KISS: only humanoid + custom-creature (no speculative anatomy families). */
 export const AVATAR_RIG_PROFILE_KINDS_V2 = ['humanoid', 'custom-creature'] as const;
@@ -101,14 +101,14 @@ export interface AvatarSkeletonEvidenceV2 {
    * Optional partial humanoid bone map. Empty for true custom creatures.
    * Never invent mappings from unknown skeletons.
    */
-  mappedHumanoidBones?: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>;
+  mappedHumanoidBones?: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>;
 }
 
 export interface AvatarHumanoidProfileV2 {
   kind: 'humanoid';
   /** Compatibility adapter — preserves Humanoid Rig V1 wire shape. */
-  rigV1: SagaDriveHumanoidRigV1;
-  missingBones: readonly SagaDriveHumanoidBoneId[];
+  rigV1: SagaTreeHumanoidRigV1;
+  missingBones: readonly SagaTreeHumanoidBoneId[];
 }
 
 export interface AvatarCustomCreatureProfileV2 {
@@ -162,7 +162,7 @@ function hasAnySafeCustomAnchor(
  * Map Humanoid Rig V1 → V2 humanoid profile (adapter; does not mutate V1).
  */
 export function mapHumanoidRigV1ToProfile(
-  rig: SagaDriveHumanoidRigV1,
+  rig: SagaTreeHumanoidRigV1,
 ): AvatarHumanoidProfileV2 {
   return {
     kind: 'humanoid',
@@ -175,7 +175,7 @@ export function mapHumanoidRigV1ToProfile(
  * Derive semantic anchors from a V1 bone map (compatibility path).
  */
 export function deriveSemanticAnchorsFromHumanoidBones(
-  bones: Readonly<Partial<Record<SagaDriveHumanoidBoneId, string>>>,
+  bones: Readonly<Partial<Record<SagaTreeHumanoidBoneId, string>>>,
 ): Partial<Record<AvatarSemanticAnchorIdV2, string>> {
   const anchors: Partial<Record<AvatarSemanticAnchorIdV2, string>> = {};
   if (bones.head) anchors.head = bones.head;
@@ -196,11 +196,11 @@ export function deriveSemanticAnchorsFromHumanoidBones(
  */
 export function buildHumanoidRigV1FromEvidence(
   evidence: AvatarSkeletonEvidenceV2,
-): SagaDriveHumanoidRigV1 {
+): SagaTreeHumanoidRigV1 {
   const bones = evidence.mappedHumanoidBones ?? {};
   const semantic = deriveSemanticAnchorsFromHumanoidBones(bones);
-  const anchors: Partial<Record<SagaDriveHumanoidAnchorId, string>> = {};
-  for (const id of SAGA_DRIVE_HUMANOID_ANCHORS) {
+  const anchors: Partial<Record<SagaTreeHumanoidAnchorId, string>> = {};
+  for (const id of SAGA_TREE_HUMANOID_ANCHORS) {
     const name = semantic[id];
     if (name) anchors[id] = name;
   }
@@ -432,9 +432,9 @@ export function capabilityFlagLabelV2(flag: AvatarRigCapabilityFlagV2): string {
 
 function fullHumanoidBones(
   prefix: string,
-): Partial<Record<SagaDriveHumanoidBoneId, string>> {
-  const bones: Partial<Record<SagaDriveHumanoidBoneId, string>> = {};
-  for (const id of SAGA_DRIVE_HUMANOID_BONES) {
+): Partial<Record<SagaTreeHumanoidBoneId, string>> {
+  const bones: Partial<Record<SagaTreeHumanoidBoneId, string>> = {};
+  for (const id of SAGA_TREE_HUMANOID_BONES) {
     bones[id] = `${prefix}_${id}`;
   }
   return bones;
@@ -453,8 +453,8 @@ export function listCustomCreatureGoldenFixtures(): readonly CustomCreatureGolde
       labelDe: 'Mensch (Humanoid)',
       expectedProfileKind: 'humanoid',
       evidence: {
-        boneCount: SAGA_DRIVE_HUMANOID_BONES.length,
-        sourceBoneNames: SAGA_DRIVE_HUMANOID_BONES.map((id) => `Human_${id}`),
+        boneCount: SAGA_TREE_HUMANOID_BONES.length,
+        sourceBoneNames: SAGA_TREE_HUMANOID_BONES.map((id) => `Human_${id}`),
         hasSkinnedMesh: true,
         hasVrmHumanoid: true,
         semanticAnchors: deriveSemanticAnchorsFromHumanoidBones(humanBones),
@@ -482,8 +482,8 @@ export function listCustomCreatureGoldenFixtures(): readonly CustomCreatureGolde
       labelDe: 'Zwerg (Humanoid, Compact-Proportionen)',
       expectedProfileKind: 'humanoid',
       evidence: {
-        boneCount: SAGA_DRIVE_HUMANOID_BONES.length,
-        sourceBoneNames: SAGA_DRIVE_HUMANOID_BONES.map((id) => `Dwarf_${id}`),
+        boneCount: SAGA_TREE_HUMANOID_BONES.length,
+        sourceBoneNames: SAGA_TREE_HUMANOID_BONES.map((id) => `Dwarf_${id}`),
         hasSkinnedMesh: true,
         hasVrmHumanoid: false,
         semanticAnchors: deriveSemanticAnchorsFromHumanoidBones(dwarfBones),
@@ -678,7 +678,7 @@ export function assertCustomCreatureContractInvariants(): {
 
   // V1 resolver still works for humanoid bones (regression).
   const v1 = resolveAvatarRigCapabilities({
-    boneCount: SAGA_DRIVE_HUMANOID_BONES.length,
+    boneCount: SAGA_TREE_HUMANOID_BONES.length,
     mappedBones: fullHumanoidBones('Reg'),
     hasVrmHumanoid: true,
     hasSkinnedMesh: true,

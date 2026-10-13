@@ -5,23 +5,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Badge } from '../../../shared/ui/badge';
 import {
-  SAGA_DRIVE_START_SKILL_CAP,
-  getSagaDriveAttribute,
-  getSagaDriveSkill,
-  type SagaDriveAttributeKey,
-  type SagaDriveSkillKey,
+  SAGA_TREE_START_SKILL_CAP,
+  getSagaTreeAttribute,
+  getSagaTreeSkill,
+  type SagaTreeAttributeKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
-import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
+import type { SagaTreeBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
 import { RuleHelp } from '../shared/RuleHelp';
 import type { CarouselScrollPhase } from './ArchetypeCarousel';
 
 interface ArchetypeSkillChoiceProps {
-  skills: readonly SagaDriveSkillKey[];
-  selectedSkill?: SagaDriveSkillKey;
-  onSelect: (skill: SagaDriveSkillKey) => void;
-  backgroundSkillPoints: SagaDriveBackgroundSkillPoints;
-  freeRanks: Record<SagaDriveSkillKey, number>;
-  attributes: Record<SagaDriveAttributeKey, number>;
+  skills: readonly SagaTreeSkillKey[];
+  selectedSkill?: SagaTreeSkillKey;
+  onSelect: (skill: SagaTreeSkillKey) => void;
+  backgroundSkillPoints: SagaTreeBackgroundSkillPoints;
+  freeRanks: Record<SagaTreeSkillKey, number>;
+  attributes: Record<SagaTreeAttributeKey, number>;
   experienceBonus?: number;
   scrollPhase?: CarouselScrollPhase;
   onStandstill?: () => void;
@@ -36,14 +36,14 @@ function getCompetencyLabel(rank: number): string {
 }
 
 function getProjectedRank(
-  skillKey: SagaDriveSkillKey,
-  backgroundSkillPoints: SagaDriveBackgroundSkillPoints,
-  freeRanks: Record<SagaDriveSkillKey, number>,
+  skillKey: SagaTreeSkillKey,
+  backgroundSkillPoints: SagaTreeBackgroundSkillPoints,
+  freeRanks: Record<SagaTreeSkillKey, number>,
 ): number {
   return freeRanks[skillKey] + (backgroundSkillPoints[skillKey] ?? 0) + 1;
 }
 
-function getDerivedStatHints(skillKey: SagaDriveSkillKey): string[] {
+function getDerivedStatHints(skillKey: SagaTreeSkillKey): string[] {
   if (skillKey === 'melee' || skillKey === 'acrobatics') {
     return ['Erhöht deine Verteidigung, wenn dieser Wert höher ist als Nahkampf/Akrobatik der Alternative.'];
   }
@@ -71,9 +71,9 @@ function getDerivedStatHints(skillKey: SagaDriveSkillKey): string[] {
  * Fade-in (Opacity + Clip-Wipe von oben nach unten). Rein dekorativ (aria-hidden).
  */
 interface ArchetypeConnectorProps {
-  skills: readonly SagaDriveSkillKey[];
-  activeSkill: SagaDriveSkillKey | null;
-  selectedSkill: SagaDriveSkillKey | null;
+  skills: readonly SagaTreeSkillKey[];
+  activeSkill: SagaTreeSkillKey | null;
+  selectedSkill: SagaTreeSkillKey | null;
   scrollPhase: CarouselScrollPhase;
   onStandstill: () => void;
 }
@@ -302,7 +302,7 @@ export function ArchetypeSkillChoice({
   scrollPhase = 'settled',
   onStandstill,
 }: ArchetypeSkillChoiceProps) {
-  const [activeSkill, setActiveSkill] = useState<SagaDriveSkillKey | null>(null);
+  const [activeSkill, setActiveSkill] = useState<SagaTreeSkillKey | null>(null);
 
   return (
     <div className="space-y-2 -mt-6">
@@ -316,11 +316,11 @@ export function ArchetypeSkillChoice({
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-archetype-skill-grid>
         {skills.map((skillKey) => {
-          const skill = getSagaDriveSkill(skillKey);
-          const attribute = getSagaDriveAttribute(skill.attribute);
+          const skill = getSagaTreeSkill(skillKey);
+          const attribute = getSagaTreeAttribute(skill.attribute);
           const selected = selectedSkill === skillKey;
           const projectedRank = getProjectedRank(skillKey, backgroundSkillPoints, freeRanks);
-          const disabled = !selected && projectedRank > SAGA_DRIVE_START_SKILL_CAP;
+          const disabled = !selected && projectedRank > SAGA_TREE_START_SKILL_CAP;
           const backgroundValue = backgroundSkillPoints[skillKey] ?? 0;
           const hasBackground = backgroundValue > 0;
           const freeRank = freeRanks[skillKey];
@@ -376,7 +376,7 @@ export function ArchetypeSkillChoice({
               )}
 
               {disabled && (
-                <p className="mt-2 text-[11px] text-destructive">Würde Startcap {SAGA_DRIVE_START_SKILL_CAP} überschreiten.</p>
+                <p className="mt-2 text-[11px] text-destructive">Würde Startcap {SAGA_TREE_START_SKILL_CAP} überschreiten.</p>
               )}
             </button>
           );

@@ -1,15 +1,15 @@
 /**
- * Avatar source contract — sagadrive | import | meshy (#14).
+ * Avatar source contract — sagatree | import | meshy (#14).
  * Pure domain: source is never a capability proof; validated analysis owns capabilities.
  * Location: src/domains/character/avatar/avatar-source.ts
  */
 
-export const AVATAR_SOURCE_CONTRACT_VERSION = 'SagaDriveAvatarSourceV1' as const;
+export const AVATAR_SOURCE_CONTRACT_VERSION = 'SagaTreeAvatarSourceV1' as const;
 
-export const AVATAR_SOURCES = ['sagadrive', 'import', 'meshy'] as const;
+export const AVATAR_SOURCES = ['sagatree', 'import', 'meshy'] as const;
 export type AvatarSource = (typeof AVATAR_SOURCES)[number];
 
-/** Legacy appearance.avatar.provider — always map to sagadrive when reading. */
+/** Legacy appearance.avatar.provider — always map to sagatree when reading. */
 export const LEGACY_AVATAR_PROVIDER = 'm3-character-studio' as const;
 
 export interface AvatarSourceOptionMeta {
@@ -21,7 +21,7 @@ export interface AvatarSourceOptionMeta {
 
 export const AVATAR_SOURCE_OPTIONS: readonly AvatarSourceOptionMeta[] = [
   {
-    source: 'sagadrive',
+    source: 'sagatree',
     titleDe: 'Vorlage anpassen',
     expectationDe: 'voll editierbar',
     summaryDe:
@@ -48,7 +48,7 @@ export function isAvatarSource(value: unknown): value is AvatarSource {
 }
 
 /**
- * Resolve persisted source. Legacy `provider: m3-character-studio` → sagadrive.
+ * Resolve persisted source. Legacy `provider: m3-character-studio` → sagatree.
  * Missing source with model_url but no traits hint → import (deterministic fallback).
  */
 export function resolveAvatarSource(input: {
@@ -57,11 +57,11 @@ export function resolveAvatarSource(input: {
   modelUrl?: string | null;
 }): AvatarSource {
   if (isAvatarSource(input.source)) return input.source;
-  if (input.provider === LEGACY_AVATAR_PROVIDER) return 'sagadrive';
+  if (input.provider === LEGACY_AVATAR_PROVIDER) return 'sagatree';
   if (typeof input.modelUrl === 'string' && input.modelUrl.trim().length > 0) {
     return 'import';
   }
-  return 'sagadrive';
+  return 'sagatree';
 }
 
 export function avatarSourceMeta(source: AvatarSource): AvatarSourceOptionMeta {
@@ -102,20 +102,20 @@ export interface AvatarSourceSwitchDecision {
 }
 
 /**
- * Dirty SagaDrive morph/traits → Import/Meshy needs explicit discard confirm.
+ * Dirty SagaTree morph/traits → Import/Meshy needs explicit discard confirm.
  * Source never grants permissions.
  */
 export function evaluateAvatarSourceSwitch(input: {
   from: AvatarSource;
   to: AvatarSource;
-  dirtySagaDrive: boolean;
+  dirtySagaTree: boolean;
 }): AvatarSourceSwitchDecision {
   if (input.from === input.to) return { needsConfirm: false };
-  if (input.from === 'sagadrive' && input.dirtySagaDrive && input.to !== 'sagadrive') {
+  if (input.from === 'sagatree' && input.dirtySagaTree && input.to !== 'sagatree') {
     return {
       needsConfirm: true,
       messageDe:
-        'Ungespeicherte SagaDrive-Look-Änderungen verwerfen und Quelle wechseln?',
+        'Ungespeicherte SagaTree-Look-Änderungen verwerfen und Quelle wechseln?',
     };
   }
   return { needsConfirm: false };

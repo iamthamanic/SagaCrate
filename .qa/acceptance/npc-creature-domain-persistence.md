@@ -5,10 +5,10 @@
 Issue: #196 · Slug: `npc-creature-domain-persistence` · Depends on: #195
 
 ## Intent
-SagaDrive erhält eine #94-konforme fachliche und persistente Grundlage für NPC-/Kreaturen-Definitionen, getrennt von Session-Instanzen. Typisierte Domain-Verträge, owner-/world-scoped RLS, Infrastructure-Repository und fail-closed Validierung — ohne Library-UI und ohne Legacy-D&D-`npcs`/`bestiary` als Source of Truth.
+SagaTree erhält eine #94-konforme fachliche und persistente Grundlage für NPC-/Kreaturen-Definitionen, getrennt von Session-Instanzen. Typisierte Domain-Verträge, owner-/world-scoped RLS, Infrastructure-Repository und fail-closed Validierung — ohne Library-UI und ohne Legacy-D&D-`npcs`/`bestiary` als Source of Truth.
 
 ## Preconditions
-- Power framework (#195) on main: `src/domains/rules/sagadrive/npc-creature-power/**`
+- Power framework (#195) on main: `src/domains/rules/sagatree/npc-creature-power/**`
 - Design: `.qa/design/npc-creatures-v1-ux.md` (definition vs instance, categories, compact/full)
 - World-profile auth helpers from migration 015 (`current_user_can_read/edit_world_profile`)
 - No live Supabase required for the offline contract script

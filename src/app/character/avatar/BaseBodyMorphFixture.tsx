@@ -12,7 +12,7 @@ import {
   BASE_BODY_CAMERA_SAFE_BOUNDS,
   assertMorphFixtureCameraSafe,
   buildBaseBodyMorphFixtureCases,
-  createSagaDriveBaseBodyManifestV1,
+  createSagaTreeBaseBodyManifestV1,
   deriveSpeciesMorphState,
   type BaseBodySpeciesId,
 } from '../../../domains/character/avatar/base-body-contract';
@@ -46,7 +46,7 @@ export function BaseBodyMorphFixture() {
   const current = cases[caseIndex] ?? cases[0];
   const camera = assertMorphFixtureCameraSafe(current.morph);
   const readiness = evaluateBaseBodyMorphReadiness(presentTargets);
-  const manifest = createSagaDriveBaseBodyManifestV1();
+  const manifest = createSagaTreeBaseBodyManifestV1();
   const speciesMorph = deriveSpeciesMorphState(speciesId);
 
   return (

@@ -11,7 +11,7 @@ import type { AvatarRigProfileKindV2 } from './rig-capability-contract-v2';
 import type { AvatarRiggingProviderId } from './rigging-provider-contract';
 
 export const CUSTOM_RIG_BENCHMARK_CONTRACT_VERSION =
-  'SagaDriveCustomRigBenchmarkV1' as const;
+  'SagaTreeCustomRigBenchmarkV1' as const;
 
 /** Golden fixtures for the rigging decision matrix (controlled assets only). */
 export const CUSTOM_RIG_BENCHMARK_FIXTURE_IDS = [
@@ -26,7 +26,7 @@ export type CustomRigBenchmarkFixtureId =
 
 /**
  * Evaluated paths.
- * `unirig-prior-art` = researched prior art (not a SagaDrive adapter yet).
+ * `unirig-prior-art` = researched prior art (not a SagaTree adapter yet).
  * `import-existing-rig` = keep imported skeleton (no auto-rig).
  * `generate-rig` = provider-specific Meshy remesh+auto-rig infrastructure capability.
  */
@@ -261,7 +261,7 @@ export const CUSTOM_RIG_BENCHMARK_MATRIX_V1: readonly CustomRigBenchmarkCellV1[]
     skeletonSemantics: 0.75, skinWeights: 0.7, animationStability: 0.68,
     runtimeCost: 0.55, hardwareFit: 0.4, licenseFit: 0.5,
     reproducibility: 0.4, selfHostFit: 0.45, failureModeClarity: 0.55,
-  }, 'unavailable', 'Prior art UniRig — kein SagaDrive-Adapter; nicht Default.'),
+  }, 'unavailable', 'Prior art UniRig — kein SagaTree-Adapter; nicht Default.'),
   cell('unirig-prior-art', 'dwarf', {
     skeletonSemantics: 0.72, skinWeights: 0.68, animationStability: 0.65,
     runtimeCost: 0.55, hardwareFit: 0.4, licenseFit: 0.5,

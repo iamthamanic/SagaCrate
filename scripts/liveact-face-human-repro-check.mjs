@@ -79,7 +79,7 @@ for (const p of pairs) {
     `${p.id} semantic QA V2 pass (${(result.inventory.semanticQa?.violations || []).slice(0, 4).join('; ')})`,
   );
   check(
-    result.inventory.semanticQa?.contractVersion === 'SagaDriveLiveActFaceSemanticQaV2',
+    result.inventory.semanticQa?.contractVersion === 'SagaTreeLiveActFaceSemanticQaV2',
     `${p.id} semantic contract V2`,
   );
   console.log(`liveact-face-human-repro-check: ${p.id} semantic QA V2 pass`);

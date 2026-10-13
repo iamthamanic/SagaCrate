@@ -39,7 +39,7 @@ const boot = readFileSync(join(root, 'scripts/bootstrap-qtmesh-facerig.sh'), 'ut
 
 check(/liveact-face-authoring-qtmesh-check/.test(gate), 'test-gate wiring');
 check(/execFile|spawn/.test(lib) && !/exec\(`qtmesh/.test(lib), 'no shell-interpolated exec');
-check(/SAGADRIVE_QTMESH_BIN/.test(lib), 'env resolution');
+check(/SAGATREE_QTMESH_BIN/.test(lib), 'env resolution');
 check(/8720dc91bd7426908b9218673fbd74d544dd908c/.test(lib) && /8720dc91/.test(boot), 'pinned commit');
 check(/--input/.test(cli) && /--output/.test(cli) && /--run-dir/.test(cli), 'CLI flags');
 check(!/npm run test-gate/.test(boot) || true, 'bootstrap is separate');
@@ -197,7 +197,7 @@ printf '%s\\n' '{"ok":true,"shapeCount":52,"fitResidual":0.02,"targetNames":["ey
 
   const envResolved = resolveQtmeshBin({
     root,
-    env: { SAGADRIVE_QTMESH_BIN: fakeBin },
+    env: { SAGATREE_QTMESH_BIN: fakeBin },
   });
   check(envResolved.source === 'env', 'resolve env');
 
@@ -205,7 +205,7 @@ printf '%s\\n' '{"ok":true,"shapeCount":52,"fitResidual":0.02,"targetNames":["ey
   try {
     resolveQtmeshBin({
       root: join(fixtureDir, 'empty-root-no-cache'),
-      env: { PATH: '/nonexistent-path-for-test', SAGADRIVE_QTMESH_BIN: '' },
+      env: { PATH: '/nonexistent-path-for-test', SAGATREE_QTMESH_BIN: '' },
     });
   } catch (e) {
     missingThrew = /qtmesh not found/.test(String(e.message || e));

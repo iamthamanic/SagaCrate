@@ -1,5 +1,5 @@
 /**
- * LightingLookInspector — Lighting knobs in SagaDrive terms (#344).
+ * LightingLookInspector — Lighting knobs in SagaTree terms (#344).
  * Location: src/app/look/editor/inspectors/LightingLookInspector.tsx
  */
 import { Label } from '../../../../shared/ui/label';

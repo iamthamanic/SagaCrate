@@ -8,7 +8,7 @@ GLB + optional `face-anchors.json` → `validateLiveActFaceAsset` (Khronos + str
 ## Boundaries
 - Scripts-only offline path; no React/runtime morph changes.
 - Thresholds live in `liveact-face-semantic-profile-v1.mjs` (no filename/gender exceptions).
-- Domain unchanged; anchors reuse SagaDriveFaceAnchorsV1 ids from #399.
+- Domain unchanged; anchors reuse SagaTreeFaceAnchorsV1 ids from #399.
 
 ## Risks
 - Production m5/f5 runs without anchors skip semantic until ledger ships `face-anchors.json` (by design for #401).

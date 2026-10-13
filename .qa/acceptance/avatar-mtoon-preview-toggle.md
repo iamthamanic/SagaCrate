@@ -1,11 +1,11 @@
 # Acceptance — avatar-mtoon-preview-toggle
 
 ## Intent
-Im Character-Editor 3D-Viewport MToon-Stil (SagaDrive-Profil) per Toggle an/aus schalten, um Roh-PBR vs. Stylized-Look zu vergleichen — ohne Shader-Injection und ohne Persistenz.
+Im Character-Editor 3D-Viewport MToon-Stil (SagaTree-Profil) per Toggle an/aus schalten, um Roh-PBR vs. Stylized-Look zu vergleichen — ohne Shader-Injection und ohne Persistenz.
 
 ## Preconditions
 - AvatarCanvas ready mit geladenem VRM/GLB.
-- Bestehendes SagaDriveMToonProfileV1 + applyAppearance-Pfad.
+- Bestehendes SagaTreeMToonProfileV1 + applyAppearance-Pfad.
 
 ## Happy Path
 - [ ] Editor-Viewport zeigt Toggle „MToon“ (sichtbar wenn Runtime ready).

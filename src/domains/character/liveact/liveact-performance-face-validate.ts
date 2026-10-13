@@ -22,7 +22,7 @@ import {
   PERFORMANCE_FACE_OPTIONAL_PREMIUM_CONTROLS,
   PERFORMANCE_FACE_REQUIRED_PREMIUM_CONTROLS,
   PERFORMANCE_FACE_VALIDATOR_VERSION,
-  SAGADRIVE_PERFORMANCE_FACE_CONTRACT,
+  SAGATREE_PERFORMANCE_FACE_CONTRACT,
   clampPerformanceFaceWeight,
   computeCorrectiveWeight,
   type PerformanceFaceCapabilityLevel,
@@ -187,7 +187,7 @@ export function validatePerformanceFaceV2(
   }
 
   return {
-    contractVersion: SAGADRIVE_PERFORMANCE_FACE_CONTRACT,
+    contractVersion: SAGATREE_PERFORMANCE_FACE_CONTRACT,
     validatorVersion: PERFORMANCE_FACE_VALIDATOR_VERSION,
     capabilityLevel,
     standardEligible,

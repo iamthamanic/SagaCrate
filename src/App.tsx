@@ -65,9 +65,9 @@ function CharacterEditorView() {
   // does not remount the editor mid-load.
   const [mountKey] = useState(() => {
     if (typeof sessionStorage === 'undefined') return 'new-character';
-    const editId = sessionStorage.getItem('sagadrive:character-edit-id');
+    const editId = sessionStorage.getItem('sagatree:character-edit-id');
     if (editId) return editId;
-    const promotion = sessionStorage.getItem('sagadrive:npc-promotion');
+    const promotion = sessionStorage.getItem('sagatree:npc-promotion');
     if (promotion) return `npc-promotion:${promotion.length}`;
     return 'new-character';
   });

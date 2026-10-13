@@ -21,7 +21,7 @@
 **CLEAR** — NZUI (nicht-UI-Diff). Single-hop Validierungsskript; keine Composition über UI/Service/DB.
 
 ## Hop chain
-`docs/sagadrive core rules.md` §2.6/§10.4/§14.2/§14.10 (read-only Referenz) → `scripts/validate-travel-chase-vehicles.mjs` (Chase-Distanzleiste, Reise-Fail-Forward, Maßstab/Schutz/Schwachstelle, 6 Pflichtszenarien) → Assertions (Sackgassen=0, Gleichstand-Freeze, Δ≥2 block, kein Retry, kein Skill-Cherry-Pick) → `.qa/runs/validate-travel-chase-vehicles-report.md` → `scripts/test-gate.mjs` (`checkTravelChaseVehiclesValidation()`).
+`docs/sagatree core rules.md` §2.6/§10.4/§14.2/§14.10 (read-only Referenz) → `scripts/validate-travel-chase-vehicles.mjs` (Chase-Distanzleiste, Reise-Fail-Forward, Maßstab/Schutz/Schwachstelle, 6 Pflichtszenarien) → Assertions (Sackgassen=0, Gleichstand-Freeze, Δ≥2 block, kein Retry, kein Skill-Cherry-Pick) → `.qa/runs/validate-travel-chase-vehicles-report.md` → `scripts/test-gate.mjs` (`checkTravelChaseVehiclesValidation()`).
 
 ## Simulations
 | Case | Intended | Composed | Result |

@@ -63,7 +63,7 @@ function expectPass(fn, message) {
 }
 
 // §5.2 specialization bonus constant (no magic number in UI).
-check(rules.SAGA_DRIVE_SPECIALIZATION_BONUS === 2, 'specialization bonus constant is +2');
+check(rules.SAGA_TREE_SPECIALIZATION_BONUS === 2, 'specialization bonus constant is +2');
 
 const SKILL_POOL = ['medicine', 'insight', 'persuasion', 'awareness'];
 const ARCHETYPE = 'fighter'; // skills: athletics, melee, ranged, intimidation
@@ -116,7 +116,7 @@ function profileFor(build, extra = {}) {
 }
 
 function finalSkillsFor(build, level) {
-  return rules.resolveSagaDriveSkillRanks(build, level);
+  return rules.resolveSagaTreeSkillRanks(build, level);
 }
 
 function snapshotFor(build, extra = {}) {
@@ -143,7 +143,7 @@ function snapshotFor(build, extra = {}) {
     },
     attributes: extra.attributes ?? ATTRS,
     skills,
-    sagadrive_profile: {
+    sagatree_profile: {
       ...profile,
       essence: profile.essence ?? 'physical',
       baseAttributes: profile.baseAttributes ?? ATTRS,
@@ -163,7 +163,7 @@ function snapshotFor(build, extra = {}) {
 const ATTRS = { strength: 4, dexterity: 3, endurance: 3, mind: 2, perception: 2, charisma: 1 };
 
 // §5.2 specialization bonus constant (no magic number in UI).
-check(rules.SAGA_DRIVE_SPECIALIZATION_BONUS === 2, 'specialization bonus constant is +2');
+check(rules.SAGA_TREE_SPECIALIZATION_BONUS === 2, 'specialization bonus constant is +2');
 
 // (1) 7 free / 2 background / 1 archetype → valid roundtrip (20).
 {
@@ -171,7 +171,7 @@ check(rules.SAGA_DRIVE_SPECIALIZATION_BONUS === 2, 'specialization bonus constan
   const skills = finalSkillsFor(build, 1);
   check(skills.medicine === 2 && skills.athletics === 3 && skills.melee === 2, 'start sources stack correctly');
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'valid complete build passes persistence assert',
   );
 }
@@ -189,7 +189,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   check(!rules.isValidStartSkillBuild(build, ['medicine', 'medicine', 'insight', 'awareness'], ARCHETYPE), 'duplicated pool rejected');
   check(!rules.isValidStartSkillBuild(build, ['medicine', 'insight', 'awareness', 'persuasion', 'stealth'], ARCHETYPE), 'pool of five rejected');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build, {
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build, {
       background: { ...profileFor(build).background, skillPool: ['medicine'] },
     }), 1),
     'pool [medicine] with { medicine: 2 } is not a complete background',
@@ -202,7 +202,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const profile = profileFor(build);
   delete profile.archetype;
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profile, 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profile, 1),
     'missing archetype key fails',
   );
   check(!rules.isValidStartSkillBuild(build, SKILL_POOL, undefined), 'start build without archetype key rejected');
@@ -214,7 +214,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   delete build.archetypeTrainingSkill;
   const skills = finalSkillsFor(build, 1);
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'missing archetype training skill fails',
   );
 }
@@ -224,7 +224,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   build.archetypeTrainingSkill = 'medicine';
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'archetype training skill outside archetype list fails',
   );
 }
@@ -234,7 +234,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   delete build.archetypeTrainingSkill;
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'only 7 free + 2 background fails',
   );
 }
@@ -244,7 +244,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   build.backgroundSkillPoints = {};
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'only 7 free + 1 archetype fails',
   );
 }
@@ -254,7 +254,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   build.freeSkillRanks = rules.normalizeFreeSkillRanks({});
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'only 2 background + 1 archetype fails',
   );
 }
@@ -264,7 +264,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   build.freeSkillRanks = { athletics: 2, melee: 2, insight: 1 };
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'free skill ranks summing to 5 fail',
   );
 }
@@ -274,7 +274,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   build.backgroundSkillPoints = { medicine: 1 };
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 1),
     'background skill points summing to 1 fail',
   );
 }
@@ -286,7 +286,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const skills = finalSkillsFor(build, 1); // medicine = 2 bg + 2 free = 4
   check(skills.medicine === 4, 'stacked start rank exceeds cap in fixture');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'start cap violation fails',
   );
 }
@@ -304,7 +304,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const trained = Object.values(skills).filter((rank) => rank > 0).length;
   check(trained === 4, `exactly four trained start skills (got ${trained})`);
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'four trained start skills pass',
   );
 }
@@ -317,12 +317,12 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const trained = Object.values(skills).filter((rank) => rank > 0).length;
   check(trained === 4, `stacked V2 has four trained skills (got ${trained})`);
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'stacked four-skill V2 passes character persistence',
   );
   const snapshot = snapshotFor(build);
   check(!Object.prototype.hasOwnProperty.call(snapshot, 'freeSkillRanks'), 'generated preset snapshot has no top-level freeSkillRanks');
-  const freeSum = Object.values(snapshot.sagadrive_profile.freeSkillRanks ?? {}).reduce((sum, value) => sum + value, 0);
+  const freeSum = Object.values(snapshot.sagatree_profile.freeSkillRanks ?? {}).reduce((sum, value) => sum + value, 0);
   check(freeSum === 7, `profile freeSkillRanks sum is 7 (got ${freeSum})`);
   expectPass(
     () => preset.assertValidSnapshot(snapshot),
@@ -351,7 +351,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = fourSkillStackedBuild();
   const legalFree = rules.normalizeFreeSkillRanks(build.freeSkillRanks);
   const missingProfileFree = snapshotFor(build);
-  delete missingProfileFree.sagadrive_profile.freeSkillRanks;
+  delete missingProfileFree.sagatree_profile.freeSkillRanks;
   missingProfileFree.freeSkillRanks = legalFree;
   expectThrow(
     () => preset.assertValidSnapshot(missingProfileFree),
@@ -372,7 +372,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
 {
   const table = new Map([[0, 0], [1, 2], [2, 3], [3, 4], [4, 5], [5, 5]]);
   for (const [rank, expected] of table) {
-    check(rules.getSagaDriveAppliedExperienceBonus(rank, 17) === expected, `applied EB level 17 rank ${rank} → ${expected}`);
+    check(rules.getSagaTreeAppliedExperienceBonus(rank, 17) === expected, `applied EB level 17 rank ${rank} → ${expected}`);
   }
 }
 
@@ -383,7 +383,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
     { level: 3, kind: 'rank-up', skill: 'melee' },
     { level: 3, kind: 'rank-up', skill: 'insight' },
   ];
-  check(!rules.isValidSagaDriveSkillDevelopment(build, advances, build.specializations, 5), 'duplicate rank slot rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(build, advances, build.specializations, 5), 'duplicate rank slot rejected');
 }
 
 // (10) Rank advance + specialization in the same level → FAIL (both kinds).
@@ -392,15 +392,15 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const rankUp = [{ level: 3, kind: 'rank-up', skill: 'melee' }];
   const learn = [{ level: 3, kind: 'learn', skill: 'stealth' }];
   const specAt3 = { skill: 'melee', name: 'Klingen', source: 'skill-development', acquiredAtLevel: 3 };
-  check(!rules.isValidSagaDriveSkillDevelopment(build, rankUp, [...build.specializations, specAt3], 5), 'L3 rank-up + L3 spec rejected');
-  check(!rules.isValidSagaDriveSkillDevelopment(build, learn, [...build.specializations, specAt3], 5), 'L3 learn + L3 spec rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(build, rankUp, [...build.specializations, specAt3], 5), 'L3 rank-up + L3 spec rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(build, learn, [...build.specializations, specAt3], 5), 'L3 learn + L3 spec rejected');
 }
 
 // (11) Chronological specialization prerequisites.
 {
   const build = validBuild();
   // L3 learn stealth, L5 rank-up stealth → PASS.
-  check(rules.isValidSagaDriveSkillDevelopment(
+  check(rules.isValidSagaTreeSkillDevelopment(
     build,
     [{ level: 3, kind: 'learn', skill: 'stealth' }, { level: 5, kind: 'rank-up', skill: 'stealth' }],
     build.specializations,
@@ -408,7 +408,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   ), 'L3 learn, L5 rank-up passes');
 
   // L3 rank-up melee, L5 spec on medicine (2nd spec needs rank 3, medicine still 2 at L5) → FAIL.
-  check(!rules.isValidSagaDriveSkillDevelopment(
+  check(!rules.isValidSagaTreeSkillDevelopment(
     build,
     [{ level: 3, kind: 'rank-up', skill: 'melee' }],
     [...build.specializations, { skill: 'medicine', name: 'Chirurgie', source: 'skill-development', acquiredAtLevel: 5 }],
@@ -416,7 +416,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   ), 'spec with too low rank at acquisition time rejected');
 
   // Later rank-up must not legitimize an earlier illegal specialization.
-  check(!rules.isValidSagaDriveSkillDevelopment(
+  check(!rules.isValidSagaTreeSkillDevelopment(
     build,
     [{ level: 7, kind: 'rank-up', skill: 'medicine' }],
     [...build.specializations, { skill: 'medicine', name: 'Chirurgie', source: 'skill-development', acquiredAtLevel: 5 }],
@@ -424,7 +424,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   ), 'later rank-up does not fix earlier illegal spec');
 
   // L3/L5 rank-ups on medicine (2→3→4 within caps), L7 spec (needs 3, has 4) → PASS.
-  check(rules.isValidSagaDriveSkillDevelopment(
+  check(rules.isValidSagaTreeSkillDevelopment(
     build,
     [{ level: 3, kind: 'rank-up', skill: 'medicine' }, { level: 5, kind: 'rank-up', skill: 'medicine' }],
     [...build.specializations, { skill: 'medicine', name: 'Chirurgie', source: 'skill-development', acquiredAtLevel: 7 }],
@@ -439,7 +439,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const profile = profileFor(build);
   profile.background.specialization = undefined;
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profile, 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profile, 1),
     'missing background specialization fails',
   );
 }
@@ -448,9 +448,9 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
 {
   const build = validBuild();
   const unbound = [{ skill: 'insight', name: 'Menschenlesen', source: 'background', acquiredAtLevel: 1 }];
-  check(!rules.isValidSagaDriveSkillDevelopment(build, [], unbound, 1), 'background spec on non-background-trained skill rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(build, [], unbound, 1), 'background spec on non-background-trained skill rejected');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor({ ...build, specializations: unbound }), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor({ ...build, specializations: unbound }), 1),
     'persistence rejects unbound background spec',
   );
 }
@@ -458,25 +458,25 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
 // Background specialization must be acquired at level 1.
 {
   const atLevel1 = validBuild();
-  check(rules.isValidSagaDriveSkillDevelopment(atLevel1, [], atLevel1.specializations, 1), 'background spec at level 1 accepted');
+  check(rules.isValidSagaTreeSkillDevelopment(atLevel1, [], atLevel1.specializations, 1), 'background spec at level 1 accepted');
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(atLevel1, 1), profileFor(atLevel1), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(atLevel1, 1), profileFor(atLevel1), 1),
     'background spec at level 1 passes persistence',
   );
 
   const atLevel3 = validBuild();
   atLevel3.specializations = [{ skill: 'medicine', name: 'Notfallmedizin', source: 'background', acquiredAtLevel: 3 }];
-  check(!rules.isValidSagaDriveSkillDevelopment(atLevel3, [], atLevel3.specializations, 1), 'background spec at level 3 rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(atLevel3, [], atLevel3.specializations, 1), 'background spec at level 3 rejected');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(atLevel3, 1), profileFor(atLevel3), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(atLevel3, 1), profileFor(atLevel3), 1),
     'background spec at level 3 fails persistence',
   );
 
   const atLevel19 = validBuild();
   atLevel19.specializations = [{ skill: 'medicine', name: 'Notfallmedizin', source: 'background', acquiredAtLevel: 19 }];
-  check(!rules.isValidSagaDriveSkillDevelopment(atLevel19, [], atLevel19.specializations, 1), 'background spec at level 19 rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(atLevel19, [], atLevel19.specializations, 1), 'background spec at level 19 rejected');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(atLevel19, 1), profileFor(atLevel19), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(atLevel19, 1), profileFor(atLevel19), 1),
     'background spec at level 19 fails persistence',
   );
 }
@@ -484,9 +484,9 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
 // (13) Level 3 without slot → FAIL.
 {
   const build = validBuild();
-  check(!rules.isValidSagaDriveSkillDevelopment(build, [], build.specializations, 3), 'level 3 without slot rejected');
+  check(!rules.isValidSagaTreeSkillDevelopment(build, [], build.specializations, 3), 'level 3 without slot rejected');
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 3),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), profileFor(build), 3),
     'level 3 without development slot fails',
   );
 }
@@ -499,7 +499,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
     { level: 5, kind: 'rank-up', skill: 'insight' },
   ];
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 5), profileFor(build), 5),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 5), profileFor(build), 5),
     'L3 + L5 complete passes',
   );
 }
@@ -510,7 +510,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const storedSkills = finalSkillsFor(build, 1);
   const patchedSkills = { ...storedSkills, melee: 5 };
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, patchedSkills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, patchedSkills, profileFor(build), 1),
     'skills-only inconsistent partial update fails',
   );
 }
@@ -521,7 +521,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const storedSkills = finalSkillsFor(build, 1);
   const patchedProfile = profileFor({ ...build, skillAdvances: [{ level: 3, kind: 'rank-up', skill: 'melee' }] });
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, storedSkills, patchedProfile, 3),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, storedSkills, patchedProfile, 3),
     'profile-only partial update inconsistent with stored skills fails',
   );
 }
@@ -534,15 +534,15 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   build.skillAdvances = [{ level: 3, kind: 'rank-up', skill: 'melee' }];
   const storedSkills = finalSkillsFor(build, 3);
   check(
-    !rules.isValidSagaDriveSkillDevelopment(build, build.skillAdvances, build.specializations, 5),
+    !rules.isValidSagaTreeSkillDevelopment(build, build.skillAdvances, build.specializations, 5),
     'level 5 with only a level-3 decision is rejected (unfilled L5 slot)',
   );
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, storedSkills, profileFor(build), 5),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, storedSkills, profileFor(build), 5),
     'level-up to 5 with an unfilled L5 slot fails even with matching finals',
   );
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, storedSkills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, storedSkills, profileFor(build), 1),
     'level-only downgrade invalidating existing advances fails',
   );
 }
@@ -552,7 +552,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const build = validBuild();
   const skills = { ...finalSkillsFor(build, 1), awareness: 0 };
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profileFor(build), 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profileFor(build), 1),
     'inconsistent final skill values fail',
   );
 }
@@ -569,7 +569,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   empty.background.specialization = undefined;
   const emptySkills = rules.normalizeFreeSkillRanks({});
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, emptySkills, empty, 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, emptySkills, empty, 1),
     'completely missing skill provenance fails',
   );
 }
@@ -586,10 +586,10 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   trainedOnly.background.specialization = undefined;
   const storedFinals = rules.normalizeFreeSkillRanks({ medicine: 4, insight: 2 });
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, storedFinals, trainedOnly, 7),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, storedFinals, trainedOnly, 7),
     'trainedSkills without V2 provenance fails',
   );
-  const normalized = normalize.normalizeSagaDriveProfile(trainedOnly);
+  const normalized = normalize.normalizeSagaTreeProfile(trainedOnly);
   check(normalized.background.trainedSkills.length === 0, 'normalization does not restore trainedSkills without backgroundSkillPoints');
   check(!('skillProvenanceStatus' in normalized), 'normalization does not emit skillProvenanceStatus');
 }
@@ -601,7 +601,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   delete partial.archetypeTrainingSkill;
   partial.background.backgroundSkillPoints = undefined;
   expectThrow(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, finalSkillsFor(build, 1), partial, 1),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, finalSkillsFor(build, 1), partial, 1),
     'partial V2 provenance fails',
   );
 }
@@ -617,12 +617,12 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   const skills = finalSkillsFor(build, 7);
   const profile = profileFor(build);
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, skills, profile, 7),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, skills, profile, 7),
     'valid level-7 roundtrip passes',
   );
-  const reloaded = normalize.normalizeSagaDriveProfile(profile);
+  const reloaded = normalize.normalizeSagaTreeProfile(profile);
   expectPass(
-    () => persistence.assertValidSagaDriveCharacterPersistence(ATTRS, normalize.normalizeSkills(skills), reloaded, 7),
+    () => persistence.assertValidSagaTreeCharacterPersistence(ATTRS, normalize.normalizeSkills(skills), reloaded, 7),
     'normalized complete V2 profile still passes',
   );
   check(!('skillProvenanceStatus' in reloaded), 'roundtrip does not persist skillProvenanceStatus');
@@ -641,25 +641,25 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
     { level: 7, kind: 'rank-up', skill: 'melee' },
   ];
   const withoutL3 = advances.filter((entry) => entry.level !== 3);
-  const sanitized = rules.sanitizeSagaDriveSkillDevelopment(build, withoutL3, build.specializations, 7);
+  const sanitized = rules.sanitizeSagaTreeSkillDevelopment(build, withoutL3, build.specializations, 7);
   check(!sanitized.advances.some((entry) => entry.level === 5 && entry.skill === 'stealth'), 'dependent later rank-up pruned');
   check(sanitized.advances.some((entry) => entry.level === 7 && entry.skill === 'melee'), 'independent later slot kept');
   // Safe resolve never throws on the broken chain.
-  const ranks = rules.resolveSagaDriveSkillRanksSafe({ ...build, skillAdvances: withoutL3 }, 7);
+  const ranks = rules.resolveSagaTreeSkillRanksSafe({ ...build, skillAdvances: withoutL3 }, 7);
   check(ranks.stealth === 0 && ranks.melee === 3, 'safe resolve prunes instead of throwing');
 }
 
 // Sanitizer: invalid background spec levels are discarded, not rewritten to 1.
 {
   const build = validBuild();
-  const kept = rules.sanitizeSagaDriveSkillDevelopment(build, [], build.specializations, 1);
+  const kept = rules.sanitizeSagaTreeSkillDevelopment(build, [], build.specializations, 1);
   check(
     kept.specializations.some((entry) => entry.source === 'background' && entry.acquiredAtLevel === 1),
     'sanitizer keeps valid background spec at level 1',
   );
 
   const at19 = [{ skill: 'medicine', name: 'Notfallmedizin', source: 'background', acquiredAtLevel: 19 }];
-  const discarded19 = rules.sanitizeSagaDriveSkillDevelopment(build, [], at19, 1);
+  const discarded19 = rules.sanitizeSagaTreeSkillDevelopment(build, [], at19, 1);
   check(
     !discarded19.specializations.some((entry) => entry.source === 'background'),
     'sanitizer does not keep background spec acquiredAtLevel 19 as valid V2 state',
@@ -670,7 +670,7 @@ check(rules.isValidBackgroundSkillPoints({ medicine: 1, insight: 1 }, SKILL_POOL
   );
 
   const at3 = [{ skill: 'medicine', name: 'Notfallmedizin', source: 'background', acquiredAtLevel: 3 }];
-  const discarded3 = rules.sanitizeSagaDriveSkillDevelopment(build, [], at3, 1);
+  const discarded3 = rules.sanitizeSagaTreeSkillDevelopment(build, [], at3, 1);
   check(
     !discarded3.specializations.some((entry) => entry.source === 'background'),
     'sanitizer does not keep background spec acquiredAtLevel 3 as valid V2 state',

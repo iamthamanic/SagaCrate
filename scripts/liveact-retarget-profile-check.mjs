@@ -70,8 +70,8 @@ const bad = mod.normalizeLiveActRetargetProfile({
 check(Object.keys(bad.channels).length === 0, 'non-finite dropped');
 
 const frame = {
-  contractVersion: 'SagaDriveLiveActFrameV1',
-  faceContractVersion: 'SagaDriveLiveActFaceV1',
+  contractVersion: 'SagaTreeLiveActFrameV1',
+  faceContractVersion: 'SagaTreeLiveActFaceV1',
   timestampMs: 1,
   sequence: 1,
   confidence: 1,

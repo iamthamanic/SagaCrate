@@ -1,5 +1,5 @@
 {
-  "contractVersion": "SagaDriveLiveActCalibrationProfileV2",
+  "contractVersion": "SagaTreeLiveActCalibrationProfileV2",
   "policyVersion": "liveact-personal-calibration-policy-v1",
   "choreographyDurationMs": 34500,
   "v1": {

@@ -30,7 +30,7 @@ check(/createDefaultTraitFitRange/.test(pack), 'fit range stamp');
 check(/MTOON_PROFILE_VERSION/.test(pack), 'mtoon stamp');
 check(/RIG_CONTRACT_VERSION/.test(pack), 'rig stamp');
 check(/CC0-1.0|spdx/.test(pack), 'license metadata');
-check(/sagadrive-first-party/.test(pack), 'provenance');
+check(/sagatree-first-party/.test(pack), 'provenance');
 check(!/https?:\/\//.test(pack), 'no remote URLs in pack');
 check(!/from ['"]react['"]/.test(pack), 'pack has no React');
 

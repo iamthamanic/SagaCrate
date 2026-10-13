@@ -25,7 +25,7 @@ import {
 } from './liveact-performance-face-validate';
 
 export const LIVEACT_PERFECT_FIDELITY_V2_E2E_CONTRACT =
-  'SagaDriveLiveActPerfectFidelityV2E2E' as const;
+  'SagaTreeLiveActPerfectFidelityV2E2E' as const;
 
 export interface PerfectFidelityV2AvatarProfile {
   id: 'canonical-face3' | 'external-premium-fixture';

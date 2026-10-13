@@ -12,7 +12,7 @@ import {
   MORPH_CONTRACT_VERSION,
   createDefaultAvatarMorphState,
   validateAvatarMorphInput,
-  type SagaDriveAvatarMorphStateV1,
+  type SagaTreeAvatarMorphStateV1,
 } from './morph-contract';
 import { MTOON_PROFILE_VERSION } from './mtoon-profile';
 import { RIG_CONTRACT_VERSION } from './rig-contract';
@@ -48,7 +48,7 @@ export interface AvatarSaveExportPayloadV1 {
   /** True when source mesh bytes were embedded; false for metadata-only package. */
   embedsSourceMesh: boolean;
   baseTraits: BaseTraitSelection;
-  morph: SagaDriveAvatarMorphStateV1;
+  morph: SagaTreeAvatarMorphStateV1;
   /** Explicitly empty — overlays are filtered out and must stay empty. */
   runtimeOverlays: readonly [];
 }
@@ -154,12 +154,12 @@ export function encodeAvatarExportGlb(input: {
   }
 
   const json = JSON.stringify({
-    asset: { version: '2.0', generator: 'SagaDriveAvatarSaveExportV1' },
+    asset: { version: '2.0', generator: 'SagaTreeAvatarSaveExportV1' },
     scenes: [{ nodes: [0] }],
     scene: 0,
-    nodes: [{ name: 'SagaDriveAvatarExport' }],
+    nodes: [{ name: 'SagaTreeAvatarExport' }],
     extras: {
-      sagadriveAvatarExport: input.payload,
+      sagatreeAvatarExport: input.payload,
     },
   });
   const jsonBytes = new TextEncoder().encode(json);
@@ -236,7 +236,7 @@ function tryInjectExtrasIntoGlb(
     typeof doc.extras === 'object' && doc.extras !== null
       ? { ...(doc.extras as Record<string, unknown>) }
       : {};
-  extras.sagadriveAvatarExport = payload;
+  extras.sagatreeAvatarExport = payload;
   doc.extras = extras;
 
   const nextJson = new TextEncoder().encode(JSON.stringify(doc));

@@ -3,7 +3,7 @@
  * Location: src/domains/character/avatar/modular-generate-flow-v1.ts
  *
  * Orchestrates the #268 handoff job graph into a concrete editor result.
- * Provider mesh is raw material only — SagaDrive materializes body/identity/
+ * Provider mesh is raw material only — SagaTree materializes body/identity/
  * wardrobe/props. Blob never marked full modular. No React / network.
  */
 
@@ -21,7 +21,7 @@ import type { CanonicalBodyFamilyId } from './canonical-body-families-v1';
 import { STARTER_WEARABLE_IDS, type StarterWearableId } from './starter-wardrobe-manifest-v1';
 
 export const MODULAR_GENERATE_FLOW_CONTRACT_VERSION =
-  'SagaDriveModularGenerateFlowV1' as const;
+  'SagaTreeModularGenerateFlowV1' as const;
 
 export type ModularGenerateFlowStatus =
   | 'running'
@@ -249,7 +249,7 @@ export function runModularGenerateFlow(input: {
   };
 }
 
-/** Progress labels for UI — SagaDrive steps, no provider internals. */
+/** Progress labels for UI — SagaTree steps, no provider internals. */
 export function listModularGenerateProgressLabelsDe(): readonly string[] {
   return buildModularGenerateHandoffFor269().jobGraph.stages.map(
     (s) => STAGE_LABEL_DE[s.stageId] ?? s.stageId,

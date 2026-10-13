@@ -5,11 +5,11 @@
  */
 import { EssenceCarousel } from './EssenceCarousel';
 import { RuleHelp } from '../shared/RuleHelp';
-import type { SagaDriveEssenceKey } from '../../../domains/rules/sagatree/character-creation';
+import type { SagaTreeEssenceKey } from '../../../domains/rules/sagatree/character-creation';
 
 interface CharacterEssencePanelProps {
-  selectedEssence?: SagaDriveEssenceKey;
-  onEssenceChange: (value: SagaDriveEssenceKey) => void;
+  selectedEssence?: SagaTreeEssenceKey;
+  onEssenceChange: (value: SagaTreeEssenceKey) => void;
 }
 
 export function CharacterEssencePanel({ selectedEssence, onEssenceChange }: CharacterEssencePanelProps) {

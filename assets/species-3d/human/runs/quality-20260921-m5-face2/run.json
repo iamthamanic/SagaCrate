@@ -6,7 +6,7 @@
     "repository": "fernandotonon/QtMeshEditor",
     "commit": "8720dc91bd7426908b9218673fbd74d544dd908c",
     "license": "MIT",
-    "bin": ".cache/sagadrive-tools/qtmesh/bin/qtmesh",
+    "bin": ".cache/sagatree-tools/qtmesh/bin/qtmesh",
     "binSource": "cache",
     "install": {
       "tool": "qtmesh",
@@ -92,7 +92,7 @@
       "numErrors": 0,
       "numWarnings": 4
     },
-    "sagaDrive": {
+    "sagaTree": {
       "pass": true,
       "errors": [],
       "missingRequired": [],
@@ -107,13 +107,13 @@
     "qtmeshReportPath": "qtmesh-report.json",
     "notes": "QtMesh 3.41.1 + MARKER_SIM=2 (13 proportional anchors). MediaPipe 478 constellation residual 0.318/0.241 cleared; marker path yields fit max 0.92% and core-v1 PASS; public ship tex\u22642048 for GitHub size.",
     "semanticQa": {
-      "contractVersion": "SagaDriveLiveActFaceSemanticQaV2",
+      "contractVersion": "SagaTreeLiveActFaceSemanticQaV2",
       "profileVersion": "liveact-face-semantic-profile-v2",
       "pass": true,
       "skipped": false,
       "blockedByInvalidFaceAnchors": false,
       "faceAnchorAnatomyQa": {
-        "contractVersion": "SagaDriveFaceAnchorAnatomyQaV1",
+        "contractVersion": "SagaTreeFaceAnchorAnatomyQaV1",
         "profileVersion": "liveact-face-anchor-anatomy-profile-v1",
         "pass": true,
         "violations": [],
@@ -335,7 +335,7 @@
       "violations": []
     },
     "faceAnchorAnatomyQa": {
-      "contractVersion": "SagaDriveFaceAnchorAnatomyQaV1",
+      "contractVersion": "SagaTreeFaceAnchorAnatomyQaV1",
       "profileVersion": "liveact-face-anchor-anatomy-profile-v1",
       "pass": true,
       "violations": [],
@@ -420,8 +420,8 @@
   },
   "faceAnchorsAuthoring": {
     "mode": "head-normalized+anatomic-refine",
-    "anatomyQaContract": "SagaDriveFaceAnchorAnatomyQaV1",
-    "semanticQaContract": "SagaDriveLiveActFaceSemanticQaV2",
+    "anatomyQaContract": "SagaTreeFaceAnchorAnatomyQaV1",
+    "semanticQaContract": "SagaTreeLiveActFaceSemanticQaV2",
     "note": "Anchors re-authored without morph-extremum placement; anatomy QA before semantic QA."
   },
   "anchors": {

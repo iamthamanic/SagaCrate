@@ -1,7 +1,7 @@
 # Debug Report — meshy-avatar-stuck-99-offline
 
 **Date:** 2026-09-20  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** partial (vite-only UI + Edge logs; live poll not re-triggered in browser session)
 
@@ -55,7 +55,7 @@ failed to send request to user worker: connection closed before message complete
 edge main dispatch failed user worker failed to respond
 ```
 
-- Container `sagadrive-edge`: Up, ~196MiB RAM (memory OK)
+- Container `sagatree-edge`: Up, ~196MiB RAM (memory OK)
 - Worker config: `memoryLimitMb: 512`, `workerTimeoutMs: 5 * 60 * 1000` (`supabase/functions/main/index.ts`)
 - **CPU time** limits are separate from memory/timeout — currently killing isolates during avatar materialize
 
@@ -85,7 +85,7 @@ edge main dispatch failed user worker failed to respond
 
 ## Minimal fix hint (do not apply in this debug pass)
 
-1. **Operational (now):** Restart `sagadrive-edge`; hard-reload editor; retry generation. Clear stuck job id in sessionStorage if polls keep failing.
+1. **Operational (now):** Restart `sagatree-edge`; hard-reload editor; retry generation. Clear stuck job id in sessionStorage if polls keep failing.
 2. **Product/infra:** Further split rigging materialize so **one poll never does download+upload+CPU-heavy work** in the same isolate (queue step machine: remesh wait → rig wait → download → upload each return early). Optionally raise Edge CPU budget if self-host config allows.
 3. **UX:** On `offline` during `rigging`, copy should say **„KI-Server überlastet / Worker abgebrochen — retry“** not pure „Keine Verbindung“; optionally show last server `error_message` / edge 5xx.
 4. **Regression:** Gate or script that fails if Edge logs contain `CPU time hard limit` during avatar e2e; assert poll continues after simulated mid-rigging 5xx without sticky false “no API key”.

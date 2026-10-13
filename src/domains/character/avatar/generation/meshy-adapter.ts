@@ -1,5 +1,5 @@
 /**
- * Meshy capability schema + SagaDrive ↔ Meshy mapping.
+ * Meshy capability schema + SagaTree ↔ Meshy mapping.
  * Location: src/domains/character/avatar/generation/meshy-adapter.ts
  *
  * All Meshy-specific parameter names stay inside this file.
@@ -131,7 +131,7 @@ export const MESHY_PRESET_FAST: GenerationPresetDefinition = {
 export const MESHY_PRESET_RECOMMENDED: GenerationPresetDefinition = {
   id: 'recommended',
   labelDe: 'Empfohlen',
-  descriptionDe: 'Beste Balance für SagaDrive-Hauptcharaktere: High-Detail-Master, danach Runtime-Optimize.',
+  descriptionDe: 'Beste Balance für SagaTree-Hauptcharaktere: High-Detail-Master, danach Runtime-Optimize.',
   version: 1,
   providerId: 'meshy',
   settings: {
@@ -228,7 +228,7 @@ export const MESHY_CAPABILITY: ProviderCapabilityDefinition = {
       key: 'imageEnhancement',
       labelDe: 'Image Enhancement',
       type: 'boolean',
-      hintDe: 'Bei sauberem SagaDrive-Referenzbild auslassen.',
+      hintDe: 'Bei sauberem SagaTree-Referenzbild auslassen.',
     },
     {
       key: 'pbr',
@@ -248,7 +248,7 @@ export const MESHY_CAPABILITY: ProviderCapabilityDefinition = {
       key: 'initialRemesh',
       labelDe: 'Initial Remesh (Provider)',
       type: 'boolean',
-      hintDe: 'Für Hauptcharaktere aus — SagaDrive remesht danach für Runtime.',
+      hintDe: 'Für Hauptcharaktere aus — SagaTree remesht danach für Runtime.',
     },
     {
       key: 'targetPolycount',
@@ -270,7 +270,7 @@ export const MESHY_CAPABILITY: ProviderCapabilityDefinition = {
       min: 10_000,
       max: 100_000,
       step: 1000,
-      hintDe: 'SagaDrive-Pipeline nach dem Master (ca. 40–60k empfohlen).',
+      hintDe: 'SagaTree-Pipeline nach dem Master (ca. 40–60k empfohlen).',
     },
     {
       key: 'outputFormat',

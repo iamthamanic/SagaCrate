@@ -10,7 +10,7 @@ import type { AvatarV2Anatomy, AvatarV2BodyFamily, AvatarV2Modularity } from './
 import type { Avatar3dGenerationProviderId } from './generation/types';
 
 export const GENERATE_PRODUCT_FLOW_CONTRACT_VERSION =
-  'SagaDriveGenerateProductFlowV1' as const;
+  'SagaTreeGenerateProductFlowV1' as const;
 
 /** Product goals — independent of text vs image input mode. */
 export const GENERATE_PRODUCT_MODE_IDS = ['editable-wardrobe', 'free-form'] as const;
@@ -58,7 +58,7 @@ export function listGenerateProductModeOptions(): readonly GenerateProductModeOp
       modeId: 'editable-wardrobe',
       labelDe: 'Editierbar & kleidungsfähig (empfohlen)',
       detailDe:
-        'Ziel: kanonischer SagaDrive-Körper mit Kleidung und Morphs, soweit die Analyse es freigibt.',
+        'Ziel: kanonischer SagaTree-Körper mit Kleidung und Morphs, soweit die Analyse es freigibt.',
       recommended: true,
     },
     {
@@ -86,7 +86,7 @@ export function resolveGenerateIntentComposition(
       bodyCompatibility: 'custom',
       limitationsDe: [
         'Freie Form: Capabilities folgen der Strukturanalyse — Provider-Erfolg allein reicht nicht.',
-        'Standard-SagaDrive-Kleidung passt nicht automatisch auf diesen Körper.',
+        'Standard-SagaTree-Kleidung passt nicht automatisch auf diesen Körper.',
       ],
     };
   }

@@ -80,7 +80,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Generation-Einstellungen ungültig.',
         retryable: false,
@@ -93,7 +93,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Modell ungültig oder nicht erlaubt.',
         retryable: false,
@@ -105,7 +105,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Geometrie-Qualität ungültig.',
         retryable: false,
@@ -116,7 +116,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Texture-Qualität ungültig.',
         retryable: false,
@@ -127,7 +127,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Pose ungültig.',
         retryable: false,
@@ -138,7 +138,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Topology ungültig.',
         retryable: false,
@@ -152,7 +152,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Polycount ungültig.',
         retryable: false,
@@ -163,7 +163,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Runtime-Polycount ungültig.',
         retryable: false,
@@ -175,7 +175,7 @@ export function validateGenerationSettings(
     return {
       ok: false,
       error: {
-        provider: 'sagadrive',
+        provider: 'sagatree',
         code: 'validation',
         message: 'Output-Format muss GLB sein.',
         retryable: false,
@@ -189,7 +189,7 @@ export function validateGenerationSettings(
       return {
         ok: false,
         error: {
-          provider: 'sagadrive',
+          provider: 'sagatree',
           code: 'validation',
           message: 'Provider-Extras ungültig.',
           retryable: false,

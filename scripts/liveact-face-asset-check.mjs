@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * liveact-face-asset-check — CLI: Khronos then SagaDrive face-asset gate (#383/#422).
+ * liveact-face-asset-check — CLI: Khronos then SagaTree face-asset gate (#383/#422).
  * Location: scripts/liveact-face-asset-check.mjs
  *
  * Usage:
@@ -43,7 +43,7 @@ async function main() {
           ? ` functional=${result.inventory.functionalQa.violations.slice(0, 3).join(';')}`
           : '';
       console.error(
-        `liveact-face-asset-check FAIL: ${result.inventory.sagaDrive.errors.join(', ')}${semanticHint}${functionalHint}`,
+        `liveact-face-asset-check FAIL: ${result.inventory.sagaTree.errors.join(', ')}${semanticHint}${functionalHint}`,
       );
       process.exit(1);
     }

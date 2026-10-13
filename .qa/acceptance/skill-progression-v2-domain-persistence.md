@@ -4,12 +4,12 @@
 
 ## Intent
 
-Issue #90: Implement source-aware skill progression (7 free / 2 background / 1 archetype start points, stacked background points, level 3–19 skill advances, multiple specializations with provenance) in the SagaDrive rules kernel and character domain layer after architecture migration #94. Deterministic calculation, fail-closed validation for new provenance, legacy read compatibility without invented level events. UI redesign is #91 out of scope.
+Issue #90: Implement source-aware skill progression (7 free / 2 background / 1 archetype start points, stacked background points, level 3–19 skill advances, multiple specializations with provenance) in the SagaTree rules kernel and character domain layer after architecture migration #94. Deterministic calculation, fail-closed validation for new provenance, legacy read compatibility without invented level events. UI redesign is #91 out of scope.
 
 ## Preconditions
 
 - Branch from `main` with merged #94 architecture, #96 hardening, #97 boundary-check P2.
-- Canonical rules from #89 / PR #93 documented in `docs/sagadrive core rules.md`.
+- Canonical rules from #89 / PR #93 documented in `docs/sagatree core rules.md`.
 - Character persistence remains owner-scoped via Supabase adapter; no React/Supabase in rules kernel.
 
 ## Happy Path
@@ -19,7 +19,7 @@ Issue #90: Implement source-aware skill progression (7 free / 2 background / 1 a
 - [ ] Level-1 build: background `medicine:+2` + archetype `medicine:+1` → medicine rank 3; roundtrip load/save preserves provenance.
 - [ ] Level-5 advance `medicine 3→4` stored as level-5 event; caps enforced per level band.
 - [ ] Level 17: applied EB for ranks 0/1/2/3/4/5 → 0/2/3/4/5/5; initiative uses applied EB on awareness; health/resistances use global EB.
-- [ ] `assertValidSagaDriveSkillPersistence` fail-closed when new provenance present but final `skills` mismatch; skipped for legacy-unresolved characters.
+- [ ] `assertValidSagaTreeSkillPersistence` fail-closed when new provenance present but final `skills` mismatch; skipped for legacy-unresolved characters.
 - [ ] Architecture boundary check passes; `npm run test-gate` green including new regression script.
 
 ## Edge Cases
@@ -46,9 +46,9 @@ Issue #90: Implement source-aware skill progression (7 free / 2 background / 1 a
 
 ## Assumptions
 
-- `freeSkillRanks` stored on `sagaDriveProfile` (not separate table); JSONB additive fields only.
+- `freeSkillRanks` stored on `sagaTreeProfile` (not separate table); JSONB additive fields only.
 - Background specialization remains in `background.specialization` at level 1; full list also in `specializations[]` when provenance complete.
-- `SAGA_DRIVE_START_MIN_TRAINED_SKILLS` remains in UI until #91; domain removes min-6 requirement.
+- `SAGA_TREE_START_MIN_TRAINED_SKILLS` remains in UI until #91; domain removes min-6 requirement.
 
 ## Screenshots
 
@@ -58,14 +58,14 @@ Issue #90: Implement source-aware skill progression (7 free / 2 background / 1 a
 
 ## Implementation Notes
 - Files touched:
-  - `src/domains/rules/sagadrive/skill-progression/index.ts` — rules kernel (EB, caps, advances, provenance, legacy migration)
-  - `src/domains/character/domain/sagadrive-profile.entity.ts` — profile contracts
+  - `src/domains/rules/sagatree/skill-progression/index.ts` — rules kernel (EB, caps, advances, provenance, legacy migration)
+  - `src/domains/character/domain/sagatree-profile.entity.ts` — profile contracts
   - `src/domains/character/use-cases/normalize-character.ts` — normalization (explicit backgroundSkillPoints only)
   - `src/domains/character/use-cases/assert-character-persistence.ts` — fail-closed skill + attribute persistence
-  - `src/domains/rules/sagadrive/derived-stats/compute-derived-stats.ts` — initiative uses applied EB when `level` provided
+  - `src/domains/rules/sagatree/derived-stats/compute-derived-stats.ts` — initiative uses applied EB when `level` provided
   - `src/infrastructure/character/supabase-character.repository.ts` — combined persistence assert on create/update
   - `src/modules/rulesets/skillProgression.ts` — legacy barrel
-  - `src/app/character/progression/CharacterSkillsPanel.tsx` — re-exports domain `getSagaDriveFinalSkillRanks`
+  - `src/app/character/progression/CharacterSkillsPanel.tsx` — re-exports domain `getSagaTreeFinalSkillRanks`
   - `scripts/skill-progression-regression-check.mjs`, `scripts/skill-progression.self-test.mjs`
   - `package.json` — test-gate wiring
 - Unit / regression: `node scripts/skill-progression-regression-check.mjs`, `npm run test-gate` → PASS

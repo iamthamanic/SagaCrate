@@ -4,24 +4,24 @@
  */
 import { useCallback, useState } from 'react';
 import {
-  sagaDriveArchetypeOptions,
-  type SagaDriveArchetypeKey,
-  type SagaDriveSkillKey,
+  sagaTreeArchetypeOptions,
+  type SagaTreeArchetypeKey,
+  type SagaTreeSkillKey,
 } from '../../../domains/rules/sagatree/character-creation';
 import type { CharacterAttributesDto } from '../../../domains/character';
-import type { SagaDriveBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
+import type { SagaTreeBackgroundSkillPoints } from '../../../domains/rules/sagatree/skill-progression';
 import { ArchetypeCarousel, type CarouselScrollPhase } from './ArchetypeCarousel';
 import { ArchetypeSkillChoice } from './ArchetypeSkillChoice';
 import { RuleHelp } from '../shared/RuleHelp';
 
 interface CharacterArchetypePanelProps {
-  selectedArchetype?: SagaDriveArchetypeKey;
-  onArchetypeChange: (value: SagaDriveArchetypeKey) => void;
-  archetypeTrainingSkill?: SagaDriveSkillKey;
-  onArchetypeTrainingSkillChange: (skill: SagaDriveSkillKey) => void;
+  selectedArchetype?: SagaTreeArchetypeKey;
+  onArchetypeChange: (value: SagaTreeArchetypeKey) => void;
+  archetypeTrainingSkill?: SagaTreeSkillKey;
+  onArchetypeTrainingSkillChange: (skill: SagaTreeSkillKey) => void;
   coreAbility?: { name: string };
-  freeRanks: Record<SagaDriveSkillKey, number>;
-  backgroundSkillPoints: SagaDriveBackgroundSkillPoints;
+  freeRanks: Record<SagaTreeSkillKey, number>;
+  backgroundSkillPoints: SagaTreeBackgroundSkillPoints;
   attributes: CharacterAttributesDto;
   experienceBonus?: number;
 }
@@ -36,7 +36,7 @@ export function CharacterArchetypePanel({
   attributes,
   experienceBonus = 1,
 }: CharacterArchetypePanelProps) {
-  const selectedOption = sagaDriveArchetypeOptions.find((option) => option.value === selectedArchetype);
+  const selectedOption = sagaTreeArchetypeOptions.find((option) => option.value === selectedArchetype);
   const [scrollPhase, setScrollPhase] = useState<CarouselScrollPhase>('settled');
 
   // Phase 'settled' kommt ausschliesslich aus dem Standstill-Watcher des Connectors:

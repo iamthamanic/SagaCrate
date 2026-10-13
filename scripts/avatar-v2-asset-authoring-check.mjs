@@ -79,12 +79,12 @@ const manifest = m.createAssetAuthoringManifest({
   modelId: 'meshy-6',
   prompt: 'adult stylized humanoid base body a-pose mtoon',
   settings,
-  provenance: { license: 'first-party', attributionDe: 'SagaDrive first-party' },
+  provenance: { license: 'first-party', attributionDe: 'SagaTree first-party' },
   outputChecksum: 'abc123',
   bodyFamily: 'standard',
   createdAt: '2026-09-19T00:00:00.000Z',
 });
-check(manifest.contractVersion === 'SagaDriveAssetAuthoringV1', 'manifest version');
+check(manifest.contractVersion === 'SagaTreeAssetAuthoringV1', 'manifest version');
 check(manifest.generationContractVersion.includes('Generation'), 'gen contract pin');
 
 let threw = false;

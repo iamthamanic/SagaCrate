@@ -10,10 +10,10 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { createPortal } from 'react-dom';
 import type { LiveActCapabilitiesV1 } from '../../../domains/character/liveact';
 import {
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
-  type SagaDriveFaceAnchorId,
-  type SagaDriveFaceAnchorTriangleBinding,
-  type SagaDriveFaceAnchorsManifestV1,
+  SAGA_TREE_FACE_ANCHOR_IDS,
+  type SagaTreeFaceAnchorId,
+  type SagaTreeFaceAnchorTriangleBinding,
+  type SagaTreeFaceAnchorsManifestV1,
 } from '../../../domains/character/avatar/face-anchor-contract';
 import {
   clearFaceMappingDraftBinding,
@@ -24,7 +24,7 @@ import {
   setFaceMappingDraftBinding,
   validateFaceMappingDraft,
   type FaceMappingDraftValidationResult,
-  type SagaDriveFaceMappingDraftV1,
+  type SagaTreeFaceMappingDraftV1,
 } from '../../../domains/character/avatar/face-mapping-draft-v1';
 import {
   applyAutoMappingToDraft,
@@ -59,15 +59,15 @@ import { LiveActCameraPreview } from './LiveActCameraPreview';
 import { LiveActCharacterFaceOverlay } from './LiveActCharacterFaceOverlay';
 import type { UseLiveActViewportResult } from './useLiveActViewport';
 
-function meshLabelFromBinding(binding: SagaDriveFaceAnchorTriangleBinding): string {
+function meshLabelFromBinding(binding: SagaTreeFaceAnchorTriangleBinding): string {
   const node = binding.nodeIdentity.trim() || '?';
   return `${node}/t${binding.triangleIndex}`;
 }
 
 function autoCoordsFromSession(
   session: FaceMappingAutoSessionResultV1,
-): Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>> {
-  const out: Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>> = {};
+): Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>> {
+  const out: Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>> = {};
   for (const row of session.anchors) {
     const mapped = row.outcome === 'mapped' && Boolean(row.binding);
     out[row.anchorId] = {
@@ -83,8 +83,8 @@ function autoCoordsFromSession(
 
 function autoBindingsFromSession(
   session: FaceMappingAutoSessionResultV1,
-): Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> {
-  const out: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> = {};
+): Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> {
+  const out: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> = {};
   for (const row of session.anchors) {
     if (row.binding && row.outcome === 'mapped') {
       out[row.anchorId] = row.binding;
@@ -95,10 +95,10 @@ function autoBindingsFromSession(
 
 function projectManualCoords(
   runtime: CharacterStudioRuntime,
-  draft: SagaDriveFaceMappingDraftV1,
-): Partial<Record<SagaDriveFaceAnchorId, FaceMappingManualCoordV1>> {
-  const out: Partial<Record<SagaDriveFaceAnchorId, FaceMappingManualCoordV1>> = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  draft: SagaTreeFaceMappingDraftV1,
+): Partial<Record<SagaTreeFaceAnchorId, FaceMappingManualCoordV1>> {
+  const out: Partial<Record<SagaTreeFaceAnchorId, FaceMappingManualCoordV1>> = {};
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = draft.anchors[id];
     if (!binding) continue;
     const world = runtime.evaluateFaceMappingBindingWorld(binding, id);
@@ -118,9 +118,9 @@ function projectManualCoords(
 function projectAutoCoordsFromBindings(
   runtime: CharacterStudioRuntime,
   session: FaceMappingAutoSessionResultV1,
-  bindings: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>>,
-): Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>> {
-  const out: Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>> = {};
+  bindings: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>>,
+): Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>> {
+  const out: Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>> = {};
   for (const row of session.anchors) {
     const binding =
       row.outcome === 'mapped'
@@ -168,7 +168,7 @@ interface LiveActViewportControlsProps {
   /** Open large face-framed 3D preview modal. */
   onExpandPreview?: () => void;
   /** Persist Face Mapping anchors on the character avatar (editor hook). */
-  onFaceAnchorsCommitted?: (manifest: SagaDriveFaceAnchorsManifestV1) => void;
+  onFaceAnchorsCommitted?: (manifest: SagaTreeFaceAnchorsManifestV1) => void;
 }
 
 function faceMappingSaveBlockedMessage(validation: FaceMappingDraftValidationResult): string {
@@ -192,23 +192,23 @@ export function LiveActViewportControls({
   onFaceAnchorsCommitted,
 }: LiveActViewportControlsProps) {
   const [faceMappingOpen, setFaceMappingOpen] = useState(false);
-  const [draft, setDraft] = useState<SagaDriveFaceMappingDraftV1 | null>(null);
+  const [draft, setDraft] = useState<SagaTreeFaceMappingDraftV1 | null>(null);
   const [missMessage, setMissMessage] = useState<string | null>(null);
   const [autoBusy, setAutoBusy] = useState(false);
   const [autoStatusMessage, setAutoStatusMessage] = useState<string | null>(null);
   const [manualCoords, setManualCoords] = useState<
-    Partial<Record<SagaDriveFaceAnchorId, FaceMappingManualCoordV1>>
+    Partial<Record<SagaTreeFaceAnchorId, FaceMappingManualCoordV1>>
   >({});
   const [autoCoords, setAutoCoords] = useState<
-    Partial<Record<SagaDriveFaceAnchorId, FaceMappingAutoCoordV1>>
+    Partial<Record<SagaTreeFaceAnchorId, FaceMappingAutoCoordV1>>
   >({});
   const [overlayViewMode, setOverlayViewMode] = useState<FaceMappingOverlayViewMode>('draft');
   const [groundTruthValid, setGroundTruthValid] = useState<boolean | null>(null);
   const [referenceStatus, setReferenceStatus] = useState<string | null>(null);
-  const draftRef = useRef<SagaDriveFaceMappingDraftV1 | null>(null);
+  const draftRef = useRef<SagaTreeFaceMappingDraftV1 | null>(null);
   const authoringMetaRef = useRef<FaceMappingDraftAuthoringMeta>({});
   const autoBindingsRef = useRef<Partial<
-    Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>
+    Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>
   > | null>(null);
   const autoSessionTokenRef = useRef(0);
   const groundTruthReferenceRef = useRef<FaceMappingGroundTruthReferenceV1 | null>(null);
@@ -300,7 +300,7 @@ export function LiveActViewportControls({
     if (!runtime || !seedDraft || autoBusy) return;
 
     let protectedCount = 0;
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       if (isProtectedFaceMappingAnchor(authoringMetaRef.current[id], seedDraft.anchors[id])) {
         protectedCount += 1;
       }
@@ -491,7 +491,7 @@ export function LiveActViewportControls({
     };
   }, [studioRuntimeRef]);
 
-  const onSelectAnchor = useCallback((anchorId: SagaDriveFaceAnchorId) => {
+  const onSelectAnchor = useCallback((anchorId: SagaTreeFaceAnchorId) => {
     setMissMessage(null);
     setDraft((prev) => {
       if (!prev) return prev;
@@ -502,7 +502,7 @@ export function LiveActViewportControls({
   }, []);
 
   const onBindingPlaced = useCallback(
-    (anchorId: SagaDriveFaceAnchorId, binding: SagaDriveFaceAnchorTriangleBinding | null) => {
+    (anchorId: SagaTreeFaceAnchorId, binding: SagaTreeFaceAnchorTriangleBinding | null) => {
       if (!binding) {
         setMissMessage('Kein Treffer auf der Character-Oberfläche — erneut tippen oder ziehen.');
         // Keep existing binding + meta (protection). Only explicit Clear removes provenance.

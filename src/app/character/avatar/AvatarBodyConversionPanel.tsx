@@ -67,7 +67,7 @@ export function AvatarBodyConversionPanel({
   return (
     <section
       className="space-y-2 rounded-lg border border-border bg-muted/10 p-3"
-      aria-label="Auf SagaDrive-Körper übertragen"
+      aria-label="Auf SagaTree-Körper übertragen"
       data-avatar-body-conversion-panel
     >
       <div className="flex flex-wrap items-center gap-2">
@@ -80,13 +80,13 @@ export function AvatarBodyConversionPanel({
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          Auf SagaDrive-Körper übertragen
+          Auf SagaTree-Körper übertragen
         </Button>
       </div>
       {open ? (
         <div className="space-y-3" data-avatar-conversion-chooser>
           <p className="text-xs text-muted-foreground">
-            Look wird übertragen; Proportionen können sich verändern — dafür volle SagaDrive-Kleidung
+            Look wird übertragen; Proportionen können sich verändern — dafür volle SagaTree-Kleidung
             und Körperbearbeitung. Das Original bleibt erhalten.
           </p>
           {summary.anatomy === 'custom-creature' ? (

@@ -1,7 +1,7 @@
 # Acceptance — avatar-vrm-pack (#404)
 
 ## Intent
-Offline, deterministic pack of a validated SagaDrive humanoid GLB (+ face inventory)
+Offline, deterministic pack of a validated SagaTree humanoid GLB (+ face inventory)
 into a VRM 1.0 asset without re-authoring geometry, skin, PBR, or morph semantics.
 
 ## Commands

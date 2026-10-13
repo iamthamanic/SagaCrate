@@ -1,5 +1,5 @@
 /**
- * speciesBanners — Flat-color heraldic coat of arms per SagaDrive Spezies.
+ * speciesBanners — Flat-color heraldic coat of arms per SagaTree Spezies.
  * Style: bold logo, distinct colors/patterns, no shading, uniform 400×512px RGB.
  * Location: src/app/character/creation/speciesBanners.ts
  */

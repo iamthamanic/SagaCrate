@@ -20,7 +20,7 @@ GM starts/ends an encounter or applies damage/condition/turn/spendAction; author
 | Simulation | Intent | Observed | Result |
 |------------|--------|----------|--------|
 | N-actors | GM mutates encounter; players only read own participant; spendAction only current PC owner or GM | Membership + GM checks in RPC; spendAction ownership via `owner_user_id` | pass |
-| Invalid/missing | Forged initiative/HP/round stripped; non-GM start/damage forbidden; start while active fails | `sagadrive_strip_forged_encounter_keys`; RAISE forbidden / Encounter bereits aktiv | pass |
+| Invalid/missing | Forged initiative/HP/round stripped; non-GM start/damage forbidden; start while active fails | `sagatree_strip_forged_encounter_keys`; RAISE forbidden / Encounter bereits aktiv | pass |
 | Two consumers / crash | GM + players subscribe; snapshot refresh converges; idempotency key prevents double events; lastRoll/scene preserved | Revision bump + idempotent replay; scene/checkTarget paths do not wipe shared blob | pass |
 
 ## Flags

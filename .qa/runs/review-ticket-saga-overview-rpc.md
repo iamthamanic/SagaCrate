@@ -11,7 +11,7 @@
 
 ## Architecture
 - Layers OK: domain (parse/assert + pure primary action) → infrastructure (RPC) → app hook
-- Reuses `sagadrive_project_shared_adventure` (DRY with live snapshot)
+- Reuses `sagatree_project_shared_adventure` (DRY with live snapshot)
 - No React Query / Realtime; hooks limited to useState/useEffect/useRef
 
 ## Security

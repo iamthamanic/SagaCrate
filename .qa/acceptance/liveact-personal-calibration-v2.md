@@ -112,11 +112,11 @@ Not a pure Performance HUD.
 
 ## Implementation Notes
 
-- Contract: `SagaDriveLiveActCalibrationProfileV2` + policy `liveact-personal-calibration-policy-v1`
+- Contract: `SagaTreeLiveActCalibrationProfileV2` + policy `liveact-personal-calibration-policy-v1`
 - Scope: `LiveActPersonalCalibrationScopeV1 { ownerLocalId, characterLocalId }`
 - Domain: capture/finalize/apply/store under `liveact-personal-calibration-*.ts`
 - Engine: `setPersonalCalibrationScope` + `calibratePersonalV2()`; classic `calibrate()` session-overrides Personal
 - Apply seat: after #448 temporal; paired L/R gains from stronger span
-- Persistence: `localStorage` key `sagadrive.liveact.calibrationProfile.v2:<owner>:<character>`
+- Persistence: `localStorage` key `sagatree.liveact.calibrationProfile.v2:<owner>:<character>`
 - UI: Premium + Skip ≥44px; verify-ui required (Phone/Tablet/Desktop)
 - Gate: `scripts/liveact-personal-calibration-v2-check.mjs`

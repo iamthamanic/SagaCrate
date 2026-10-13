@@ -8,7 +8,7 @@ Der Hintergrund-Flow im Character Editor nutzt ein swipebares Template-Karussell
 Roadmap: Fortsetzung von PR #82 (Hintergrund-Skill-Nodes).
 
 ## Preconditions
-- Character Editor läuft mit SagaDrive Core.
+- Character Editor läuft mit SagaTree Core.
 - Background-Templates und Custom-Hintergrund existieren.
 - Regeln: 4 Pool-Skills, 2 Trainings (`Hintergrund +1`), 1 Spezialisierung auf trainiertem Skill.
 - Persistenz und Callbacks bleiben unverändert.

@@ -8,7 +8,7 @@ Director/GM applies cue (manual or automatic trigger) → shared.director + prog
 
 ## Hop chain
 useDirectorRuntime / GmActionPalette trigger-cue
-→ applyDirectorCueCommand (pure) + SQL sagadrive_resolve_cue_command
+→ applyDirectorCueCommand (pure) + SQL sagatree_resolve_cue_command
 → world_state.shared.director + programPresentation
 → get_session_runtime_snapshot (no gameplay columns)
 

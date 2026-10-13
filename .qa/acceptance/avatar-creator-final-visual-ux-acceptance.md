@@ -8,7 +8,7 @@ Finales E2E-/Visual-Gate für den Avatar Character Creator: 20–30 Creator-Komb
 ## Happy Path
 - [x] 24 reproduzierbare Creator-Kombinationen (12 Fantasy + 12 Sci-Fi)
 - [x] Golden Refs Fantasy-Elf + Sci-Fi-Cyborg mit stabilen Fingerprints
-- [x] SagaDrive Morph voll; Import/Meshy capability-gated Messaging
+- [x] SagaTree Morph voll; Import/Meshy capability-gated Messaging
 - [x] Save-Export strippt Runtime-/Equipment-Overlays
 - [x] Shared Surfaces: full-3d + WebGL→Portrait Fallback
 - [x] Responsive/a11y Structural (min-h-11, overflow-x-hidden, aria)

@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # ===========================================
-# SagaDrive Self-Host Setup Script
+# SagaTree Self-Host Setup Script
 # ===========================================
 
 set -e
 
-echo "🚀 SagaDrive Self-Host Setup"
+echo "🚀 SagaTree Self-Host Setup"
 echo "=============================="
 
 # Check prerequisites
@@ -50,7 +50,7 @@ if [ ! -f .env ]; then
     
     cat > .env << EOF
 # ===========================================
-# SagaDrive Self-Host Configuration
+# SagaTree Self-Host Configuration
 # GENERATED - Keep this file secure!
 # ===========================================
 

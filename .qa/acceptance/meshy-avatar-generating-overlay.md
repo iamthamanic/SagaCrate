@@ -23,7 +23,7 @@ While Meshy generates a character, the Character Editor portrait preview shows a
 - [ ] AvatarSurfaceViewer used outside editor (Session/Token) unchanged — no Meshy coupling.
 
 ## Regression
-- [ ] Import / SagaDrive avatar sources still show viewer without overlay.
+- [ ] Import / SagaTree avatar sources still show viewer without overlay.
 - [ ] Existing Meshy start/poll/retry flow unchanged.
 
 ## Assumptions

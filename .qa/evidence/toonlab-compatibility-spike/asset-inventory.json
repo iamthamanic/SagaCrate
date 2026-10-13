@@ -134,12 +134,12 @@
     {
       "id": "three-peer-gap",
       "severity": "blocker",
-      "detail": "SagaDrive three@0.183.2 does not satisfy ToonLab peer ^0.185.1."
+      "detail": "SagaTree three@0.183.2 does not satisfy ToonLab peer ^0.185.1."
     },
     {
       "id": "vrm-peer-gap",
       "severity": "blocker",
-      "detail": "SagaDrive @pixiv/three-vrm@3.5.1 does not satisfy ToonLab peer ^3.5.4."
+      "detail": "SagaTree @pixiv/three-vrm@3.5.1 does not satisfy ToonLab peer ^3.5.4."
     },
     {
       "id": "react-peer-gap",
@@ -154,7 +154,7 @@
     {
       "id": "mtoon-parallel-path",
       "severity": "info",
-      "detail": "SagaDrive already has an allowlisted MToon style profile. ToonLab must not silently replace that contract; Look runtime (#342) should keep provider-neutral adapters."
+      "detail": "SagaTree already has an allowlisted MToon style profile. ToonLab must not silently replace that contract; Look runtime (#342) should keep provider-neutral adapters."
     }
   ],
   "minimalIntegrationPath": [

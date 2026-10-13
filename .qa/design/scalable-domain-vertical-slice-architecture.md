@@ -6,7 +6,7 @@
 
 ## Intent
 
-Establish a **Modular Monolith** with explicit domain boundaries, vertical slices for user flows, and a UI-independent rules kernel — incrementally migrated (Character + SagaDrive rules only) to unblock Skill Progression v2 (#90/#91).
+Establish a **Modular Monolith** with explicit domain boundaries, vertical slices for user flows, and a UI-independent rules kernel — incrementally migrated (Character + SagaTree rules only) to unblock Skill Progression v2 (#90/#91).
 
 ## Principles
 
@@ -26,7 +26,7 @@ src/
 │   │   ├── contracts/        # commands + view models
 │   │   └── use-cases/        # normalize, validate, service facade
 │   └── rules/
-│       └── sagadrive/        # rules kernel slices (no UI/Supabase)
+│       └── sagatree/        # rules kernel slices (no UI/Supabase)
 │           ├── character-creation/
 │           ├── attribute-progression/
 │           ├── background-templates/
@@ -54,8 +54,8 @@ src/
 | Progression panels (skills, abilities, statistics, inventory, preset, notes) | `src/app/character/progression/` |
 | `character.service.ts` | `use-cases/normalize-character.ts` + `use-cases/character-service.ts` + `infrastructure/supabase-character.repository.ts` |
 | `character.types.ts` | `domain/*` + `contracts/*` + `infrastructure/character.persistence.ts` |
-| `derivedStats.ts` | `domains/rules/sagadrive/derived-stats/` (pure) + `app/character/edit/map-derived-stat-cards.ts` (UI) |
-| `src/modules/rulesets/*` | `src/domains/rules/sagadrive/<slice>/` |
+| `derivedStats.ts` | `domains/rules/sagatree/derived-stats/` (pure) + `app/character/edit/map-derived-stat-cards.ts` (UI) |
+| `src/modules/rulesets/*` | `src/domains/rules/sagatree/<slice>/` |
 
 ## Boundary Rules (enforced by `architecture-boundary-check.mjs`)
 

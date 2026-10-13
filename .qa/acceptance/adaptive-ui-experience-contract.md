@@ -4,7 +4,7 @@
 
 ## Intent
 
-Definiere den verbindlichen SagaDrive Adaptive-UI-Contract mit messbaren `AU-*` Gates für Layout, Touch, Safe Areas, Motion, Accessibility und gerätegerechte Re-Komposition. AGENTS.md und THEME_GUIDE verknüpfen den Contract verbindlich ohne widersprüchliche Duplikate.
+Definiere den verbindlichen SagaTree Adaptive-UI-Contract mit messbaren `AU-*` Gates für Layout, Touch, Safe Areas, Motion, Accessibility und gerätegerechte Re-Komposition. AGENTS.md und THEME_GUIDE verknüpfen den Contract verbindlich ohne widersprüchliche Duplikate.
 
 ## Preconditions
 

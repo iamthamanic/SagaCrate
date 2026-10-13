@@ -36,7 +36,7 @@ const editor = [
 ].join('\n');
 const library = read('src/app/library/Library.tsx');
 const dashboard = read('src/app/dashboard/Dashboard.tsx');
-const characterTypes = read('src/domains/character/domain/sagadrive-profile.entity.ts');
+const characterTypes = read('src/domains/character/domain/sagatree-profile.entity.ts');
 const characterNormalize = read('src/domains/character/use-cases/normalize-character.ts');
 const characterRepository = read('src/infrastructure/character/supabase-character.repository.ts');
 
@@ -52,12 +52,12 @@ requireMatch(migrationHardening, /origin is immutable/, 'origin immutable on upd
 
 requireMatch(types, /interface CharacterPresetSnapshot/, 'preset snapshot type');
 requireMatch(types, /schemaVersion: 1/, 'snapshot schema version');
-rejectMatch(types, /freeSkillRanks:\s*Record<SagaDriveSkillKey,\s*number>/, 'parallel top-level freeSkillRanks on CharacterPresetSnapshot');
-requireMatch(types, /sagatree_profile: SagaDriveProfileDto/, 'skill provenance via sagatree_profile');
+rejectMatch(types, /freeSkillRanks:\s*Record<SagaTreeSkillKey,\s*number>/, 'parallel top-level freeSkillRanks on CharacterPresetSnapshot');
+requireMatch(types, /sagatree_profile: SagaTreeProfileDto/, 'skill provenance via sagatree_profile');
 requireMatch(types, /published: boolean/, 'published flag on preset vm/dto');
 
 requireMatch(service, /export function assertValidSnapshot/, 'exported snapshot validation');
-requireMatch(service, /assertValidSagaDriveCharacterPersistence/, 'preset snapshots delegate skill/attribute rules to character persistence');
+requireMatch(service, /assertValidSagaTreeCharacterPersistence/, 'preset snapshots delegate skill/attribute rules to character persistence');
 requireMatch(service, /normalizeSafeUrl/, 'portrait_url sanitized via normalizeSafeUrl');
 requireMatch(service, /Skipping invalid preset version on read/, 're-validate snapshots on read');
 requireMatch(service, /createPresetFromCharacter/, 'create preset from character');
@@ -67,11 +67,11 @@ requireMatch(service, /maybeAutoReleaseVersion/, 'auto release helper');
 requireMatch(service, /\(Kopie\)/, 'duplicate name suffix');
 requireMatch(service, /sourceCharacterMissing/, 'deleted source character note support');
 rejectMatch(service, /value\.freeSkillRanks/, 'preset service still reads top-level value.freeSkillRanks');
-rejectMatch(service, /SAGA_DRIVE_START_MIN_TRAINED_SKILLS/, 'preset service leftover min-trained-skills constant');
+rejectMatch(service, /SAGA_TREE_START_MIN_TRAINED_SKILLS/, 'preset service leftover min-trained-skills constant');
 rejectMatch(service, /trainedCount/, 'preset service leftover trainedCount min-6 rule');
 rejectMatch(service, /mindestens 6/, 'preset service leftover minimum 6 trained skills copy');
 
-requireMatch(characterTypes, /presetReleaseMode\?:/, 'release mode on sagadrive profile');
+requireMatch(characterTypes, /presetReleaseMode\?:/, 'release mode on sagatree profile');
 requireMatch(characterNormalize, /presetReleaseMode/, 'release mode normalized in character service');
 
 requireMatch(panel, /Als Preset speichern/, 'save as preset CTA');
@@ -91,7 +91,7 @@ requireMatch(dialog, /Level /, 'version level picker');
 requireMatch(dialog, /setCharacterEditorBootstrap/, 'bootstrap wiring from dialog');
 requireMatch(dialog, /assertValidSnapshot/, 'assert before bootstrap handoff');
 requireMatch(startingTemplatePicker, /SagaTree-Starttemplates/, 'system starttemplates section');
-requireMatch(startingTemplatePicker, /listSagaDriveStartingTemplates/, 'catalog list in picker');
+requireMatch(startingTemplatePicker, /listSagaTreeStartingTemplates/, 'catalog list in picker');
 requireMatch(startingTemplatePicker, /StartingTemplateIcon/, 'starttemplate icon per row');
 requireMatch(startingTemplatePicker, /summaryDe/, 'starttemplate playstyle tooltip');
 requireMatch(startingTemplatePicker, /CircleHelp/, 'starttemplate help trigger');
@@ -101,8 +101,8 @@ requireMatch(editor, /value="settings"/, 'Einstellungen editor tab');
 requireMatch(editor, /CharacterPresetPanel/, 'preset panel mounted');
 requireMatch(editor, /takeCharacterEditorBootstrap/, 'bootstrap consume');
 requireMatch(editor, /kind === 'starting-template'/, 'starting-template bootstrap consume');
-requireMatch(editor, /getSagaDriveStartingTemplate/, 'catalog resolve for starttemplate');
-requireMatch(editor, /validateSagaDriveStartingTemplate/, 'fail-closed starttemplate validate');
+requireMatch(editor, /getSagaTreeStartingTemplate/, 'catalog resolve for starttemplate');
+requireMatch(editor, /validateSagaTreeStartingTemplate/, 'fail-closed starttemplate validate');
 requireMatch(editor, /AppliedVorlageBadge/, 'vorlage badge in editor header');
 requireMatch(editor, /setAppliedVorlage/, 'vorlage origin tracked after bootstrap');
 requireMatch(editor, /IncompleteTabHint/, 'pulsing incomplete tab hints');
@@ -115,7 +115,7 @@ rejectMatch(editor, /snapshot\.freeSkillRanks/, 'preset hydration still reads sn
 rejectMatch(editor, /payload\.freeSkillRanks/, 'hydrateEditor still has freeSkillRanks override');
 rejectMatch(editor, /freeSkillRanks\?:\s*Partial/, 'hydrateEditor payload still declares freeSkillRanks override');
 rejectMatch(editor, /freeSkillRanks,\s*\n\s*skills: finalSkillRanks/, 'preset snapshot builder still writes top-level freeSkillRanks');
-rejectMatch(dialog, /SagaDrive-Presets bald/, 'old system presets stub must be gone');
+rejectMatch(dialog, /SagaTree-Presets bald/, 'old system presets stub must be gone');
 
 requireMatch(library, /CreateCharacterEntryDialog/, 'library create dialog');
 requireMatch(dashboard, /CreateCharacterEntryDialog/, 'dashboard create dialog');

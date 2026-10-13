@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * vectorize-item-icons — optional local / CI VTracer batch for SagaDrive item icons.
+ * vectorize-item-icons — optional local / CI VTracer batch for SagaTree item icons.
  * Skips items that already have a valid SVG unless --force or manifest status=regenerate.
  * VTracer is optional locally; required when --require-vtracer is set (CI).
  * Location: scripts/vectorize-item-icons.mjs

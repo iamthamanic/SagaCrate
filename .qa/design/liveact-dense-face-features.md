@@ -22,7 +22,7 @@ Dense Feature Extraction
 ≠ Iris Gaze Solver (#446)
 ```
 
-`SagaDriveLiveActFrameV1` is **unchanged** — no landmark arrays, no dense payload.
+`SagaTreeLiveActFrameV1` is **unchanged** — no landmark arrays, no dense payload.
 
 ## Architecture
 
@@ -31,7 +31,7 @@ MediaPipe Face Landmarks
   → provider adapter (indices → named semantic points)  [infrastructure]
   → face-local orthonormal normalization                  [domain]
   → region feature extraction                            [domain]
-  → SagaDriveLiveActDenseFaceFeaturesV1                  [domain]
+  → SagaTreeLiveActDenseFaceFeaturesV1                  [domain]
   → engine side-channel listener (future #446/#447)
 ```
 

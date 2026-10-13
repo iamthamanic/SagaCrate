@@ -9,7 +9,7 @@ Inventar zeigt Charakter-Ressourcen 0–5 inkl. Affordability; Playwright sicher
 Traglast-, Waffen-/Werkzeug- und Ressourcen-Flows inkl. Save/Reload.
 
 ## Preconditions
-- #19 / #21 closed; item rules kernel (`src/domains/rules/sagadrive/items`) present.
+- #19 / #21 closed; item rules kernel (`src/domains/rules/sagatree/items`) present.
 - Live Inventar = `CharacterInventoryV2Panel` (legacy panel unmounted).
 - DB column `characters.resources` JSONB exists.
 
@@ -37,8 +37,8 @@ Traglast-, Waffen-/Werkzeug- und Ressourcen-Flows inkl. Save/Reload.
 - Proof: `.qa/runs/composition-gate-validate-gear-resources-load.md`
 
 ## Implementation Notes
-- Domain: `src/domains/rules/sagadrive/items/resource-affordability.ts` (+ barrel export).
-- Persist: `CharacterVm.abstractResources` ↔ `characters.resources.sagadriveAbstract`.
+- Domain: `src/domains/rules/sagatree/items/resource-affordability.ts` (+ barrel export).
+- Persist: `CharacterVm.abstractResources` ↔ `characters.resources.sagatreeAbstract`.
 - UI: resources Select on `InventorySummaryBar`; `InventoryAffordabilityDialog` on catalog add.
 - Script: `scripts/validate-gear-resources-load.mjs` wired in `test-gate.mjs`.
 - E2E: `e2e/validate-gear-resources-load.spec.ts` + evidence dir.

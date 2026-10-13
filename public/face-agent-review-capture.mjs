@@ -2,7 +2,7 @@
  * Face Agent Review capture harness — implements __SAGA_FACE_AGENT_REVIEW_CAPTURE__.
  * Location: public/face-agent-review-capture.mjs
  *
- * Loads candidate GLB + SagaDriveFaceAnchorsV1 (triangle/barycentric), resolves
+ * Loads candidate GLB + SagaTreeFaceAnchorsV1 (triangle/barycentric), resolves
  * world positions on the mesh, draws 21 labeled markers, poses camera for the
  * seven evidence views. Served by face-anchor-agent-review-evidence-capture --harness.
  */
@@ -142,7 +142,7 @@ function findMeshByIdentity(sceneRoot, nodeIdentity) {
 }
 
 /**
- * Resolve SagaDriveFaceAnchorsV1 triangle/barycentric binding to world position.
+ * Resolve SagaTreeFaceAnchorsV1 triangle/barycentric binding to world position.
  * @param {THREE.Mesh} mesh
  * @param {{ primitiveIndex?: number; triangleIndex?: number; barycentric?: { u?: number; v?: number; w?: number } }} binding
  */

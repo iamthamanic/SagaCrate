@@ -706,7 +706,7 @@ check(/liveact-calibration-prompt/.test(pip), 'PiP shows calibration prompt');
 check(/calibrationRunning=\{liveAct\.calibrationStatus === 'running'\}/.test(controls), 'prompt wiring');
 check(/patchReferenceVrmTeethBinds/.test(fetchScript), 'fetch applies teeth patch');
 check(!/const URL\b/.test(fetchScript), 'fetch script does not shadow global URL');
-check(/Changes \(SagaDrive\)/.test(attribution) && /h_TeethDown/.test(attribution), 'CC BY change note');
+check(/Changes \(SagaTree\)/.test(attribution) && /h_TeethDown/.test(attribution), 'CC BY change note');
 check(/checkLiveActFidelity/.test(gate), 'test-gate wiring');
 
 console.log('liveact-fidelity-check OK');

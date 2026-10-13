@@ -7,11 +7,11 @@
  */
 
 import {
-  isSagaDriveNpcLevel,
+  isSagaTreeNpcLevel,
   normalizeCombatRoleForProfile,
-  type SagaDriveCombatProfile,
-  type SagaDriveCombatRole,
-  type SagaDriveNpcLevel,
+  type SagaTreeCombatProfile,
+  type SagaTreeCombatRole,
+  type SagaTreeNpcLevel,
 } from '../rules/sagatree/npc-creature-power';
 import type {
   NpcCreatureCombatDetails,
@@ -129,7 +129,7 @@ function readStringFields(
 
 /**
  * Build a definition from trusted id/scope columns + untrusted payload.
- * Returns null when the row cannot be read as a valid SagaDrive definition.
+ * Returns null when the row cannot be read as a valid SagaTree definition.
  */
 export function parseNpcCreatureDefinition(
   id: string,
@@ -152,8 +152,8 @@ export function parseNpcCreatureDefinition(
   if (!isNpcCreatureSheetMode(payload.sheetMode)) return null;
 
   const levelRaw = payload.level;
-  if (typeof levelRaw !== 'number' || !isSagaDriveNpcLevel(levelRaw)) return null;
-  const level: SagaDriveNpcLevel = levelRaw;
+  if (typeof levelRaw !== 'number' || !isSagaTreeNpcLevel(levelRaw)) return null;
+  const level: SagaTreeNpcLevel = levelRaw;
 
   if (typeof payload.combatProfile !== 'string' || !COMBAT_PROFILES.includes(payload.combatProfile)) {
     return null;
@@ -161,8 +161,8 @@ export function parseNpcCreatureDefinition(
   if (typeof payload.combatRole !== 'string' || !COMBAT_ROLES.includes(payload.combatRole)) {
     return null;
   }
-  const combatProfile = payload.combatProfile as SagaDriveCombatProfile;
-  const combatRole = payload.combatRole as SagaDriveCombatRole;
+  const combatProfile = payload.combatProfile as SagaTreeCombatProfile;
+  const combatRole = payload.combatRole as SagaTreeCombatRole;
   if (normalizeCombatRoleForProfile(combatProfile, combatRole) !== combatRole) return null;
 
   const tags = readTags(payload.tags);

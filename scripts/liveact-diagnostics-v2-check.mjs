@@ -31,7 +31,7 @@ const vrmOut = read('src/infrastructure/character/liveact/vrm-liveact-avatar-out
 const hook = read('src/app/character/liveact/useLiveActViewport.ts');
 const gate = read('scripts/test-gate.mjs');
 
-check(/SagaDriveLiveActDiagnosticsV2/.test(domain), 'contract version');
+check(/SagaTreeLiveActDiagnosticsV2/.test(domain), 'contract version');
 check(/LIVEACT_DIAGNOSTICS_V2_STAGES/.test(domain), 'stages const');
 check(/snapshotLiveActDiagnosticsV2FromSample/.test(domain), 'raw snapshot helper');
 check(/snapshotLiveActDiagnosticsV2FromFrame/.test(domain), 'frame snapshot helper');
@@ -75,7 +75,7 @@ await build({
 });
 
 const mod = await import(outfile + `?t=${Date.now()}`);
-check(mod.LIVEACT_DIAGNOSTICS_V2_VERSION === 'SagaDriveLiveActDiagnosticsV2', 'version runtime');
+check(mod.LIVEACT_DIAGNOSTICS_V2_VERSION === 'SagaTreeLiveActDiagnosticsV2', 'version runtime');
 check(Array.isArray(mod.LIVEACT_DIAGNOSTICS_V2_STAGES), 'stages array');
 check(mod.LIVEACT_DIAGNOSTICS_V2_STAGES.length === 6, 'six stages');
 check(

@@ -1,4 +1,4 @@
-# SagaDrive Conditions & Resistances Report (#33)
+# SagaTree Conditions & Resistances Report (#33)
 
 Deterministische Prüfung von §9 Zustände, §6.5 Widerstände, §2.5 Vorteil/Nachteil, §7.4/§8.5. Kein RNG.
 

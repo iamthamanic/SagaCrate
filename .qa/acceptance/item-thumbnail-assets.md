@@ -5,7 +5,7 @@
 Issue: #140 · Slug: `item-thumbnail-assets` · Parent: #132 · Depends on: #136, #139
 
 ## Intent
-Der Visuals-Bereich der Item-Workbench erhält eine echte 2D-Asset-Pipeline: sicherer PNG/JPEG-Upload und optionale Meshy-Text-to-Image-Generierung. Assets landen owner-/world-scoped in SagaDrive Storage und werden über stabilen `assetKey` aufgelöst; Provider-URLs sind nie die dauerhafte Referenz. Ohne Meshy-Konfiguration bleibt Upload/Fallback nutzbar (fail-closed).
+Der Visuals-Bereich der Item-Workbench erhält eine echte 2D-Asset-Pipeline: sicherer PNG/JPEG-Upload und optionale Meshy-Text-to-Image-Generierung. Assets landen owner-/world-scoped in SagaTree Storage und werden über stabilen `assetKey` aufgelöst; Provider-URLs sind nie die dauerhafte Referenz. Ohne Meshy-Konfiguration bleibt Upload/Fallback nutzbar (fail-closed).
 
 ## Preconditions
 - Persistenz #136 und Workbench #139 vorhanden

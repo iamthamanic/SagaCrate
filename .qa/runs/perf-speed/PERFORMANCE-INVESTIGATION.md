@@ -26,7 +26,7 @@ Sample size for repeats: **n=5** → p95/p99 omitted (insufficient). Profile: **
 
 | Item | Value |
 |------|--------|
-| App | SagaDrive (React 18 + Vite 6 + Three/VRM + MediaPipe) |
+| App | SagaTree (React 18 + Vite 6 + Three/VRM + MediaPipe) |
 | URL | `http://localhost:3004` |
 | Auth | Local Admin `admin` / `1234` (product fallback) |
 | Backend | `localhost:8000` Kong **down** — no Supabase REST timings |
@@ -170,7 +170,7 @@ Look Fully (probe wait for canvas) ..... INVALID without template
 
 ## White-box backlog (code evidence only — not timed this run)
 
-Source: repo map of routing, services, and E2E surfaces ([Map SagaDrive perf surfaces](02d9ce01-c24e-4ad1-b6da-8bea93b0e0b0)). These are **candidates for Mode C / next Interaction runs**, not proven bottlenecks until measured with Docker up.
+Source: repo map of routing, services, and E2E surfaces ([Map SagaTree perf surfaces](02d9ce01-c24e-4ad1-b6da-8bea93b0e0b0)). These are **candidates for Mode C / next Interaction runs**, not proven bottlenecks until measured with Docker up.
 
 | Candidate | Code signal | Suggested measure | Confidence now |
 |-----------|-------------|-------------------|----------------|

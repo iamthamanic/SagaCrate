@@ -2,9 +2,9 @@
  * Combat-profile adjustments applied after level benchmark, before role HP.
  * Location: src/domains/rules/sagatree/npc-creature-power/profiles.ts
  */
-import type { SagaDriveCombatProfile, SagaDriveProfileAdjustments } from './types';
+import type { SagaTreeCombatProfile, SagaTreeProfileAdjustments } from './types';
 
-const IDENTITY: SagaDriveProfileAdjustments = {
+const IDENTITY: SagaTreeProfileAdjustments = {
   healthMultiplier: 1,
   defenseDelta: 0,
   primaryAttackDelta: 0,
@@ -21,9 +21,9 @@ const IDENTITY: SagaDriveProfileAdjustments = {
   combatSignatureRequired: true,
 };
 
-export const SAGADRIVE_COMBAT_PROFILE_ADJUSTMENTS: Record<
-  SagaDriveCombatProfile,
-  SagaDriveProfileAdjustments
+export const SAGATREE_COMBAT_PROFILE_ADJUSTMENTS: Record<
+  SagaTreeCombatProfile,
+  SagaTreeProfileAdjustments
 > = {
   noncombat: {
     ...IDENTITY,
@@ -70,13 +70,13 @@ export const SAGADRIVE_COMBAT_PROFILE_ADJUSTMENTS: Record<
 };
 
 export function profileAdjustmentsFor(
-  profile: SagaDriveCombatProfile,
-): SagaDriveProfileAdjustments {
-  return SAGADRIVE_COMBAT_PROFILE_ADJUSTMENTS[profile];
+  profile: SagaTreeCombatProfile,
+): SagaTreeProfileAdjustments {
+  return SAGATREE_COMBAT_PROFILE_ADJUSTMENTS[profile];
 }
 
 /**
- * Apply resistance slot deltas without exceeding SagaDrive skill/attribute caps.
+ * Apply resistance slot deltas without exceeding SagaTree skill/attribute caps.
  * Caps: displayed resistance values stay within defense±4 and never invent a
  * hidden modifier beyond the primary modifier ceiling at that level.
  */

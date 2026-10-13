@@ -160,7 +160,7 @@ Fehler werden an der betroffenen Stelle zusätzlich lokal erklärt.
 
 ## Bestehendes Designsystem
 
-Die Umsetzung bleibt im vorhandenen SagaDrive Character-Editor-Design:
+Die Umsetzung bleibt im vorhandenen SagaTree Character-Editor-Design:
 
 - bestehende Dark-/Light-Themes
 - bestehende shadcn/Radix-Primitives
@@ -221,7 +221,7 @@ Bestehende Charaktere ohne `backgroundTemplateId` werden als `custom` behandelt.
 
 ## UX-Abnahmetest
 
-Eine Person ohne SagaDrive-Vorwissen soll ohne Regelbuch beantworten können:
+Eine Person ohne SagaTree-Vorwissen soll ohne Regelbuch beantworten können:
 
 1. Welche vier Skills gehören zu meinem Hintergrund?
 2. Welche zwei davon habe ich trainiert?

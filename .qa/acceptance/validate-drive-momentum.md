@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #26 (Epic #18), Type: chore, Labels: P2, Validierung
-- Regeln: `docs/sagadrive core rules.md` §2.10 (Drive: Start 3, Max 5, Reroll mit Alte/Neu-Wahl, max 1/eigene Probe, Rückgewinnung via Komplikation), §2.11 (Momentum: Start 0, Max 3, Verfall 1/Szenenende, Quellen/Ausgaben), §2.12 + §16.3 (Deaktivierung: unabhängig, abhängige Fähigkeiten brauchen Ersatzbegrenzung oder nicht-verfügbar)
-- Validierungsplan: `docs/sagadrive core validation.md` D2 (Varianten beide/nur Drive/nur Momentum/keine; Messgrößen: Gewinn/Ausgaben pro Szene, Cap-Häufigkeit, realer Wert eines Drive-Rerolls, Momentum-Einfluss auf Teamaktionen, Fähigkeiten ohne definierten Zustand bei Deaktivierung)
+- Regeln: `docs/sagatree core rules.md` §2.10 (Drive: Start 3, Max 5, Reroll mit Alte/Neu-Wahl, max 1/eigene Probe, Rückgewinnung via Komplikation), §2.11 (Momentum: Start 0, Max 3, Verfall 1/Szenenende, Quellen/Ausgaben), §2.12 + §16.3 (Deaktivierung: unabhängig, abhängige Fähigkeiten brauchen Ersatzbegrenzung oder nicht-verfügbar)
+- Validierungsplan: `docs/sagatree core validation.md` D2 (Varianten beide/nur Drive/nur Momentum/keine; Messgrößen: Gewinn/Ausgaben pro Szene, Cap-Häufigkeit, realer Wert eines Drive-Rerolls, Momentum-Einfluss auf Teamaktionen, Fähigkeiten ohne definierten Zustand bei Deaktivierung)
 
 ## Preconditions
 - `scripts/lib/core-probe.mjs` (exakte Verteilungen je Modus normal/advantage/disadvantage).

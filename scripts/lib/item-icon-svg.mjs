@@ -1,5 +1,5 @@
 /**
- * Shared SVG validation + sanitization for SagaDrive item icons (VTracer output).
+ * Shared SVG validation + sanitization for SagaTree item icons (VTracer output).
  * Location: scripts/lib/item-icon-svg.mjs
  */
 

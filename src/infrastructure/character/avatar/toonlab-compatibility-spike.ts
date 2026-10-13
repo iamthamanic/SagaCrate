@@ -1,5 +1,5 @@
 /**
- * toonlab-compatibility-spike — isolated ToonLab ↔ SagaDrive avatar renderer matrix (#341).
+ * toonlab-compatibility-spike — isolated ToonLab ↔ SagaTree avatar renderer matrix (#341).
  * Location: src/infrastructure/character/avatar/toonlab-compatibility-spike.ts
  *
  * Pure decision/inventory helpers for the compatibility spike. No React, no ToonLab
@@ -41,8 +41,8 @@ export interface ToonLabSpikePeerRequirements {
   glslPathRemoved: boolean;
 }
 
-/** Host versions observed in SagaDrive at spike time (package.json + CharacterStudioRuntime). */
-export const SAGADRIVE_AVATAR_HOST_AT_SPIKE: ToonLabSpikeHostVersions = {
+/** Host versions observed in SagaTree at spike time (package.json + CharacterStudioRuntime). */
+export const SAGATREE_AVATAR_HOST_AT_SPIKE: ToonLabSpikeHostVersions = {
   three: '0.183.2',
   threeVrm: '3.5.1',
   react: '18.3.1',
@@ -67,7 +67,7 @@ export interface ToonLabSpikeFixtureAsset {
   role: 'human-male-body' | 'human-male-vrm-face';
 }
 
-/** Real SagaDrive public assets used for the matrix (identical camera assumed in harness notes). */
+/** Real SagaTree public assets used for the matrix (identical camera assumed in harness notes). */
 export const TOONLAB_SPIKE_FIXTURES: readonly ToonLabSpikeFixtureAsset[] = [
   {
     id: 'human-male-glb',
@@ -133,7 +133,7 @@ function satisfiesCaret(host: string, peerRange: string): boolean {
 }
 
 export function buildToonLabSpikeMatrix(
-  host: ToonLabSpikeHostVersions = SAGADRIVE_AVATAR_HOST_AT_SPIKE,
+  host: ToonLabSpikeHostVersions = SAGATREE_AVATAR_HOST_AT_SPIKE,
   peers: ToonLabSpikePeerRequirements = TOONLAB_PEERS_AT_SPIKE,
 ): ToonLabSpikeCheckRow[] {
   const threeOk = satisfiesCaret(host.three, peers.three);
@@ -224,7 +224,7 @@ export function buildToonLabSpikeMatrix(
 }
 
 export function evaluateToonLabCompatibilitySpike(
-  host: ToonLabSpikeHostVersions = SAGADRIVE_AVATAR_HOST_AT_SPIKE,
+  host: ToonLabSpikeHostVersions = SAGATREE_AVATAR_HOST_AT_SPIKE,
   peers: ToonLabSpikePeerRequirements = TOONLAB_PEERS_AT_SPIKE,
 ): ToonLabSpikeDecision {
   const matrix = buildToonLabSpikeMatrix(host, peers);
@@ -234,14 +234,14 @@ export function evaluateToonLabCompatibilitySpike(
     findings.push({
       id: 'three-peer-gap',
       severity: 'blocker',
-      detail: `SagaDrive three@${host.three} does not satisfy ToonLab peer ${peers.three}.`,
+      detail: `SagaTree three@${host.three} does not satisfy ToonLab peer ${peers.three}.`,
     });
   }
   if (!satisfiesCaret(host.threeVrm, peers.threeVrm)) {
     findings.push({
       id: 'vrm-peer-gap',
       severity: 'blocker',
-      detail: `SagaDrive @pixiv/three-vrm@${host.threeVrm} does not satisfy ToonLab peer ${peers.threeVrm}.`,
+      detail: `SagaTree @pixiv/three-vrm@${host.threeVrm} does not satisfy ToonLab peer ${peers.threeVrm}.`,
     });
   }
   if (!satisfiesCaret(host.react, peers.react)) {
@@ -263,7 +263,7 @@ export function evaluateToonLabCompatibilitySpike(
     id: 'mtoon-parallel-path',
     severity: 'info',
     detail:
-      'SagaDrive already has an allowlisted MToon style profile. ToonLab must not silently replace that contract; Look runtime (#342) should keep provider-neutral adapters.',
+      'SagaTree already has an allowlisted MToon style profile. ToonLab must not silently replace that contract; Look runtime (#342) should keep provider-neutral adapters.',
   });
 
   const blockers = findings.filter((f) => f.severity === 'blocker');

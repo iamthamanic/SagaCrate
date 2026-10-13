@@ -1,11 +1,11 @@
-# SagaDrive Face Anchor Semantics V1 (#421)
+# SagaTree Face Anchor Semantics V1 (#421)
 
-**Contract:** `SagaDriveFaceAnchorSemanticsV1`  
-**IDs:** unchanged `SagaDriveFaceAnchorId` (21) — see `face-anchor-contract.ts`  
+**Contract:** `SagaTreeFaceAnchorSemanticsV1`  
+**IDs:** unchanged `SagaTreeFaceAnchorId` (21) — see `face-anchor-contract.ts`  
 **Evidence basis:** Human-in-the-loop Canonical V1 live test (PR #452). Manual GT defines *meaning*; MediaPipe must reproduce asset-neutrally.  
 **Non-goals:** No hardcoded GT pixels, no asset-name overrides, no #422 functional QA, no V2 / #442.
 
-Related map implementation: `mediapipe-sagadrive-face-anchor-map-v1.ts`  
+Related map implementation: `mediapipe-sagatree-face-anchor-map-v1.ts`  
 Related surfaces: `face-mapping-surface-semantics-v1.ts`
 
 ## Shared rules
@@ -157,7 +157,7 @@ binding + `manual`|`manual_override` + `reviewed=true` + valid `reviewedAt` + **
 ## Surfaces (provider-neutral)
 
 Classes include `oral_interior` (teeth, tooth, tongue, gum(s), palate, denture, oral / inner-mouth tokens).  
-`oral_interior` is **forbidden** for every `SagaDriveFaceAnchorId` in V1.  
+`oral_interior` is **forbidden** for every `SagaTreeFaceAnchorId` in V1.  
 Unlabeled third-party skin may remain `unknown` → allowed only when the anchor expects `face_skin`.
 
 ---

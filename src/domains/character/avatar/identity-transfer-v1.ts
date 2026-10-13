@@ -9,7 +9,7 @@
 import type { AvatarV2BodyFamily } from './composition-contract-v2';
 
 export const IDENTITY_TRANSFER_CONTRACT_VERSION =
-  'SagaDriveIdentityTransferV1' as const;
+  'SagaTreeIdentityTransferV1' as const;
 
 /** Controlled golden fixtures — never private user assets. */
 export const IDENTITY_TRANSFER_GOLDEN_FIXTURE_IDS = [
@@ -385,7 +385,7 @@ export function buildIdentityTransferConversionPlan(): IdentityTransferConversio
     ],
     outputs: [
       'target bodyFamily ∈ {standard,compact,heavy}',
-      'morphState approximation (SagaDriveAvatarMorphV1)',
+      'morphState approximation (SagaTreeAvatarMorphV1)',
       'traits + colors on CharacterAvatarDto',
       'optional projected albedo asset (owner-scoped) with bakeStatus',
       'conversionStatus: ready | degraded | failed',

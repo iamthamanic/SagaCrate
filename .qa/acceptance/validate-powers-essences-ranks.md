@@ -2,8 +2,8 @@
 
 ## Quellen
 - Ticket: #25 (Epic #18), Type: chore, Labels: P2, Validierung
-- Regeln: `docs/sagadrive core rules.md` §10 (Momentum), §11 (Fähigkeiten/Ränge/Investitionen), §12 (Kraftmodell 12.1–12.6), §2 (Aktivierungsprobe)` — §12.6 Wirkungsbudget: Novize d6+2 … Legende 5d6+5
-- Validierungsplan: `docs/sagadrive core validation.md` D1 (Dimensionen: Schaden, Kontrolle, Mobilität, Schutz, Utility, Ziele, Fläche, Reichweite, Dauer, Aufrechterhaltung; kritisch: Experte–Legende, Multi-Ziele+Kontrolle+lange Dauer, Gegenwirkung, sekundäre Essenz, Multi-Archetyp)
+- Regeln: `docs/sagatree core rules.md` §10 (Momentum), §11 (Fähigkeiten/Ränge/Investitionen), §12 (Kraftmodell 12.1–12.6), §2 (Aktivierungsprobe)` — §12.6 Wirkungsbudget: Novize d6+2 … Legende 5d6+5
+- Validierungsplan: `docs/sagatree core validation.md` D1 (Dimensionen: Schaden, Kontrolle, Mobilität, Schutz, Utility, Ziele, Fläche, Reichweite, Dauer, Aufrechterhaltung; kritisch: Experte–Legende, Multi-Ziele+Kontrolle+lange Dauer, Gegenwirkung, sekundäre Essenz, Multi-Archetyp)
 
 ## Preconditions
 - `scripts/lib/core-probe.mjs` (Aktivierungsproben via `exactProbabilities` / `resolveGrade`).

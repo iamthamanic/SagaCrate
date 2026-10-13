@@ -39,7 +39,7 @@ V1 guided flow remains available as **fallback / classic**.
 
 ## Profile contract
 
-`SagaDriveLiveActCalibrationProfileV2`
+`SagaTreeLiveActCalibrationProfileV2`
 
 - `solverFingerprint` over dense / iris / hybrid / temporal+policy / profile version
 - per-channel: capability, neutral, usableMin/Max, noiseFloor, confidence, asymmetry, crossTalk
@@ -79,7 +79,7 @@ characterLocalId (stable character domain id)
 Storage key (semantic):
 
 ```text
-sagadrive.liveact.calibrationProfile.v2:<owner>:<character>
+sagatree.liveact.calibrationProfile.v2:<owner>:<character>
 ```
 
 No shared `_default` key. Incomplete scope ⇒ **no persistent load/save**

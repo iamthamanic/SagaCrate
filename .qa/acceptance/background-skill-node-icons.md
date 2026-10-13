@@ -9,7 +9,7 @@ Hintergrund-Skill-Nodes und der Spezialisierungs-Select zeigen dieselbe Lucide-F
 ## Preconditions
 
 - Branch `feat/background-skill-points-in-nodes` with `BackgroundSkillNode` and specialization Select already present.
-- Existing `SkillIcon` maps every `SagaDriveSkillKey` via Lucide.
+- Existing `SkillIcon` maps every `SagaTreeSkillKey` via Lucide.
 
 ## Happy Path
 

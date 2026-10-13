@@ -9,7 +9,7 @@ durable pose store. #363 Media Plane carries ephemeral `liveact-data`.
 
 ```text
 hybrid → map → personal calib → #448 adaptive temporal → calibrated
-→ NETWORK (SagaDriveLiveActNetworkFrameV1)
+→ NETWORK (SagaTreeLiveActNetworkFrameV1)
 → local: retarget → avatar output
 ```
 

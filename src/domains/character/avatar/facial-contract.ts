@@ -6,7 +6,7 @@
  * adapters report availability from the model, then weights clamp 0..1.
  */
 
-export const FACIAL_CONTRACT_VERSION = 'SagaDriveAvatarFacialV1' as const;
+export const FACIAL_CONTRACT_VERSION = 'SagaTreeAvatarFacialV1' as const;
 
 export const FACIAL_EMOTION_KEYS = ['neutral', 'happy', 'angry', 'sad'] as const;
 export type FacialEmotionKey = (typeof FACIAL_EMOTION_KEYS)[number];

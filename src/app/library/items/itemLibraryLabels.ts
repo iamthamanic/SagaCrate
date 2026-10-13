@@ -58,6 +58,6 @@ export const LIBRARY_SOURCE_LABELS: Record<LibraryItemSource, string> = {
   world: 'Welt',
 };
 
-export const ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY = 'sagadrive_library_items_view_mode';
+export const ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY = 'sagatree_library_items_view_mode';
 
 export type ItemLibraryViewMode = 'list' | 'grid';

@@ -1,5 +1,5 @@
 /**
- * CharacterLookInspector — Character knobs in SagaDrive terms (#344).
+ * CharacterLookInspector — Character knobs in SagaTree terms (#344).
  * Location: src/app/look/editor/inspectors/CharacterLookInspector.tsx
  */
 import { Label } from '../../../../shared/ui/label';
@@ -15,7 +15,7 @@ export function CharacterLookInspector({ draft, disabled, onChange }: Props) {
   return (
     <div className="space-y-4" data-look-inspector="character">
       <p className="text-xs text-muted-foreground">
-        Charakterstil in SagaDrive-Begriffen — keine Provider-Rohparameter.
+        Charakterstil in SagaTree-Begriffen — keine Provider-Rohparameter.
       </p>
       <div className="space-y-2">
         <Label htmlFor="look-char-style">Stylisierung</Label>

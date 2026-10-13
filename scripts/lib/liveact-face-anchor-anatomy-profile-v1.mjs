@@ -1,11 +1,11 @@
 /**
- * liveact-face-anchor-anatomy-profile-v1 — thresholds for SagaDriveFaceAnchorAnatomyQaV1.
+ * liveact-face-anchor-anatomy-profile-v1 — thresholds for SagaTreeFaceAnchorAnatomyQaV1.
  * Location: scripts/lib/liveact-face-anchor-anatomy-profile-v1.mjs
  *
  * Independent of morph Semantic QA. Uses normalized head proportions only.
  */
 
-export const FACE_ANCHOR_ANATOMY_QA_CONTRACT_VERSION = 'SagaDriveFaceAnchorAnatomyQaV1';
+export const FACE_ANCHOR_ANATOMY_QA_CONTRACT_VERSION = 'SagaTreeFaceAnchorAnatomyQaV1';
 export const FACE_ANCHOR_ANATOMY_PROFILE_VERSION = 'liveact-face-anchor-anatomy-profile-v1';
 
 /** Versioned gates — not asset-specific. Normalized by face height / interocular. */

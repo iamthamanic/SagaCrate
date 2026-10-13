@@ -252,7 +252,7 @@ if (previous && previous.gates) {
 
 function renderMarkdown(r) {
   const lines = [
-    '# SagaDrive Release Readiness',
+    '# SagaTree Release Readiness',
     '',
     '> GENERATED — ' + r.generatedAt + ' · commit ' + r.commitSha.slice(0, 8),
     '',

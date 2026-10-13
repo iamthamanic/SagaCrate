@@ -13,7 +13,7 @@ import {
 } from './body-family-variant-resolver-v1';
 import type { CanonicalBodyFamilyId } from './canonical-body-families-v1';
 
-export const SKINNED_WEARABLE_PLAN_VERSION = 'SagaDriveSkinnedWearablePlanV1' as const;
+export const SKINNED_WEARABLE_PLAN_VERSION = 'SagaTreeSkinnedWearablePlanV1' as const;
 
 export type SkinnedWearableUiStatus = 'passt' | 'muss geprüft werden' | 'nicht kompatibel';
 

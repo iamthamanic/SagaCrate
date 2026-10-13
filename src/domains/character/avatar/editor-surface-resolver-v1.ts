@@ -14,7 +14,7 @@ import {
 import type { AvatarRigCapabilityFlag } from './rig-contract';
 
 export const AVATAR_EDITOR_SURFACE_RESOLVER_VERSION =
-  'SagaDriveAvatarEditorSurfaceResolverV1' as const;
+  'SagaTreeAvatarEditorSurfaceResolverV1' as const;
 
 export const AVATAR_EDITOR_SURFACE_IDS = [
   'morphBody',

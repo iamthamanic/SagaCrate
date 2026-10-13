@@ -2,12 +2,12 @@
 
 ## Quellen
 - Ticket: #28 (Epic #18), Type: chore, Labels: P1, Validierung
-- Regeln: `docs/sagadrive core rules.md` §5.1 (18 Skills), §5.2 (Spezialisierung +2, Leiter, Fachhandlung), §5.3 (Caps / anwendbarer EB), §5.6 (Handlungskategorien), §5.8 (Beschreibungen/Abgrenzungen), §3.5 (alternative Attribute), §3.6 (reine Attributschecks)
-- Validierungsplan: `docs/sagadrive core validation.md` A3
+- Regeln: `docs/sagatree core rules.md` §5.1 (18 Skills), §5.2 (Spezialisierung +2, Leiter, Fachhandlung), §5.3 (Caps / anwendbarer EB), §5.6 (Handlungskategorien), §5.8 (Beschreibungen/Abgrenzungen), §3.5 (alternative Attribute), §3.6 (reine Attributschecks)
+- Validierungsplan: `docs/sagatree core validation.md` A3
 
 ## Preconditions
 - `scripts/lib/core-probe.mjs` (SPECIALIZATION_BONUS, rankRowFor).
-- Domain-Katalog: `src/domains/rules/sagadrive/character-creation/index.ts` → `sagaDriveSkillDefinitions`.
+- Domain-Katalog: `src/domains/rules/sagatree/character-creation/index.ts` → `sagaTreeSkillDefinitions`.
 
 ## Happy Path (postcondition-style)
 - **18 Skills:** Katalog exakt Athletik…Auftreten; Domain-Keys/Labels/Attribute synced; Ticket-Alias „Steuern“ = Fortbewegungsmittel (`driving`).
@@ -26,7 +26,7 @@
 
 ## Gütekriterien
 - 0 Findings; deterministisch; byte-reproduzierbarer Report.
-- Keine Änderung an `docs/sagadrive core rules.md`.
+- Keine Änderung an `docs/sagatree core rules.md`.
 
 ## Security Coverage
 - N/A — reines Regelskript; keine Endpoints, keine Nutzerdaten, keine Secrets.

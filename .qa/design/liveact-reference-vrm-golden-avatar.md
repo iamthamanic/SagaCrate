@@ -5,7 +5,7 @@
 
 ## 1. Problem
 
-SagaDrive Human VRM face motion can look rubbery (eyes/mouth). Unclear whether LiveAct/MediaPipe/VRM runtime or asset authoring is at fault.
+SagaTree Human VRM face motion can look rubbery (eyes/mouth). Unclear whether LiveAct/MediaPipe/VRM runtime or asset authoring is at fault.
 
 ## 2. Hypothesis
 
@@ -36,14 +36,14 @@ A known-good ARKit52 VRM through the **same** LiveAct path will either move clea
 
 ```
 Character Editor (Human Vorlage)
-  ├─ SagaDrive Human → resolveSpeciesTemplateModelUrl (unchanged)
+  ├─ SagaTree Human → resolveSpeciesTemplateModelUrl (unchanged)
   └─ Reference VRM → /assets/avatars/reference/valid-white-m1-default.vrm
          → CharacterStudioRuntime VRM loader (@pixiv/three-vrm)
          → VrmLiveActAvatarOutput
          → LiveAct engine ← MediaPipe
 ```
 
-**Not in path:** Meshy, QtMesh, SagaDrive face authoring, VRM pack.
+**Not in path:** Meshy, QtMesh, SagaTree face authoring, VRM pack.
 
 ## 6. Data flow (expressions)
 
@@ -58,7 +58,7 @@ Observed inventory (pinned commit):
 
 Missing vs LiveAct 52 set (do **not** invent aliases): cheekSquint*, eyeLook* ARKit morphs (gaze via LookAt), mouthRoll*, mouthShrug*.
 
-## 7. SagaDrive stages skipped
+## 7. SagaTree stages skipped
 
 Face Mapping, face-anchors sidecar authoring, QtMesh morph seed, avatar-vrm-pack.
 
@@ -68,7 +68,7 @@ Head yaw/pitch/roll; eye gaze L/R/U/D; blinks; brows; jaw; mouth smile/frown/puc
 
 ## 9. Interpretation (Fall A–D)
 
-| Fall | SagaDrive | Reference | Meaning |
+| Fall | SagaTree | Reference | Meaning |
 |------|-----------|-----------|---------|
 | A | schlecht | gut | LiveAct OK; authoring/geometry problem |
 | B | schlecht | schlecht | LiveAct/MediaPipe/retarget/runtime problem |

@@ -1,10 +1,10 @@
-# SagaDrive Avatar Assets
+# SagaTree Avatar Assets
 
 ## Zweck
 
-Der Avatar-Asset-Katalog trennt die SagaDrive-Rendering-Runtime von den tatsächlich ausgelieferten 3D-Modellen. Ein Asset wird nur als Remote-Fallback in `src/infrastructure/character/avatar/avatar-asset-manifests.ts` aufgenommen, wenn Herkunft, konkreter Dateipfad und Lizenz nachvollziehbar geprüft werden können.
+Der Avatar-Asset-Katalog trennt die SagaTree-Rendering-Runtime von den tatsächlich ausgelieferten 3D-Modellen. Ein Asset wird nur als Remote-Fallback in `src/infrastructure/character/avatar/avatar-asset-manifests.ts` aufgenommen, wenn Herkunft, konkreter Dateipfad und Lizenz nachvollziehbar geprüft werden können.
 
-`VITE_AVATAR_ASSET_BASE_URL` kann dieselben stabilen Manifest-IDs auf selbst gehostete Dateien umleiten. Fehlt ein Self-Host-Asset, verwendet SagaDrive den unten dokumentierten, commit-gepinnten Remote-Fallback.
+`VITE_AVATAR_ASSET_BASE_URL` kann dieselben stabilen Manifest-IDs auf selbst gehostete Dateien umleiten. Fehlt ein Self-Host-Asset, verwendet SagaTree den unten dokumentierten, commit-gepinnten Remote-Fallback.
 
 ## Aktuell freigegebene Quelle
 
@@ -13,13 +13,13 @@ Der Avatar-Asset-Katalog trennt die SagaDrive-Rendering-Runtime von den tatsäch
 - Lizenz: `CC0-1.0`
 - Repository-Beschreibung: Sammlung frei nutzbarer VRM-Modelle unter CC0
 - Quellhinweis: Das Repository nennt Stable Diffusion und TripoSR für die Erstellung sowie Mixamo für das Rigging.
-- Erlaubte Nutzung im SagaDrive-Katalog: kommerziell und nicht-kommerziell; die CC0-Erklärung erlaubt Nutzung, Bearbeitung und Weiterverteilung für beliebige Zwecke. Rechte Dritter, Marken-, Patent-, Persönlichkeits- und ähnliche Rechte bleiben von CC0 unberührt und müssen bei einem konkreten Einsatz weiterhin berücksichtigt werden.
+- Erlaubte Nutzung im SagaTree-Katalog: kommerziell und nicht-kommerziell; die CC0-Erklärung erlaubt Nutzung, Bearbeitung und Weiterverteilung für beliebige Zwecke. Rechte Dritter, Marken-, Patent-, Persönlichkeits- und ähnliche Rechte bleiben von CC0 unberührt und müssen bei einem konkreten Einsatz weiterhin berücksichtigt werden.
 
-Die Remote-URLs zeigen absichtlich auf den geprüften Commit und nicht auf `main`. Ein späterer Upstream-Commit ändert dadurch kein bereits freigegebenes SagaDrive-Asset unbemerkt.
+Die Remote-URLs zeigen absichtlich auf den geprüften Commit und nicht auf `main`. Ein späterer Upstream-Commit ändert dadurch kein bereits freigegebenes SagaTree-Asset unbemerkt.
 
 ## Katalog
 
-| SagaDrive-Spezies | Manifest | Self-Host-Pfad | Commit-gepinnter Quellpfad | Einstufung | Begründung |
+| SagaTree-Spezies | Manifest | Self-Host-Pfad | Commit-gepinnter Quellpfad | Einstufung | Begründung |
 | --- | --- | --- | --- | --- | --- |
 | Neutral | `humanoid-neutral` | `neutral.vrm` | `skinnie1_5.vrm` | Neutraler Fallback | Allgemeiner humanoider Sicherheitsfallback |
 | Mensch | `fantasy-human` | `human.vrm` | `skinnie1_5.vrm` | Neutraler Fallback | Quellkatalog weist das Modell nicht ausdrücklich als Mensch aus |

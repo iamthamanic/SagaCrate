@@ -1,11 +1,11 @@
 # Acceptance — sagatree-core-workflows-real-apis (#606)
 
 ## Intent
-Verify SagaTree core happy paths against the **regular** sagadrive Compose stack
+Verify SagaTree core happy paths against the **regular** sagatree Compose stack
 via real Auth/REST/RPC/Storage/Edge APIs (no SQL seed bypass from minproof).
 
 ## Preconditions
-- `sagadrive-kong` + auth/rest/storage/edge/db healthy on `:8000`
+- `sagatree-kong` + auth/rest/storage/edge/db healthy on `:8000`
 - Migrations through **071** applied (authenticated project/session writes)
 - `.env` has `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
   `VITE_SUPABASE_URL` (or `API_EXTERNAL_URL`)
@@ -20,7 +20,7 @@ via real Auth/REST/RPC/Storage/Edge APIs (no SQL seed bypass from minproof).
 
 ## Realtime
 - Prefer postgres_changes sync after mutate on regular Kong `/realtime/v1`
-- If `sagadrive-realtime` is down (known #604 `SECRET_KEY_BASE`), record
+- If `sagatree-realtime` is down (known #604 `SECRET_KEY_BASE`), record
   `realtime.status=BLOCKED_604` with container log evidence — do not fake pass
 
 ## Edge negative authz

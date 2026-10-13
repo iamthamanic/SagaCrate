@@ -1,7 +1,7 @@
 # Debug Report — `character-portrait-bucket-not-found`
 
 **Date:** 2026-09-18  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** full (storage evidence + code path)
 
@@ -26,13 +26,13 @@ Portrait upload/generate fails because the private Storage bucket `character-por
 
 ## Reproduction
 
-- **Command / URL:** local Vite (`npm run dev`, port from `.qa/project.yaml`) + self-host Supabase (`sagadrive-db`)
+- **Command / URL:** local Vite (`npm run dev`, port from `.qa/project.yaml`) + self-host Supabase (`sagatree-db`)
 - **Playwright spec:** none (storage-level repro)
 - **Result:** reproduced via DB query + code path
 - **Hard path:** no
 
 ```text
-docker exec sagadrive-db psql -U postgres -d postgres \
+docker exec sagatree-db psql -U postgres -d postgres \
   -c "select id, name from storage.buckets order by name;"
 
 # Before fix:
@@ -78,7 +78,7 @@ Local Postgres Storage had no `character-portraits` bucket. Client upload correc
 
 **Confidence:** high  
 **Repro grade:** full  
-**Minimal fix:** apply `006_character_portrait_storage.sql` (done on `sagadrive-db`); keep migration in apply script. Then implement head+torso snapshot framing + auto-capture after Meshy/import (product ask).  
+**Minimal fix:** apply `006_character_portrait_storage.sql` (done on `sagatree-db`); keep migration in apply script. Then implement head+torso snapshot framing + auto-capture after Meshy/import (product ask).  
 **Regression guard:** assert bucket exists after migrate; UI smoke: upload + generate both succeed without bucket error.
 
 ---

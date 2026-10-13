@@ -11,7 +11,7 @@ Entfernt Source-Gating aus dem CharacterEditor: verfügbare Bearbeitung folgt nu
 - CharacterEditor bleibt Composition Root
 
 ## Happy Path
-- [x] Kein Editor-Feature wird allein durch `source === sagadrive|import|meshy` freigeschaltet
+- [x] Kein Editor-Feature wird allein durch `source === sagatree|import|meshy` freigeschaltet
 - [x] Capability-driven Controls funktionieren für Native, Import und Generate Fixtures
 - [x] CharacterEditor bleibt Composition Root; Businesslogik liegt nicht in React-Hooks/Components
 - [x] UI verwendet keine internen Issue-/Contract-Kürzel als Enduser-Copy

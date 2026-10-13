@@ -4,7 +4,7 @@
 
 ## Intent
 
-Provider-neutral SagaDrive LookRuntime with Apply/Restore; ToonLab only as infrastructure detail (currently BLOCKED stub per #341).
+Provider-neutral SagaTree LookRuntime with Apply/Restore; ToonLab only as infrastructure detail (currently BLOCKED stub per #341).
 
 ## Happy Path
 

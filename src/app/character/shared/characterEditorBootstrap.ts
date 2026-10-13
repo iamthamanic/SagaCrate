@@ -1,14 +1,14 @@
 /**
  * characterEditorBootstrap — One-shot draft for opening CharacterEditor from a preset,
- * SagaDrive starttemplate (#464), or NPC/creature promotion (#200).
+ * SagaTree starttemplate (#464), or NPC/creature promotion (#200).
  * Location: src/app/character/shared/characterEditorBootstrap.ts
  */
 import type { CharacterPresetSnapshot } from '../../../domains/character/contracts/character-preset.types';
 import type { NpcPromotionPlan } from '../../../domains/npc-creature';
-import type { SagaDriveStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
+import type { SagaTreeStartingTemplateKey } from '../../../domains/rules/sagatree/starting-templates';
 
-const CHARACTER_EDIT_STORAGE_KEY = 'sagadrive:character-edit-id';
-const NPC_PROMOTION_STORAGE_KEY = 'sagadrive:npc-promotion';
+const CHARACTER_EDIT_STORAGE_KEY = 'sagatree:character-edit-id';
+const NPC_PROMOTION_STORAGE_KEY = 'sagatree:npc-promotion';
 
 export type CharacterEditorBootstrap =
   | {
@@ -20,7 +20,7 @@ export type CharacterEditorBootstrap =
   | {
       /** System Level-1 starttemplate key only — editor resolves catalog (#464). */
       kind: 'starting-template';
-      templateKey: SagaDriveStartingTemplateKey;
+      templateKey: SagaTreeStartingTemplateKey;
     }
   | {
       kind: 'character-edit';

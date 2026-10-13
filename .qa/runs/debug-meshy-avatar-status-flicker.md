@@ -1,7 +1,7 @@
 # Debug Report — meshy-avatar-status-flicker
 
 **Date:** 2026-09-18  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** full (Playwright mock + code path)
 

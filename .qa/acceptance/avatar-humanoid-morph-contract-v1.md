@@ -1,7 +1,7 @@
 # Acceptance — avatar-humanoid-morph-contract-v1
 
 ## Intent
-Define a single versioned `SagaDriveAvatarMorphV1` contract so Body/Face editors, base bodies, export, and wearables share the same parameters — no UI or mesh assets in this ticket.
+Define a single versioned `SagaTreeAvatarMorphV1` contract so Body/Face editors, base bodies, export, and wearables share the same parameters — no UI or mesh assets in this ticket.
 
 ## Preconditions
 - #6 humanoid rig contract is on main.
@@ -35,6 +35,6 @@ Out: UI (#215), mesh assets (#213), MToon (#214), import morph guarantees.
 - Proof: .qa/runs/composition-gate-avatar-humanoid-morph-contract-v1.md
 
 ## Implementation Notes
-- Domain: morph-contract.ts — SagaDriveAvatarMorphV1, metadata, validate, merge, migrate, capabilities.
+- Domain: morph-contract.ts — SagaTreeAvatarMorphV1, metadata, validate, merge, migrate, capabilities.
 - DTO: CharacterAvatarDto optional morph + eyes.
 - Check: avatar-morph-contract-check.mjs wired into test-gate.

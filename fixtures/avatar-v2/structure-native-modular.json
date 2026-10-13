@@ -30,8 +30,8 @@
     {
       "name": "Body_Base",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "body",
           "slot": "body_base",
           "bodyFamily": "standard"
@@ -41,8 +41,8 @@
     {
       "name": "Hair_A",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "trait",
           "slot": "hair"
         }
@@ -51,8 +51,8 @@
     {
       "name": "Jacket",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "wearable",
           "slot": "torso"
         }

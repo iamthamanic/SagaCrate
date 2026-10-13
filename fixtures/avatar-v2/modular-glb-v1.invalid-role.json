@@ -3,8 +3,8 @@
     {
       "name": "Weird",
       "extras": {
-        "sagadrive": {
-          "contractVersion": "SagaDriveModularAvatarGlbV1",
+        "sagatree": {
+          "contractVersion": "SagaTreeModularAvatarGlbV1",
           "role": "dragon-wing"
         }
       }

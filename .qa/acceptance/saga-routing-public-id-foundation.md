@@ -3,7 +3,7 @@
 <!-- #276 — Public IDs, Saga/Session URLs, Screen-vs-Modal standard -->
 
 ## Intent
-SagaDrive erhält einen verbindlichen Standard für öffentliche Resource-IDs, URLs und die Entscheidung zwischen eigenständigem Screen und Modal. Sagas und Sessions werden als erste vollständige Hierarchie auf diesen Standard migriert. Live-Sessions besitzen eigenständige Gamemaster-, Player- und Display-Screens unter derselben Session-Resource. Characters, Items und NPC/Creatures erhalten stabile Public IDs zusätzlich zu ihren internen Primary Keys.
+SagaTree erhält einen verbindlichen Standard für öffentliche Resource-IDs, URLs und die Entscheidung zwischen eigenständigem Screen und Modal. Sagas und Sessions werden als erste vollständige Hierarchie auf diesen Standard migriert. Live-Sessions besitzen eigenständige Gamemaster-, Player- und Display-Screens unter derselben Session-Resource. Characters, Items und NPC/Creatures erhalten stabile Public IDs zusätzlich zu ihren internen Primary Keys.
 
 ## Preconditions
 - History-API-Routing foundation (#133) vorhanden (`routes.ts`, `useAppLocation`).

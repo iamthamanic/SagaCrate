@@ -12,7 +12,7 @@ GM shares a concrete Session via „Einladung kopieren“; authenticated recipie
 - [x] „Einladung kopieren“ on SessionJoin create-success and GM Live
 - [x] `/session-invite?t=` resolves → `/session-join?saga&project_id&intent=join` (token stripped)
 - [x] Existing GM membership → live gamemaster; existing player with character → live player
-- [x] Auth interruption stashes invite path (`sagadrive:invite-return`) and resumes after login
+- [x] Auth interruption stashes invite path (`sagatree:invite-return`) and resumes after login
 - [x] Code join remains available as fallback
 - [x] `revoke_session_invite` available; expired/revoked/completed surfaced in German
 - [x] Zero type escape hatches; gate wired in test-gate

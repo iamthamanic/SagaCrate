@@ -1,5 +1,5 @@
 /**
- * Shared CORS policy for SagaDrive Edge Functions.
+ * Shared CORS policy for SagaTree Edge Functions.
  * Location: supabase/functions/_shared/cors.ts
  *
  * Single origin/methods policy — functions must not set Access-Control-Allow-Origin locally.

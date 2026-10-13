@@ -11,7 +11,7 @@ import {
 } from './liveact-face-contract';
 import type { LiveActGazeDrivePath } from './liveact-gaze-path';
 
-export const LIVEACT_CAPABILITIES_VERSION = 'SagaDriveLiveActCapabilitiesV1' as const;
+export const LIVEACT_CAPABILITIES_VERSION = 'SagaTreeLiveActCapabilitiesV1' as const;
 
 export interface LiveActInputCapabilities {
   face: boolean;

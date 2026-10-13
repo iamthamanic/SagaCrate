@@ -1,4 +1,4 @@
-# Supabase Setup für SagaDrive
+# Supabase Setup für SagaTree
 
 ## 🚀 Quick Start
 

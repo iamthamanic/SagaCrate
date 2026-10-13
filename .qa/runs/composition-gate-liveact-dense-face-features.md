@@ -8,7 +8,7 @@ MediaPipe FaceLandmarker result
 → provider adapter (indices → named semantic points)  [infra, reuses #421 map]
 → face-local orthonormal normalization                [domain]
 → region feature extraction                           [domain]
-→ SagaDriveLiveActDenseFaceFeaturesV1                 [domain]
+→ SagaTreeLiveActDenseFaceFeaturesV1                 [domain]
 → engine side-channel (subscribeDenseFaceFeatures)
 → #444 measurement boundary / future #446–#447 consumers
 ```

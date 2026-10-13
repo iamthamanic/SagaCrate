@@ -1,7 +1,7 @@
 # Debug Report — inventory-slot-stretch
 
 **Date:** 2026-09-09  
-**Project:** sagadrive  
+**Project:** sagatree  
 **Shell:** web  
 **Repro grade:** full  
 

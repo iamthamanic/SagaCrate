@@ -3,7 +3,7 @@
 <!-- #420 — liveact-face-mapping-manual -->
 
 ## Intent
-Über Gear → Face Setup → Face Mapping kann der Nutzer die 21 `SagaDriveFaceAnchorsV1`-Marker per Mesh-Raycast setzen. Draft bleibt session-lokal bis Übernehmen.
+Über Gear → Face Setup → Face Mapping kann der Nutzer die 21 `SagaTreeFaceAnchorsV1`-Marker per Mesh-Raycast setzen. Draft bleibt session-lokal bis Übernehmen.
 
 ## Happy Path
 - [x] Face Setup im Gear; **Face Mapping öffnen** startet Authoring (Tracking/Overlay/Bones aus, Pose neutral).

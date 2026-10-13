@@ -205,7 +205,7 @@ export function createCharacterStudioAvatar(input: {
   return {
     schema_version: 1,
     provider: LEGACY_AVATAR_PROVIDER,
-    source: input.source ?? 'sagadrive',
+    source: input.source ?? 'sagatree',
     preset: preset.id,
     model_format: inferAvatarFormat(modelUrl),
     model_url: modelUrl,

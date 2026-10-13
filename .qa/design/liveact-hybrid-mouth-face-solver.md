@@ -35,7 +35,7 @@ avatar deformation
 #446 iris gaze
 ```
 
-ARKit52 / `SagaDriveLiveActFaceV1` remains the compatibility layer. Hybrid does
+ARKit52 / `SagaTreeLiveActFaceV1` remains the compatibility layer. Hybrid does
 not invent new morph channels. Dense evidence confirms/corrects/asymmetry-refines
 existing controls.
 
@@ -107,7 +107,7 @@ scale. No fusion on stale dense (sequence mismatch → exact semantic fallback).
 
 ## Contract
 
-`SagaDriveLiveActHybridFaceV1`
+`SagaTreeLiveActHybridFaceV1`
 
 - semantic output controls (subset of `LIVEACT_FACE_CHANNELS`)
 - per-control confidence

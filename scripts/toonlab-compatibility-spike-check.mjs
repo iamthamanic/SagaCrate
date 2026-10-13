@@ -174,7 +174,7 @@ const artifact = {
   generatedAt: new Date().toISOString(),
   verdict: decision.verdict,
   package: `${decision.packageName}@${decision.packageVersion}`,
-  host: mod.SAGADRIVE_AVATAR_HOST_AT_SPIKE,
+  host: mod.SAGATREE_AVATAR_HOST_AT_SPIKE,
   peers: mod.TOONLAB_PEERS_AT_SPIKE,
   fixtures: inventories,
   matrix: decision.matrix,

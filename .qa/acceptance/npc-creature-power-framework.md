@@ -4,12 +4,12 @@
 
 ## Intent
 
-SagaDrive erhält einen verbindlichen, UI-unabhängigen Regelkern für kompakte NPC-/Kreaturen-Statblocks: Stufe 1–20, Machtgrad, Standard/Elite/Boss, Kampfprofile, Benchmarks und Elite-/Boss-Impulse — ohne zweites Kampfsystem.
+SagaTree erhält einen verbindlichen, UI-unabhängigen Regelkern für kompakte NPC-/Kreaturen-Statblocks: Stufe 1–20, Machtgrad, Standard/Elite/Boss, Kampfprofile, Benchmarks und Elite-/Boss-Impulse — ohne zweites Kampfsystem.
 
 ## Preconditions
 
 - Design: `.qa/design/npc-creature-power-framework.md`, `.qa/design/npc-creature-benchmarks.md`
-- Rules kernel under `src/domains/rules/sagadrive/**`
+- Rules kernel under `src/domains/rules/sagatree/**`
 
 ## Happy Path
 
@@ -55,6 +55,6 @@ N/A (rules-only, no UI)
 
 ## Implementation Notes
 
-- `src/domains/rules/sagadrive/npc-creature-power/**`
+- `src/domains/rules/sagatree/npc-creature-power/**`
 - `scripts/npc-creature-power-framework-check.mjs` + test-gate wire
 - Core §15 rewrite; `validate-enemy-encounter-boss-balance.mjs` updated

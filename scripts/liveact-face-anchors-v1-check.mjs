@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * liveact-face-anchors-v1-check — SagaDriveFaceAnchorsV1 contract + runtime (#399).
+ * liveact-face-anchors-v1-check — SagaTreeFaceAnchorsV1 contract + runtime (#399).
  * Location: scripts/liveact-face-anchors-v1-check.mjs
  */
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -40,8 +40,8 @@ const authorLib = read('scripts/lib/liveact-face-anchor-author-lib.mjs');
 const gate = read('scripts/test-gate.mjs');
 const acceptance = read('.qa/acceptance/liveact-face-anchors-v1.md');
 
-check(/SagaDriveFaceAnchorsV1|FACE_ANCHORS_CONTRACT_VERSION/.test(domain), 'contract version');
-check(/SAGA_DRIVE_FACE_ANCHOR_IDS/.test(domain), 'anchor id list');
+check(/SagaTreeFaceAnchorsV1|FACE_ANCHORS_CONTRACT_VERSION/.test(domain), 'contract version');
+check(/SAGA_TREE_FACE_ANCHOR_IDS/.test(domain), 'anchor id list');
 check(/mouthUpper/.test(domain) && /forehead/.test(domain), 'semantic ids');
 check(/nodeIdentity/.test(domain) && /barycentric/.test(domain), 'triangle binding');
 check(/parseFaceAnchorsManifestV1/.test(domain), 'fail-closed parser');
@@ -62,7 +62,7 @@ check(
   'author CLI flags',
 );
 check(/liveact-face-anchors-v1-check/.test(gate), 'test-gate wiring');
-check(/SagaDriveFaceAnchorsV1/.test(acceptance), 'acceptance references contract');
+check(/SagaTreeFaceAnchorsV1/.test(acceptance), 'acceptance references contract');
 
 mkdirSync(fixtureDir, { recursive: true });
 
@@ -118,10 +118,10 @@ await build({
 });
 
 const domainMod = await import(domainOut + `?t=${Date.now()}`);
-check(domainMod.FACE_ANCHORS_CONTRACT_VERSION === 'SagaDriveFaceAnchorsV1', 'version runtime');
-check(domainMod.SAGA_DRIVE_FACE_ANCHOR_IDS.length === 21, '21 anchor ids');
-check(domainMod.isSagaDriveFaceAnchorId('noseTip'), 'noseTip id');
-check(!domainMod.isSagaDriveFaceAnchorId('landmark_0'), 'reject unknown id');
+check(domainMod.FACE_ANCHORS_CONTRACT_VERSION === 'SagaTreeFaceAnchorsV1', 'version runtime');
+check(domainMod.SAGA_TREE_FACE_ANCHOR_IDS.length === 21, '21 anchor ids');
+check(domainMod.isSagaTreeFaceAnchorId('noseTip'), 'noseTip id');
+check(!domainMod.isSagaTreeFaceAnchorId('landmark_0'), 'reject unknown id');
 
 const badParse = domainMod.parseFaceAnchorsManifestV1({ contractVersion: 'nope', anchors: {} });
 check(!badParse.ok, 'parse rejects version');

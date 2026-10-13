@@ -7,7 +7,7 @@
 
 ## Event
 
-User uploads a PNG/JPEG thumbnail or confirms Meshy text-to-image generation for a Personal/World ItemDefinition; asset is materialized in SagaDrive storage and referenced via stable `assetKey`.
+User uploads a PNG/JPEG thumbnail or confirms Meshy text-to-image generation for a Personal/World ItemDefinition; asset is materialized in SagaTree storage and referenced via stable `assetKey`.
 
 ## Hop chain
 

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { ensureLoggedIn } from './helpers/auth';
 
 const EVIDENCE_DIR = '.qa/evidence/item-library-browser';
-const VIEW_MODE_STORAGE_KEY = 'sagadrive_library_items_view_mode';
+const VIEW_MODE_STORAGE_KEY = 'sagatree_library_items_view_mode';
 
 
 function json(route: Route, value: unknown, status = 200) {

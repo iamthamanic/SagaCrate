@@ -1,18 +1,18 @@
 /**
- * SagaDriveFaceMappingDraftV1 — session-local manual face-mapping draft (#420/#visual-guides).
+ * SagaTreeFaceMappingDraftV1 — session-local manual face-mapping draft (#420/#visual-guides).
  * Location: src/domains/character/avatar/face-mapping-draft-v1.ts
  *
- * Pure draft/status/validation for the 21 SagaDriveFaceAnchorsV1 markers.
+ * Pure draft/status/validation for the 21 SagaTreeFaceAnchorsV1 markers.
  * Binding DE labels are the Face-Rig Editor source of truth (inner/outer = eye corners).
- * No React / Three.js. Runtime format stays SagaDriveFaceAnchorsV1.
+ * No React / Three.js. Runtime format stays SagaTreeFaceAnchorsV1.
  */
 
 import {
   FACE_ANCHORS_CONTRACT_VERSION,
-  SAGA_DRIVE_FACE_ANCHOR_IDS,
-  type SagaDriveFaceAnchorId,
-  type SagaDriveFaceAnchorTriangleBinding,
-  type SagaDriveFaceAnchorsManifestV1,
+  SAGA_TREE_FACE_ANCHOR_IDS,
+  type SagaTreeFaceAnchorId,
+  type SagaTreeFaceAnchorTriangleBinding,
+  type SagaTreeFaceAnchorsManifestV1,
   validateFaceAnchorTriangleBinding,
 } from './face-anchor-contract';
 import {
@@ -20,7 +20,7 @@ import {
   isFaceMappingSurfaceSemanticsOk,
 } from './face-mapping-surface-semantics-v1';
 
-export const FACE_MAPPING_DRAFT_CONTRACT_VERSION = 'SagaDriveFaceMappingDraftV1' as const;
+export const FACE_MAPPING_DRAFT_CONTRACT_VERSION = 'SagaTreeFaceMappingDraftV1' as const;
 
 export const FACE_MAPPING_MARKER_STATUSES = [
   'missing',
@@ -46,7 +46,7 @@ export interface FaceMappingMarkerGroupV1 {
   readonly id: FaceMappingMarkerGroupId;
   /** German UI label. */
   readonly labelDe: string;
-  readonly anchorIds: readonly SagaDriveFaceAnchorId[];
+  readonly anchorIds: readonly SagaTreeFaceAnchorId[];
 }
 
 /** Canonical UI grouping for the 21 markers (brow L/R split for binding labels). */
@@ -87,7 +87,7 @@ export const FACE_MAPPING_MARKER_GROUP_DEFS: readonly FaceMappingMarkerGroupV1[]
  * Binding German labels for Face-Rig Editor rows.
  * Eye inner/outer = corners toward nose / temple (not pupil).
  */
-export const FACE_MAPPING_ANCHOR_LABEL_DE: Readonly<Record<SagaDriveFaceAnchorId, string>> = {
+export const FACE_MAPPING_ANCHOR_LABEL_DE: Readonly<Record<SagaTreeFaceAnchorId, string>> = {
   mouthUpper: 'Oberlippe Mitte',
   mouthLower: 'Unterlippe Mitte',
   mouthCornerLeft: 'Linker Mundwinkel',
@@ -112,7 +112,7 @@ export const FACE_MAPPING_ANCHOR_LABEL_DE: Readonly<Record<SagaDriveFaceAnchorId
 };
 
 /** Short German labels for 3D overlay (binding semantics, compact). */
-export const FACE_MAPPING_ANCHOR_SHORT_DE: Readonly<Record<SagaDriveFaceAnchorId, string>> = {
+export const FACE_MAPPING_ANCHOR_SHORT_DE: Readonly<Record<SagaTreeFaceAnchorId, string>> = {
   mouthUpper: 'Oberlippe',
   mouthLower: 'Unterlippe',
   mouthCornerLeft: 'Mund L',
@@ -137,25 +137,25 @@ export const FACE_MAPPING_ANCHOR_SHORT_DE: Readonly<Record<SagaDriveFaceAnchorId
 };
 
 export type FaceMappingDraftAnchors = Partial<
-  Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding | null>
+  Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding | null>
 >;
 
-export interface SagaDriveFaceMappingDraftV1 {
+export interface SagaTreeFaceMappingDraftV1 {
   readonly contractVersion: typeof FACE_MAPPING_DRAFT_CONTRACT_VERSION;
   /** Snapshot when Face Setup opened (Cancel / Reset target). */
-  readonly baseline: SagaDriveFaceAnchorsManifestV1 | null;
+  readonly baseline: SagaTreeFaceAnchorsManifestV1 | null;
   /** Working bindings; null value = explicitly cleared. */
   readonly anchors: FaceMappingDraftAnchors;
-  readonly selectedAnchorId: SagaDriveFaceAnchorId | null;
+  readonly selectedAnchorId: SagaTreeFaceAnchorId | null;
   readonly dirty: boolean;
 }
 
 export function createEmptyFaceMappingDraft(
-  baseline: SagaDriveFaceAnchorsManifestV1 | null = null,
-): SagaDriveFaceMappingDraftV1 {
+  baseline: SagaTreeFaceAnchorsManifestV1 | null = null,
+): SagaTreeFaceMappingDraftV1 {
   const anchors: FaceMappingDraftAnchors = {};
   if (baseline) {
-    for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+    for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
       const binding = baseline.anchors[id];
       if (binding) anchors[id] = { ...binding, barycentric: { ...binding.barycentric } };
     }
@@ -170,17 +170,17 @@ export function createEmptyFaceMappingDraft(
 }
 
 export function selectFaceMappingAnchor(
-  draft: SagaDriveFaceMappingDraftV1,
-  anchorId: SagaDriveFaceAnchorId | null,
-): SagaDriveFaceMappingDraftV1 {
+  draft: SagaTreeFaceMappingDraftV1,
+  anchorId: SagaTreeFaceAnchorId | null,
+): SagaTreeFaceMappingDraftV1 {
   return { ...draft, selectedAnchorId: anchorId };
 }
 
 export function setFaceMappingDraftBinding(
-  draft: SagaDriveFaceMappingDraftV1,
-  anchorId: SagaDriveFaceAnchorId,
-  binding: SagaDriveFaceAnchorTriangleBinding,
-): SagaDriveFaceMappingDraftV1 {
+  draft: SagaTreeFaceMappingDraftV1,
+  anchorId: SagaTreeFaceAnchorId,
+  binding: SagaTreeFaceAnchorTriangleBinding,
+): SagaTreeFaceMappingDraftV1 {
   return {
     ...draft,
     anchors: { ...draft.anchors, [anchorId]: binding },
@@ -189,9 +189,9 @@ export function setFaceMappingDraftBinding(
 }
 
 export function clearFaceMappingDraftBinding(
-  draft: SagaDriveFaceMappingDraftV1,
-  anchorId: SagaDriveFaceAnchorId,
-): SagaDriveFaceMappingDraftV1 {
+  draft: SagaTreeFaceMappingDraftV1,
+  anchorId: SagaTreeFaceAnchorId,
+): SagaTreeFaceMappingDraftV1 {
   return {
     ...draft,
     anchors: { ...draft.anchors, [anchorId]: null },
@@ -200,14 +200,14 @@ export function clearFaceMappingDraftBinding(
 }
 
 /** Reset working anchors to the baseline captured at open. */
-export function resetFaceMappingDraft(draft: SagaDriveFaceMappingDraftV1): SagaDriveFaceMappingDraftV1 {
+export function resetFaceMappingDraft(draft: SagaTreeFaceMappingDraftV1): SagaTreeFaceMappingDraftV1 {
   return createEmptyFaceMappingDraft(draft.baseline);
 }
 
 export function resolveFaceMappingMarkerStatus(
-  draft: SagaDriveFaceMappingDraftV1,
-  anchorId: SagaDriveFaceAnchorId,
-  options?: { reviewedAnchorIds?: ReadonlySet<SagaDriveFaceAnchorId> },
+  draft: SagaTreeFaceMappingDraftV1,
+  anchorId: SagaTreeFaceAnchorId,
+  options?: { reviewedAnchorIds?: ReadonlySet<SagaTreeFaceAnchorId> },
 ): FaceMappingMarkerStatus {
   const binding = draft.anchors[anchorId];
   if (binding == null) return 'missing';
@@ -220,10 +220,10 @@ export function resolveFaceMappingMarkerStatus(
 }
 
 export function faceMappingDraftToManifest(
-  draft: SagaDriveFaceMappingDraftV1,
-): SagaDriveFaceAnchorsManifestV1 {
-  const anchors: Partial<Record<SagaDriveFaceAnchorId, SagaDriveFaceAnchorTriangleBinding>> = {};
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  draft: SagaTreeFaceMappingDraftV1,
+): SagaTreeFaceAnchorsManifestV1 {
+  const anchors: Partial<Record<SagaTreeFaceAnchorId, SagaTreeFaceAnchorTriangleBinding>> = {};
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const binding = draft.anchors[id];
     if (!binding) continue;
     const validation = validateFaceAnchorTriangleBinding(binding, id);
@@ -244,12 +244,12 @@ export interface FaceMappingDraftValidationResult {
 }
 
 export function validateFaceMappingDraft(
-  draft: SagaDriveFaceMappingDraftV1,
+  draft: SagaTreeFaceMappingDraftV1,
 ): FaceMappingDraftValidationResult {
   let setCount = 0;
   let missingCount = 0;
   let invalidCount = 0;
-  for (const id of SAGA_DRIVE_FACE_ANCHOR_IDS) {
+  for (const id of SAGA_TREE_FACE_ANCHOR_IDS) {
     const status = resolveFaceMappingMarkerStatus(draft, id);
     if (status === 'missing') missingCount += 1;
     else if (status === 'invalid') invalidCount += 1;

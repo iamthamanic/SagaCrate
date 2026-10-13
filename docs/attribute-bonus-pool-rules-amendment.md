@@ -1,7 +1,7 @@
-# SagaDrive Core – Attribut-Bonuspool Amendment
+# SagaTree Core – Attribut-Bonuspool Amendment
 
 > **Status: SUPERSEDED** (2. September 2026)  
-> Inhalt vollständig in `docs/sagadrive core rules.md` integriert (§3.2, §3.3, §3.7).  
+> Inhalt vollständig in `docs/sagatree core rules.md` integriert (§3.2, §3.3, §3.7).  
 > Kanonische Quelle ist ausschließlich der Core. Dieses Amendment wird nicht mehr fortgeschrieben.
 >
 > Ursprünglich: verbindliche Änderung für den Character-Editor-Branch (PR #84), bis zur Konsolidierung im Hauptdokument.

@@ -1,5 +1,5 @@
 /**
- * sagadrive item rule types — §5.7 / §8.3 / §10 load, cost, protection, traits.
+ * sagatree item rule types — §5.7 / §8.3 / §10 load, cost, protection, traits.
  * Location: src/domains/rules/sagatree/items/types.ts
  *
  * Domain-pure: no React, no Supabase, no inventory state.
@@ -21,7 +21,7 @@ export type ItemProtection = 1 | 2 | 3;
  * Universal weapon trait names from Core §10.1 (excluding parameterized
  * `Durchdringung X`, which uses {@link DURCHDRINGUNG_TRAIT_PATTERN}).
  */
-export const SAGA_DRIVE_WEAPON_TRAIT_NAMES = [
+export const SAGA_TREE_WEAPON_TRAIT_NAMES = [
   'Finesse',
   'Reichweite',
   'Wurf',
@@ -34,7 +34,7 @@ export const SAGA_DRIVE_WEAPON_TRAIT_NAMES = [
   'Schwer',
 ] as const;
 
-export type SagaDriveWeaponTraitName = (typeof SAGA_DRIVE_WEAPON_TRAIT_NAMES)[number];
+export type SagaTreeWeaponTraitName = (typeof SAGA_TREE_WEAPON_TRAIT_NAMES)[number];
 
 /** Parameterized penetration trait: `Durchdringung X` with X ≥ 1 (§10.1). */
 export const DURCHDRINGUNG_TRAIT_PATTERN = /^Durchdringung ([1-9]\d*)$/;
@@ -43,9 +43,9 @@ export const DURCHDRINGUNG_TRAIT_PATTERN = /^Durchdringung ([1-9]\d*)$/;
  * Additional trait strings used by the Core catalog that are not in the
  * §10.1 weapon-trait list (shield defense / hand occupancy).
  */
-export const SAGA_DRIVE_CORE_CATALOG_EXTRA_TRAITS = ['+1 Verteidigung', '1 Hand'] as const;
+export const SAGA_TREE_CORE_CATALOG_EXTRA_TRAITS = ['+1 Verteidigung', '1 Hand'] as const;
 
-export type SagaDriveCoreCatalogExtraTrait = (typeof SAGA_DRIVE_CORE_CATALOG_EXTRA_TRAITS)[number];
+export type SagaTreeCoreCatalogExtraTrait = (typeof SAGA_TREE_CORE_CATALOG_EXTRA_TRAITS)[number];
 
 /** Canonical protection → minimum-strength pairing from §8.3. */
 export const PROTECTION_MINIMUM_STRENGTH: Readonly<Record<ItemProtection, MinimumStrength>> = {

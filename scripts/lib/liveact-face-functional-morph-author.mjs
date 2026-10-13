@@ -3,7 +3,7 @@
  * Location: scripts/lib/liveact-face-functional-morph-author.mjs
  *
  * Design decision: from reviewed semantic anchors + mesh topology, deterministically
- * rewrite named SagaDrive face morph POSITION accessors.
+ * rewrite named SagaTree face morph POSITION accessors.
  * Milestone 1: jawOpen. Milestone 2: blinks. Milestone 3: browInnerUp. Milestone 4: smiles.
  * Milestone 5: mouthPucker.
  *
