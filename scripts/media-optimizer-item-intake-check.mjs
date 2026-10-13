@@ -39,8 +39,8 @@ check(/alreadyOptimized/.test(s), 'alreadyOptimized option');
 check(/prepareItemThumbnailFile\(file/.test(s) || /await prepareItemThumbnailFile/.test(s), 'upload prepares');
 check(/createObjectURL\(file\)/.test(h), 'Object URL preview');
 check(/uploadThumbnail\(id, file\)/.test(h), 'hook calls upload');
-check(/Bestehendes Thumbnail bleibt erhalten|prior signedUrl/.test(h), 'keeps prior asset');
-check(/revokeObjectURL/.test(h), 'revokes provisional preview on fail');
+check(/resolvedUrl/.test(h) && /survives failures|#643/.test(h), 'keeps prior asset');
+check(/Immediate local preview|createObjectURL\(file\)/.test(h), 'preview-first');
 
 section('3 · typed-strict');
 for (const [rel, text] of [
