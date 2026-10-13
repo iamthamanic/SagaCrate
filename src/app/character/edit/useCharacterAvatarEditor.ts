@@ -16,6 +16,8 @@ import {
   type SetStateAction,
 } from 'react';
 import { toast } from 'sonner@2.0.3';
+import { useMediaOptimizeIntake } from '../../media';
+import type { MediaIntakeStatus } from '../../media';
 import type { AvatarPortraitCaptureHandle } from '../avatar/AvatarCanvas';
 import type { MeshyAvatarJobUiState } from '../avatar/AvatarMeshyPanel';
 import { useAvatarComposition } from '../avatar/useAvatarComposition';
@@ -110,6 +112,13 @@ export type CharacterAvatarEditorApi = {
   importComposition: ImportCompositionState | null;
   modularGenerateResult: ModularGenerateFlowResultV1 | null;
   uploading: boolean;
+  /** Local Object URL while optimizing/uploading (immediate preview). */
+  portraitPreviewUrl: string | null;
+  portraitIntakeStatus: MediaIntakeStatus;
+  portraitIntakeStatusLabelDe: string;
+  portraitIntakeCanRetry: boolean;
+  retryPortraitOptimize: () => Promise<void>;
+  abortPortraitOptimize: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;
   avatarCanvasRef: RefObject<HTMLCanvasElement | null>;
   portraitCaptureRef: RefObject<AvatarPortraitCaptureHandle | null>;
@@ -170,6 +179,10 @@ export function useCharacterAvatarEditor({
   const [accessory, setAccessory] = useState(initialPreset.accessory ?? 'none');
 
   const [portraitUrl, setPortraitUrl] = useState('');
+  const portraitIntake = useMediaOptimizeIntake({
+    profileId: 'character-portrait',
+    kind: 'image',
+  });
   const [importedModelUrl, setImportedModelUrl] = useState<string | undefined>(undefined);
   const [avatarSource, setAvatarSource] = useState<AvatarSource>('sagatree');
   const [meshyUi, setMeshyUi] = useState<MeshyAvatarJobUiState | null>(null);
@@ -789,11 +802,38 @@ export function useCharacterAvatarEditor({
   const uploadPortrait = async (file: File, successMessage = 'Portrait gespeichert') => {
     setUploading(true);
     try {
-      const url = await characterService.uploadPortrait(file);
-      setPortraitUrl(url);
+      const outcome = await portraitIntake.selectFile(file, {
+        profileId: 'character-portrait',
+        kind: 'image',
+      });
+      if (outcome.status !== 'ready' || !outcome.ready) {
+        toast.error(
+          outcome.errorMessage ?? 'Portrait-Optimierung fehlgeschlagen. Bestehendes Portrait bleibt erhalten.',
+        );
+        return;
+      }
+
+      const base = file.name.replace(/\.[^.]+$/, '') || 'portrait';
+      const ext =
+        outcome.ready.uploadMimeType === 'image/webp'
+          ? 'webp'
+          : outcome.ready.uploadMimeType === 'image/jpeg'
+            ? 'jpg'
+            : 'png';
+      const uploadFile = new File([outcome.ready.uploadBlob], `${base}.${ext}`, {
+        type: outcome.ready.uploadMimeType,
+      });
+
+      await portraitIntake.upload(async () => {
+        const url = await characterService.uploadPortrait(uploadFile, {
+          alreadyOptimized: true,
+        });
+        setPortraitUrl(url);
+      });
       toast.success(successMessage);
     } catch (error) {
       console.error('Portrait upload error:', error);
+      // Do not clear portraitUrl — previous remote asset survives failed attempts.
       toast.error(error instanceof Error ? error.message : 'Portrait konnte nicht gespeichert werden');
     } finally {
       setUploading(false);
@@ -812,6 +852,7 @@ export function useCharacterAvatarEditor({
       return;
     }
     const safeName = characterName.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-') || 'character';
+    // Canvas capture → same character-portrait intake + optimizer path as file upload.
     await uploadPortrait(new File([blob], `${safeName}-portrait.png`, { type: 'image/png' }), successMessage);
   };
 
@@ -827,6 +868,32 @@ export function useCharacterAvatarEditor({
       return;
     }
     await uploadPortrait(file);
+  };
+
+  const retryPortraitOptimize = async () => {
+    setUploading(true);
+    try {
+      const outcome = await portraitIntake.retry();
+      if (!outcome || outcome.status !== 'ready' || !outcome.ready || !portraitIntake.sourceFile) {
+        toast.error(outcome?.errorMessage ?? 'Erneute Optimierung fehlgeschlagen.');
+        return;
+      }
+      const file = portraitIntake.sourceFile;
+      const base = file.name.replace(/\.[^.]+$/, '') || 'portrait';
+      const ext = outcome.ready.uploadMimeType === 'image/webp' ? 'webp' : 'png';
+      const uploadFile = new File([outcome.ready.uploadBlob], `${base}.${ext}`, {
+        type: outcome.ready.uploadMimeType,
+      });
+      await portraitIntake.upload(async () => {
+        const url = await characterService.uploadPortrait(uploadFile, { alreadyOptimized: true });
+        setPortraitUrl(url);
+      });
+      toast.success('Portrait gespeichert');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Portrait konnte nicht gespeichert werden');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleGeneratePortrait = async () => {
@@ -873,6 +940,12 @@ export function useCharacterAvatarEditor({
     importComposition,
     modularGenerateResult,
     uploading,
+    portraitPreviewUrl: portraitIntake.previewUrl,
+    portraitIntakeStatus: portraitIntake.status,
+    portraitIntakeStatusLabelDe: portraitIntake.statusLabelDe,
+    portraitIntakeCanRetry: portraitIntake.canRetry,
+    retryPortraitOptimize,
+    abortPortraitOptimize: portraitIntake.abort,
     fileInputRef,
     avatarCanvasRef,
     portraitCaptureRef,

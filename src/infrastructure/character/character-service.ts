@@ -17,10 +17,67 @@ import { persistMigratedInventory } from '../inventory/inventory-persistence';
 import { getLookProfile } from '../look';
 import { projectService } from '../project/project-service';
 import { characterAdventureArcService } from './character-adventure-arc-service';
+import { optimizeMedia } from '../media/optimizer';
 import { supabaseCharacterRepository } from './supabase-character.repository';
 
 function invalidateCharacterListCaches(): void {
   entityCache.invalidate(ENTITY_CACHE_KEYS.characterSummaries);
+}
+
+export type UploadPortraitOptions = {
+  /**
+   * When true, skip client optimize (caller already ran character-portrait intake).
+   * Storage MIME/magic-byte/owner checks still run in the repository.
+   */
+  readonly alreadyOptimized?: boolean;
+  readonly signal?: AbortSignal;
+};
+
+/**
+ * Run the character-portrait media optimizer. Never returns the original after a
+ * required optimize failure (no silent fallback upload).
+ */
+export async function prepareCharacterPortraitFile(
+  file: File,
+  signal?: AbortSignal,
+): Promise<File> {
+  let optimizedBytes: Uint8Array | undefined;
+  const result = await optimizeMedia({
+    kind: 'image',
+    profileId: 'character-portrait',
+    mimeType: file.type || 'application/octet-stream',
+    byteSize: file.size,
+    bytes: file,
+    signal,
+    onOptimizedBytes: (bytes) => {
+      optimizedBytes = bytes;
+    },
+  });
+
+  if (result.status === 'unchanged') {
+    return file;
+  }
+
+  if (result.status === 'optimized') {
+    if (!optimizedBytes || optimizedBytes.byteLength === 0) {
+      throw new Error('Portrait-Optimierung lieferte keine Bytes (kein stilles Original).');
+    }
+    const copy = new Uint8Array(optimizedBytes.byteLength);
+    copy.set(optimizedBytes);
+    const base = file.name.replace(/\.[^.]+$/, '') || 'portrait';
+    const ext = result.outputMimeType === 'image/webp' ? 'webp' : 'bin';
+    return new File([copy], `${base}.${ext}`, { type: result.outputMimeType });
+  }
+
+  if (result.status === 'aborted') {
+    throw new Error(result.message || 'Portrait-Optimierung abgebrochen.');
+  }
+
+  const message =
+    'message' in result && typeof result.message === 'string'
+      ? result.message
+      : 'Portrait-Optimierung fehlgeschlagen.';
+  throw new Error(message);
 }
 
 class CharacterService {
@@ -153,8 +210,19 @@ class CharacterService {
     return supabaseCharacterRepository.searchCharacters(query);
   }
 
-  uploadPortrait(file: File): Promise<string> {
-    return supabaseCharacterRepository.uploadPortrait(file);
+  /**
+   * Prepare (unless alreadyOptimized) then upload to owner-scoped Storage.
+   * On failure the previous portrait URL is unchanged (caller keeps local state).
+   */
+  async uploadPortrait(file: File, options?: UploadPortraitOptions): Promise<string> {
+    const prepared = options?.alreadyOptimized
+      ? file
+      : await prepareCharacterPortraitFile(file, options?.signal);
+    return supabaseCharacterRepository.uploadPortrait(prepared);
+  }
+
+  preparePortraitFile(file: File, signal?: AbortSignal): Promise<File> {
+    return prepareCharacterPortraitFile(file, signal);
   }
 }
 

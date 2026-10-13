@@ -7,6 +7,7 @@
 
 export { useMediaOptimizeIntake } from './intake/useMediaOptimizeIntake';
 export type {
+  MediaIntakeSelectOutcome,
   UseMediaOptimizeIntakeConfig,
   UseMediaOptimizeIntakeResult,
 } from './intake/useMediaOptimizeIntake';
