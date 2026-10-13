@@ -1,5 +1,6 @@
 /**
- * useItemAssets — reusable item thumbnail (#140) + model3d (#141) UI state.
+ * useItemAssets — reusable item thumbnail (#140/#643) + model3d (#141) UI state.
+ * Thumbnail upload: Object URL preview first, then item-thumbnail optimize via service.
  * Network via itemThumbnailService / itemModel3dService only; no Supabase imports.
  * Location: src/app/items/visuals/useItemAssets.ts
  */
@@ -179,17 +180,19 @@ export function useItemAssets({
     submitLock.current = true;
     setBusy(true);
     setErrorMessage('');
+    // Immediate local preview before encode/upload (#643).
     const preview = URL.createObjectURL(file);
     setLocalPreviewUrl(preview);
     setPhase('uploading');
     try {
+      // item-thumbnail optimizer (WebP-capable) then existing Edge upload; no silent original.
       const result = await itemThumbnailService.uploadThumbnail(id, file);
       setResolvedUrl(result.signedUrl);
       onAssetKeyChangeRef.current(result.assetKey);
       setPhase('idle');
       toast.success('Thumbnail hochgeladen');
     } catch (error) {
-      setLocalPreviewUrl(null);
+      // Keep preview for retry; do not clear resolvedUrl — old asset survives failures (#643).
       setPhase('failed');
       setErrorMessage(error instanceof Error ? error.message : 'Upload fehlgeschlagen');
       toast.error(error instanceof Error ? error.message : 'Upload fehlgeschlagen');

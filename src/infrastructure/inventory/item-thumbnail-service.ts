@@ -1,5 +1,5 @@
 /**
- * item-thumbnail-service — client facade for Workbench thumbnail upload/generate (#140).
+ * item-thumbnail-service — client facade for Workbench thumbnail upload/generate (#140/#643).
  * Invokes Edge Function only; never embeds Meshy secrets.
  * Location: src/infrastructure/inventory/item-thumbnail-service.ts
  */
@@ -11,6 +11,68 @@ import {
   parseItemThumbnailAssetKey,
   type ItemThumbnailMime,
 } from '../../domains/items';
+
+export type PrepareItemThumbnailOptions = {
+  readonly alreadyOptimized?: boolean;
+  readonly signal?: AbortSignal;
+};
+
+/**
+ * Optimize via item-thumbnail profile before Edge upload.
+ * Never returns the original after a required optimize failure.
+ */
+export async function prepareItemThumbnailFile(
+  file: File,
+  signal?: AbortSignal,
+): Promise<File> {
+  const mime = validateThumbnailFileClient(file);
+  const { optimizeMedia } = await import('../media/optimizer');
+  let optimizedBytes: Uint8Array | undefined;
+  const result = await optimizeMedia({
+    kind: 'image',
+    profileId: 'item-thumbnail',
+    mimeType: mime,
+    byteSize: file.size,
+    bytes: file,
+    signal,
+    onOptimizedBytes: (bytes) => {
+      optimizedBytes = bytes;
+    },
+  });
+
+  if (result.status === 'unchanged') {
+    return file;
+  }
+
+  if (result.status === 'optimized') {
+    if (!optimizedBytes || optimizedBytes.byteLength === 0) {
+      throw new Error('Thumbnail-Optimierung lieferte keine Bytes (kein stilles Original).');
+    }
+    if (!isAllowedItemThumbnailMime(result.outputMimeType)) {
+      throw new Error(`Optimiertes MIME ${result.outputMimeType} ist nicht erlaubt.`);
+    }
+    const copy = new Uint8Array(optimizedBytes.byteLength);
+    copy.set(optimizedBytes);
+    const base = file.name.replace(/\.[^.]+$/, '') || 'thumbnail';
+    const ext =
+      result.outputMimeType === 'image/webp'
+        ? 'webp'
+        : result.outputMimeType === 'image/png'
+          ? 'png'
+          : 'jpg';
+    return new File([copy], `${base}.${ext}`, { type: result.outputMimeType });
+  }
+
+  if (result.status === 'aborted') {
+    throw new Error(result.message || 'Thumbnail-Optimierung abgebrochen.');
+  }
+
+  const message =
+    'message' in result && typeof result.message === 'string'
+      ? result.message
+      : 'Thumbnail-Optimierung fehlgeschlagen.';
+  throw new Error(message);
+}
 
 export type ItemThumbnailJobUiStatus =
   | 'idle'
@@ -143,9 +205,16 @@ class ItemThumbnailService {
     }
   }
 
-  async uploadThumbnail(definitionId: string, file: File): Promise<ItemThumbnailUploadResult> {
-    const mime = validateThumbnailFileClient(file);
-    const contentBase64 = await fileToBase64(file);
+  async uploadThumbnail(
+    definitionId: string,
+    file: File,
+    options?: PrepareItemThumbnailOptions,
+  ): Promise<ItemThumbnailUploadResult> {
+    const prepared = options?.alreadyOptimized
+      ? file
+      : await prepareItemThumbnailFile(file, options?.signal);
+    const mime = validateThumbnailFileClient(prepared);
+    const contentBase64 = await fileToBase64(prepared);
     const response = await invoke({
       action: 'upload',
       definitionId,

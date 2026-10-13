@@ -55,7 +55,11 @@ function phaseLabel(phase: string, progress: number): string {
 }
 
 function isImageFile(file: File): boolean {
-  return file.type === 'image/png' || file.type === 'image/jpeg';
+  return (
+    file.type === 'image/png' ||
+    file.type === 'image/jpeg' ||
+    file.type === 'image/webp'
+  );
 }
 
 function isGlbFile(file: File): boolean {

@@ -560,6 +560,17 @@ function checkMediaOptimizerItemWebpContract() {
   });
 }
 
+function checkMediaOptimizerItemIntake() {
+  console.log('Media optimizer item intake (#643): optimize before thumbnail Edge upload...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-item-intake-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
+
+
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -2065,6 +2076,7 @@ checkMediaOptimizerCharacterPortrait();
 checkMediaOptimizerWorldPin();
 checkMediaOptimizerLookReference();
 checkMediaOptimizerItemWebpContract();
+checkMediaOptimizerItemIntake();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
