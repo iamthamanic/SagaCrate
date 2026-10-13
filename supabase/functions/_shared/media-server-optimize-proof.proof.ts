@@ -1,6 +1,9 @@
 /**
  * Deno proof tests for server-side raster optimization (#645).
- * Location: supabase/functions/_shared/media-server-optimize-proof_test.ts
+ * Location: supabase/functions/_shared/media-server-optimize-proof.proof.ts
+ *
+ * Not named *_test.ts — CI's blanket `deno test` has no --allow-read for WASM.
+ * Invoked only via scripts/media-optimizer-server-proof-check.mjs.
  *
  * Real PNG/JPEG/WebP bytes are produced by the same WASM codecs (no network fixtures).
  */

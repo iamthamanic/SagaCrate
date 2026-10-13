@@ -1,0 +1,10 @@
+{
+  "decision": "deno-adapter",
+  "runtime": "deno",
+  "generatedAt": "2026-10-13T17:54:01.990Z",
+  "notesDe": [
+    "Produktive Storage-/Auth-Services wurden in diesem Proof nicht verändert.",
+    "Metriken stammen aus dem Deno-Testlauf (stdout summary + decision doc)."
+  ],
+  "denoExitCode": 0
+}

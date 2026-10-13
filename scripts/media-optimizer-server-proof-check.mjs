@@ -27,7 +27,7 @@ function check(condition, message) {
 section('1 · files');
 const paths = [
   'supabase/functions/_shared/media-server-optimize-proof.ts',
-  'supabase/functions/_shared/media-server-optimize-proof_test.ts',
+  'supabase/functions/_shared/media-server-optimize-proof.proof.ts',
   'docs/media-optimizer-server-decision.md',
   'docs/media-optimizer-server-proof.md',
 ];
@@ -53,7 +53,7 @@ const deno = spawnSync(
     '--allow-net',
     '--allow-env',
     '--allow-sys',
-    'supabase/functions/_shared/media-server-optimize-proof_test.ts',
+    'supabase/functions/_shared/media-server-optimize-proof.proof.ts',
   ],
   { cwd: root, encoding: 'utf8' },
 );
