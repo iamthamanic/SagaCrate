@@ -1,6 +1,6 @@
 # Composition Gate — media-opt-provider-output
 
-- HEAD_SHA: a662b2f5d31498fcc6087671b10c2d3570741488
+- HEAD_SHA: 774a99e7c73b1ce161008262eab84ff97e2d5ae8
 - BASE_SHA: f1fc759858b93c3c1a16a6f295cd78a40ad440c5
 - Date: 2026-10-13
 - Verdict: CLEAR
