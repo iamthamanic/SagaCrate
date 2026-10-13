@@ -480,6 +480,14 @@ function checkLookProfileDomain() {
   });
 }
 
+function checkMediaOptimizerContracts() {
+  console.log('Media optimizer contracts (#625): kinds, profiles, budgets, result invariants...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-contracts-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkLookProfilePersistence() {
   console.log('LookProfile persistence (#340): migration/RLS, draft validation, append-only versions...');
   execFileSync(process.execPath, ['scripts/look-profile-persistence-check.mjs'], {
@@ -1976,6 +1984,7 @@ checkItemEpicAcceptance();
 checkItemRoutingFoundation();
 checkSagaRoutingPublicIdFoundation();
 checkLookProfileDomain();
+checkMediaOptimizerContracts();
 checkLookProfilePersistence();
 checkLookLibrary();
 checkLookWorldCapabilityStubs();
