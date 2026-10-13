@@ -4,7 +4,7 @@
  * Location: scripts/sagatree-brand-phase-a-check.mjs
  *
  * Locks login/shell/title/package to SagaTree. Does not require renaming
- * SagaTree Core rules identifiers.
+ * SagaDrive Core rules identifiers.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -47,7 +47,7 @@ for (const file of surfaces) {
   if (!existsSync(join(root, file))) fail(`missing ${file}`);
   const content = read(file);
   requireMatch(content, /SagaTree/, `${file} SagaTree`);
-  forbidMatch(content, />\s*SagaTree\s*</, `${file} product heading SagaTree`);
+  forbidMatch(content, />\s*SagaDrive\s*</, `${file} product heading SagaDrive`);
   if (/\bas any\b|eslint-disable|@ts-ignore|@ts-expect-error/.test(content)) {
     fail(`${file} type escape hatch`);
   }
@@ -64,7 +64,7 @@ requireMatch(smoke, /heading.*SagaTree/, 'smoke heading');
 
 const lore = read('src/domains/character/use-cases/character-lore-examples.ts');
 requireMatch(lore, /SagaTree-Setting|SagaTree-Welt/, 'lore world frame');
-forbidMatch(lore, /SagaTree-Setting|SagaTree-Welt/, 'lore still SagaTree product world');
+forbidMatch(lore, /SagaDrive-Setting|SagaDrive-Welt/, 'lore still SagaDrive product world');
 
 requireMatch(read('README.md'), /^# SagaTree\s*$/m, 'README H1');
 requireMatch(read('scripts/test-gate.mjs'), /sagatree-brand-phase-a-check\.mjs/, 'test-gate');

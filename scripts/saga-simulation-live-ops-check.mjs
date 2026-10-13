@@ -32,7 +32,7 @@ requireMatch(migration, /apply_simulation_batch/i, 'apply_simulation_batch');
 requireMatch(migration, /advance_time/i, 'advance_time');
 requireMatch(migration, /set_party_location/i, 'set_party_location');
 requireMatch(migration, /simulationPatch/i, 'simulationPatch');
-requireMatch(migration, /sagatree_ensure_adventure_v2/i, 'ensure v2');
+requireMatch(migration, /sagadrive_ensure_adventure_v2/i, 'ensure v2');
 requireMatch(migration, /days muss zwischen 1 und 30/i, 'days bounds');
 
 const domain = read('src/domains/session/contracts/adventure-runtime-state.ts');

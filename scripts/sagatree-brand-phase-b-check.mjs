@@ -35,16 +35,16 @@ requireMatch(
   /value:\s*'sagatree-core',\s*label:\s*'SagaTree Core'/,
   'ruleset option label SagaTree Core',
 );
-forbidMatch(creation, /label:\s*'SagaTree Core'/, 'ruleset still labeled SagaTree Core');
+forbidMatch(creation, /label:\s*'SagaDrive Core'/, 'ruleset still labeled SagaDrive Core');
 
 const readme = read('README.md');
 requireMatch(readme, /### Elevator Pitch/, 'README Elevator Pitch section');
 requireMatch(readme, /\*\*Für Spielleitung\*\*/, 'README pitch for DMs');
 requireMatch(readme, /\*\*Für Spieler\*\*/, 'README pitch for players');
 requireMatch(readme, /SagaTree Core/, 'README SagaTree Core');
-forbidMatch(readme, /heißt weiterhin \*\*SagaTree Core\*\*/, 'README still keeps SagaTree Core');
-forbidMatch(readme, /## SagaTree Core Character Editor/, 'README section still SagaTree Core Character Editor');
-forbidMatch(readme, /\*\*SagaTree Core Editor\*\*/, 'README features still SagaTree Core Editor');
+forbidMatch(readme, /heißt weiterhin \*\*SagaDrive Core\*\*/, 'README still keeps SagaDrive Core');
+forbidMatch(readme, /## SagaDrive Core Character Editor/, 'README section still SagaDrive Core Character Editor');
+forbidMatch(readme, /\*\*SagaDrive Core Editor\*\*/, 'README features still SagaDrive Core Editor');
 
 const pitchBlock = (readme.match(/### Elevator Pitch\n([\s\S]*?)(?=\n### |\n## )/) || [])[1] || '';
 if (!pitchBlock) fail('could not isolate Elevator Pitch block');
@@ -53,12 +53,12 @@ if (/React|Vite|Supabase|Postgres/i.test(pitchBlock)) {
 }
 
 const editor = read('src/app/character/edit/CharacterEditor.tsx');
-forbidMatch(editor, /Wähle SagaTree Core/, 'editor toast still SagaTree Core');
+forbidMatch(editor, /Wähle SagaDrive Core/, 'editor toast still SagaDrive Core');
 requireMatch(editor, /Wähle SagaTree Core/, 'editor toast SagaTree Core');
 
 const e2e = read('e2e/character-editor.spec.ts');
 requireMatch(e2e, /SagaTree Core/, 'e2e expects SagaTree Core');
-forbidMatch(e2e, /getByText\('SagaTree Core'\)/, 'e2e still asserts SagaTree Core');
+forbidMatch(e2e, /getByText\('SagaDrive Core'\)/, 'e2e still asserts SagaDrive Core');
 
 requireMatch(read('scripts/test-gate.mjs'), /sagatree-brand-phase-b-check\.mjs/, 'test-gate');
 
