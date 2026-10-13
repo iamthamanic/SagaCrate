@@ -1,22 +1,22 @@
 # Composition Gate — library-coverflow-wide-gaps
 
-- HEAD_SHA: cf58cc635e7677145ee60c49577f78408e995bb2
-- BASE_SHA: cf58cc635e7677145ee60c49577f78408e995bb2
-- Date: 2026-10-13
+- HEAD_SHA: 852b8df7dd2c8fab383d0ccd5cee894857c63e1b
+- BASE_SHA: fa9a4dc6c2b5b7418b8493ec188bdccebddeec16
+- Date: 2026-10-14
 - Verdict: CLEAR
 
 ## Event
-Library coverflow slide changes selection; each slide gets a signed circular distance (`--cf-delta`) used by CSS to tuck it linearly toward the center.
+Library coverflow browse → Embla slide index →  style → CSS linear tuck () keeps equal neighbor gaps on wide viewports.
 
 ## Hop chain
-Embla select → `useCenterFocusCarousel.current` → `getItemStyle(index)` → inline CSS var on `CarouselItem` → scoped CSS `calc(var(--cf-delta) * -40%)` on card.
+React EntityBrowser → useCenterFocusCarousel.getItemStyle → resolveCenterFocusSlideDelta → CSS custom property → transform on card.
 
 ## Simulations
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| N-actors | Every slide positioned independently by its own delta | Pure function per index; no shared state | pass |
-| Invalid/missing | No `--cf-delta` → no tuck, no layout break | CSS var fallback `0` | pass |
-| Two consumers / crash | Focus-mode pickers unaffected; EntityBrowser only coverflow user | Only coverflow CSS reads the var; focus CSS unchanged | pass |
+| N-actors | Many visible neighbors keep equal mid-to-mid spacing | Linear tuck for every distance including is-far | pass |
+| Invalid/missing | Missing  falls back to 0 |  | pass |
+| Two consumers / crash | Pair (length===2) still one-sided neighbor; loop circular delta | length===2 early-return kept; delta helper shared | pass |
 
 ## Flags
 none
