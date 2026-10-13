@@ -1,5 +1,5 @@
 /**
- * world-map-service — Supabase adapter for world_maps (#580).
+ * world-map-service — Supabase adapter for world_maps (#580/#637).
  * Location: src/infrastructure/world/world-map-service.ts
  */
 import { supabase } from '../../lib/supabase';
@@ -8,6 +8,65 @@ import {
   type WorldMapData,
   type WorldMapVm,
 } from '../../domains/world/map';
+
+const MAP_PIN_MAX_BYTES = 5 * 1024 * 1024;
+const MAP_PIN_ALLOWED_MIME = new Set(['image/png', 'image/jpeg', 'image/webp']);
+
+export type UploadPinImageOptions = {
+  readonly alreadyOptimized?: boolean;
+  readonly signal?: AbortSignal;
+};
+
+/** Prepare pin image via map-pin optimizer. Never silent-fallback to original on failure. */
+export async function prepareWorldMapPinFile(
+  file: File,
+  signal?: AbortSignal,
+): Promise<File> {
+  if (file.size > MAP_PIN_MAX_BYTES) {
+    throw new Error('Bild ist zu groß. Maximum 5 MB');
+  }
+  const { optimizeMedia } = await import('../media/optimizer');
+  let optimizedBytes: Uint8Array | undefined;
+  const result = await optimizeMedia({
+    kind: 'image',
+    profileId: 'map-pin',
+    mimeType: file.type || 'application/octet-stream',
+    byteSize: file.size,
+    bytes: file,
+    signal,
+    onOptimizedBytes: (bytes) => {
+      optimizedBytes = bytes;
+    },
+  });
+
+  if (result.status === 'unchanged') {
+    if (!MAP_PIN_ALLOWED_MIME.has(file.type)) {
+      throw new Error('Nur PNG, JPEG oder WebP erlaubt.');
+    }
+    return file;
+  }
+
+  if (result.status === 'optimized') {
+    if (!optimizedBytes || optimizedBytes.byteLength === 0) {
+      throw new Error('Pin-Bild-Optimierung lieferte keine Bytes (kein stilles Original).');
+    }
+    const copy = new Uint8Array(optimizedBytes.byteLength);
+    copy.set(optimizedBytes);
+    const base = file.name.replace(/\.[^.]+$/, '') || 'pin';
+    const ext = result.outputMimeType === 'image/webp' ? 'webp' : 'bin';
+    return new File([copy], `${base}.${ext}`, { type: result.outputMimeType });
+  }
+
+  if (result.status === 'aborted') {
+    throw new Error(result.message || 'Pin-Bild-Optimierung abgebrochen.');
+  }
+
+  const message =
+    'message' in result && typeof result.message === 'string'
+      ? result.message
+      : 'Pin-Bild-Optimierung fehlgeschlagen.';
+  throw new Error(message);
+}
 
 class WorldMapService {
   async getMap(worldProfileId: string, playerView = false): Promise<WorldMapVm> {
@@ -41,21 +100,38 @@ class WorldMapService {
     return vm;
   }
 
-  /** Upload pin image; returns Storage path (not signed URL). */
+  /**
+   * Upload pin image; returns owner-scoped Storage path (not signed URL / not Base64).
+   * Optimizes unless `alreadyOptimized` (intake already ran map-pin profile).
+   */
   async uploadPinImage(
     worldProfileId: string,
     file: File,
+    options?: UploadPinImageOptions,
   ): Promise<string> {
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) throw new Error('Anmeldung erforderlich');
-    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
+
+    const prepared = options?.alreadyOptimized
+      ? file
+      : await prepareWorldMapPinFile(file, options?.signal);
+
+    if (prepared.size > MAP_PIN_MAX_BYTES) {
+      throw new Error('Bild ist zu groß. Maximum 5 MB');
+    }
+    if (prepared.type && !MAP_PIN_ALLOWED_MIME.has(prepared.type)) {
+      throw new Error('Nur PNG, JPEG oder WebP erlaubt.');
+    }
+
+    const ext =
+      prepared.type === 'image/png' ? 'png' : prepared.type === 'image/webp' ? 'webp' : 'jpg';
     const path = `${user.id}/world/${worldProfileId}/pins/${Date.now().toString(36)}.${ext}`;
-    const { error } = await supabase.storage.from('world-map-pins').upload(path, file, {
+    const { error } = await supabase.storage.from('world-map-pins').upload(path, prepared, {
       upsert: false,
-      contentType: file.type || 'image/jpeg',
+      contentType: prepared.type || 'image/jpeg',
     });
     if (error) throw new Error(`Pin-Bild Upload fehlgeschlagen: ${error.message}`);
     return path;
