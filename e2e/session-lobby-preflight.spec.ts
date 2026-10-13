@@ -26,6 +26,8 @@ test.describe('Session Lobby Preflight (#491)', () => {
       timeout: 20_000,
     });
     await expect(page.locator('[data-session-lobby="v1"]')).toBeVisible();
+    await expect(page.locator('[data-session-lobby-join-hero]')).toBeVisible();
+    await expect(page.locator('[data-session-lobby-saga-cover-frame]')).toBeVisible();
     await expectNoHorizontalOverflow(page);
 
     const leave = page.getByRole('button', { name: 'Verlassen' });
