@@ -43,19 +43,29 @@ Deno.test('assertSafeUserExtra rejects non-strings', () => {
   assertEquals(assertSafeUserExtra('  ok  '), 'ok');
 });
 
-Deno.test('sniff PNG and JPEG magic bytes', () => {
+Deno.test('sniff PNG, JPEG and WebP magic bytes', () => {
   const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 1]);
   const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 1, 2]);
+  const webp = new Uint8Array([
+    0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50, 0, 1,
+  ]);
   assertEquals(sniffItemThumbnailMime(png), 'image/png');
   assertEquals(sniffItemThumbnailMime(jpeg), 'image/jpeg');
+  assertEquals(sniffItemThumbnailMime(webp), 'image/webp');
   assertEquals(sniffItemThumbnailMime(new Uint8Array([1, 2, 3])), null);
 });
 
 Deno.test('validateThumbnailBytes rejects mismatched mime', () => {
   const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 1]);
   assertThrows(() => validateThumbnailBytes(png, 'image/jpeg'));
+  assertThrows(() => validateThumbnailBytes(png, 'image/webp'));
   const ok = validateThumbnailBytes(png, 'image/png');
   assertEquals(ok.mime, 'image/png');
+  const webp = new Uint8Array([
+    0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50, 0, 1,
+  ]);
+  const webpOk = validateThumbnailBytes(webp, 'image/webp');
+  assertEquals(webpOk.mime, 'image/webp');
 });
 
 Deno.test('storage path is owner/world scoped with random asset id', () => {
@@ -75,6 +85,13 @@ Deno.test('storage path is owner/world scoped with random asset id', () => {
     mime: 'image/jpeg',
   });
   assertEquals(world, 'user-1/world/world-9/world:xyz/asset-2.jpg');
+  const webpPath = buildItemThumbnailStoragePath({
+    ownerUserId: 'user-1',
+    definitionId: 'personal:abc',
+    assetId: 'asset-3',
+    mime: 'image/webp',
+  });
+  assertEquals(webpPath, 'user-1/personal:abc/asset-3.webp');
   assertEquals(buildItemThumbnailAssetKey('asset-2'), 'thumbnail2d:asset-2');
 });
 

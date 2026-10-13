@@ -146,8 +146,12 @@ equal(look.maxImagesPerRequest, 10, 'look max images');
 
 const item = media.getImageAssetPolicy('item-thumbnail');
 equal(item.budget.maxUploadBytes, 10 * MiB, 'item maxUpload');
-equal(item.allowedMimeTypes.slice().sort(), ['image/jpeg', 'image/png'].sort(), 'item mime');
-check(item.allowWebpOutput === false, 'item webp deferred');
+equal(
+  item.allowedMimeTypes.slice().sort(),
+  ['image/jpeg', 'image/png', 'image/webp'].sort(),
+  'item mime',
+);
+check(item.allowWebpOutput === true, 'item webp enabled (#641)');
 
 check(portrait.budget.targetBytes < portrait.budget.maxUploadBytes, 'target < max portrait');
 check(look.budget.targetBytes < look.budget.maxUploadBytes, 'target < max look');

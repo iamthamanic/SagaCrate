@@ -365,7 +365,7 @@ serve(async (request: Request) => {
         status: 'ok',
         meshyConfigured,
         maxBytes: 10 * 1024 * 1024,
-        allowedMime: ['image/png', 'image/jpeg'],
+        allowedMime: ['image/png', 'image/jpeg', 'image/webp'],
       });
     }
 
