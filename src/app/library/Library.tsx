@@ -165,6 +165,11 @@ export function Library({
   // Honor `/library/:tab` (and legacy `?tab=`) from deep links / back-forward.
   useEffect(() => {
     const applyTabFromUrl = () => {
+      // popstate can fire while Library is still mounted after Back leaves
+      // `/library…` — never rewrite non-library destinations.
+      if (parseLibraryTabFromPathname(window.location.pathname) === null) {
+        return;
+      }
       const tab = readLibraryTabFromLocation();
       setActiveTab(tab);
       setVisitedTabs((current) => new Set(current).add(tab));

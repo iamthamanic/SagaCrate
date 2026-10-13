@@ -288,7 +288,12 @@ const LIBRARY_TAB_ALIASES: Record<string, LibraryTabId> = {
 
 export function parseLibraryTabParam(raw: string | null | undefined): LibraryTabId | null {
   if (!raw) return null;
-  return LIBRARY_TAB_ALIASES[raw.trim().toLowerCase()] ?? null;
+  const key = raw.trim().toLowerCase();
+  // Own-property only — avoid Object.prototype keys like `constructor`.
+  if (!Object.prototype.hasOwnProperty.call(LIBRARY_TAB_ALIASES, key)) {
+    return null;
+  }
+  return LIBRARY_TAB_ALIASES[key] ?? null;
 }
 
 /**
