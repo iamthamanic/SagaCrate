@@ -1,7 +1,7 @@
 # Composition Gate — compose-slim-profiles
 
 **Verdict:** SKIPPED  
-**HEAD:** `6ed009ca33c5e873d101dd973e5d867d5c01fa0f` (pre-commit; restamp after commit if needed)  
-**WORKTREE:** compose/docs/setup only  
+**HEAD:** `c422f39de79862fb738141cf4260391f3b78304a`  
+**WORKTREE:** clean for scoped files  
 
 No app surface / no UI composition. Change is Docker Compose profiles + ops docs for slim self-host on ~8 GB VPS.
