@@ -1,6 +1,6 @@
 # Composition Gate — session-lobby-media-preview
 
-- HEAD_SHA: 6aa99d53555f7b8c7bece20969b51e3fc3a6d655
+- HEAD_SHA: 95681d336dd202dddafaf5e1248197642d41baa9
 - BASE_SHA: 4d4ca6bdc37eeb4f6bcdba17c59e404a80bc2ad6
 - Date: 2026-10-14
 - Verdict: CLEAR (manual); automated composition-gate.mjs SKIPPED — single-hop application diff without downstream side-effect path
@@ -24,4 +24,4 @@ No LiveKit / `useSessionMediaPlane` publish. No server write of media blobs.
 none
 
 ## Skip reason
-n/a
+n/a (manual CLEAR); automated SKIPPED: single-hop application diff without downstream side-effect path
