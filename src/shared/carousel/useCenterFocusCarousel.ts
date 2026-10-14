@@ -36,6 +36,22 @@ export type UseCenterFocusCarouselOptions = {
   visualMode?: CenterFocusVisualMode;
   /** Extra Tailwind basis classes for each slide. */
   slideBasisClassName?: string;
+  /**
+   * Embla loop (clones slides in the engine). Default true (picker kits).
+   * Pair lists (N=2) should pass false — Embla loop peeks the other card on
+   * BOTH sides and looks like 3 copies. Use `wrap` instead for endless swap.
+   */
+  loop?: boolean;
+  /**
+   * When Embla loop is off: Prev on first → last, Next on last → first.
+   * Keeps endless navigation without a third visible clone peek.
+   */
+  wrap?: boolean;
+  /**
+   * One-shot mount/re-init snap index (e.g. middle clone of first source item
+   * so cover-flow has left+right neighbors). Default 0.
+   */
+  initialSlideIndex?: number;
 };
 
 export function useCenterFocusCarousel({
@@ -44,11 +60,16 @@ export function useCenterFocusCarousel({
   prefix = 'center-focus',
   visualMode = 'coverflow',
   slideBasisClassName = CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
+  loop = true,
+  wrap = false,
+  initialSlideIndex = 0,
 }: UseCenterFocusCarouselOptions) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const didCenterRef = useRef(false);
   const itemCountRef = useRef(itemCount);
+  const initialSlideIndexRef = useRef(initialSlideIndex);
+  initialSlideIndexRef.current = initialSlideIndex;
 
   // Rebuild each render so HMR picks up style tweaks (string template is cheap).
   const carouselCss = centerFocusCarouselCss(prefix, visualMode);
@@ -87,17 +108,31 @@ export function useCenterFocusCarousel({
     }
     if (didCenterRef.current) return;
     didCenterRef.current = true;
-    api.scrollTo(0, true);
-    setCurrent(0);
-  }, [api, enabled, itemCount]);
+    const target = Math.max(
+      0,
+      Math.min(itemCount - 1, initialSlideIndexRef.current),
+    );
+    api.scrollTo(target, true);
+    setCurrent(target);
+  }, [api, enabled, itemCount, initialSlideIndex]);
 
   const scrollPrev = useCallback(() => {
-    api?.scrollPrev();
-  }, [api]);
+    if (!api) return;
+    if (wrap && !loop && !api.canScrollPrev()) {
+      api.scrollTo(Math.max(0, itemCount - 1));
+      return;
+    }
+    api.scrollPrev();
+  }, [api, wrap, loop, itemCount]);
 
   const scrollNext = useCallback(() => {
-    api?.scrollNext();
-  }, [api]);
+    if (!api) return;
+    if (wrap && !loop && !api.canScrollNext()) {
+      api.scrollTo(0);
+      return;
+    }
+    api.scrollNext();
+  }, [api, wrap, loop]);
 
   const scrollToIndex = useCallback(
     (index: number) => {
@@ -150,7 +185,7 @@ export function useCenterFocusCarousel({
     handleCardClick,
     /** Inject once near the carousel root: `<style>{carouselCss}</style>` */
     carouselCss,
-    emblaOpts: CENTER_FOCUS_EMBLA_OPTS,
+    emblaOpts: loop ? CENTER_FOCUS_EMBLA_OPTS : { ...CENTER_FOCUS_EMBLA_OPTS, loop: false },
     contentClassName: CENTER_FOCUS_CONTENT_CLASS,
     itemBaseClass,
     cardClass,

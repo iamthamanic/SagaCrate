@@ -207,6 +207,41 @@ class CharacterService {
     invalidateCharacterListCaches();
   }
 
+  /** Owner-scoped clone with a fresh public id (DB trigger) and “(Kopie)” name. */
+  async duplicateCharacter(id: string): Promise<CharacterVm> {
+    const source = await supabaseCharacterRepository.getCharacterById(id);
+    const suffix = ' (Kopie)';
+    const maxBase = Math.max(1, 255 - suffix.length);
+    const name = `${source.name.trim().slice(0, maxBase) || 'Charakter'}${suffix}`;
+    const created = await supabaseCharacterRepository.createCharacter({
+      name,
+      description: source.description,
+      class: source.class,
+      race: source.race,
+      ruleset_key: source.rulesetKey,
+      dnd_background: source.dndBackground ?? null,
+      level: source.level,
+      sheet_status: source.sheetStatus,
+      background_story: source.backgroundStory,
+      notes: source.notes,
+      personality_traits: source.personalityTraits,
+      ideals: source.ideals,
+      bonds: source.bonds,
+      flaws: source.flaws,
+      appearance: source.appearance,
+      attributes: source.attributes,
+      skills: source.skills,
+      sagatree_profile: source.sagaTreeProfile,
+      abilities: source.abilities,
+      inventory: source.inventory,
+      inventory_v2: source.inventoryV2,
+      abstractResources: source.abstractResources,
+      portrait_url: source.portraitUrl,
+    });
+    invalidateCharacterListCaches();
+    return created;
+  }
+
   searchCharacters(query: string): Promise<CharacterVm[]> {
     return supabaseCharacterRepository.searchCharacters(query);
   }

@@ -54,6 +54,8 @@ export interface WorldProfileBinding {
 export interface CatalogDefinitionRecord {
   definition: ItemDefinition;
   status: CatalogDefinitionStatus;
+  /** Immutable public item id (IT-XXXXX) when persisted. */
+  publicId?: string | null;
   /** Set exactly for `world` definitions. */
   worldProfileId?: string | null;
   /** Set for `personal` definitions; the authenticated owner. */

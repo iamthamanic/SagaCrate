@@ -4,8 +4,20 @@
  * Statblock view, and Template/Compact/Controller actions.
  * Location: src/app/library/npc-creatures/NpcCreatureLibraryBrowser.tsx
  */
-import { useState } from 'react';
-import { Edit, Loader2, Plus, RefreshCw, Search, UserPlus, Users, Swords } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import {
+  Copy,
+  CopyPlus,
+  Edit,
+  Loader2,
+  Plus,
+  RefreshCw,
+  Search,
+  Trash2,
+  UserPlus,
+  Users,
+  Swords,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import {
   buildNpcCreatureIconPublicSrc,
@@ -19,11 +31,24 @@ import {
 } from '../../../domains/npc-creature';
 import type { ProjectSummaryVm } from '../../../domains/project/contracts/project.types';
 import { getAuthenticatedUserId } from '../../../lib/authenticatedUser';
+import {
+  archiveNpcCreatureDefinition,
+  duplicateNpcCreatureDefinition,
+} from '../../../infrastructure/npc-creature/npc-creature-service';
 import { setCharacterEditorBootstrap } from '../../character';
 import { Button } from '../../../shared/ui/button';
 import { Input } from '../../../shared/ui/input';
 import { EntityBrowser, type EntityBrowserRenderContext } from '../EntityBrowser';
 import { EntityBrowserCard } from '../EntityBrowserCard';
+import {
+  copyPublicIdMenuLabel,
+  EntityBrowserCornerMenuPortal,
+  EntityBrowserCornerMenuTrigger,
+  type EntityBrowserCornerMenuItem,
+} from '../EntityBrowserCornerMenu';
+import { copyLibraryField } from '../copyLibraryField';
+import { SAGATREE_NATIVE_CHIP } from '../libraryNativeBadge';
+import { useLibraryCornerMenu } from '../useLibraryCornerMenu';
 import { NpcCreatureAssignControllerDialog } from './NpcCreatureAssignControllerDialog';
 import { NpcCreatureSpawnInstanceDialog } from './NpcCreatureSpawnInstanceDialog';
 import { NpcCreatureLibraryFiltersBar } from './NpcCreatureLibraryFilters';
@@ -61,8 +86,11 @@ function toBrowserItems(
   }));
 }
 
-function buildMetaChips(definition: NpcCreatureDefinition, machtgradLabel: string): string[] {
-  const chips: string[] = [
+function buildMetaChips(
+  definition: NpcCreatureDefinition,
+  machtgradLabel: string,
+): Array<string | typeof SAGATREE_NATIVE_CHIP> {
+  const chips: Array<string | typeof SAGATREE_NATIVE_CHIP> = [
     formatNpcLevelMachtgradLine(definition.level, machtgradLabel),
   ];
   if (definition.sheetMode === 'compact') {
@@ -71,7 +99,12 @@ function buildMetaChips(definition: NpcCreatureDefinition, machtgradLabel: strin
     );
   }
   chips.push(NPC_CREATURE_SHEET_MODE_LABELS[definition.sheetMode]);
-  chips.push(LIBRARY_NPC_SOURCE_LABELS[librarySourceOf(definition)]);
+  const source = librarySourceOf(definition);
+  if (source === 'core' || source === 'pack') {
+    chips.unshift(SAGATREE_NATIVE_CHIP);
+  } else {
+    chips.push(LIBRARY_NPC_SOURCE_LABELS[source]);
+  }
   return chips;
 }
 
@@ -95,6 +128,72 @@ export function NpcCreatureLibraryBrowser({
     null,
   );
   const [spawnOpen, setSpawnOpen] = useState(false);
+  const {
+    anchor: npcMenuAnchor,
+    busyKey: npcMenuBusyKey,
+    setBusyKey: setNpcMenuBusyKey,
+    toggle: toggleCornerMenu,
+    close: closeCornerMenu,
+    isOpen: isNpcMenuOpen,
+  } = useLibraryCornerMenu();
+  const [npcMenuRecord, setNpcMenuRecord] = useState<NpcCreatureCatalogRecord | null>(
+    null,
+  );
+
+  const toggleNpcMenu = useCallback(
+    (record: NpcCreatureCatalogRecord, rect: DOMRect) => {
+      const menuKey = record.publicId || record.definition.id;
+      const wasOpen = isNpcMenuOpen(menuKey);
+      toggleCornerMenu(menuKey, rect);
+      setNpcMenuRecord(wasOpen ? null : record);
+    },
+    [isNpcMenuOpen, toggleCornerMenu],
+  );
+
+  const closeNpcMenu = useCallback(() => {
+    closeCornerMenu();
+    setNpcMenuRecord(null);
+  }, [closeCornerMenu]);
+
+  const handleDuplicateNpc = async (record: NpcCreatureCatalogRecord) => {
+    const menuKey = record.publicId || record.definition.id;
+    setNpcMenuBusyKey(menuKey);
+    try {
+      const created = await duplicateNpcCreatureDefinition(
+        record.definition.id,
+        record.definition,
+      );
+      toast.success(
+        `NPC dupliziert${created.publicId ? ` (${created.publicId})` : ''}`,
+      );
+      library.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Duplizieren fehlgeschlagen');
+    } finally {
+      setNpcMenuBusyKey(null);
+    }
+  };
+
+  const handleArchiveNpc = async (record: NpcCreatureCatalogRecord) => {
+    if (
+      !confirm(
+        `„${record.definition.name}“${record.publicId ? ` (${record.publicId})` : ''} archivieren?`,
+      )
+    ) {
+      return;
+    }
+    const menuKey = record.publicId || record.definition.id;
+    setNpcMenuBusyKey(menuKey);
+    try {
+      await archiveNpcCreatureDefinition(record.definition.id);
+      toast.success('NPC/Kreatur archiviert');
+      library.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Archivieren fehlgeschlagen');
+    } finally {
+      setNpcMenuBusyKey(null);
+    }
+  };
 
   const openStatblock = (definition: NpcCreatureDefinition) => {
     setViewDefinition(definition);
@@ -207,65 +306,17 @@ export function NpcCreatureLibraryBrowser({
     </div>
   );
 
-  const renderPromotionActions = (record: BrowserItem) => {
-    const { definition } = record;
-    const action = classifyNpcLibraryPromotionAction(definition);
-    if (action === 'template-to-character') {
-      return (
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
-          onClick={() => handleTemplateToCharacter(definition)}
-          data-npc-library-template-to-character
-        >
-          Charakter daraus erstellen
-        </Button>
-      );
-    }
-    if (action === 'compact-to-full') {
-      return (
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
-          onClick={() => void handleCompactToFull(record)}
-          data-npc-library-compact-to-full
-        >
-          Als vollständigen Charakter ausbauen
-        </Button>
-      );
-    }
-    if (action === 'controller-assign' && gmProjects.length > 0) {
-      return (
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
-          onClick={() => handleAssignController(definition)}
-          data-npc-library-assign-controller
-        >
-          <UserPlus className="mr-1 size-3" aria-hidden="true" />
-          Spieler zuweisen
-        </Button>
-      );
-    }
-    return null;
-  };
-
   const renderItem = (
     record: BrowserItem,
     context: EntityBrowserRenderContext,
   ) => {
     const { definition } = record;
     const derived = deriveNpcCreaturePower(definition);
-    const promotion = renderPromotionActions(record);
     const iconSrc = definition.iconKey
       ? buildNpcCreatureIconPublicSrc(definition.iconKey)
       : null;
+    const menuKey = record.publicId || definition.id;
+    const menuBusy = npcMenuBusyKey === menuKey;
     return (
       <EntityBrowserCard
         title={definition.name}
@@ -278,50 +329,47 @@ export function NpcCreatureLibraryBrowser({
         variant={context.variant}
         isCenter={context.isCenter}
         onOpen={
-          context.variant === 'list' || context.isCenter
+          context.variant === 'list' ||
+          context.variant === 'grid' ||
+          context.isCenter
             ? () => openStatblock(definition)
             : undefined
         }
+        cornerAction={
+          <EntityBrowserCornerMenuTrigger
+            compact={context.variant === 'list'}
+            busy={menuBusy}
+            label={`Aktionen für ${definition.name}`}
+            menuKey={menuKey}
+            open={isNpcMenuOpen(menuKey)}
+            onToggle={(rect) => toggleNpcMenu(record, rect)}
+            dataAttr="library-npc-menu"
+          />
+        }
         actions={
-          <div className="flex w-full flex-col gap-2">
-            <div className="flex w-full gap-2">
+          <div className="flex w-full gap-2">
+            <Button
+              variant="default"
+              size="sm"
+              className="h-11 min-h-11 flex-1 bg-cyan-600 text-white hover:bg-cyan-500"
+              onClick={() => openStatblock(definition)}
+              aria-label={`${definition.name} öffnen`}
+            >
+              <span className="text-xs">Öffnen</span>
+            </Button>
+            {definition.scope === 'personal' ? (
               <Button
                 variant="outline"
                 size="sm"
                 className="h-11 min-h-11 flex-1"
-                onClick={() => openStatblock(definition)}
-                aria-label={`${definition.name} öffnen`}
+                onClick={() => onEditNpc?.(definition.id)}
+                aria-label={`${definition.name} bearbeiten`}
+                data-npc-library-edit
               >
-                <span className="text-xs">Öffnen</span>
-              </Button>
-              {definition.scope === 'personal' ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-11 min-h-11 flex-1"
-                  onClick={() => onEditNpc?.(definition.id)}
-                  aria-label={`${definition.name} bearbeiten`}
-                  data-npc-library-edit
-                >
-                  <Edit className="mr-1 size-3" aria-hidden="true" />
-                  <span className="text-xs">Bearbeiten</span>
-                </Button>
-              ) : null}
-            </div>
-            {gmProjects.length > 0 ? (
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="h-auto min-h-11 w-full whitespace-normal py-1.5 text-center"
-                onClick={() => handleSpawnInstance(definition)}
-                data-npc-library-spawn-instance
-              >
-                <Swords className="mr-1 size-3" aria-hidden="true" />
-                Zum Abenteuer hinzufügen
+                <Edit className="mr-1 size-3" aria-hidden="true" />
+                <span className="text-xs">Bearbeiten</span>
               </Button>
             ) : null}
-            {promotion}
           </div>
         }
       />
@@ -435,6 +483,80 @@ export function NpcCreatureLibraryBrowser({
         definition={spawnDefinition}
         gmProjects={gmProjects}
       />
+
+      {npcMenuAnchor && npcMenuRecord ? (
+        <EntityBrowserCornerMenuPortal
+          anchor={npcMenuAnchor}
+          busy={npcMenuBusyKey === npcMenuAnchor.menuKey}
+          dataAttr="library-npc-menu"
+          contentDataAttr="library-npc-menu-content"
+          onClose={closeNpcMenu}
+          items={(() => {
+            const definition = npcMenuRecord.definition;
+            const promotion = classifyNpcLibraryPromotionAction(definition);
+            const items: EntityBrowserCornerMenuItem[] = [
+              {
+                id: 'copy-id',
+                label: copyPublicIdMenuLabel('NPC-ID', npcMenuRecord.publicId),
+                icon: <Copy className="size-4 shrink-0" aria-hidden="true" />,
+                disabled: !npcMenuRecord.publicId,
+                onSelect: () =>
+                  void copyLibraryField('NPC-ID', npcMenuRecord.publicId ?? ''),
+              },
+              {
+                id: 'duplicate',
+                label: 'NPC duplizieren',
+                icon: <CopyPlus className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => void handleDuplicateNpc(npcMenuRecord),
+              },
+            ];
+            if (gmProjects.length > 0) {
+              items.push({
+                id: 'spawn',
+                label: 'Zum Abenteuer hinzufügen',
+                icon: <Swords className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => handleSpawnInstance(definition),
+              });
+            }
+            if (promotion === 'template-to-character') {
+              items.push({
+                id: 'template-to-character',
+                label: 'Charakter daraus erstellen',
+                icon: <UserPlus className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => handleTemplateToCharacter(definition),
+              });
+            } else if (promotion === 'compact-to-full') {
+              items.push({
+                id: 'compact-to-full',
+                label: 'Als vollständigen Charakter ausbauen',
+                icon: <UserPlus className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => void handleCompactToFull(npcMenuRecord),
+              });
+            } else if (promotion === 'controller-assign' && gmProjects.length > 0) {
+              items.push({
+                id: 'assign-controller',
+                label: 'Spieler zuweisen',
+                icon: <UserPlus className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => handleAssignController(definition),
+              });
+            }
+            if (
+              definition.scope === 'personal' ||
+              definition.scope === 'world'
+            ) {
+              items.push({
+                id: 'archive',
+                label: 'NPC archivieren',
+                icon: <Trash2 className="size-4 shrink-0" aria-hidden="true" />,
+                destructive: true,
+                separatorBefore: true,
+                onSelect: () => void handleArchiveNpc(npcMenuRecord),
+              });
+            }
+            return items;
+          })()}
+        />
+      ) : null}
     </div>
   );
 }

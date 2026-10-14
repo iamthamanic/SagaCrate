@@ -18,13 +18,14 @@ import {
 } from '../../domains/look';
 
 export const LOOK_PROFILE_COLUMNS =
-  'id, owner_user_id, owner_scope, current_version, status, created_at, updated_at' as const;
+  'id, public_id, owner_user_id, owner_scope, current_version, status, created_at, updated_at' as const;
 
 export const LOOK_PROFILE_VERSION_COLUMNS =
   'profile_id, version, source, display_name, capabilities, execution_modes, look_references, created_at' as const;
 
 export type LookProfileDto = {
   id: string;
+  public_id?: string | null;
   owner_user_id: string;
   owner_scope: string;
   current_version: number;
@@ -65,6 +66,10 @@ export function mapLookProfileRecord(
 ): LookProfileRecord | null {
   const profile = parseLookProfile({
     id: profileRow.id,
+    publicId:
+      typeof profileRow.public_id === 'string' && profileRow.public_id.trim()
+        ? profileRow.public_id.trim().toUpperCase()
+        : undefined,
     currentVersion: profileRow.current_version,
     ownerScope: profileRow.owner_scope,
     ownerId: profileRow.owner_user_id,

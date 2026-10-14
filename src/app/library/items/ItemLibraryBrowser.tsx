@@ -1,36 +1,25 @@
 /**
  * ItemLibraryBrowser — public Library Items tab entry (#138).
- * Composes search, filters, toolbar, and list/grid results; navigates via
+ * Composes search, filters, and EntityBrowser (list/grid/carousel); navigates via
  * callbacks from App shell routing (single useAppLocation owner). No item
  * business rules beyond presentation wiring.
  * Location: src/app/library/items/ItemLibraryBrowser.tsx
  */
-import { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
-import { Input } from '../../../shared/ui/input';
-import { ItemLibraryFiltersBar } from './ItemLibraryFilters';
-import { ItemLibraryResults } from './ItemLibraryResults';
-import { ItemLibraryToolbar } from './ItemLibraryToolbar';
+import { useState } from 'react';
+import { Package, Plus, RefreshCw, Search } from 'lucide-react';
+import { toast } from 'sonner';
+import type { ItemDefinition } from '../../../domains/items';
 import {
-  ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY,
-  type ItemLibraryViewMode,
-} from './itemLibraryLabels';
+  archiveDefinition,
+  forkDefinition,
+} from '../../../infrastructure/inventory/item-catalog-service';
+import { Button } from '../../../shared/ui/button';
+import { Input } from '../../../shared/ui/input';
+import { EntityBrowser } from '../EntityBrowser';
+import { ItemLibraryCard } from './ItemLibraryCard';
+import { ItemLibraryFiltersBar } from './ItemLibraryFilters';
+import { ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY } from './itemLibraryLabels';
 import { useItemLibrary } from './useItemLibrary';
-
-function isViewMode(value: unknown): value is ItemLibraryViewMode {
-  return value === 'list' || value === 'grid';
-}
-
-function loadInitialViewMode(): ItemLibraryViewMode {
-  const fallback: ItemLibraryViewMode =
-    typeof window !== 'undefined' && window.innerWidth < 768 ? 'grid' : 'list';
-  try {
-    const saved = window.localStorage.getItem(ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY);
-    return isViewMode(saved) ? saved : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 export interface ItemLibraryBrowserProps {
   enabled?: boolean;
@@ -46,15 +35,39 @@ export function ItemLibraryBrowser({
   onOpenItem,
 }: ItemLibraryBrowserProps) {
   const library = useItemLibrary({ enabled });
-  const [viewMode, setViewMode] = useState<ItemLibraryViewMode>(() => loadInitialViewMode());
+  const [busyItemId, setBusyItemId] = useState<string | null>(null);
 
-  useEffect(() => {
+  const handleDuplicateItem = async (item: ItemDefinition) => {
+    setBusyItemId(item.id);
     try {
-      window.localStorage.setItem(ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY, viewMode);
-    } catch {
-      // Private mode: keep in-memory preference only.
+      const created = await forkDefinition(item.id, { scope: 'personal' });
+      toast.success(
+        `Item dupliziert${created.publicId ? ` (${created.publicId})` : ''}`,
+      );
+      library.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Duplizieren fehlgeschlagen');
+    } finally {
+      setBusyItemId(null);
     }
-  }, [viewMode]);
+  };
+
+  const handleArchiveItem = async (item: ItemDefinition) => {
+    if (!confirm(`„${item.name}“ archivieren?`)) return;
+    setBusyItemId(item.id);
+    try {
+      await archiveDefinition(item.id);
+      toast.success('Item archiviert');
+      library.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Archivieren fehlgeschlagen');
+    } finally {
+      setBusyItemId(null);
+    }
+  };
+
+  const showResults =
+    !library.isLoading && !library.error && library.filteredItems.length > 0;
 
   return (
     <div className="space-y-4" data-item-library-browser>
@@ -81,26 +94,107 @@ export function ItemLibraryBrowser({
         showReset={library.hasActiveFilters}
       />
 
-      <ItemLibraryToolbar
-        resultCount={library.filteredItems.length}
-        totalCount={library.items.length}
-        hasActiveFilters={library.hasActiveFilters}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        onCreate={onCreateItem}
-      />
+      {!showResults ? (
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            size="sm"
+            className="h-11 min-h-11"
+            onClick={onCreateItem}
+            data-item-library-create
+          >
+            <Plus className="mr-2 size-4" aria-hidden="true" />
+            Neues Item erstellen
+          </Button>
+        </div>
+      ) : null}
 
-      <ItemLibraryResults
-        items={library.filteredItems}
-        viewMode={viewMode}
-        isLoading={library.isLoading}
-        error={library.error}
-        hasActiveFilters={library.hasActiveFilters}
-        catalogEmpty={library.items.length === 0}
-        onOpenItem={onOpenItem}
-        onResetFilters={library.resetFilters}
-        onRetry={library.refresh}
-      />
+      {library.isLoading ? (
+        <div
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+          aria-busy="true"
+          aria-label="Gegenstände werden geladen"
+        >
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div
+              key={index}
+              className="aspect-[4/5] w-full animate-pulse rounded-lg border border-border bg-muted/40"
+              aria-hidden="true"
+            />
+          ))}
+        </div>
+      ) : null}
+
+      {library.error ? (
+        <div
+          className="flex flex-col items-center gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center"
+          role="alert"
+        >
+          <p className="text-sm text-destructive">{library.error}</p>
+          <Button type="button" variant="outline" size="sm" onClick={library.refresh}>
+            <RefreshCw className="mr-2 size-4" aria-hidden="true" />
+            Erneut versuchen
+          </Button>
+        </div>
+      ) : null}
+
+      {!library.isLoading && !library.error && library.filteredItems.length === 0 ? (
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed p-8 text-center">
+          <Package className="size-10 text-muted-foreground" aria-hidden="true" />
+          {library.hasActiveFilters ? (
+            <>
+              <p className="text-muted-foreground">Keine Gegenstände für diese Filter</p>
+              <Button type="button" variant="outline" size="sm" onClick={library.resetFilters}>
+                Filter zurücksetzen
+              </Button>
+            </>
+          ) : library.items.length === 0 ? (
+            <p className="text-muted-foreground">Noch keine Gegenstände verfügbar</p>
+          ) : (
+            <p className="text-muted-foreground">Keine Gegenstände gefunden</p>
+          )}
+        </div>
+      ) : null}
+
+      {showResults ? (
+        <EntityBrowser
+          storageKey={ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY}
+          items={library.filteredItems}
+          getId={(item) => item.id}
+          onOpenItem={(item) => onOpenItem(item.id)}
+          toolbarLeft={
+            library.hasActiveFilters
+              ? `${library.filteredItems.length} von ${library.items.length} Gegenständen`
+              : `${library.filteredItems.length} Gegenstand${library.filteredItems.length === 1 ? '' : 'e'}`
+          }
+          toolbarRight={
+            <Button
+              type="button"
+              size="sm"
+              className="h-8"
+              onClick={onCreateItem}
+              data-item-library-create
+            >
+              <Plus className="mr-1 size-3.5" aria-hidden="true" />
+              Neu
+            </Button>
+          }
+          renderItem={(item, context) => (
+            <ItemLibraryCard
+              definition={item}
+              viewMode={context.variant === 'list' ? 'list' : 'grid'}
+              onOpen={() => onOpenItem(item.id)}
+              busy={busyItemId === item.id}
+              onDuplicate={() => void handleDuplicateItem(item)}
+              onArchive={
+                item.scope === 'personal' || item.scope === 'world'
+                  ? () => void handleArchiveItem(item)
+                  : undefined
+              }
+            />
+          )}
+        />
+      ) : null}
     </div>
   );
 }

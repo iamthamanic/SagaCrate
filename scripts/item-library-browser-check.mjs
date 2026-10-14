@@ -78,20 +78,27 @@ section('5 · UI contract strings / a11y hooks');
 {
   const browser = read('src/app/library/items/ItemLibraryBrowser.tsx');
   const toolbar = read('src/app/library/items/ItemLibraryToolbar.tsx');
+  const toggle = read('src/app/library/LibraryViewModeToggle.tsx');
   const filters = read('src/app/library/items/ItemLibraryFilters.tsx');
   const results = read('src/app/library/items/ItemLibraryResults.tsx');
   const card = read('src/app/library/items/ItemLibraryCard.tsx');
 
-  check(/Neues Item erstellen/.test(toolbar), 'primary CTA copy');
+  check(
+    /Neues Item erstellen/.test(browser) || /Neues Item erstellen/.test(toolbar),
+    'primary CTA copy',
+  );
   check(/Gegenstände suchen/.test(browser), 'search placeholder/label');
   check(/Filter zurücksetzen/.test(filters) || /Filter zurücksetzen/.test(results), 'reset copy');
   check(/data-item-library-browser/.test(browser), 'browser data hook');
   check(/data-item-library-search/.test(browser), 'search data hook');
-  check(/data-item-library-create/.test(toolbar), 'create CTA data hook');
+  check(/data-item-library-create/.test(browser), 'create CTA data hook');
   check(/InventoryItemThumb/.test(card), 'card uses InventoryItemThumb');
-  check(/min-h-11/.test(toolbar), 'toolbar targets ≥44px');
-  check(/Listenansicht/.test(toolbar) && /Grid-Ansicht/.test(toolbar), 'list/grid labels');
-  check(!/Karussell/.test(browser + toolbar + results), 'no carousel for items catalog');
+  check(/min-h-11/.test(browser) || /min-h-11/.test(toolbar), 'toolbar targets ≥44px');
+  check(/EntityBrowser/.test(browser), 'browser uses shared EntityBrowser shell');
+  check(
+    /Listenansicht/.test(toggle) && /Grid-Ansicht/.test(toggle) && /Karussell-Ansicht/.test(toggle),
+    'shared list/grid/carousel view toggle',
+  );
   check(/Typ/.test(filters) && /Setting/.test(filters) && /Kontext/.test(filters), 'filter labels');
   check(/Quelle/.test(filters) && /Pack/.test(filters), 'source/pack filters');
 }

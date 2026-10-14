@@ -37,11 +37,33 @@ export function useCharacterSummaries(options: UseCharacterSummariesOptions = {}
     }
   }, [refresh]);
 
+  const duplicateCharacter = useCallback(async (id: string): Promise<CharacterSummaryVm | null> => {
+    try {
+      const created = await characterService.duplicateCharacter(id);
+      entityCache.invalidate(ENTITY_CACHE_KEYS.characterSummaries);
+      await refresh({ force: true });
+      return {
+        id: created.id,
+        publicId: created.publicId,
+        name: created.name,
+        class: created.class,
+        race: created.race,
+        level: created.level,
+        sheetStatus: created.sheetStatus,
+        portraitUrl: created.portraitUrl,
+      };
+    } catch (err) {
+      console.error('Error duplicating character:', err);
+      return null;
+    }
+  }, [refresh]);
+
   return {
     characters: items,
     isLoading,
     error,
     deleteCharacter,
+    duplicateCharacter,
     refreshCharacters: refresh,
   };
 }

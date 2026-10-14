@@ -13,6 +13,8 @@ export type CenterFocusSlideRole =
 
 /**
  * Relative role of `index` vs `current` with circular distance (for loop carousels).
+ * Pair (length === 2): only one neighbor role — circular ±1 is the same slide;
+ * prefer side-right so cover-flow never paints the other card on BOTH sides.
  */
 export function resolveCenterFocusSlideRole(
   index: number,
@@ -20,6 +22,11 @@ export function resolveCenterFocusSlideRole(
   length: number,
 ): CenterFocusSlideRole {
   if (length <= 0) return 'far';
+  if (length === 2) {
+    if (index === current) return 'center';
+    // One neighbor only (never both sides of the same other card).
+    return index < current ? 'side-left' : 'side-right';
+  }
   let delta = index - current;
   if (length > 1) {
     delta = ((delta % length) + length) % length;

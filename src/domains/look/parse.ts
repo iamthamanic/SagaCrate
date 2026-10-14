@@ -163,8 +163,18 @@ export function parseLookProfile(value: unknown): LookProfile | null {
   if (value.ownerId !== null && value.ownerId !== undefined && ownerId === null) {
     return null;
   }
+  const publicId =
+    value.publicId === undefined || value.publicId === null
+      ? undefined
+      : isNonEmptyString(value.publicId)
+        ? value.publicId.trim().toUpperCase()
+        : undefined;
+  if (value.publicId !== undefined && value.publicId !== null && publicId === undefined) {
+    return null;
+  }
   return {
     id: value.id,
+    ...(publicId ? { publicId } : {}),
     currentVersion: value.currentVersion,
     ownerScope,
     ownerId,

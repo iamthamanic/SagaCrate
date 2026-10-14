@@ -36,3 +36,11 @@ export function sagatreeNativePregenPortraitUrlByName(displayName: string): stri
   const id = PREGEN_ID_BY_DISPLAY_NAME[displayName.trim().toLowerCase()];
   return id ? SAGATREE_NATIVE_PREGEN_PORTRAIT_URLS[id] : null;
 }
+
+/** True when the display name matches a seeded Dornhain pregen. */
+export function isSagatreeNativePregenName(displayName: string): boolean {
+  return Object.prototype.hasOwnProperty.call(
+    PREGEN_ID_BY_DISPLAY_NAME,
+    displayName.trim().toLowerCase(),
+  );
+}

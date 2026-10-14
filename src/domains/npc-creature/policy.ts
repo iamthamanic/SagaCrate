@@ -13,6 +13,8 @@ export interface NpcCreatureCatalogRecord {
   status: NpcCreatureStatus;
   ownerUserId: string;
   worldProfileId: string | null;
+  /** Immutable public NPC/creature id (NPCC-XXXXX) when persisted. */
+  publicId?: string | null;
 }
 
 export interface NpcCreatureMutationContext {

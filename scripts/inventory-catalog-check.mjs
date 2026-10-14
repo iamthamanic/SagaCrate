@@ -562,7 +562,11 @@ section('9 · Persistenz- und Sicherheitsvertrag');
   const persistence = read('src/infrastructure/inventory/item-catalog.persistence.ts');
   requireMatch(persistence, /export function mapDefinitionRow/, 'Zeilen-Mapping');
   requireMatch(persistence, /parseItemDefinition/, 'Mapping nutzt die Domänen-Prüfung');
-  requireMatch(persistence, /const \{ id: _id, scope: _scope, \.\.\.payload \}/, 'Payload ohne Identitätsspalten');
+  requireMatch(
+    persistence,
+    /const \{ id: _id, scope: _scope, publicId: _publicId, \.\.\.payload \}/,
+    'Payload ohne Identitätsspalten',
+  );
 
   requireMatch(migration, /ON DELETE RESTRICT/, 'Weltprofil-FK verhindert Hard-Delete per Cascade');
   rejectMatch(migration, /world_profile_id UUID REFERENCES public\.world_profiles\(id\) ON DELETE CASCADE/, 'kein CASCADE auf Welt-Definitionen');

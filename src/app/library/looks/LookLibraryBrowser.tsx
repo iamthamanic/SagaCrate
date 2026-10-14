@@ -1,13 +1,17 @@
 /**
  * LookLibraryBrowser — Bibliothek › Looks tab (#343).
+ * Uses EntityBrowser for Liste / Grid / Karussell like other Library tabs.
  * Location: src/app/library/looks/LookLibraryBrowser.tsx
  */
 import { Loader2, Plus, Search } from 'lucide-react';
 import { Button } from '../../../shared/ui/button';
 import { Input } from '../../../shared/ui/input';
+import { EntityBrowser } from '../EntityBrowser';
 import { LookLibraryCard } from './LookLibraryCard';
 import { useLookLibrary } from './useLookLibrary';
 import { toast } from 'sonner';
+
+const LOOK_LIBRARY_VIEW_MODE_STORAGE_KEY = 'sagatree_library_looks_view_mode';
 
 export interface LookLibraryBrowserProps {
   enabled?: boolean;
@@ -38,6 +42,9 @@ export function LookLibraryBrowser({
     else toast.error('Archivieren fehlgeschlagen');
   };
 
+  const showResults =
+    !library.isLoading && !library.error && library.filteredLooks.length > 0;
+
   return (
     <div className="space-y-4" data-look-library-browser>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -56,7 +63,7 @@ export function LookLibraryBrowser({
             data-look-library-search
           />
         </div>
-        {canMutate ? (
+        {canMutate && !showResults ? (
           <Button type="button" onClick={onCreateLook} data-look-create>
             <Plus className="mr-2 size-4" />
             Look erstellen
@@ -107,21 +114,35 @@ export function LookLibraryBrowser({
         </div>
       ) : null}
 
-      {!library.isLoading && library.filteredLooks.length > 0 ? (
-        <div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          data-look-library-success
-        >
-          {library.filteredLooks.map((look) => (
-            <LookLibraryCard
-              key={look.profile.id}
-              look={look}
-              canMutate={canMutate}
-              onEdit={onEditLook}
-              onDuplicate={handleDuplicate}
-              onArchive={handleArchive}
-            />
-          ))}
+      {showResults ? (
+        <div data-look-library-success>
+          <EntityBrowser
+            storageKey={LOOK_LIBRARY_VIEW_MODE_STORAGE_KEY}
+            items={library.filteredLooks.map((look) => ({
+              ...look,
+              id: look.profile.id,
+            }))}
+            getId={(look) => look.profile.id}
+            onOpenItem={(look) => onEditLook(look.profile.id)}
+            toolbarLeft={`${library.filteredLooks.length} Look${library.filteredLooks.length === 1 ? '' : 's'}`}
+            toolbarRight={
+              canMutate ? (
+                <Button type="button" size="sm" className="h-8" onClick={onCreateLook} data-look-create>
+                  <Plus className="mr-1 size-3.5" />
+                  Neu
+                </Button>
+              ) : null
+            }
+            renderItem={(look) => (
+              <LookLibraryCard
+                look={look}
+                canMutate={canMutate}
+                onEdit={onEditLook}
+                onDuplicate={handleDuplicate}
+                onArchive={handleArchive}
+              />
+            )}
+          />
         </div>
       ) : null}
     </div>

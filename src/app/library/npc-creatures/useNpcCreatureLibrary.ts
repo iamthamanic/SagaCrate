@@ -14,6 +14,7 @@ import {
   listCoreNpcCreatureDefinitions,
   type NpcCreatureLibraryFilters,
 } from '../../../domains/npc-creature';
+import { deriveStablePublicResourceId } from '../../../domains/resource-id';
 import { listNpcCreatureDefinitions } from '../../../infrastructure/npc-creature/npc-creature-service';
 
 export interface UseNpcCreatureLibraryOptions {
@@ -40,6 +41,7 @@ function toLocalRecord(definition: NpcCreatureDefinition): NpcCreatureCatalogRec
     status: 'active',
     ownerUserId: '',
     worldProfileId: null,
+    publicId: deriveStablePublicResourceId('npcCreature', definition.id),
   };
 }
 

@@ -36,6 +36,12 @@ import type {
 export interface ItemDefinition extends ItemMechanics {
   /** Stable catalog id, e.g. `core:shortsword`. */
   id: string;
+  /**
+   * Immutable public item id (IT-XXXXX). Persisted Personal/World rows get it
+   * from the DB trigger; Core/builtin Library rows may carry a derived stable id.
+   * Never stored inside the JSON payload.
+   */
+  publicId?: string;
   scope: ItemDefinitionScope;
   name: string;
   description: string;

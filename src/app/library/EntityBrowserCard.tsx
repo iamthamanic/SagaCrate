@@ -5,7 +5,7 @@
  * Thumbnail/portrait click opens a reusable image lightbox when an image URL is present.
  * Location: src/app/library/EntityBrowserCard.tsx
  */
-import { useState, type MouseEvent } from 'react';
+import { useState, type MouseEvent, type ReactNode, type SyntheticEvent } from 'react';
 import { ImageOff } from 'lucide-react';
 import { Badge } from '../../shared/ui/badge';
 import { Card, CardContent } from '../../shared/ui/card';
@@ -15,10 +15,22 @@ import {
 } from '../../shared/ui';
 import { cn } from '../../shared/ui/utils';
 
+/** Tone for status/origin chips (Native gold, Aktiv green, …). */
+export type EntityBrowserChipTone = 'default' | 'native' | 'success' | 'muted';
+
+export type EntityBrowserChip =
+  | string
+  | {
+      label: string;
+      tone?: EntityBrowserChipTone;
+    };
+
 type EntityBrowserCardProps = {
   title: string;
   meta?: string;
-  metaChips?: readonly string[];
+  metaChips?: readonly EntityBrowserChip[];
+  /** Optional row under chips (e.g. copyable SA- / Beitrittscode). */
+  metaExtra?: ReactNode;
   /** Optional status badges (e.g. incomplete character draft). */
   badges?: readonly { label: string; variant?: 'destructive' | 'secondary' | 'outline' }[];
   imageUrl?: string;
@@ -35,12 +47,40 @@ type EntityBrowserCardProps = {
   imageAspect?: 'square' | 'landscape';
   /** Click image to enlarge. Default true when `imageUrl` is set. */
   imageEnlargeable?: boolean;
-  variant: 'carousel' | 'list';
+  /** `grid` uses the same vertical card body as carousel (square previews). */
+  variant: 'carousel' | 'list' | 'grid';
   /** Marks the carousel center card with a subtle primary border for focus feedback. */
   isCenter?: boolean;
   actions?: React.ReactNode;
+  /**
+   * Top-right overlay (e.g. ⋮ menu). List: card corner. Carousel: on cover/portrait.
+   * Wrapper stops click/pointerdown so Embla + card onOpen do not steal the menu.
+   */
+  cornerAction?: React.ReactNode;
   onOpen?: () => void;
 };
+
+function stopCardChromeEvents(event: SyntheticEvent) {
+  event.stopPropagation();
+}
+
+function normalizeChip(chip: EntityBrowserChip): { label: string; tone: EntityBrowserChipTone } {
+  if (typeof chip === 'string') return { label: chip, tone: 'default' };
+  return { label: chip.label, tone: chip.tone ?? 'default' };
+}
+
+function chipToneClass(tone: EntityBrowserChipTone): string {
+  if (tone === 'native') {
+    return 'border-amber-500/50 bg-amber-500/15 text-amber-700 dark:text-amber-300';
+  }
+  if (tone === 'success') {
+    return 'border-emerald-500/45 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300';
+  }
+  if (tone === 'muted') {
+    return 'border-border bg-muted/40 text-muted-foreground';
+  }
+  return 'border-border bg-muted/60 text-muted-foreground';
+}
 
 const FALLBACK_COLOR_CLASSES: readonly string[] = [
   'bg-primary/15 text-primary',
@@ -246,10 +286,39 @@ function EntityPortraitStage({
   );
 }
 
+function MetaChipRow({
+  chips,
+  size,
+}: {
+  chips: readonly EntityBrowserChip[];
+  size: 'sm' | 'md';
+}) {
+  return (
+    <div className={cn('flex flex-wrap gap-1', size === 'md' && 'gap-1.5')}>
+      {chips.map((raw) => {
+        const chip = normalizeChip(raw);
+        return (
+          <span
+            key={`${chip.tone}:${chip.label}`}
+            className={cn(
+              'rounded-full border font-medium',
+              size === 'md' ? 'px-2 py-0.5 text-[11px]' : 'px-1.5 py-0.5 text-[10px]',
+              chipToneClass(chip.tone),
+            )}
+          >
+            {chip.label}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export function EntityBrowserCard({
   title,
   meta,
   metaChips,
+  metaExtra,
   badges,
   imageUrl,
   imageAlt,
@@ -261,6 +330,7 @@ export function EntityBrowserCard({
   variant,
   isCenter = false,
   actions,
+  cornerAction,
   onOpen,
 }: EntityBrowserCardProps) {
   const lightbox = useImageLightbox();
@@ -283,6 +353,18 @@ export function EntityBrowserCard({
     />
   );
 
+  const cornerChrome = cornerAction ? (
+    <div
+      className="absolute right-1.5 top-1.5 z-40"
+      data-entity-browser-corner-action
+      onClick={stopCardChromeEvents}
+      onPointerDown={stopCardChromeEvents}
+      onTouchStart={stopCardChromeEvents}
+    >
+      {cornerAction}
+    </div>
+  ) : null;
+
   if (variant === 'list') {
     const thumb = (
       <EntityThumbnail
@@ -300,7 +382,7 @@ export function EntityBrowserCard({
       <>
         <Card
           className={cn(
-            'group/card overflow-hidden transition-colors hover:border-primary/40',
+            'group/card relative overflow-hidden transition-colors hover:border-primary/40',
             onOpen && 'cursor-pointer',
           )}
           onClick={onOpen}
@@ -318,24 +400,40 @@ export function EntityBrowserCard({
               </div>
               {meta && <p className="truncate text-xs text-muted-foreground">{meta}</p>}
               {metaChips && metaChips.length > 0 && (
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {metaChips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border bg-muted/60 px-2 py-0.5 text-[11px] text-muted-foreground"
-                    >
-                      {chip}
-                    </span>
-                  ))}
+                <div className="mt-1.5">
+                  <MetaChipRow chips={metaChips} size="md" />
                 </div>
               )}
+              {metaExtra ? (
+                <div className="mt-1.5" onClick={stopCardChromeEvents}>
+                  {metaExtra}
+                </div>
+              ) : null}
             </div>
-            {actions && (
+            {(cornerAction || actions) && (
               <div
-                className="flex max-w-[min(100%,28rem)] flex-shrink-0 flex-wrap items-center justify-end gap-2"
-                onClick={(event) => event.stopPropagation()}
+                className="flex shrink-0 flex-col items-end justify-between gap-2 self-stretch"
+                onClick={stopCardChromeEvents}
+                onPointerDown={stopCardChromeEvents}
+                onTouchStart={stopCardChromeEvents}
               >
-                {actions}
+                {cornerAction ? (
+                  <div
+                    data-entity-browser-corner-action
+                    onClick={stopCardChromeEvents}
+                    onPointerDown={stopCardChromeEvents}
+                    onTouchStart={stopCardChromeEvents}
+                  >
+                    {cornerAction}
+                  </div>
+                ) : (
+                  <span className="size-8 shrink-0" aria-hidden="true" />
+                )}
+                {actions ? (
+                  <div className="flex w-full min-w-[6.5rem] flex-col items-stretch justify-end">
+                    {actions}
+                  </div>
+                ) : null}
               </div>
             )}
           </div>
@@ -350,25 +448,28 @@ export function EntityBrowserCard({
       <Card
         className={cn(
           // gap-0: no empty band between stage and text; card height = content height.
-          'w-full gap-0 overflow-hidden transition-all duration-300',
+          'relative w-full gap-0 overflow-hidden transition-all duration-300',
           isCenter
             ? 'border-primary/40 shadow-none'
             : 'shadow-md hover:border-primary/40',
           onOpen && 'cursor-pointer',
         )}
         onClick={onOpen}
-        data-entity-browser-card="carousel"
+        data-entity-browser-card={variant === 'grid' ? 'grid' : 'carousel'}
       >
-        <EntityPortraitStage
-          imageUrl={imageUrl}
-          imageAlt={imageAlt}
-          imageFallback={imageFallback}
-          imageObjectFit={imageObjectFit}
-          imageObjectPosition={imageObjectPosition}
-          imageAspect={imageAspect}
-          enlargeable={enlargeable}
-          onEnlarge={openEnlarge}
-        />
+        <div className="relative">
+          <EntityPortraitStage
+            imageUrl={imageUrl}
+            imageAlt={imageAlt}
+            imageFallback={imageFallback}
+            imageObjectFit={imageObjectFit}
+            imageObjectPosition={imageObjectPosition}
+            imageAspect={imageAspect}
+            enlargeable={enlargeable}
+            onEnlarge={openEnlarge}
+          />
+          {cornerChrome}
+        </div>
         <CardContent className="space-y-2.5 p-3 [&:last-child]:pb-3">
           <div className="min-w-0 space-y-0.5">
             <div className="flex flex-wrap items-center gap-1.5">
@@ -381,22 +482,20 @@ export function EntityBrowserCard({
             </div>
             {meta && <p className="truncate text-[11px] text-muted-foreground">{meta}</p>}
             {metaChips && metaChips.length > 0 && (
-              <div className="mt-1.5 flex flex-wrap gap-1">
-                {metaChips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border bg-muted/60 px-1.5 py-0.5 text-[10px] text-muted-foreground"
-                  >
-                    {chip}
-                  </span>
-                ))}
+              <div className="mt-1.5">
+                <MetaChipRow chips={metaChips} size="sm" />
               </div>
             )}
+            {metaExtra ? (
+              <div className="mt-1.5" onClick={stopCardChromeEvents}>
+                {metaExtra}
+              </div>
+            ) : null}
           </div>
           {actions && (
             <div
-              className="flex w-full flex-wrap gap-1.5"
-              onClick={(event) => event.stopPropagation()}
+              className="flex w-full flex-wrap items-stretch gap-1.5"
+              onClick={stopCardChromeEvents}
             >
               {actions}
             </div>

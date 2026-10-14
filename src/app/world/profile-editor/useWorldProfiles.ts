@@ -23,6 +23,7 @@ interface UseWorldProfilesReturn {
   error: string | null;
   createWorld: (payload: CreateWorldProfileDto) => Promise<WorldProfileVm | null>;
   updateWorld: (id: string, payload: UpdateWorldProfileDto) => Promise<WorldProfileVm | null>;
+  duplicateWorld: (id: string) => Promise<WorldProfileVm | null>;
   deleteWorld: (id: string) => Promise<boolean>;
   refreshWorlds: () => Promise<void>;
 }
@@ -84,6 +85,22 @@ export function useWorldProfiles(options: UseWorldProfilesOptions = {}): UseWorl
     }
   }, [refresh, user]);
 
+  const duplicateWorld = useCallback(async (id: string): Promise<WorldProfileVm | null> => {
+    if (!user) {
+      return null;
+    }
+
+    try {
+      const world = await worldProfileService.duplicateWorldProfile(user.id, id);
+      entityCache.invalidate(ENTITY_CACHE_KEYS.worldSummaries);
+      await refresh();
+      return world;
+    } catch (err) {
+      console.error('Error duplicating world:', err);
+      return null;
+    }
+  }, [refresh, user]);
+
   const deleteWorld = useCallback(async (id: string): Promise<boolean> => {
     if (!user) {
       return false;
@@ -106,6 +123,7 @@ export function useWorldProfiles(options: UseWorldProfilesOptions = {}): UseWorl
     error,
     createWorld,
     updateWorld,
+    duplicateWorld,
     deleteWorld,
     refreshWorlds: refresh,
   };

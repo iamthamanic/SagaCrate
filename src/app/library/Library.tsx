@@ -1,8 +1,31 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Button } from '../../shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui/tabs';
 import { Input } from '../../shared/ui/input';
-import { Plus, Search, User, BookOpen, Edit, Trash2, Loader2, Globe2, Package, Users, Palette } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../../shared/ui/dialog';
+import {
+  Plus,
+  Search,
+  User,
+  BookOpen,
+  Edit,
+  Trash2,
+  Loader2,
+  Globe2,
+  Package,
+  Users,
+  Palette,
+  Copy,
+  CopyPlus,
+  RotateCcw,
+} from 'lucide-react';
 import {
   useCharacterSummaries,
   CreateCharacterEntryDialog,
@@ -11,7 +34,11 @@ import {
 } from '../character';
 import type { CharacterSummaryVm } from '../../domains/character';
 import { resolveAvatarSurfaceView } from '../../domains/character/avatar';
-import { sagatreeNativePregenPortraitUrlByName } from '../../domains/character/use-cases/sagatree-native-pregen-portraits';
+import {
+  isSagatreeNativePregenName,
+  sagatreeNativePregenPortraitUrlByName,
+} from '../../domains/character/use-cases/sagatree-native-pregen-portraits';
+import { SAGATREE_NATIVE_CHIP } from './libraryNativeBadge';
 import {
   sagatreeNativeSagaCoverUrl,
   sagatreeNativeSagaCoverUrlByTitle,
@@ -22,6 +49,7 @@ import {
 } from '../../domains/world/use-cases/sagatree-native-world-covers';
 import { useProjectSummaries } from '../project';
 import type { ProjectSummaryVm } from '../../domains/project/contracts/project.types';
+import { projectService } from '../../infrastructure/project/project-service';
 import { sagaDefinitionService } from '../../infrastructure/saga/saga-definition-service';
 import { useAuth } from '../../lib/auth-context';
 import {
@@ -33,7 +61,14 @@ import {
   type LibraryTabId,
 } from '../shell';
 import { EntityBrowser, type EntityBrowserRenderContext } from './EntityBrowser';
-import { EntityBrowserCard } from './EntityBrowserCard';
+import { EntityBrowserCard, type EntityBrowserChip } from './EntityBrowserCard';
+import {
+  copyPublicIdMenuLabel,
+  EntityBrowserCornerMenuPortal,
+  EntityBrowserCornerMenuTrigger,
+  type EntityBrowserCornerMenuAnchor,
+  type EntityBrowserCornerMenuItem,
+} from './EntityBrowserCornerMenu';
 import { getSpeciesDevelopmentMode } from '../../domains/world/worldModuleRegistry';
 import { useWorldProfiles } from '../world';
 import type { CreateWorldProfileDto, WorldProfileVm } from '../../domains/world/contracts/world.types';
@@ -104,6 +139,45 @@ const PROJECT_STATUS_LABELS: Record<ProjectSummaryVm['status'], string> = {
   archived: 'Archiviert',
 };
 
+async function copyTextToClipboard(value: string): Promise<boolean> {
+  const text = value.trim();
+  if (!text) return false;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+type LibraryEntityMenuState =
+  | {
+      kind: 'saga';
+      entity: ProjectSummaryVm;
+      anchor: EntityBrowserCornerMenuAnchor;
+    }
+  | {
+      kind: 'world';
+      entity: WorldProfileVm;
+      anchor: EntityBrowserCornerMenuAnchor;
+    }
+  | {
+      kind: 'character';
+      entity: CharacterSummaryVm;
+      anchor: EntityBrowserCornerMenuAnchor;
+    };
+
 export function Library({
   onNavigate,
   onNavigateToItem,
@@ -125,7 +199,14 @@ export function Library({
   const [editingWorld, setEditingWorld] = useState<WorldProfileVm | null>(null);
   const { user } = useAuth();
 
-  const { characters, isLoading, error, deleteCharacter, refreshCharacters } = useCharacterSummaries({
+  const {
+    characters,
+    isLoading,
+    error,
+    deleteCharacter,
+    duplicateCharacter,
+    refreshCharacters,
+  } = useCharacterSummaries({
     enabled: visitedTabs.has('characters'),
   });
   const {
@@ -136,13 +217,18 @@ export function Library({
   } = useProjectSummaries({
     enabled: visitedTabs.has('adventures') || visitedTabs.has('npcs'),
   });
-  const [creatingGroupFor, setCreatingGroupFor] = useState<string | null>(null);
+  const [sagaMenuBusyId, setSagaMenuBusyId] = useState<string | null>(null);
+  const [worldMenuBusyId, setWorldMenuBusyId] = useState<string | null>(null);
+  const [characterMenuBusyId, setCharacterMenuBusyId] = useState<string | null>(null);
+  const [duplicateTarget, setDuplicateTarget] = useState<ProjectSummaryVm | null>(null);
+  const [entityMenu, setEntityMenu] = useState<LibraryEntityMenuState | null>(null);
   const {
     worlds,
     isLoading: worldsLoading,
     error: worldsError,
     createWorld,
     updateWorld,
+    duplicateWorld,
     deleteWorld,
   } = useWorldProfiles({ enabled: visitedTabs.has('worlds') });
   const itemsTabVisited = visitedTabs.has('items');
@@ -219,16 +305,35 @@ export function Library({
     console.warn('[library] onNavigateToLookEdit is not wired; cannot open look', lookId);
   };
 
-  const handleDeleteCharacter = async (id: string, name: string) => {
-    if (!confirm(`Möchtest du "${name}" wirklich löschen?`)) {
+  const handleDeleteCharacter = async (char: CharacterSummaryVm) => {
+    const label = char.publicId ? `„${char.name}“ (${char.publicId})` : `„${char.name}“`;
+    if (!confirm(`Möchtest du ${label} wirklich löschen?`)) {
       return;
     }
 
-    const success = await deleteCharacter(id);
-    if (success) {
-      toast.success('Charakter gelöscht');
-    } else {
-      toast.error('Fehler beim Löschen');
+    setCharacterMenuBusyId(char.id);
+    try {
+      const success = await deleteCharacter(char.id);
+      if (success) toast.success('Charakter gelöscht');
+      else toast.error('Fehler beim Löschen');
+    } finally {
+      setCharacterMenuBusyId(null);
+    }
+  };
+
+  const handleDuplicateCharacter = async (char: CharacterSummaryVm) => {
+    setCharacterMenuBusyId(char.id);
+    try {
+      const created = await duplicateCharacter(char.id);
+      if (created) {
+        toast.success(
+          `Charakter dupliziert${created.publicId ? ` (${created.publicId})` : ''}`,
+        );
+      } else {
+        toast.error('Charakter konnte nicht dupliziert werden');
+      }
+    } finally {
+      setCharacterMenuBusyId(null);
     }
   };
 
@@ -258,15 +363,34 @@ export function Library({
   };
 
   const handleDeleteWorld = async (world: WorldProfileVm) => {
-    if (!confirm(`Möchtest du die Welt "${world.name}" wirklich löschen?`)) {
+    if (!confirm(`Möchtest du die Welt „${world.name}“ (${world.publicId || world.id}) wirklich löschen?`)) {
       return;
     }
 
-    const success = await deleteWorld(world.id);
-    if (success) {
-      toast.success('Welt gelöscht');
-    } else {
-      toast.error('Welt konnte nicht gelöscht werden');
+    setWorldMenuBusyId(world.id);
+    try {
+      const success = await deleteWorld(world.id);
+      if (success) {
+        toast.success('Welt gelöscht');
+      } else {
+        toast.error('Welt konnte nicht gelöscht werden');
+      }
+    } finally {
+      setWorldMenuBusyId(null);
+    }
+  };
+
+  const handleDuplicateWorld = async (world: WorldProfileVm) => {
+    setWorldMenuBusyId(world.id);
+    try {
+      const created = await duplicateWorld(world.id);
+      if (created) {
+        toast.success(`Welt dupliziert${created.publicId ? ` (${created.publicId})` : ''}`);
+      } else {
+        toast.error('Welt konnte nicht dupliziert werden');
+      }
+    } finally {
+      setWorldMenuBusyId(null);
     }
   };
 
@@ -288,64 +412,180 @@ export function Library({
     return counts;
   })();
 
-  const createNewGroupRun = async (project: ProjectSummaryVm) => {
+  const duplicateSagaRun = async (
+    project: ProjectSummaryVm,
+    mode: 'fresh' | 'with_progress',
+  ) => {
     if (!project.sagaId || !project.sagaVersionId) {
       toast.error('Diese Saga hat keine Fassung');
       return;
     }
     if (project.gmUserId !== user?.id) {
-      toast.error('Nur die Spielleitung kann eine neue Gruppe starten');
+      toast.error('Nur die Spielleitung kann eine Saga duplizieren');
       return;
     }
-    setCreatingGroupFor(project.id);
+    setSagaMenuBusyId(project.id);
     try {
-      const created = await sagaDefinitionService.createProjectFromVersion({
-        sagaId: project.sagaId,
-        versionId: project.sagaVersionId,
-        name: `${project.sagaTitle ?? project.name} · Gruppe`,
+      const created = await sagaDefinitionService.duplicatePlaythrough({
+        projectId: project.id,
+        mode,
       });
+      setDuplicateTarget(null);
       await refreshProjects({ force: true });
-      toast.success('Neue Gruppe erstellt');
+      toast.success(
+        mode === 'with_progress'
+          ? 'Saga mit aktuellem Stand dupliziert'
+          : 'Saga vom Anfang dupliziert',
+      );
       if (created.publicId) {
         onNavigate(pathForSagaSection(created.publicId, 'overview'));
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Gruppe fehlgeschlagen');
+      toast.error(err instanceof Error ? err.message : 'Duplizieren fehlgeschlagen');
     } finally {
-      setCreatingGroupFor(null);
+      setSagaMenuBusyId(null);
     }
   };
+
+  const deleteSagaRun = async (project: ProjectSummaryVm) => {
+    if (project.gmUserId !== user?.id) {
+      toast.error('Nur die Spielleitung kann eine Saga löschen');
+      return;
+    }
+    const title = project.sagaTitle?.trim() || project.name;
+    if (!confirm(`Möchtest du die Saga „${title}“ (${project.publicId}) wirklich löschen?`)) {
+      return;
+    }
+    setSagaMenuBusyId(project.id);
+    try {
+      await projectService.deleteProject(project.id);
+      await refreshProjects({ force: true });
+      toast.success('Saga gelöscht');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Löschen fehlgeschlagen');
+    } finally {
+      setSagaMenuBusyId(null);
+    }
+  };
+
+  const copyField = async (label: string, value: string) => {
+    const ok = await copyTextToClipboard(value);
+    if (ok) toast.success(`${label} kopiert`);
+    else toast.error(`${label} konnte nicht kopiert werden`);
+  };
+
+  const closeEntityMenu = useCallback(() => {
+    setEntityMenu(null);
+  }, []);
+
+  const toggleSagaMenu = useCallback((project: ProjectSummaryVm, rect: DOMRect) => {
+    setEntityMenu((prev) => {
+      if (prev?.kind === 'saga' && prev.entity.publicId === project.publicId) return null;
+      return {
+        kind: 'saga',
+        entity: project,
+        anchor: {
+          menuKey: project.publicId,
+          top: rect.bottom + 4,
+          left: rect.right - 224,
+        },
+      };
+    });
+  }, []);
+
+  const toggleWorldMenu = useCallback((world: WorldProfileVm, rect: DOMRect) => {
+    setEntityMenu((prev) => {
+      if (prev?.kind === 'world' && prev.entity.id === world.id) return null;
+      return {
+        kind: 'world',
+        entity: world,
+        anchor: {
+          menuKey: world.publicId || world.id,
+          top: rect.bottom + 4,
+          left: rect.right - 224,
+        },
+      };
+    });
+  }, []);
+
+  const toggleCharacterMenu = useCallback((char: CharacterSummaryVm, rect: DOMRect) => {
+    setEntityMenu((prev) => {
+      if (prev?.kind === 'character' && prev.entity.id === char.id) return null;
+      return {
+        kind: 'character',
+        entity: char,
+        anchor: {
+          menuKey: char.publicId || char.id,
+          top: rect.bottom + 4,
+          left: rect.right - 224,
+        },
+      };
+    });
+  }, []);
 
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredCharacters = characters.filter(char =>
     char.name.toLowerCase().includes(normalizedSearch) ||
     char.class.toLowerCase().includes(normalizedSearch) ||
-    char.race.toLowerCase().includes(normalizedSearch)
+    char.race.toLowerCase().includes(normalizedSearch) ||
+    (char.publicId ?? '').toLowerCase().includes(normalizedSearch)
   );
   const filteredWorlds = worlds.filter((world) =>
     world.name.toLowerCase().includes(normalizedSearch) ||
-    world.description.toLowerCase().includes(normalizedSearch)
+    world.description.toLowerCase().includes(normalizedSearch) ||
+    world.publicId.toLowerCase().includes(normalizedSearch)
   );
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(normalizedSearch) ||
     (project.description ?? '').toLowerCase().includes(normalizedSearch) ||
-    project.code.toLowerCase().includes(normalizedSearch)
+    project.code.toLowerCase().includes(normalizedSearch) ||
+    project.publicId.toLowerCase().includes(normalizedSearch) ||
+    (project.sagaTitle ?? '').toLowerCase().includes(normalizedSearch)
   );
 
   const renderProject = (project: ProjectSummaryVm, context: EntityBrowserRenderContext) => {
     const storyTitle = project.sagaTitle?.trim() || project.name;
     const runCount = project.sagaId ? (runCountBySagaId.get(project.sagaId) ?? 1) : 1;
     const showGroupLabel = runCount > 1;
-    const chips = [
-      PROJECT_STATUS_LABELS[project.status],
-      `${project.memberCount} Mitglied${project.memberCount !== 1 ? 'er' : ''}`,
-      `Code: ${project.code}`,
-    ];
-    if (project.sagaOrigin === 'native') chips.unshift('Native');
-    if (showGroupLabel) chips.push(`Gruppe: ${project.name}`);
+    const isGm = Boolean(user?.id) && project.gmUserId === user?.id;
+    const menuBusy = sagaMenuBusyId === project.id;
+    const canDuplicate = isGm && Boolean(project.sagaId && project.sagaVersionId);
+
+    const chips: EntityBrowserChip[] = [];
+    if (project.sagaOrigin === 'native') {
+      chips.push(SAGATREE_NATIVE_CHIP);
+    }
+    chips.push({
+      label: PROJECT_STATUS_LABELS[project.status],
+      tone: project.status === 'active' ? 'success' : 'default',
+    });
+    chips.push({
+      label: `${project.memberCount} Mitglied${project.memberCount !== 1 ? 'er' : ''}`,
+      tone: 'muted',
+    });
+    if (showGroupLabel) {
+      chips.push({ label: `Gruppe: ${project.name}`, tone: 'muted' });
+    }
+
     const coverUrl =
       (project.sagaSlug ? sagatreeNativeSagaCoverUrl(project.sagaSlug) : null)
       ?? sagatreeNativeSagaCoverUrlByTitle(storyTitle);
+
+    const stopMenuBubble = (event: { stopPropagation: () => void }) => {
+      event.stopPropagation();
+    };
+
+    const sagaCornerMenu = (
+      <EntityBrowserCornerMenuTrigger
+        compact={context.variant === 'list'}
+        busy={menuBusy}
+        label={`Aktionen für ${storyTitle}`}
+        menuKey={project.publicId}
+        open={entityMenu?.kind === 'saga' && entityMenu.entity.publicId === project.publicId}
+        onToggle={(rect) => toggleSagaMenu(project, rect)}
+        dataAttr="library-saga-menu"
+      />
+    );
 
     return (
       <EntityBrowserCard
@@ -358,37 +598,47 @@ export function Library({
         imageObjectFit="cover"
         imageObjectPosition="center bottom"
         metaChips={chips}
+        metaExtra={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-7 min-h-7 w-full min-w-0 gap-0.5 px-1.5 font-mono text-[10px]"
+            onClick={(event) => {
+              stopMenuBubble(event);
+              void copyField('Beitrittscode', project.code);
+            }}
+            aria-label={`Beitrittscode ${project.code} kopieren`}
+            data-library-saga-copy-code={project.code}
+          >
+            <span className="truncate">Code: {project.code}</span>
+            <Copy className="size-2.5 shrink-0 opacity-70" aria-hidden="true" />
+          </Button>
+        }
         variant={context.variant}
         isCenter={context.isCenter}
-        onOpen={context.variant === 'list' || context.isCenter ? () => openProject(project) : undefined}
+        onOpen={
+          context.variant === 'list' ||
+          context.variant === 'grid' ||
+          context.isCenter
+            ? () => openProject(project)
+            : undefined
+        }
+        cornerAction={sagaCornerMenu}
         actions={
-          <>
-            <Button
-              variant="default"
-              size="sm"
-              className="min-h-11 flex-1 bg-cyan-600 text-white hover:bg-cyan-500"
-              onClick={() => openSagaOverview(project)}
-              data-library-saga-open={project.publicId}
-            >
-              <BookOpen className="mr-1 h-3 w-3" />
-              <span className="text-xs">Saga öffnen</span>
-            </Button>
-            {showGroupLabel && project.gmUserId === user?.id ? (
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 min-w-[8rem] flex-1"
-                disabled={creatingGroupFor === project.id}
-                onClick={() => void createNewGroupRun(project)}
-                data-library-saga-new-group={project.publicId}
-              >
-                <Users className="mr-1 h-3 w-3" />
-                <span className="text-xs">
-                  {creatingGroupFor === project.id ? 'Wird erstellt…' : 'Mit neuer Gruppe spielen'}
-                </span>
-              </Button>
-            ) : null}
-          </>
+          <Button
+            variant="default"
+            size="sm"
+            className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
+            onClick={(event) => {
+              stopMenuBubble(event);
+              openSagaOverview(project);
+            }}
+            data-library-saga-open={project.publicId}
+          >
+            <BookOpen className="mr-1 h-3 w-3 shrink-0" />
+            <span className="truncate text-xs">Saga öffnen</span>
+          </Button>
         }
       />
     );
@@ -399,6 +649,19 @@ export function Library({
     const coverUrl =
       sagatreeNativeWorldCoverUrlFromModules(world.modules)
       ?? sagatreeNativeWorldCoverUrlByName(world.name);
+    const isNativeWorld = Boolean(coverUrl);
+    const menuKey = world.publicId || world.id;
+    const menuBusy = worldMenuBusyId === world.id;
+    const stopMenuBubble = (event: { stopPropagation: () => void }) => {
+      event.stopPropagation();
+    };
+    const worldChips: EntityBrowserChip[] = [
+      `Speziesentwicklung: ${SPECIES_DEVELOPMENT_MODE_LABELS[speciesDevelopmentMode]}`,
+    ];
+    if (isNativeWorld) {
+      worldChips.unshift(SAGATREE_NATIVE_CHIP);
+    }
+
     return (
       <EntityBrowserCard
         title={world.name}
@@ -409,33 +672,41 @@ export function Library({
         imageAspect="landscape"
         imageObjectFit="cover"
         imageObjectPosition="center bottom"
-        metaChips={[
-          `Speziesentwicklung: ${SPECIES_DEVELOPMENT_MODE_LABELS[speciesDevelopmentMode]}`,
-        ]}
+        metaChips={worldChips}
         variant={context.variant}
         isCenter={context.isCenter}
-        onOpen={context.variant === 'list' || context.isCenter ? () => openEditWorld(world) : undefined}
+        onOpen={
+          context.variant === 'list' ||
+          context.variant === 'grid' ||
+          context.isCenter
+            ? () => openEditWorld(world)
+            : undefined
+        }
+        cornerAction={
+          <EntityBrowserCornerMenuTrigger
+            compact={context.variant === 'list'}
+            busy={menuBusy}
+            label={`Aktionen für ${world.name}`}
+            menuKey={menuKey}
+            open={entityMenu?.kind === 'world' && entityMenu.entity.id === world.id}
+            onToggle={(rect) => toggleWorldMenu(world, rect)}
+            dataAttr="library-world-menu"
+          />
+        }
         actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 min-h-11 flex-1"
-              onClick={() => openEditWorld(world)}
-            >
-              <Edit className="w-3 h-3 mr-1" />
-              <span className="text-xs">Bearbeiten</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 min-h-11"
-              aria-label={`${world.name} löschen`}
-              onClick={() => void handleDeleteWorld(world)}
-            >
-              <Trash2 className="w-3 h-3 text-destructive" />
-            </Button>
-          </>
+          <Button
+            variant="default"
+            size="sm"
+            className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
+            onClick={(event) => {
+              stopMenuBubble(event);
+              openEditWorld(world);
+            }}
+            data-library-world-open={menuKey}
+          >
+            <Edit className="mr-1 h-3 w-3 shrink-0" />
+            <span className="truncate text-xs">Bearbeiten</span>
+          </Button>
         }
       />
     );
@@ -452,13 +723,25 @@ export function Library({
     });
     // Prefer owner portrait → Dornhain native pregen art → Spezies-Skizze.
     const nativePortrait = sagatreeNativePregenPortraitUrlByName(char.name);
+    const isNativeCharacter = isSagatreeNativePregenName(char.name);
     const imageUrl =
       surface.portraitUrl ?? nativePortrait ?? getSpeciesSketchUrl(char.race || 'human');
     const imageObjectFit = surface.portraitUrl || nativePortrait ? 'cover' : 'contain';
+    const menuKey = char.publicId || char.id;
+    const menuBusy = characterMenuBusyId === char.id;
+    const openEditor = () => {
+      setCharacterEditorBootstrap({ kind: 'character-edit', characterId: char.id });
+      onNavigate('character-editor');
+    };
+    const stopMenuBubble = (event: { stopPropagation: () => void }) => {
+      event.stopPropagation();
+    };
+
     return (
     <EntityBrowserCard
       title={char.name}
       meta={`Level ${char.level} · ${char.race} · ${char.class || '—'}`}
+      metaChips={isNativeCharacter ? [SAGATREE_NATIVE_CHIP] : undefined}
       badges={
         char.sheetStatus === 'incomplete'
           ? [{ label: 'Unvollständig', variant: 'destructive' }]
@@ -471,33 +754,38 @@ export function Library({
       imageObjectPosition={imageObjectFit === 'cover' ? 'center 20%' : undefined}
       variant={context.variant}
       isCenter={context.isCenter}
-      onOpen={context.variant === 'list' || context.isCenter ? () => {
-        setCharacterEditorBootstrap({ kind: 'character-edit', characterId: char.id });
-        onNavigate('character-editor');
-      } : undefined}
+      onOpen={
+        context.variant === 'list' ||
+        context.variant === 'grid' ||
+        context.isCenter
+          ? openEditor
+          : undefined
+      }
+      cornerAction={
+        <EntityBrowserCornerMenuTrigger
+          compact={context.variant === 'list'}
+          busy={menuBusy}
+          label={`Aktionen für ${char.name}`}
+          menuKey={menuKey}
+          open={entityMenu?.kind === 'character' && entityMenu.entity.id === char.id}
+          onToggle={(rect) => toggleCharacterMenu(char, rect)}
+          dataAttr="library-character-menu"
+        />
+      }
       actions={
-        <>
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex-1"
-            onClick={() => {
-              setCharacterEditorBootstrap({ kind: 'character-edit', characterId: char.id });
-              onNavigate('character-editor');
-            }}
-          >
-            <Edit className="w-3 h-3 mr-1" />
-            <span className="text-xs">Bearbeiten</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            aria-label={`${char.name} löschen`}
-            onClick={() => void handleDeleteCharacter(char.id, char.name)}
-          >
-            <Trash2 className="w-3 h-3 text-destructive" />
-          </Button>
-        </>
+        <Button
+          variant="default"
+          size="sm"
+          className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
+          onClick={(event) => {
+            stopMenuBubble(event);
+            openEditor();
+          }}
+          data-library-character-open={menuKey}
+        >
+          <Edit className="mr-1 h-3 w-3 shrink-0" />
+          <span className="truncate text-xs">Bearbeiten</span>
+        </Button>
       }
     />
   );
@@ -803,6 +1091,171 @@ export function Library({
         onOpenChange={setCreateCharacterOpen}
         onNavigateToEditor={() => onNavigate('character-editor')}
       />
+
+      <Dialog
+        open={duplicateTarget !== null}
+        onOpenChange={(open) => {
+          if (!open && sagaMenuBusyId === null) setDuplicateTarget(null);
+        }}
+      >
+        <DialogContent className="max-w-md" data-library-saga-duplicate-dialog>
+          <DialogHeader>
+            <DialogTitle>Saga duplizieren</DialogTitle>
+            <DialogDescription>
+              {duplicateTarget
+                ? `„${duplicateTarget.sagaTitle?.trim() || duplicateTarget.name}“ — mit aktuellem Fortschritt oder als frischen Start?`
+                : 'Wie soll die Kopie angelegt werden?'}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col gap-2 sm:flex-col sm:space-x-0">
+            <Button
+              type="button"
+              className="min-h-11 w-full justify-start gap-2"
+              disabled={!duplicateTarget || sagaMenuBusyId === duplicateTarget.id}
+              onClick={() => {
+                if (duplicateTarget) void duplicateSagaRun(duplicateTarget, 'with_progress');
+              }}
+              data-library-saga-duplicate-progress
+            >
+              <CopyPlus className="size-4 shrink-0" aria-hidden="true" />
+              Mit aktuellem Stand
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="min-h-11 w-full justify-start gap-2"
+              disabled={!duplicateTarget || sagaMenuBusyId === duplicateTarget.id}
+              onClick={() => {
+                if (duplicateTarget) void duplicateSagaRun(duplicateTarget, 'fresh');
+              }}
+              data-library-saga-duplicate-fresh
+            >
+              <RotateCcw className="size-4 shrink-0" aria-hidden="true" />
+              Kopie vom Anfang
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              className="min-h-11 w-full"
+              disabled={Boolean(duplicateTarget && sagaMenuBusyId === duplicateTarget.id)}
+              onClick={() => setDuplicateTarget(null)}
+            >
+              Abbrechen
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {entityMenu?.kind === 'saga' ? (
+        <EntityBrowserCornerMenuPortal
+          anchor={entityMenu.anchor}
+          busy={sagaMenuBusyId === entityMenu.entity.id}
+          dataAttr="library-saga-menu"
+          contentDataAttr="library-saga-menu-content"
+          onClose={closeEntityMenu}
+          items={(() => {
+            const project = entityMenu.entity;
+            const isGm = Boolean(user?.id) && project.gmUserId === user?.id;
+            const canDuplicate = isGm && Boolean(project.sagaId && project.sagaVersionId);
+            const items: EntityBrowserCornerMenuItem[] = [
+              {
+                id: 'copy-id',
+                label: copyPublicIdMenuLabel('Saga-ID', project.publicId),
+                icon: <Copy className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => void copyField('Saga-ID', project.publicId),
+              },
+            ];
+            if (canDuplicate) {
+              items.push({
+                id: 'duplicate',
+                label: 'Saga duplizieren',
+                icon: <CopyPlus className="size-4 shrink-0" aria-hidden="true" />,
+                onSelect: () => setDuplicateTarget(project),
+              });
+            }
+            if (isGm) {
+              items.push({
+                id: 'delete',
+                label: 'Saga löschen',
+                icon: <Trash2 className="size-4 shrink-0" aria-hidden="true" />,
+                destructive: true,
+                separatorBefore: true,
+                onSelect: () => void deleteSagaRun(project),
+              });
+            }
+            return items;
+          })()}
+        />
+      ) : null}
+
+      {entityMenu?.kind === 'world' ? (
+        <EntityBrowserCornerMenuPortal
+          anchor={entityMenu.anchor}
+          busy={worldMenuBusyId === entityMenu.entity.id}
+          dataAttr="library-world-menu"
+          contentDataAttr="library-world-menu-content"
+          onClose={closeEntityMenu}
+          items={[
+            {
+              id: 'copy-id',
+              label: copyPublicIdMenuLabel('Welt-ID', entityMenu.entity.publicId),
+              icon: <Copy className="size-4 shrink-0" aria-hidden="true" />,
+              disabled: !entityMenu.entity.publicId,
+              onSelect: () => void copyField('Welt-ID', entityMenu.entity.publicId),
+            },
+            {
+              id: 'duplicate',
+              label: 'Welt duplizieren',
+              icon: <CopyPlus className="size-4 shrink-0" aria-hidden="true" />,
+              onSelect: () => void handleDuplicateWorld(entityMenu.entity),
+            },
+            {
+              id: 'delete',
+              label: 'Welt löschen',
+              icon: <Trash2 className="size-4 shrink-0" aria-hidden="true" />,
+              destructive: true,
+              separatorBefore: true,
+              onSelect: () => void handleDeleteWorld(entityMenu.entity),
+            },
+          ]}
+        />
+      ) : null}
+
+      {entityMenu?.kind === 'character' ? (
+        <EntityBrowserCornerMenuPortal
+          anchor={entityMenu.anchor}
+          busy={characterMenuBusyId === entityMenu.entity.id}
+          dataAttr="library-character-menu"
+          contentDataAttr="library-character-menu-content"
+          onClose={closeEntityMenu}
+          items={[
+            {
+              id: 'copy-id',
+              label: copyPublicIdMenuLabel(
+                'Charakter-ID',
+                entityMenu.entity.publicId,
+              ),
+              icon: <Copy className="size-4 shrink-0" aria-hidden="true" />,
+              disabled: !entityMenu.entity.publicId,
+              onSelect: () => void copyField('Charakter-ID', entityMenu.entity.publicId ?? ''),
+            },
+            {
+              id: 'duplicate',
+              label: 'Charakter duplizieren',
+              icon: <CopyPlus className="size-4 shrink-0" aria-hidden="true" />,
+              onSelect: () => void handleDuplicateCharacter(entityMenu.entity),
+            },
+            {
+              id: 'delete',
+              label: 'Charakter löschen',
+              icon: <Trash2 className="size-4 shrink-0" aria-hidden="true" />,
+              destructive: true,
+              separatorBefore: true,
+              onSelect: () => void handleDeleteCharacter(entityMenu.entity),
+            },
+          ]}
+        />
+      ) : null}
     </div>
   );
 }

@@ -7,6 +7,7 @@ export {
   PUBLIC_RESOURCE_PREFIXES,
   RESERVED_PUBLIC_RESOURCE_PREFIXES,
   assertPublicResourceId,
+  deriveStablePublicResourceId,
   formatPublicResourceId,
   generatePublicIdBody,
   generatePublicResourceId,

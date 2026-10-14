@@ -19,6 +19,9 @@ export interface ItemLibraryResultsProps {
   onOpenItem: (id: string) => void;
   onResetFilters: () => void;
   onRetry: () => void;
+  busyItemId?: string | null;
+  onDuplicateItem?: (item: ItemDefinition) => void;
+  onArchiveItem?: (item: ItemDefinition) => void;
 }
 
 function SkeletonRow({ viewMode }: { viewMode: ItemLibraryViewMode }) {
@@ -43,6 +46,9 @@ export function ItemLibraryResults({
   onOpenItem,
   onResetFilters,
   onRetry,
+  busyItemId = null,
+  onDuplicateItem,
+  onArchiveItem,
 }: ItemLibraryResultsProps) {
   if (error) {
     return (
@@ -114,14 +120,24 @@ export function ItemLibraryResults({
       data-item-library-results
       data-view-mode={viewMode}
     >
-      {items.map((item) => (
-        <ItemLibraryCard
-          key={item.id}
-          definition={item}
-          viewMode={viewMode}
-          onOpen={() => onOpenItem(item.id)}
-        />
-      ))}
+      {items.map((item) => {
+        const canArchive = item.scope === 'personal' || item.scope === 'world';
+        return (
+          <ItemLibraryCard
+            key={item.id}
+            definition={item}
+            viewMode={viewMode}
+            onOpen={() => onOpenItem(item.id)}
+            busy={busyItemId === item.id}
+            onDuplicate={
+              onDuplicateItem ? () => onDuplicateItem(item) : undefined
+            }
+            onArchive={
+              canArchive && onArchiveItem ? () => onArchiveItem(item) : undefined
+            }
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Apply SagaTree SQL migrations to the self-host Postgres container (sagatree-db).
 # Documented path: README_SELFHOST + README.md migration order. Not cloud.
-# Legacy container name sagadrive-db still accepted until local compose is renamed.
+# Legacy container name sagadrive-db still accepted if an old stack is running.
 
 set -euo pipefail
 
