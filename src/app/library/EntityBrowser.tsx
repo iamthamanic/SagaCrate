@@ -138,7 +138,11 @@ export function EntityBrowser<T extends { id: string }>({
   };
 
   return (
-    <div className="@container w-full min-w-0 space-y-3">
+    <div
+      className="@container w-full min-w-0 space-y-3"
+      data-entity-browser
+      data-view-mode={viewMode}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1 text-sm text-muted-foreground">{toolbarLeft}</div>
         <div className="flex items-center gap-2">

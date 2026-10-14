@@ -114,6 +114,7 @@ export function ItemLibraryBrowser({
           className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
           aria-busy="true"
           aria-label="Gegenstände werden geladen"
+          data-item-library-loading
         >
           {Array.from({ length: 8 }).map((_, index) => (
             <div
@@ -129,6 +130,7 @@ export function ItemLibraryBrowser({
         <div
           className="flex flex-col items-center gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-8 text-center"
           role="alert"
+          data-item-library-error
         >
           <p className="text-sm text-destructive">{library.error}</p>
           <Button type="button" variant="outline" size="sm" onClick={library.refresh}>
@@ -139,11 +141,14 @@ export function ItemLibraryBrowser({
       ) : null}
 
       {!library.isLoading && !library.error && library.filteredItems.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed p-8 text-center">
+        <div
+          className="flex flex-col items-center gap-3 rounded-lg border border-dashed p-8 text-center"
+          data-item-library-empty
+        >
           <Package className="size-10 text-muted-foreground" aria-hidden="true" />
           {library.hasActiveFilters ? (
             <>
-              <p className="text-muted-foreground">Keine Gegenstände für diese Filter</p>
+              <p className="text-muted-foreground">Keine Treffer für Suche und Filter</p>
               <Button type="button" variant="outline" size="sm" onClick={library.resetFilters}>
                 Filter zurücksetzen
               </Button>
@@ -157,43 +162,47 @@ export function ItemLibraryBrowser({
       ) : null}
 
       {showResults ? (
-        <EntityBrowser
-          storageKey={ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY}
-          items={library.filteredItems}
-          getId={(item) => item.id}
-          onOpenItem={(item) => onOpenItem(item.id)}
-          toolbarLeft={
-            library.hasActiveFilters
-              ? `${library.filteredItems.length} von ${library.items.length} Gegenständen`
-              : `${library.filteredItems.length} Gegenstand${library.filteredItems.length === 1 ? '' : 'e'}`
-          }
-          toolbarRight={
-            <Button
-              type="button"
-              size="sm"
-              className="h-8"
-              onClick={onCreateItem}
-              data-item-library-create
-            >
-              <Plus className="mr-1 size-3.5" aria-hidden="true" />
-              Neu
-            </Button>
-          }
-          renderItem={(item, context) => (
-            <ItemLibraryCard
-              definition={item}
-              viewMode={context.variant === 'list' ? 'list' : 'grid'}
-              onOpen={() => onOpenItem(item.id)}
-              busy={busyItemId === item.id}
-              onDuplicate={() => void handleDuplicateItem(item)}
-              onArchive={
-                item.scope === 'personal' || item.scope === 'world'
-                  ? () => void handleArchiveItem(item)
-                  : undefined
-              }
-            />
-          )}
-        />
+        <div data-item-library-results>
+          <EntityBrowser
+            storageKey={ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY}
+            items={library.filteredItems}
+            getId={(item) => item.id}
+            onOpenItem={(item) => onOpenItem(item.id)}
+            toolbarLeft={
+              library.hasActiveFilters
+                ? `${library.filteredItems.length} von ${library.items.length} Gegenständen`
+                : `${library.filteredItems.length} Gegenstand${library.filteredItems.length === 1 ? '' : 'e'}`
+            }
+            toolbarRight={
+              <Button
+                type="button"
+                size="sm"
+                className="h-8"
+                onClick={onCreateItem}
+                data-item-library-create
+                aria-label="Neues Item erstellen"
+              >
+                <Plus className="mr-1 size-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">Neues Item erstellen</span>
+                <span className="sm:hidden">Neu</span>
+              </Button>
+            }
+            renderItem={(item, context) => (
+              <ItemLibraryCard
+                definition={item}
+                viewMode={context.variant === 'list' ? 'list' : 'grid'}
+                onOpen={() => onOpenItem(item.id)}
+                busy={busyItemId === item.id}
+                onDuplicate={() => void handleDuplicateItem(item)}
+                onArchive={
+                  item.scope === 'personal' || item.scope === 'world'
+                    ? () => void handleArchiveItem(item)
+                    : undefined
+                }
+              />
+            )}
+          />
+        </div>
       ) : null}
     </div>
   );

@@ -111,11 +111,23 @@ test('library items grid persists on mobile and search-empty stays actionable', 
   await page.setViewportSize({ width: 390, height: 844 });
   await openItemsTab(page);
 
+  // Phone default is carousel; grid remains selectable and persists.
+  await expect(page.getByRole('button', { name: 'Karussell-Ansicht' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(
+    page.locator('[data-item-library-results] [data-view-mode="carousel"]'),
+  ).toBeVisible();
+
+  await page.getByRole('button', { name: 'Grid-Ansicht' }).click();
   await expect(page.getByRole('button', { name: 'Grid-Ansicht' })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
-  await expect(page.locator('[data-item-library-results][data-view-mode="grid"]')).toBeVisible();
+  await expect(
+    page.locator('[data-item-library-results] [data-view-mode="grid"]'),
+  ).toBeVisible();
 
   const overflow = await page.evaluate(() => {
     const doc = document.documentElement;
