@@ -232,7 +232,7 @@ Change these in `.env`:
 
 ## 📄 License
 
-MIT License - See LICENSE file for details.
+Platform software is **AGPL-3.0-only** ([LICENSE](LICENSE)). Written SagaTree Core rules use the **ORC License**; future standalone SDKs are intended for **Apache-2.0**. Details and exclusions: [LICENSES.md](LICENSES.md).
 
 ---
 
