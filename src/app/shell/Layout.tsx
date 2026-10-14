@@ -23,6 +23,7 @@ import { Badge } from '../../shared/ui/badge';
 import { isCompactBand, useAdaptiveBand } from '../../shared/ui/adaptive';
 import { ImageWithFallback } from '../../shared/ui/figma/ImageWithFallback';
 import logoImage from '../../assets/sagatree-logo.png';
+import { resolveAccountDisplayName } from '../../domains/user-profile';
 
 
 /** Minimal auth shape for chrome identity — avoid app→@supabase import (#94). */
@@ -35,12 +36,11 @@ type AuthDisplayUser = {
 function resolveAuthDisplayName(user: AuthDisplayUser | null): string | null {
   if (!user) return null;
   const meta = user.user_metadata ?? {};
-  for (const key of ['display_name', 'username'] as const) {
-    const value = meta[key];
-    if (typeof value === 'string' && value.trim()) return value.trim();
-  }
-  const local = user.email?.split('@')[0]?.trim();
-  return local || null;
+  return resolveAccountDisplayName({
+    authDisplayName: typeof meta.display_name === 'string' ? meta.display_name : null,
+    authUsername: typeof meta.username === 'string' ? meta.username : null,
+    email: user.email ?? null,
+  });
 }
 
 interface LayoutProps {

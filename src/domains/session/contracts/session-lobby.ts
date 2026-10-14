@@ -26,6 +26,10 @@ export type LobbyLiveActStatus =
 
 export type LobbyRosterMember = {
   readonly userId: string;
+  /** Account display name (primary identity in roster). */
+  readonly accountDisplayName: string;
+  /** Signed avatar URL when available; null → initials fallback. */
+  readonly avatarUrl: string | null;
   readonly characterId: string | null;
   readonly characterName: string | null;
   readonly characterPublicId: string | null;

@@ -37,13 +37,15 @@ export type AssetProfileId =
   | 'character-portrait'
   | 'map-pin'
   | 'look-reference'
-  | 'item-thumbnail';
+  | 'item-thumbnail'
+  | 'user-avatar';
 
 export const ASSET_PROFILE_IDS = [
   'character-portrait',
   'map-pin',
   'look-reference',
   'item-thumbnail',
+  'user-avatar',
 ] as const satisfies readonly AssetProfileId[];
 
 /**

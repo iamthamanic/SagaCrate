@@ -149,6 +149,8 @@ section('4 · domain behaviour');
     roster: [
       {
         userId: 'u1',
+        accountDisplayName: 'Kara-Account',
+        avatarUrl: null,
         characterId: 'c1',
         characterName: 'Kara',
         characterPublicId: 'CH-K7M4Q',

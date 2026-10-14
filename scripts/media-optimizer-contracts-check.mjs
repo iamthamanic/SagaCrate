@@ -153,6 +153,16 @@ equal(
 );
 check(item.allowWebpOutput === true, 'item webp enabled (#641)');
 
+const userAvatar = media.getImageAssetPolicy('user-avatar');
+equal(userAvatar.budget.maxUploadBytes, 5 * MiB, 'user-avatar maxUpload');
+equal(userAvatar.maxEdgePx, 768, 'user-avatar maxEdge');
+check(!userAvatar.allowedMimeTypes.includes('image/gif'), 'user-avatar rejects gif mime');
+check(userAvatar.allowWebpOutput === true, 'user-avatar webp out');
+check(
+  userAvatar.budget.targetBytes < userAvatar.budget.maxUploadBytes,
+  'target < max user-avatar',
+);
+
 check(portrait.budget.targetBytes < portrait.budget.maxUploadBytes, 'target < max portrait');
 check(look.budget.targetBytes < look.budget.maxUploadBytes, 'target < max look');
 
