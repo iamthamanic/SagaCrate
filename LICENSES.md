@@ -5,7 +5,7 @@ SagaTree nutzt getrennte Lizenzen für Software, Spielregeln und Inhalte.
 | Bereich | Lizenz |
 | --- | --- |
 | Eigener Softwarecode (Frontend, Backend, Rules Engine, Migrationen, eigene Skripte) | **AGPL-3.0-only**, siehe [LICENSE](LICENSE) |
-| Kanonisches [SagaTree Core Regelwerk](docs/sagadrive%20core%20rules.md) | **Open RPG Creative (ORC) License** für ORC Licensed Material; Reserved Material ausgeschlossen |
+| Kanonisches [SagaTree Core Regelwerk](docs/sagatree%20core%20rules.md) | **Open RPG Creative (ORC) License** für ORC Licensed Material; Reserved Material ausgeschlossen |
 | Künftige separat veröffentlichte SDKs und Clientbibliotheken | **Apache-2.0** vorgesehen; aktuell existiert noch **kein** als Apache-2.0 freigegebenes eigenständiges SDK |
 | Marken, Logos, charakteristische Welten, Illustrationen und fremde Medien | Keine pauschale Freigabe durch die Softwarelizenz; jeweils gesonderte Rechte |
 | Spieler- und Marketplace-Inhalte | Lizenz des jeweiligen Rechteinhabers; keine automatische AGPL- oder ORC-Lizenz |
