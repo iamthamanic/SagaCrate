@@ -26,6 +26,7 @@ import {
   listBuiltinStandardDefinitions,
   normalizeItemDefinition,
 } from '../../domains/items';
+import { deriveStablePublicResourceId } from '../../domains/resource-id';
 import {
   supabaseItemCatalogRepository,
 } from './supabase-item-catalog.repository';
@@ -33,6 +34,16 @@ import type {
   ForkDefinitionTarget,
   ItemDefinitionDraft,
 } from './supabase-item-catalog.repository';
+
+/** Core / builtin catalog rows have no DB trigger — stamp a stable IT- id for Library UX. */
+function withCatalogPublicId(definition: ItemDefinition): ItemDefinition {
+  if (definition.publicId) return definition;
+  if (definition.scope !== 'core') return definition;
+  return {
+    ...definition,
+    publicId: deriveStablePublicResourceId('item', definition.id),
+  };
+}
 
 /** Everything a character screen needs to render and extend its inventory. */
 export interface CharacterItemCatalog {
@@ -134,14 +145,18 @@ export async function loadLibraryItemCatalog(): Promise<LibraryItemCatalog> {
   const byId = new Map<string, ItemDefinition>();
 
   for (const definition of listCoreItemDefinitions()) {
-    byId.set(definition.id, normalizeItemDefinition(definition));
+    byId.set(definition.id, withCatalogPublicId(normalizeItemDefinition(definition)));
   }
   for (const definition of listBuiltinStandardDefinitions()) {
-    byId.set(definition.id, normalizeItemDefinition(definition));
+    byId.set(definition.id, withCatalogPublicId(normalizeItemDefinition(definition)));
   }
   for (const record of persistedRecords) {
     if (record.status !== 'active') continue;
-    byId.set(record.definition.id, normalizeItemDefinition(record.definition));
+    const normalized = normalizeItemDefinition(record.definition);
+    byId.set(
+      record.definition.id,
+      record.publicId ? { ...normalized, publicId: record.publicId } : normalized,
+    );
   }
 
   const definitions = [...byId.values()].sort(compareLibraryItemDefinitions);

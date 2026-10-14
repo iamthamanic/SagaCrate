@@ -20,6 +20,7 @@ export type PersistedNpcCreatureScope = Extract<NpcCreatureScope, 'world' | 'per
 /** Row shape of `public.npc_creature_definitions`. */
 export interface NpcCreatureDefinitionDto {
   id: string;
+  public_id?: string | null;
   scope: PersistedNpcCreatureScope;
   world_profile_id: string | null;
   owner_user_id: string;
@@ -31,7 +32,7 @@ export interface NpcCreatureDefinitionDto {
 }
 
 export const NPC_CREATURE_DEFINITION_COLUMNS =
-  'id, scope, world_profile_id, owner_user_id, payload, status, payload_version, created_at, updated_at';
+  'id, public_id, scope, world_profile_id, owner_user_id, payload, status, payload_version, created_at, updated_at';
 
 /**
  * Map a row to a catalog record.
@@ -42,11 +43,16 @@ export function mapNpcCreatureDefinitionRow(
 ): NpcCreatureCatalogRecord | null {
   const definition = parseNpcCreatureDefinition(dto.id, dto.scope, dto.payload);
   if (!definition) return null;
+  const publicId =
+    typeof dto.public_id === 'string' && dto.public_id.trim()
+      ? dto.public_id.trim().toUpperCase()
+      : null;
   return {
     definition,
     status: dto.status === 'archived' ? 'archived' : 'active',
     worldProfileId: dto.world_profile_id,
     ownerUserId: dto.owner_user_id,
+    publicId,
   };
 }
 

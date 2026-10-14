@@ -1,10 +1,13 @@
 /**
- * EntityBrowser — shared browse shell for Library entity tabs (Charaktere, Welten, Sagas).
- * Uses shared center-focus Embla kit (cover-flow, loop via slide expansion, center glow).
+ * EntityBrowser — shared browse shell for Library entity tabs.
+ * Cover-flow rules:
+ * - 1 item: exact, no loop
+ * - 2 items: exact slides + wrap nav (no Embla loop clones — those peek as a 3rd card)
+ * - ≥3: minimal pad + Embla loop for endless scroll; start mid-pack centered
  * Location: src/app/library/EntityBrowser.tsx
  */
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ChevronLeft, ChevronRight, List } from 'lucide-react';
+import { useRef, type ReactNode } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../shared/ui/button';
 import {
   Carousel,
@@ -15,15 +18,21 @@ import {
   CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
   expandSlidesForEmblaLoop,
   useCenterFocusCarousel,
+  type EmblaLoopSlidePack,
 } from '../../shared/carousel';
 import { cn } from '../../shared/ui/utils';
+import { LibraryViewModeToggle } from './LibraryViewModeToggle';
+import {
+  useLibraryViewMode,
+  type LibraryViewMode,
+} from './useLibraryViewMode';
 
-export type EntityBrowserViewMode = 'carousel' | 'list';
+export type EntityBrowserViewMode = LibraryViewMode;
 
 export type EntityBrowserRenderContext = {
   variant: EntityBrowserViewMode;
   isCenter: boolean;
-  /** Carousel: side card click scrolls to center, center card click activates. List: activates. */
+  /** Carousel: side card click scrolls to center, center card click activates. List/grid: activates. */
   onActivate: () => void;
 };
 
@@ -38,30 +47,16 @@ type EntityBrowserProps<T extends { id: string }> = {
   emptyState?: ReactNode;
 };
 
-const VIEW_MODES: readonly EntityBrowserViewMode[] = ['carousel', 'list'];
+/** Embla loop+pad only from 3+ — pair (2) uses wrap without clone peeks. */
+const LOOP_EXPAND_MIN_ITEMS = 3;
 
-function isViewMode(value: unknown): value is EntityBrowserViewMode {
-  return typeof value === 'string' && (VIEW_MODES as readonly string[]).includes(value);
-}
-
-function loadInitialViewMode(storageKey: string): EntityBrowserViewMode {
-  const fallback: EntityBrowserViewMode = window.innerWidth >= 768 ? 'list' : 'carousel';
-  try {
-    const saved = window.localStorage.getItem(storageKey);
-    return isViewMode(saved) ? saved : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function CarouselViewModeIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-4" aria-hidden="true">
-      <rect x="1" y="4" width="3" height="8" rx="0.5" fill="currentColor" opacity="0.6" />
-      <rect x="6" y="2" width="4" height="12" rx="0.5" fill="currentColor" />
-      <rect x="12" y="4" width="3" height="8" rx="0.5" fill="currentColor" opacity="0.6" />
-    </svg>
-  );
+function identityLoopPack<T>(items: readonly T[]): EmblaLoopSlidePack<T> {
+  return {
+    slides: [...items],
+    sourceCount: items.length,
+    toSourceIndex: (slideIndex) => slideIndex,
+    nearestSlideIndex: (sourceIndex) => sourceIndex,
+  };
 }
 
 export function EntityBrowser<T extends { id: string }>({
@@ -74,18 +69,28 @@ export function EntityBrowser<T extends { id: string }>({
   toolbarRight,
   emptyState,
 }: EntityBrowserProps<T>) {
-  const [viewMode, setViewMode] = useState<EntityBrowserViewMode>(() => loadInitialViewMode(storageKey));
+  const { viewMode, setViewMode } = useLibraryViewMode(storageKey);
 
-  // Embla turns loop off when slides don't fill the viewport — duplicate until scrollable.
-  const loopPackRef = useRef(expandSlidesForEmblaLoop(items));
-  const prevItemsKeyRef = useRef('');
+  const useLoopExpand = items.length >= LOOP_EXPAND_MIN_ITEMS;
+  const usePairWrap = items.length === 2;
   const itemsKey = items.map(getId).join('|');
-  if (prevItemsKeyRef.current !== itemsKey) {
-    prevItemsKeyRef.current = itemsKey;
-    loopPackRef.current = expandSlidesForEmblaLoop(items);
+
+  const loopPackRef = useRef<EmblaLoopSlidePack<T>>(identityLoopPack(items));
+  const prevPackKeyRef = useRef('');
+  const packKey = `${useLoopExpand ? 'loop' : usePairWrap ? 'pair' : 'exact'}:${itemsKey}`;
+  if (prevPackKeyRef.current !== packKey) {
+    prevPackKeyRef.current = packKey;
+    loopPackRef.current = useLoopExpand
+      ? expandSlidesForEmblaLoop(items)
+      : identityLoopPack(items);
   }
   const loopPack = loopPackRef.current;
   const slides = loopPack.slides;
+  // Mid-pack start only when padded for Embla loop (≥3).
+  const initialSlideIndex =
+    useLoopExpand && slides.length > 0
+      ? loopPack.nearestSlideIndex(0, Math.floor(slides.length / 2))
+      : 0;
 
   const {
     setApi,
@@ -109,17 +114,12 @@ export function EntityBrowser<T extends { id: string }>({
     prefix: 'entity-browser',
     visualMode: 'coverflow',
     slideBasisClassName: CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
+    loop: useLoopExpand,
+    wrap: usePairWrap,
+    initialSlideIndex,
   });
 
   const sourceCurrent = loopPack.toSourceIndex(current);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(storageKey, viewMode);
-    } catch {
-      // Private mode / storage disabled.
-    }
-  }, [storageKey, viewMode]);
 
   if (items.length === 0 && emptyState) {
     return <>{emptyState}</>;
@@ -130,7 +130,7 @@ export function EntityBrowser<T extends { id: string }>({
   };
 
   const activateItem = (item: T, slideIndex: number) => {
-    if (viewMode === 'list') {
+    if (viewMode === 'list' || viewMode === 'grid') {
       onOpenItem?.(item);
       return;
     }
@@ -138,33 +138,19 @@ export function EntityBrowser<T extends { id: string }>({
   };
 
   return (
-    <div className="@container w-full min-w-0 space-y-3">
+    <div
+      className="@container w-full min-w-0 space-y-3"
+      data-entity-browser
+      data-view-mode={viewMode}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1 text-sm text-muted-foreground">{toolbarLeft}</div>
         <div className="flex items-center gap-2">
           {toolbarRight}
-          <div className="flex items-center gap-1 rounded-lg border p-1" role="group" aria-label="Ansicht wählen">
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label="Karussell-Ansicht"
-              aria-pressed={viewMode === 'carousel'}
-              onClick={() => setViewMode('carousel')}
-              className={cn('h-8 w-8 p-0', viewMode === 'carousel' && 'bg-background shadow-sm')}
-            >
-              <CarouselViewModeIcon />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label="Listenansicht"
-              aria-pressed={viewMode === 'list'}
-              onClick={() => setViewMode('list')}
-              className={cn('h-8 w-8 p-0', viewMode === 'list' && 'bg-background shadow-sm')}
-            >
-              <List className="size-4" />
-            </Button>
-          </div>
+          <LibraryViewModeToggle
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
         </div>
       </div>
 
@@ -241,6 +227,21 @@ export function EntityBrowser<T extends { id: string }>({
               ))}
             </div>
           )}
+        </div>
+      ) : viewMode === 'grid' ? (
+        <div
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+          data-entity-browser-grid
+        >
+          {items.map((item) => (
+            <div key={getId(item)} className="min-w-0">
+              {renderItem(item, {
+                variant: 'grid',
+                isCenter: false,
+                onActivate: () => activateItem(item, 0),
+              })}
+            </div>
+          ))}
         </div>
       ) : (
         <div className="space-y-2">

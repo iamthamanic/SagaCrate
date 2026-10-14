@@ -18,6 +18,7 @@ export type PersistedDefinitionScope = 'world' | 'personal';
 /** Row shape of `public.inventory_item_definitions`. */
 export interface ItemDefinitionDto {
   id: string;
+  public_id?: string | null;
   scope: PersistedDefinitionScope;
   world_profile_id: string | null;
   owner_user_id: string;
@@ -29,7 +30,7 @@ export interface ItemDefinitionDto {
 
 /** Columns every catalog read selects. */
 export const ITEM_DEFINITION_COLUMNS =
-  'id, scope, world_profile_id, owner_user_id, payload, status, created_at, updated_at';
+  'id, public_id, scope, world_profile_id, owner_user_id, payload, status, created_at, updated_at';
 
 /**
  * Map a row to a catalog record.
@@ -42,9 +43,14 @@ export const ITEM_DEFINITION_COLUMNS =
 export function mapDefinitionRow(dto: ItemDefinitionDto): CatalogDefinitionRecord | null {
   const definition = parseItemDefinition(dto.id, dto.scope, dto.payload);
   if (!definition) return null;
+  const publicId =
+    typeof dto.public_id === 'string' && dto.public_id.trim()
+      ? dto.public_id.trim().toUpperCase()
+      : null;
   return {
-    definition,
+    definition: publicId ? { ...definition, publicId } : definition,
     status: dto.status === 'archived' ? 'archived' : 'active',
+    publicId,
     worldProfileId: dto.world_profile_id,
     ownerUserId: dto.owner_user_id,
   };
@@ -58,7 +64,7 @@ export function mapDefinitionRow(dto: ItemDefinitionDto): CatalogDefinitionRecor
  * Stamps `payloadVersion` for the taxonomy / asset-key contract (#136).
  */
 export function toDefinitionPayload(definition: ItemDefinition): Record<string, unknown> {
-  const { id: _id, scope: _scope, ...payload } = definition;
+  const { id: _id, scope: _scope, publicId: _publicId, ...payload } = definition;
   return {
     ...payload,
     payloadVersion: ITEM_DEFINITION_PAYLOAD_VERSION,

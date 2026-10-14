@@ -179,6 +179,38 @@ class SagaDefinitionService {
       publicId: typeof row.public_id === 'string' ? row.public_id : '',
     };
   }
+
+  /**
+   * Clone a GM playthrough. `fresh` = version start; `with_progress` = copy adventure_runtime.
+   */
+  async duplicatePlaythrough(input: {
+    readonly projectId: string;
+    readonly mode: 'fresh' | 'with_progress';
+  }): Promise<{ readonly id: string; readonly publicId: string }> {
+    const { data, error } = await raceWithTimeoutReject(
+      supabase.rpc('duplicate_saga_playthrough', {
+        p_project_id: input.projectId,
+        p_mode: input.mode,
+      }),
+      SUPABASE_QUERY_TIMEOUT_MS,
+      'Duplizieren Zeitüberschreitung',
+    );
+    if (error) {
+      throw new Error(error.message || 'Saga konnte nicht dupliziert werden');
+    }
+    const row = Array.isArray(data) ? data[0] : data;
+    if (!row || typeof row !== 'object') {
+      throw new Error('Ungültige Duplikat-Antwort');
+    }
+    const parsed = row as { id?: string; public_id?: string };
+    if (typeof parsed.id !== 'string') {
+      throw new Error('Duplikat ohne ID');
+    }
+    return {
+      id: parsed.id,
+      publicId: typeof parsed.public_id === 'string' ? parsed.public_id : '',
+    };
+  }
 }
 
 export const sagaDefinitionService = new SagaDefinitionService();

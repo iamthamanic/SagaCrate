@@ -51,9 +51,10 @@ section('2 · static wiring / German UI strings');
   check(/Charakter daraus erstellen/.test(browser), 'template CTA string');
   check(/Als vollständigen Charakter ausbauen/.test(browser), 'compact CTA string');
   check(/Spieler zuweisen/.test(browser), 'controller CTA string');
-  check(/data-npc-library-template-to-character/.test(browser), 'template data hook');
-  check(/data-npc-library-compact-to-full/.test(browser), 'compact data hook');
-  check(/data-npc-library-assign-controller/.test(browser), 'assign data hook');
+  // Promotion CTAs live in the Library ⋮ corner menu (not card action buttons).
+  check(/id: 'template-to-character'/.test(browser), 'template menu action');
+  check(/id: 'compact-to-full'/.test(browser), 'compact menu action');
+  check(/id: 'assign-controller'/.test(browser), 'assign menu action');
   check(/setCharacterEditorBootstrap/.test(browser), 'sets character editor bootstrap');
   check(/npc-promotion/.test(browser), 'npc-promotion bootstrap kind');
   check(/NpcCreatureAssignControllerDialog/.test(browser), 'wires assign dialog');

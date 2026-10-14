@@ -49,7 +49,7 @@ section('2 · static wiring / German UI / migration security');
 {
   const browser = read('src/app/library/npc-creatures/NpcCreatureLibraryBrowser.tsx');
   check(/Zum Abenteuer hinzufügen/.test(browser), 'library spawn CTA string');
-  check(/data-npc-library-spawn-instance/.test(browser), 'library spawn data hook');
+  check(/id: 'spawn'/.test(browser) && /Zum Abenteuer hinzufügen/.test(browser), 'library spawn menu action');
   check(/NpcCreatureSpawnInstanceDialog/.test(browser), 'wires spawn dialog');
 
   const spawnDialog = read(

@@ -115,6 +115,8 @@ export type LookProfileVersion = {
 
 export type LookProfile = {
   readonly id: string;
+  /** Immutable public look id (LK-XXXXX). */
+  readonly publicId?: string;
   readonly currentVersion: number;
   readonly ownerScope: LookScope;
   /** Optional ownership label (user/saga id) — not authorization. */

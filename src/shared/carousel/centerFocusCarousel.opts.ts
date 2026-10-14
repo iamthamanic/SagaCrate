@@ -1,10 +1,24 @@
 /**
  * centerFocusCarousel.opts — Canonical Embla options for SagaTree center-focus carousels.
  * Loop + center align; containScroll false so every slide can reach true center.
- * Note: Embla disables loop when total slide width ≤ viewport — use
- * `expandSlidesForEmblaLoop` for short lists (Library).
+ * Library: 1 exact; 2 = wrap without Embla clones; ≥3 minimal expand + Embla loop.
  * Location: src/shared/carousel/centerFocusCarousel.opts.ts
  */
+
+/**
+ * Embla uses native pointer listeners (before React stopPropagation).
+ * Ignore drag when the gesture starts on buttons/menus/links so Dropdowns open.
+ */
+export function emblaWatchDragIgnoreInteractive(
+  _api: unknown,
+  event: Event,
+): boolean {
+  const target = event.target;
+  if (!(target instanceof Element)) return true;
+  return !target.closest(
+    'button, a, input, textarea, select, [role="button"], [data-entity-browser-corner-action], [data-library-saga-menu]',
+  );
+}
 
 /** Shared Embla opts — use on every SagaTree Carousel for consistent motion. */
 export const CENTER_FOCUS_EMBLA_OPTS = {
@@ -14,7 +28,7 @@ export const CENTER_FOCUS_EMBLA_OPTS = {
   dragFree: false,
   containScroll: false as const,
   duration: 28,
-  watchDrag: true,
+  watchDrag: emblaWatchDragIgnoreInteractive,
   watchResize: true,
   watchSlides: true,
 };

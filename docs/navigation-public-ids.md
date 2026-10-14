@@ -17,6 +17,8 @@ Rules: uppercase; ≥1 letter and ≥1 digit; server-generated; immutable; UNIQU
 | `CH-` | Character |
 | `IT-` | Item definition |
 | `NPCC-` | NPC / Creature definition |
+| `WO-` | World profile (`world_profiles`) |
+| `LK-` | Look profile (`look_profiles`) |
 | `SC-` | Scene (reserved) |
 | `QT-` | Quest (reserved) |
 

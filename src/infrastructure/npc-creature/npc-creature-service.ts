@@ -81,6 +81,35 @@ export async function archiveNpcCreatureDefinition(
   return supabaseNpcCreatureRepository.archiveDefinition(definitionId);
 }
 
+function personalCopyName(sourceName: string): string {
+  const suffix = ' (Kopie)';
+  const maxBase = Math.max(1, 255 - suffix.length);
+  return `${sourceName.trim().slice(0, maxBase) || 'NPC'}${suffix}`;
+}
+
+/**
+ * Clone any library definition into a new personal row with “(Kopie)” name.
+ * Core/builtin sources are accepted from the in-memory catalog record (no DB row).
+ */
+export async function duplicateNpcCreatureDefinition(
+  definitionId: string,
+  sourceDefinition?: NpcCreatureDefinition,
+): Promise<NpcCreatureCatalogRecord> {
+  let definition = sourceDefinition ?? null;
+  if (!definition) {
+    const existing = await supabaseNpcCreatureRepository.getDefinitionById(definitionId);
+    if (!existing) {
+      throw new Error('Definition nicht gefunden.');
+    }
+    definition = existing.definition;
+  }
+  const { id: _id, scope: _scope, ...rest } = definition;
+  return supabaseNpcCreatureRepository.createDefinition({
+    target: { scope: 'personal' },
+    draft: { ...rest, name: personalCopyName(rest.name) },
+  });
+}
+
 export async function restoreNpcCreatureDefinition(
   definitionId: string,
 ): Promise<NpcCreatureCatalogRecord> {

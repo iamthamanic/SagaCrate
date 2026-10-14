@@ -11,6 +11,9 @@ import type {
   WorldProfileVm,
 } from '../../domains/world/contracts/world.types';
 
+const WORLD_SELECT =
+  'id, owner_user_id, public_id, name, description, modules, created_at, updated_at';
+
 function normalizeName(value: string): string {
   const name = value.trim();
   if (!name) throw new Error('Der Name der Welt ist erforderlich.');
@@ -23,12 +26,20 @@ function normalizeDescription(value?: string): string | null {
   return description || null;
 }
 
+function duplicateWorldName(sourceName: string): string {
+  const suffix = ' (Kopie)';
+  const base = sourceName.trim() || 'Welt';
+  const maxBase = Math.max(1, 255 - suffix.length);
+  return `${base.slice(0, maxBase)}${suffix}`;
+}
+
 class WorldProfileService {
   private readonly tableName = 'world_profiles';
 
   private mapToViewModel(dto: WorldProfileDto): WorldProfileVm {
     return {
       id: dto.id,
+      publicId: typeof dto.public_id === 'string' ? dto.public_id : '',
       name: dto.name,
       description: dto.description ?? '',
       modules: normalizeWorldModuleConfigMap(dto.modules),
@@ -41,12 +52,25 @@ class WorldProfileService {
     if (!ownerUserId) throw new Error('User not authenticated');
     const { data, error } = await supabase
       .from(this.tableName)
-      .select('id, name, description, modules, created_at, updated_at')
+      .select(WORLD_SELECT)
       .eq('owner_user_id', ownerUserId)
       .order('created_at', { ascending: false });
 
     if (error) throw new Error(`Welten konnten nicht geladen werden: ${error.message}`);
     return (data ?? []).map((entry) => this.mapToViewModel(entry as WorldProfileDto));
+  }
+
+  async getWorldProfile(ownerUserId: string, id: string): Promise<WorldProfileVm> {
+    if (!ownerUserId) throw new Error('User not authenticated');
+    const { data, error } = await supabase
+      .from(this.tableName)
+      .select(WORLD_SELECT)
+      .eq('id', id)
+      .eq('owner_user_id', ownerUserId)
+      .single();
+
+    if (error) throw new Error(`Welt konnte nicht geladen werden: ${error.message}`);
+    return this.mapToViewModel(data as WorldProfileDto);
   }
 
   async createWorldProfile(ownerUserId: string, payload: CreateWorldProfileDto): Promise<WorldProfileVm> {
@@ -61,11 +85,21 @@ class WorldProfileService {
     const { data, error } = await supabase
       .from(this.tableName)
       .insert(insertPayload)
-      .select()
+      .select(WORLD_SELECT)
       .single();
 
     if (error) throw new Error(`Welt konnte nicht erstellt werden: ${error.message}`);
     return this.mapToViewModel(data as WorldProfileDto);
+  }
+
+  async duplicateWorldProfile(ownerUserId: string, id: string): Promise<WorldProfileVm> {
+    if (!ownerUserId) throw new Error('User not authenticated');
+    const source = await this.getWorldProfile(ownerUserId, id);
+    return this.createWorldProfile(ownerUserId, {
+      name: duplicateWorldName(source.name),
+      description: source.description,
+      modules: source.modules,
+    });
   }
 
   async updateWorldProfile(
@@ -86,7 +120,7 @@ class WorldProfileService {
       .update(updatePayload)
       .eq('id', id)
       .eq('owner_user_id', ownerUserId)
-      .select()
+      .select(WORLD_SELECT)
       .single();
 
     if (error) throw new Error(`Welt konnte nicht gespeichert werden: ${error.message}`);
@@ -109,6 +143,19 @@ class WorldProfileService {
     if ((count ?? 0) > 0) {
       throw new Error(
         'Welt kann nicht gelöscht werden, solange Gegenstand-Definitionen darauf verweisen. Archivieren Sie die Definitionen zuerst — Löschen würde bestehende Inventare unauflösbar machen.',
+      );
+    }
+
+    const { count: npcCount, error: npcError } = await supabase
+      .from('npc_creature_definitions')
+      .select('id', { count: 'exact', head: true })
+      .eq('world_profile_id', id);
+    if (npcError) {
+      throw new Error(`Welt konnte nicht gelöscht werden: ${npcError.message}`);
+    }
+    if ((npcCount ?? 0) > 0) {
+      throw new Error(
+        'Welt kann nicht gelöscht werden, solange NPC-/Kreatur-Definitionen darauf verweisen.',
       );
     }
 

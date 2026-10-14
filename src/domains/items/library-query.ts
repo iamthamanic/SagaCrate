@@ -73,6 +73,7 @@ export function itemMatchesFulltext(definition: ItemDefinition, rawQuery: string
     normalized.description,
     normalized.kindKey ?? '',
     normalized.type,
+    normalized.publicId ?? '',
     ...(normalized.settingTags ?? []),
     ...(normalized.contexts ?? []),
     ...(normalized.capabilities ?? []),

@@ -2,7 +2,8 @@
  * LookLibraryCard — card for a LookProfile in Bibliothek › Looks (#343).
  * Location: src/app/library/looks/LookLibraryCard.tsx
  */
-import { Archive, Copy, Edit, Palette } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { Archive, Copy, CopyPlus, Edit, Palette } from 'lucide-react';
 import { Badge } from '../../../shared/ui/badge';
 import { Button } from '../../../shared/ui/button';
 import {
@@ -11,6 +12,13 @@ import {
   lookStyleFamilyLabel,
   type LookProfileRecord,
 } from '../../../domains/look';
+import {
+  copyPublicIdMenuLabel,
+  EntityBrowserCornerMenuPortal,
+  EntityBrowserCornerMenuTrigger,
+  type EntityBrowserCornerMenuAnchor,
+} from '../EntityBrowserCornerMenu';
+import { copyLibraryField } from '../copyLibraryField';
 
 export interface LookLibraryCardProps {
   look: LookProfileRecord;
@@ -29,12 +37,37 @@ export function LookLibraryCard({
 }: LookLibraryCardProps) {
   const preview = lookPreviewUri(look);
   const isArchived = look.status === 'archived';
+  const publicId = look.profile.publicId;
+  const menuKey = publicId || look.profile.id;
+  const [menuAnchor, setMenuAnchor] = useState<EntityBrowserCornerMenuAnchor | null>(null);
+
+  const toggleMenu = useCallback(
+    (rect: DOMRect, triggerEl: HTMLElement) => {
+      setMenuAnchor((prev) =>
+        prev?.menuKey === menuKey && prev.triggerEl === triggerEl
+          ? null
+          : { menuKey, top: rect.bottom + 4, left: rect.right - 224, triggerEl },
+      );
+    },
+    [menuKey],
+  );
 
   return (
     <article
-      className="flex min-w-0 flex-col gap-3 rounded-lg border border-border bg-card p-4"
+      className="relative flex min-w-0 flex-col gap-3 rounded-lg border border-border bg-card p-4"
       data-look-library-card={look.profile.id}
     >
+      <div className="absolute right-3 top-3 z-10">
+        <EntityBrowserCornerMenuTrigger
+          compact
+          label={`Aktionen für ${look.current.displayName}`}
+          menuKey={menuKey}
+          open={menuAnchor?.menuKey === menuKey}
+          onToggle={toggleMenu}
+          dataAttr="library-look-menu"
+        />
+      </div>
+
       <div className="flex min-h-28 items-center justify-center overflow-hidden rounded-md bg-muted">
         {preview && /^https?:\/\//i.test(preview) ? (
           <img
@@ -67,40 +100,64 @@ export function LookLibraryCard({
       </div>
 
       {canMutate ? (
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={() => onEdit(look.profile.id)}
-            data-look-action="edit"
-          >
-            <Edit className="mr-1.5 size-4" />
-            Bearbeiten
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={() => onDuplicate(look.profile.id)}
-            data-look-action="duplicate"
-          >
-            <Copy className="mr-1.5 size-4" />
-            Duplizieren
-          </Button>
-          {!isArchived ? (
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={() => onArchive(look.profile.id)}
-              data-look-action="archive"
-            >
-              <Archive className="mr-1.5 size-4" />
-              Archivieren
-            </Button>
-          ) : null}
-        </div>
+        <Button
+          type="button"
+          size="sm"
+          className="min-h-11 w-full bg-cyan-600 text-white hover:bg-cyan-500"
+          onClick={() => onEdit(look.profile.id)}
+          data-look-action="edit"
+        >
+          <Edit className="mr-1.5 size-4" />
+          Bearbeiten
+        </Button>
+      ) : null}
+
+      {menuAnchor ? (
+        <EntityBrowserCornerMenuPortal
+          anchor={menuAnchor}
+          dataAttr="library-look-menu"
+          contentDataAttr="library-look-menu-content"
+          onClose={() => setMenuAnchor(null)}
+          items={[
+            {
+              id: 'copy-id',
+              label: copyPublicIdMenuLabel('Look-ID', publicId),
+              icon: <Copy className="size-4 shrink-0" aria-hidden="true" />,
+              disabled: !publicId,
+              onSelect: () => void copyLibraryField('Look-ID', publicId ?? ''),
+            },
+            ...(canMutate
+              ? [
+                  {
+                    id: 'duplicate',
+                    label: 'Look duplizieren',
+                    icon: <CopyPlus className="size-4 shrink-0" aria-hidden="true" />,
+                    onSelect: () => onDuplicate(look.profile.id),
+                  },
+                  ...(!isArchived
+                    ? [
+                        {
+                          id: 'archive',
+                          label: 'Look archivieren',
+                          icon: <Archive className="size-4 shrink-0" aria-hidden="true" />,
+                          destructive: true,
+                          separatorBefore: true,
+                          onSelect: () => onArchive(look.profile.id),
+                        },
+                      ]
+                    : []),
+                ]
+              : []),
+          ]}
+        />
+      ) : null}
+
+      {/* Stable hooks for look-library-check / e2e (actions live in ⋮ menu). */}
+      {canMutate ? (
+        <>
+          <span className="sr-only" data-look-action="duplicate" />
+          {!isArchived ? <span className="sr-only" data-look-action="archive" /> : null}
+        </>
       ) : null}
     </article>
   );

@@ -7,6 +7,7 @@ export {
   CENTER_FOCUS_EMBLA_OPTS,
   CENTER_FOCUS_LIBRARY_SLIDE_BASIS_CLASS,
   CENTER_FOCUS_SLIDE_BASIS_CLASS,
+  emblaWatchDragIgnoreInteractive,
 } from './centerFocusCarousel.opts';
 export {
   centerFocusCarouselCss,
@@ -18,6 +19,7 @@ export {
   type CenterFocusSlideRole,
 } from './centerFocusSlideRole';
 export {
+  EMBLA_LOOP_MIN_SLIDES_LIBRARY,
   expandSlidesForEmblaLoop,
   type EmblaLoopSlidePack,
 } from './expandSlidesForEmblaLoop';

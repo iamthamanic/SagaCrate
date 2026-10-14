@@ -6,16 +6,24 @@ import { ensureLoggedIn } from './helpers/auth';
 /**
  * E2E: NPC promotion + controller UI hooks (#200).
  * Location: e2e/npc-creature-promotion-controller.spec.ts
+ *
+ * Promotion actions live in the card ⋮ menu (EntityBrowserCornerMenu).
  */
 
 const EVIDENCE_DIR = '.qa/evidence/npc-creature-promotion-controller';
-
 
 async function openNpcsTab(page: Page) {
   await page.getByRole('button', { name: 'Bibliothek' }).first().click();
   await expect(page.getByRole('heading', { name: 'Meine Bibliothek' })).toBeVisible();
   await page.getByRole('tab', { name: 'NPCs & Kreaturen' }).click();
   await expect(page.locator('[data-npc-library-browser]')).toBeVisible({ timeout: 20_000 });
+}
+
+async function openFirstNpcCornerMenu(page: Page) {
+  const trigger = page.getByRole('button', { name: /^Aktionen für / }).first();
+  await expect(trigger).toBeVisible({ timeout: 20_000 });
+  await trigger.click();
+  await expect(page.locator('[data-library-npc-menu-content]').first()).toBeVisible();
 }
 
 test.beforeAll(() => {
@@ -43,15 +51,20 @@ test('template → Charakter daraus erstellen opens CharacterEditor with unresol
   await ensureLoggedIn(page);
   await openNpcsTab(page);
 
-  const templateCta = page.locator('[data-npc-library-template-to-character]').first();
-  await expect(templateCta).toBeVisible({ timeout: 20_000 });
-  await templateCta.click();
+  await openFirstNpcCornerMenu(page);
+  const templateAction = page.getByRole('menuitem', {
+    name: 'Charakter daraus erstellen',
+  });
+  await expect(templateAction).toBeVisible({ timeout: 20_000 });
+  await templateAction.click();
 
   await expect(page.getByRole('heading', { name: /Charakter Editor/i })).toBeVisible({
     timeout: 20_000,
   });
   await expect(page.locator('[data-npc-promotion-unresolved]')).toBeVisible();
-  await expect(page.locator('[data-npc-promotion-unresolved]')).toContainText(/offene Entscheidungen/i);
+  await expect(page.locator('[data-npc-promotion-unresolved]')).toContainText(
+    /offene Entscheidungen/i,
+  );
 
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, '01-template-create-character.png'),
@@ -78,7 +91,10 @@ test('promotion CTAs present for core templates (German labels)', async ({ page 
   await ensureLoggedIn(page);
   await openNpcsTab(page);
 
-  await expect(page.getByText('Charakter daraus erstellen').first()).toBeVisible();
+  await openFirstNpcCornerMenu(page);
+  await expect(
+    page.getByRole('menuitem', { name: 'Charakter daraus erstellen' }),
+  ).toBeVisible();
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, '02-mobile-template-cta.png'),
     fullPage: true,

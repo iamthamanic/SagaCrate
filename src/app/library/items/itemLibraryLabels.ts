@@ -60,4 +60,5 @@ export const LIBRARY_SOURCE_LABELS: Record<LibraryItemSource, string> = {
 
 export const ITEM_LIBRARY_VIEW_MODE_STORAGE_KEY = 'sagatree_library_items_view_mode';
 
+/** @deprecated Prefer LibraryViewMode from useLibraryViewMode — kept for card props. */
 export type ItemLibraryViewMode = 'list' | 'grid';

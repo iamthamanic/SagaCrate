@@ -14,6 +14,8 @@ export const PUBLIC_RESOURCE_PREFIXES = {
   character: 'CH',
   npcCreature: 'NPCC',
   item: 'IT',
+  world: 'WO',
+  look: 'LK',
   scene: 'SC',
   quest: 'QT',
 } as const;
@@ -150,6 +152,44 @@ export function generatePublicResourceId(
 ): string {
   const prefix = PUBLIC_RESOURCE_PREFIXES[kind];
   return formatPublicResourceId(prefix, generatePublicIdBody(randomByte));
+}
+
+/**
+ * Deterministic Public ID for in-memory Core/builtin catalog rows (no DB trigger).
+ * Same seed always yields the same IT-/NPCC-/… id; not a substitute for server
+ * assignment on persisted Personal/World rows.
+ */
+export function deriveStablePublicResourceId(
+  kind: PublicResourceKind,
+  seed: string,
+): string {
+  const prefix = PUBLIC_RESOURCE_PREFIXES[kind];
+  const alphabet = PUBLIC_ID_ALPHABET;
+  const base = alphabet.length;
+  let hash = fnv1a32(`${kind}:${seed.trim()}`);
+
+  for (let attempt = 0; attempt < 64; attempt += 1) {
+    let h = (hash + attempt * 0x9e3779b9) >>> 0;
+    let body = '';
+    for (let i = 0; i < BODY_LENGTH; i += 1) {
+      body += alphabet[h % base] ?? 'A';
+      h = Math.imul(h ^ (i + 1), 0x01000193) >>> 0;
+    }
+    if (isValidPublicIdBody(body)) {
+      return formatPublicResourceId(prefix, body);
+    }
+  }
+  return formatPublicResourceId(prefix, 'A2BC3');
+}
+
+/** FNV-1a 32-bit — stable across JS runtimes for catalog seed hashing. */
+function fnv1a32(input: string): number {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < input.length; i += 1) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
 }
 
 function defaultRandomByte(maxExclusive: number): number {

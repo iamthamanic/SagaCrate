@@ -32,7 +32,7 @@ function mustNotInclude(file, needles, label) {
 
 mustInclude(
   'src/domains/resource-id/public-resource-id.ts',
-  ['PUBLIC_RESOURCE_PREFIXES', 'parsePublicResourceId', 'SA', 'SE', 'CH', 'NPCC', 'IT'],
+  ['PUBLIC_RESOURCE_PREFIXES', 'parsePublicResourceId', 'SA', 'SE', 'CH', 'NPCC', 'IT', 'WO', 'LK'],
   'public id contract',
 );
 mustInclude(
@@ -55,6 +55,21 @@ mustInclude(
     'public_id',
   ],
   'migration',
+);
+mustInclude(
+  'supabase/migrations/083_world_profiles_public_id.sql',
+  ['world_profiles', 'WO', 'generate_sagatree_public_id', 'ensure_public_id'],
+  'world public id migration',
+);
+mustInclude(
+  'supabase/migrations/084_look_profiles_public_id.sql',
+  ['look_profiles', 'LK', 'generate_sagatree_public_id', 'ensure_public_id'],
+  'look public id migration',
+);
+mustInclude(
+  'docs/navigation-public-ids.md',
+  ['WO-', 'LK-', 'world_profiles', 'look_profiles'],
+  'navigation public id docs',
 );
 mustInclude('src/App.tsx', ['SagaResourceScreen', 'SessionResourceScreen', 'useAppLocation'], 'App wiring');
 mustInclude('AGENTS.md', ['Public IDs', 'Screen vs Modal', '/sagas/'], 'AGENTS navigation docs');
@@ -106,6 +121,12 @@ if (domain.parsePublicResourceId('XX-K7M4Q')) {
 }
 if (!domain.isValidPublicResourceId('SE-X4K73', 'session')) {
   throw new Error('SE-X4K73 should be valid session id');
+}
+if (!domain.isValidPublicResourceId('WO-K7M4Q', 'world')) {
+  throw new Error('WO-K7M4Q should be valid world id');
+}
+if (!domain.isValidPublicResourceId('LK-K7M4Q', 'look')) {
+  throw new Error('LK-K7M4Q should be valid look id');
 }
 if (domain.isValidPublicResourceId('SE-X4K73', 'saga')) {
   throw new Error('SE id must not validate as saga');
