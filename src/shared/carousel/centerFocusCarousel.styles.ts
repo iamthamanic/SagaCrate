@@ -109,7 +109,7 @@ export function centerFocusCarouselCss(
     }
   `;
 
-  // Equal visual gaps: tuck steps are linear (side = T, far = 2T) so every
+  // Equal visual gaps: tuck steps are linear (translate = -delta * T) so every
   // adjacent pair keeps the same spacing at every breakpoint (% of own width).
   // Blur sits on the card with overflow:hidden so Safari/Firefox don't paint halos.
   const coverflowBody = `
@@ -151,16 +151,13 @@ export function centerFocusCarouselCss(
       opacity: 0.68;
       z-index: 2;
     }
-    /* T = 40% of card; far = 2T so mid-to-mid gaps stay equal across breakpoints */
-    ${item}.is-side-left > ${card} {
-      -webkit-transform: translate3d(40%, 0, 0) scale(0.9);
-      transform: translate3d(40%, 0, 0) scale(0.9);
-      -webkit-filter: blur(3px);
-      filter: blur(3px);
-    }
+    /* Linear tuck: translate = -delta * 40% of card, for every distance.
+       --cf-delta is set per slide (signed circular distance from center), so
+       wide viewports with 3+ visible neighbors per side keep equal gaps. */
+    ${item}.is-side-left > ${card},
     ${item}.is-side-right > ${card} {
-      -webkit-transform: translate3d(-40%, 0, 0) scale(0.9);
-      transform: translate3d(-40%, 0, 0) scale(0.9);
+      -webkit-transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.9);
+      transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.9);
       -webkit-filter: blur(3px);
       filter: blur(3px);
     }
@@ -169,15 +166,10 @@ export function centerFocusCarouselCss(
       opacity: 0.42;
       z-index: 1;
     }
-    ${item}.is-far-left > ${card} {
-      -webkit-transform: translate3d(80%, 0, 0) scale(0.9);
-      transform: translate3d(80%, 0, 0) scale(0.9);
-      -webkit-filter: blur(5px);
-      filter: blur(5px);
-    }
+    ${item}.is-far-left > ${card},
     ${item}.is-far-right > ${card} {
-      -webkit-transform: translate3d(-80%, 0, 0) scale(0.9);
-      transform: translate3d(-80%, 0, 0) scale(0.9);
+      -webkit-transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.9);
+      transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.9);
       -webkit-filter: blur(5px);
       filter: blur(5px);
     }
@@ -187,8 +179,8 @@ export function centerFocusCarouselCss(
       pointer-events: none;
     }
     ${item}.is-far > ${card} {
-      -webkit-transform: translate3d(0, 0, 0) scale(0.86);
-      transform: translate3d(0, 0, 0) scale(0.86);
+      -webkit-transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.86);
+      transform: translate3d(calc(var(--cf-delta, 0) * -40%), 0, 0) scale(0.86);
       -webkit-filter: blur(6px);
       filter: blur(6px);
     }

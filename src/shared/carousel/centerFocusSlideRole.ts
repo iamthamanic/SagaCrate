@@ -11,6 +11,21 @@ export type CenterFocusSlideRole =
   | 'far-right'
   | 'far';
 
+/** Signed circular distance of `index` from `current` (negative = left of center). */
+export function resolveCenterFocusSlideDelta(
+  index: number,
+  current: number,
+  length: number,
+): number {
+  if (length <= 0) return 0;
+  let delta = index - current;
+  if (length > 1) {
+    delta = ((delta % length) + length) % length;
+    if (delta > length / 2) delta -= length;
+  }
+  return delta;
+}
+
 /**
  * Relative role of `index` vs `current` with circular distance (for loop carousels).
  * Pair (length === 2): only one neighbor role — circular ±1 is the same slide;
@@ -27,11 +42,7 @@ export function resolveCenterFocusSlideRole(
     // One neighbor only (never both sides of the same other card).
     return index < current ? 'side-left' : 'side-right';
   }
-  let delta = index - current;
-  if (length > 1) {
-    delta = ((delta % length) + length) % length;
-    if (delta > length / 2) delta -= length;
-  }
+  const delta = resolveCenterFocusSlideDelta(index, current, length);
   if (delta === 0) return 'center';
   if (delta === -1) return 'side-left';
   if (delta === 1) return 'side-right';

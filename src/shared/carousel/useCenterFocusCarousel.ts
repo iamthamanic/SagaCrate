@@ -6,6 +6,7 @@
  * Location: src/shared/carousel/useCenterFocusCarousel.ts
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import type { CarouselApi } from '../ui/carousel';
 import {
   CENTER_FOCUS_CONTENT_CLASS,
@@ -18,6 +19,7 @@ import {
 } from './centerFocusCarousel.styles';
 import {
   centerFocusSlideRoleClass,
+  resolveCenterFocusSlideDelta,
   resolveCenterFocusSlideRole,
 } from './centerFocusSlideRole';
 import { cn } from '../ui/utils';
@@ -165,6 +167,15 @@ export function useCenterFocusCarousel({
     [current, itemBaseClass, itemCount, slideBasisClassName],
   );
 
+  /** Coverflow tuck distance: `--cf-delta` drives a linear translate so wide viewports keep equal gaps. */
+  const getItemStyle = useCallback(
+    (index: number): CSSProperties =>
+      ({
+        '--cf-delta': resolveCenterFocusSlideDelta(index, current, itemCount),
+      }) as CSSProperties,
+    [current, itemCount],
+  );
+
   const getCardClassName = useCallback(
     (extraClassName?: string) => cn(cardClass, 'w-full', extraClassName),
     [cardClass],
@@ -194,6 +205,7 @@ export function useCenterFocusCarousel({
     navClass,
     navButtonClass,
     getItemClassName,
+    getItemStyle,
     getCardClassName,
     getDotClassName,
   };

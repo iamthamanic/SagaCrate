@@ -15,6 +15,7 @@ export {
 } from './centerFocusCarousel.styles';
 export {
   centerFocusSlideRoleClass,
+  resolveCenterFocusSlideDelta,
   resolveCenterFocusSlideRole,
   type CenterFocusSlideRole,
 } from './centerFocusSlideRole';
