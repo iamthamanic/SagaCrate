@@ -560,6 +560,14 @@ function checkMediaOptimizerCharacterPortrait() {
   });
 }
 
+function checkMediaOptimizerUserAvatar() {
+  console.log('Media optimizer user avatar (#682): intake + profile + lobby batch...');
+  execFileSync(process.execPath, ['scripts/media-optimizer-user-avatar-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkMediaOptimizerWorldPin() {
   console.log('Media optimizer world pin (#637): map-pin intake + storage path...');
   execFileSync(process.execPath, ['scripts/media-optimizer-world-pin-check.mjs'], {
@@ -2121,6 +2129,7 @@ checkMediaOptimizerImageEngine();
 checkMediaOptimizerLazyWorker();
 checkMediaOptimizerPreviewIntake();
 checkMediaOptimizerCharacterPortrait();
+checkMediaOptimizerUserAvatar();
 checkMediaOptimizerWorldPin();
 checkMediaOptimizerLookReference();
 checkMediaOptimizerItemWebpContract();

@@ -355,7 +355,7 @@ export function Library({
         imageFallback={storyTitle}
         imageAlt={`Saga ${storyTitle}`}
         imageAspect="landscape"
-        imageObjectFit="contain"
+        imageObjectFit="cover"
         imageObjectPosition="center bottom"
         metaChips={chips}
         variant={context.variant}
@@ -407,7 +407,7 @@ export function Library({
         imageFallback={world.name}
         imageAlt={`Welt ${world.name}`}
         imageAspect="landscape"
-        imageObjectFit="contain"
+        imageObjectFit="cover"
         imageObjectPosition="center bottom"
         metaChips={[
           `Speziesentwicklung: ${SPECIES_DEVELOPMENT_MODE_LABELS[speciesDevelopmentMode]}`,

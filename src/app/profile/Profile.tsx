@@ -28,6 +28,7 @@ import { useAuth } from '../../lib/auth-context';
 import { useTheme } from '../../lib/theme-provider';
 import { toast } from 'sonner';
 import { AiProviderCredentialsPanel } from './AiProviderCredentialsPanel';
+import { AccountAvatarSection } from './AccountAvatarSection';
 import { DEFERRED_SETTING_HINT_DE } from '../../domains/session/contracts/production-ux-integrity';
 
 type SettingsTab =
@@ -117,15 +118,7 @@ export function Profile() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex size-16 items-center justify-center rounded-full bg-muted md:size-20">
-                    <User className="size-8 text-muted-foreground md:size-10" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium">{user?.email?.split('@')[0] || 'User'}</p>
-                    <p className="truncate text-sm text-muted-foreground">{user?.email}</p>
-                  </div>
-                </div>
+                <AccountAvatarSection />
 
                 <Separator />
 
@@ -137,7 +130,7 @@ export function Profile() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="user-id">User ID</Label>
-                    <Input id="user-id" defaultValue={user?.id} disabled />
+                    <Input id="user-id" defaultValue={user?.id} disabled data-account-user-id />
                   </div>
                 </div>
 

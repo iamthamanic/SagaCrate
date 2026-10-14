@@ -8,7 +8,7 @@ import type { WorldModuleConfigMap } from '../contracts/world.types';
 
 export const SAGATREE_NATIVE_WORLD_COVER_URLS = {
   // Netflix-style title treatment: "Dornhain" baked into map/village key art
-  'dornhain.whisper': '/assets/marketplace/dornhain/world-cover.png?v=1',
+  'dornhain.whisper': '/assets/marketplace/dornhain/world-cover.png?v=2',
 } as const;
 
 export type SagatreeNativeWorldSagaSlug = keyof typeof SAGATREE_NATIVE_WORLD_COVER_URLS;

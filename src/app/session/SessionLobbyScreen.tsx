@@ -9,9 +9,11 @@ import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../../shared/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '../../shared/ui/avatar';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { decideLobbyEnterLive, lobbyLiveActStatusLabelDe, lobbyMediaStatusLabelDe } from '../../domains/session/contracts/session-lobby';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
+import { initialsFromDisplayName } from '../../domains/user-profile';
 import { pathForSessionLive } from '../shell';
 import { useSessionLobby } from './hooks/useSessionLobby';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
@@ -304,19 +306,43 @@ export function SessionLobbyScreen({
                   model.roster.map((member) => (
                     <li
                       key={member.userId}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-sm"
+                      className="flex min-w-0 flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-sm"
                       data-session-lobby-member={member.isSelf ? 'self' : 'peer'}
                     >
-                      <div>
-                        <p className="font-medium">
-                          {member.characterName ??
-                            (member.role === 'gamemaster' ? 'Spielleitung' : 'Ohne Charakter')}
-                          {member.isSelf ? ' (du)' : ''}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {member.role === 'gamemaster' ? 'GM' : 'Player'}
-                          {member.characterPublicId ? ` · ${member.characterPublicId}` : ''}
-                        </p>
+                      <div className="flex min-w-0 items-center gap-3">
+                        <Avatar className="size-11 shrink-0" data-lobby-member-avatar>
+                          {member.avatarUrl ? (
+                            <AvatarImage
+                              src={member.avatarUrl}
+                              alt={`Avatar von ${member.accountDisplayName}`}
+                            />
+                          ) : null}
+                          <AvatarFallback aria-hidden={Boolean(member.avatarUrl)}>
+                            {initialsFromDisplayName(member.accountDisplayName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0">
+                          <p className="truncate font-medium" data-lobby-account-name>
+                            {member.accountDisplayName}
+                            {member.isSelf ? ' (du)' : ''}
+                          </p>
+                          <p
+                            className="truncate font-mono text-xs text-muted-foreground"
+                            data-lobby-user-id
+                            title={member.userId}
+                          >
+                            {member.userId}
+                          </p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            {member.role === 'gamemaster' ? 'GM' : 'Player'}
+                            {member.characterName
+                              ? ` · ${member.characterName}`
+                              : member.role === 'gamemaster'
+                                ? ' · Spielleitung'
+                                : ' · Ohne Charakter'}
+                            {member.characterPublicId ? ` · ${member.characterPublicId}` : ''}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex gap-2 text-xs">
                         <span
