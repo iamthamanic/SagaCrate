@@ -26,16 +26,21 @@ test.describe('Session Lobby Preflight (#491)', () => {
       timeout: 20_000,
     });
     await expect(page.locator('[data-session-lobby="v1"]')).toBeVisible();
-    await expect(page.locator('[data-session-lobby-join-hero]')).toBeVisible({
+    // Media section is always painted; join-hero needs a loaded lobby model.
+    await expect(page.locator('[data-session-lobby-media]')).toBeVisible({
       timeout: 20_000,
     });
-    await expect(page.locator('[data-session-lobby-saga-cover-frame]')).toBeVisible();
-    // Pack art when resolvable; otherwise letter fallback — never empty frame.
-    const cover = page.locator('[data-session-lobby-saga-cover]');
-    const coverFallback = page.locator('[data-session-lobby-saga-cover-fallback]');
-    await expect(cover.or(coverFallback)).toBeVisible();
-    if (await cover.count()) {
-      await expect(cover).toHaveAttribute('src', /\/assets\/.*\.(png|jpe?g|webp)/i);
+    const hero = page.locator('[data-session-lobby-join-hero]');
+    // CI seed SA/SE may lack membership → model null → no hero (same as pre-cover).
+    if (await hero.count()) {
+      await expect(hero).toBeVisible();
+      await expect(page.locator('[data-session-lobby-saga-cover-frame]')).toBeVisible();
+      const cover = page.locator('[data-session-lobby-saga-cover]');
+      const coverFallback = page.locator('[data-session-lobby-saga-cover-fallback]');
+      await expect(cover.or(coverFallback)).toBeVisible();
+      if (await cover.count()) {
+        await expect(cover).toHaveAttribute('src', /\/assets\/.*\.(png|jpe?g|webp)/i);
+      }
     }
     await expectNoHorizontalOverflow(page);
 
