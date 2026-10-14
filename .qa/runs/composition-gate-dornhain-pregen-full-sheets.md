@@ -1,21 +1,24 @@
-# Composition gate — dornhain-pregen-full-sheets
+# Composition Gate — dornhain-pregen-full-sheets
 
-## Verdict
-CLEAR (WORKTREE)
+- HEAD_SHA: PENDING_COMMIT
+- Date: 2026-10-14
+- Verdict: CLEAR
 
-## HEAD
-fix/dornhain-pregen-full-sheets (local)
+## Event
+Dornhain native starter character provision / backfill → Character Editor hydrate + Library meta + Session join (`sheet_status=complete`).
 
 ## Producer → consumer
-1. Domain catalog `dornhain-pregen-sheets.ts` builds validated SagaTree profiles from starting templates + race traits.
-2. Migration `082_dornhain_pregen_full_sheets.sql` replaces `seed_dornhain_starter_characters` and backfills existing native starters (`nativeStarterSheetVersion < 1`).
-3. Character Editor hydrate reads `race` (EN key via `normalizeSagaTreeRaceKey`) + `sagatree_profile` archetype/essence/traits/skills.
-4. Library meta maps race keys to German labels via `getCharacterCreationOptionLabel`.
+1. Domain catalog `dornhain-pregen-sheets.ts` builds validated SagaTree profiles (templates + race traits).
+2. Migration `082` / `seed_dornhain_starter_characters` persists race + `sagatree_profile` + skills; one-shot backfill only when `nativeAssetId` matches and sheet is still a thin stub.
+3. Character Editor hydrate: `normalizeSagaTreeRaceKey(race)` + profile archetype/essence/traits/skills.
+4. Library meta: German race label via `getCharacterCreationOptionLabel`.
 
-## N-actors / invalid-fallback / concurrent
-- Idempotent seed: version marker prevents overwrite after v1 applied.
-- Name or `nativeAssetId` match scopes updates to Dornhain natives only.
-- Invalid legacy `Mensch` + empty profile rows are upgraded on migration apply / re-provision.
+## Simulations
+| Case | Expected | Result |
+|------|----------|--------|
+| N-actors (many owners) | Backfill keyed by `nativeAssetId` only — no name-only overwrite of unrelated PCs | OK |
+| Invalid fallback | Customized sheet with archetype set + version&lt;1 is **not** overwritten | OK |
+| Concurrent re-seed | `nativeStarterSheetVersion=1` → idempotent no-op on full sheet fields | OK |
 
 ## Proof
 - `node scripts/dornhain-pregen-full-sheets-check.mjs`

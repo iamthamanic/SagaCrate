@@ -80,6 +80,8 @@ BEGIN
     ) INTO v_match;
 
     IF v_match THEN
+      -- Upgrade thin system stubs only: missing sheet version AND no archetype yet.
+      -- Do not overwrite a user-customized sheet that already chose an archetype.
       SELECT EXISTS (
         SELECT 1 FROM public.characters c
         WHERE c.owner_user_id = p_user_id
@@ -89,6 +91,10 @@ BEGIN
             OR (c.project_id IS NULL AND c.name = r.char_name)
           )
           AND COALESCE((c.sagatree_profile->>'nativeStarterSheetVersion')::int, 0) < 1
+          AND (
+            c.sagatree_profile IS NULL
+            OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+          )
       ) INTO v_needs_full_sheet;
 
       UPDATE public.characters c
@@ -234,8 +240,9 @@ FROM (VALUES
         '{"archetype":"diplomat","essence":"mental","speciesTraitInstances":[{"trait":"sharpened-sense","source":"species-creation","acquiredAtLevel":1,"option":"sense-sight"},{"trait":"narrow-resistance","source":"species-creation","acquiredAtLevel":1,"option":"poison-toxins"},{"trait":"enduring-organism","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"investigator","background":{"name":"Ermittlung & Information","skillPool":["investigation","awareness","insight","persuasion"],"trainedSkills":["insight","investigation"],"backgroundSkillPoints":{"insight":1,"investigation":1},"specialization":{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1},"milieuAccess":"Höfe & Schreibstuben","contact":"Archivarin der Stadt","complication":"Offene Schuld gegenüber einem Gönner","communication":"Diplomatische Formeln"},"archetypeTrainingSkill":"insight","freeSkillRanks":{"insight":1,"persuasion":2,"awareness":2,"deception":1,"investigation":1},"specializations":[{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
       )
 ) AS v(asset_id, char_name, class_label, race_key, lvl, attrs, skills, inv, profile)
-WHERE COALESCE((c.sagatree_profile->>'nativeStarterSheetVersion')::int, 0) < 1
+WHERE c.attributes->>'nativeAssetId' = v.asset_id
+  AND COALESCE((c.sagatree_profile->>'nativeStarterSheetVersion')::int, 0) < 1
   AND (
-    c.attributes->>'nativeAssetId' = v.asset_id
-    OR c.name = v.char_name
+    c.sagatree_profile IS NULL
+    OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
   );
