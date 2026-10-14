@@ -1,0 +1,27 @@
+{
+  "updated_at": "2026-10-14T14:20:00.000Z",
+  "open_source_release_ready": false,
+  "contributor_rights": "agent_and_figma_attested_2026-10-14",
+  "asset_inventory": {
+    "total": 430,
+    "cleared": 0,
+    "reserved": 9,
+    "excluded": 214,
+    "owner_pending": 207,
+    "uncleared": 0,
+    "other": 0,
+    "runtime_required_pending": 199,
+    "uncleared_paths": []
+  },
+  "blockers": [
+    "Owner license declaration for first-party media currently owner_pending (OWNER_ATTESTATIONS.md § C)",
+    "Separate review of embedded SRD/OGL-shaped data and Open5e usage in supabase/functions/rulesets/index.ts"
+  ],
+  "evidence": [
+    "docs/licensing/contributor-provenance.md",
+    "docs/licensing/asset-inventory.json",
+    "docs/licensing/OWNER_ATTESTATIONS.md",
+    "docs/licensing/attestations/2026-10-14-agent-identities.md",
+    "docs/licensing/attestations/2026-10-14-figma-make.md"
+  ]
+}

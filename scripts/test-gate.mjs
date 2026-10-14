@@ -1920,6 +1920,14 @@ function checkArchitectureBoundaries() {
   });
 }
 
+function checkAssetLicenseInventory() {
+  console.log('Asset license inventory: tracked media must be classified (no uncleared)...');
+  execFileSync(process.execPath, ['scripts/asset-license-inventory-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkEdgeCorsShared() {
   console.log('Edge CORS shared helper (#305): _shared/cors + no local Origin literals...');
   execFileSync(process.execPath, ['scripts/edge-cors-shared-check.mjs'], {
@@ -2336,6 +2344,7 @@ checkTravelChaseVehiclesValidation();
 checkCharacterEditorRulesUxValidation();
 checkGearResourcesLoadValidation();
 checkAnalogEndToEndPlaytestValidation();
+checkAssetLicenseInventory();
 scanAddedLinesForSecrets();
 reportDependencyAudit();
 

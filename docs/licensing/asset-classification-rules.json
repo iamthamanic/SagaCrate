@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "roots": [
+    "assets",
+    "public/assets",
+    "public/apple-touch-icon.png",
+    "public/favicon.svg",
+    "public/favicon.png",
+    "public/favicon-32.png",
+    "public/favicon-48.png",
+    "public/favicon-64.png",
+    "src/assets",
+    "docs/brand",
+    "docs/screenshots"
+  ],
+  "extensions": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".svg",
+    ".gif",
+    ".glb",
+    ".gltf",
+    ".vrm",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".otf"
+  ],
+  "rules": [
+    {
+      "id": "liveact-reference-vrm-attribution",
+      "match": "^public/assets/avatars/reference/",
+      "source": "TLTMedia/valid-vrm-avatars (Google VALID derivative)",
+      "creator": "Google VALID / TLTMedia / SagaTree derivative binds",
+      "license": "CC-BY-4.0",
+      "evidence": "public/assets/avatars/reference/ATTRIBUTION.md",
+      "redistributable": true,
+      "attribution_required": true,
+      "runtime_required": false,
+      "status": "cleared"
+    },
+    {
+      "id": "brand-reserved",
+      "match": "^(docs/brand/|src/assets/sagatree-logo\\.png$|public/(favicon.*|apple-touch-icon\\.png)$)",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved"
+    },
+    {
+      "id": "docs-screenshots-reserved",
+      "match": "^docs/screenshots/",
+      "source": "SagaTree product screenshots",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved",
+      "evidence": "TRADEMARKS.md; docs/licensing/OWNER_ATTESTATIONS.md § C (unsigned)",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": false,
+      "status": "owner_pending"
+    },
+    {
+      "id": "item-svg-icons",
+      "match": "^public/assets/items/.*\\.svg$",
+      "source": "Cursor GenerateImage → VTracer (svg-icon-create)",
+      "creator": "iamthamanic (pipeline)",
+      "license": "UNDECLARED-first-party",
+      "evidence": "assets/item-icons.manifest.json; .cursor/skills/svg-icon-create/SKILL.md; OWNER_ATTESTATIONS.md § C",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
+      "id": "npc-creature-svg-icons",
+      "match": "^public/assets/npc-creatures/.*\\.svg$",
+      "source": "Cursor GenerateImage → VTracer (svg-icon-create)",
+      "creator": "iamthamanic (pipeline)",
+      "license": "UNDECLARED-first-party",
+      "evidence": "assets/npc-creature-icons.manifest.json; OWNER_ATTESTATIONS.md § C",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
+      "id": "species-avatar-meshes",
+      "match": "^public/assets/avatars/species/",
+      "source": "Meshy image-to-3d + face authoring (see provenance.json)",
+      "creator": "iamthamanic / Meshy tasks recorded in provenance",
+      "license": "UNDECLARED-first-party",
+      "evidence": "assets/species-3d/human/provenance.json; OWNER_ATTESTATIONS.md § C",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
+      "id": "marketplace-dornhain-covers",
+      "match": "^public/assets/marketplace/",
+      "source": "SagaTree Dornhain starter content art",
+      "creator": "iamthamanic",
+      "license": "UNDECLARED-first-party",
+      "evidence": "git history (iamthamanic); OWNER_ATTESTATIONS.md § C",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
+      "id": "src-species-and-inventory-art",
+      "match": "^src/assets/(species|inventory|items)/",
+      "source": "SagaTree UI art",
+      "creator": "iamthamanic",
+      "license": "UNDECLARED-first-party",
+      "evidence": "git history (iamthamanic); OWNER_ATTESTATIONS.md § C",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
+      "id": "figma-make-imported-raster",
+      "match": "^src/assets/[0-9a-f]{40}\\.png$",
+      "source": "Figma Make import",
+      "creator": "figma[bot] / Make file owner (unattested)",
+      "license": "UNDECLARED-Make-export",
+      "evidence": "git 70d4a232; src/Attributions.md; OWNER_ATTESTATIONS.md § B",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": false,
+      "status": "owner_pending"
+    },
+    {
+      "id": "authoring-sources-not-runtime",
+      "match": "^assets/(item-icon-sources|npc-creature-icon-sources|item-icon-style-refs|species-3d)/",
+      "source": "Authoring / provenance / intermediate rasters",
+      "creator": "mixed",
+      "license": "see-sidecar-or-pending",
+      "evidence": "assets/*/README.md; assets/species-3d/**/provenance.json",
+      "redistributable": false,
+      "attribution_required": false,
+      "runtime_required": false,
+      "status": "excluded"
+    }
+  ],
+  "default": {
+    "source": "unknown",
+    "creator": "unknown",
+    "license": "unknown",
+    "evidence": "none",
+    "redistributable": true,
+    "attribution_required": false,
+    "runtime_required": false,
+    "status": "uncleared"
+  }
+}

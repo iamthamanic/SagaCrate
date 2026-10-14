@@ -141,4 +141,4 @@ npm run build
 
 ## 📄 License
 
-Proprietary - SagaTree Platform
+Platform software in this repository is licensed under **AGPL-3.0-only**. Written SagaTree Core rules use the **ORC License**; third-party assets, trademarks, and marketplace content keep separate rights. See [LICENSES.md](../LICENSES.md), [LICENSE](../LICENSE), and [TRADEMARKS.md](../TRADEMARKS.md).
