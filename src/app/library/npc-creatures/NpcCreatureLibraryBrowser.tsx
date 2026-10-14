@@ -141,10 +141,10 @@ export function NpcCreatureLibraryBrowser({
   );
 
   const toggleNpcMenu = useCallback(
-    (record: NpcCreatureCatalogRecord, rect: DOMRect) => {
+    (record: NpcCreatureCatalogRecord, rect: DOMRect, triggerEl: HTMLElement) => {
       const menuKey = record.publicId || record.definition.id;
       const wasOpen = isNpcMenuOpen(menuKey);
-      toggleCornerMenu(menuKey, rect);
+      toggleCornerMenu(menuKey, rect, triggerEl);
       setNpcMenuRecord(wasOpen ? null : record);
     },
     [isNpcMenuOpen, toggleCornerMenu],
@@ -342,7 +342,7 @@ export function NpcCreatureLibraryBrowser({
             label={`Aktionen für ${definition.name}`}
             menuKey={menuKey}
             open={isNpcMenuOpen(menuKey)}
-            onToggle={(rect) => toggleNpcMenu(record, rect)}
+            onToggle={(rect, triggerEl) => toggleNpcMenu(record, rect, triggerEl)}
             dataAttr="library-npc-menu"
           />
         }

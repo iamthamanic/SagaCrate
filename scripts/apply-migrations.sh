@@ -101,6 +101,10 @@ migrations=(
   077_dornhain_default_all_accounts.sql
   079_drop_sagadrive_aliases.sql
   080_rename_local_auth_emails_sagatree.sql
+  081_user_profiles_and_avatars.sql
+  082_duplicate_saga_playthrough.sql
+  083_world_profiles_public_id.sql
+  084_look_profiles_public_id.sql
 )
 
 only="${1:-}"

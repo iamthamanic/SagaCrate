@@ -478,50 +478,62 @@ export function Library({
     setEntityMenu(null);
   }, []);
 
-  const toggleSagaMenu = useCallback((project: ProjectSummaryVm, rect: DOMRect) => {
-    setEntityMenu((prev) => {
-      if (prev?.kind === 'saga' && prev.entity.publicId === project.publicId) return null;
-      return {
-        kind: 'saga',
-        entity: project,
-        anchor: {
-          menuKey: project.publicId,
-          top: rect.bottom + 4,
-          left: rect.right - 224,
-        },
-      };
-    });
-  }, []);
+  const toggleSagaMenu = useCallback(
+    (project: ProjectSummaryVm, rect: DOMRect, triggerEl: HTMLElement) => {
+      setEntityMenu((prev) => {
+        if (prev?.kind === 'saga' && prev.entity.publicId === project.publicId) return null;
+        return {
+          kind: 'saga',
+          entity: project,
+          anchor: {
+            menuKey: project.publicId,
+            top: rect.bottom + 4,
+            left: rect.right - 224,
+            triggerEl,
+          },
+        };
+      });
+    },
+    [],
+  );
 
-  const toggleWorldMenu = useCallback((world: WorldProfileVm, rect: DOMRect) => {
-    setEntityMenu((prev) => {
-      if (prev?.kind === 'world' && prev.entity.id === world.id) return null;
-      return {
-        kind: 'world',
-        entity: world,
-        anchor: {
-          menuKey: world.publicId || world.id,
-          top: rect.bottom + 4,
-          left: rect.right - 224,
-        },
-      };
-    });
-  }, []);
+  const toggleWorldMenu = useCallback(
+    (world: WorldProfileVm, rect: DOMRect, triggerEl: HTMLElement) => {
+      setEntityMenu((prev) => {
+        if (prev?.kind === 'world' && prev.entity.id === world.id) return null;
+        return {
+          kind: 'world',
+          entity: world,
+          anchor: {
+            menuKey: world.publicId || world.id,
+            top: rect.bottom + 4,
+            left: rect.right - 224,
+            triggerEl,
+          },
+        };
+      });
+    },
+    [],
+  );
 
-  const toggleCharacterMenu = useCallback((char: CharacterSummaryVm, rect: DOMRect) => {
-    setEntityMenu((prev) => {
-      if (prev?.kind === 'character' && prev.entity.id === char.id) return null;
-      return {
-        kind: 'character',
-        entity: char,
-        anchor: {
-          menuKey: char.publicId || char.id,
-          top: rect.bottom + 4,
-          left: rect.right - 224,
-        },
-      };
-    });
-  }, []);
+  const toggleCharacterMenu = useCallback(
+    (char: CharacterSummaryVm, rect: DOMRect, triggerEl: HTMLElement) => {
+      setEntityMenu((prev) => {
+        if (prev?.kind === 'character' && prev.entity.id === char.id) return null;
+        return {
+          kind: 'character',
+          entity: char,
+          anchor: {
+            menuKey: char.publicId || char.id,
+            top: rect.bottom + 4,
+            left: rect.right - 224,
+            triggerEl,
+          },
+        };
+      });
+    },
+    [],
+  );
 
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredCharacters = characters.filter(char =>
@@ -582,7 +594,7 @@ export function Library({
         label={`Aktionen für ${storyTitle}`}
         menuKey={project.publicId}
         open={entityMenu?.kind === 'saga' && entityMenu.entity.publicId === project.publicId}
-        onToggle={(rect) => toggleSagaMenu(project, rect)}
+        onToggle={(rect, triggerEl) => toggleSagaMenu(project, rect, triggerEl)}
         dataAttr="library-saga-menu"
       />
     );
@@ -689,7 +701,7 @@ export function Library({
             label={`Aktionen für ${world.name}`}
             menuKey={menuKey}
             open={entityMenu?.kind === 'world' && entityMenu.entity.id === world.id}
-            onToggle={(rect) => toggleWorldMenu(world, rect)}
+            onToggle={(rect, triggerEl) => toggleWorldMenu(world, rect, triggerEl)}
             dataAttr="library-world-menu"
           />
         }
@@ -768,7 +780,7 @@ export function Library({
           label={`Aktionen für ${char.name}`}
           menuKey={menuKey}
           open={entityMenu?.kind === 'character' && entityMenu.entity.id === char.id}
-          onToggle={(rect) => toggleCharacterMenu(char, rect)}
+          onToggle={(rect, triggerEl) => toggleCharacterMenu(char, rect, triggerEl)}
           dataAttr="library-character-menu"
         />
       }

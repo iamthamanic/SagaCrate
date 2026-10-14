@@ -25,6 +25,8 @@ export type EntityBrowserCornerMenuAnchor = {
   top: number;
   left: number;
   menuKey: string;
+  /** Concrete trigger node — preferred over querySelector when Embla clones share menuKey. */
+  triggerEl: HTMLElement;
 };
 
 const MENU_WIDTH = 224;
@@ -50,7 +52,7 @@ type TriggerProps = {
   label: string;
   menuKey: string;
   open: boolean;
-  onToggle: (rect: DOMRect) => void;
+  onToggle: (rect: DOMRect, triggerEl: HTMLElement) => void;
   /** data-* attribute name without `data-` prefix, e.g. library-saga-menu */
   dataAttr?: string;
 };
@@ -83,7 +85,7 @@ export function EntityBrowserCornerMenuTrigger({
         event.stopImmediatePropagation();
       }
       if (busy) return;
-      onToggle(el.getBoundingClientRect());
+      onToggle(el.getBoundingClientRect(), el);
     };
 
     el.addEventListener('pointerdown', blockEmbla, true);
@@ -152,10 +154,8 @@ export function EntityBrowserCornerMenuPortal({
   useLayoutEffect(() => {
     let raf = 0;
     const syncFromTrigger = () => {
-      const trigger = document.querySelector(
-        `[data-${dataAttr}="${CSS.escape(anchor.menuKey)}"]`,
-      );
-      if (!(trigger instanceof HTMLElement)) {
+      const trigger = anchor.triggerEl;
+      if (!(trigger instanceof HTMLElement) || !trigger.isConnected) {
         onCloseRef.current();
         return;
       }
@@ -186,19 +186,14 @@ export function EntityBrowserCornerMenuPortal({
       window.removeEventListener('resize', onScrollOrResize);
       document.removeEventListener('scroll', onScrollOrResize, true);
     };
-  }, [anchor.menuKey, dataAttr]);
+  }, [anchor.menuKey, anchor.triggerEl]);
 
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
       const target = event.target;
       if (!(target instanceof Node)) return;
       if (menuRef.current?.contains(target)) return;
-      if (
-        target instanceof Element &&
-        target.closest(`[data-${dataAttr}="${CSS.escape(anchor.menuKey)}"]`)
-      ) {
-        return;
-      }
+      if (anchor.triggerEl.contains(target)) return;
       onCloseRef.current();
     };
     const onKeyDown = (event: KeyboardEvent) => {
@@ -210,7 +205,7 @@ export function EntityBrowserCornerMenuPortal({
       document.removeEventListener('pointerdown', onPointerDown, true);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [anchor.menuKey, dataAttr]);
+  }, [anchor.menuKey, anchor.triggerEl]);
 
   const runAndClose = (action: () => void) => {
     onClose();
@@ -224,6 +219,8 @@ export function EntityBrowserCornerMenuPortal({
       {...{ [`data-${contentDataAttr}`]: anchor.menuKey }}
       className="fixed z-[200] min-w-[14rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
       style={{ top: coords.top, left: coords.left }}
+      onPointerDown={(event) => event.stopPropagation()}
+      onClick={(event) => event.stopPropagation()}
     >
       {items.map((item) => (
         <div key={item.id}>

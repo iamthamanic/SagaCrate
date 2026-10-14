@@ -18,16 +18,22 @@ export function useLibraryCornerMenu() {
     setAnchor(null);
   }, []);
 
-  const toggle = useCallback((menuKey: string, rect: DOMRect) => {
-    setAnchor((prev) => {
-      if (prev?.menuKey === menuKey) return null;
-      return {
-        menuKey,
-        top: rect.bottom + 4,
-        left: rect.right - 224,
-      };
-    });
-  }, []);
+  const toggle = useCallback(
+    (menuKey: string, rect: DOMRect, triggerEl: HTMLElement) => {
+      setAnchor((prev) => {
+        if (prev?.menuKey === menuKey && prev.triggerEl === triggerEl) {
+          return null;
+        }
+        return {
+          menuKey,
+          top: rect.bottom + 4,
+          left: rect.right - 224,
+          triggerEl,
+        };
+      });
+    },
+    [],
+  );
 
   const isOpen = useCallback(
     (menuKey: string) => anchor?.menuKey === menuKey,

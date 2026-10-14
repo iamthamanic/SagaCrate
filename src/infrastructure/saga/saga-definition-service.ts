@@ -198,16 +198,17 @@ class SagaDefinitionService {
     if (error) {
       throw new Error(error.message || 'Saga konnte nicht dupliziert werden');
     }
-    if (!data || typeof data !== 'object') {
+    const row = Array.isArray(data) ? data[0] : data;
+    if (!row || typeof row !== 'object') {
       throw new Error('Ungültige Duplikat-Antwort');
     }
-    const row = data as { id?: string; public_id?: string };
-    if (typeof row.id !== 'string') {
+    const parsed = row as { id?: string; public_id?: string };
+    if (typeof parsed.id !== 'string') {
       throw new Error('Duplikat ohne ID');
     }
     return {
-      id: row.id,
-      publicId: typeof row.public_id === 'string' ? row.public_id : '',
+      id: parsed.id,
+      publicId: typeof parsed.public_id === 'string' ? parsed.public_id : '',
     };
   }
 }

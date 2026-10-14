@@ -42,11 +42,11 @@ export function LookLibraryCard({
   const [menuAnchor, setMenuAnchor] = useState<EntityBrowserCornerMenuAnchor | null>(null);
 
   const toggleMenu = useCallback(
-    (rect: DOMRect) => {
+    (rect: DOMRect, triggerEl: HTMLElement) => {
       setMenuAnchor((prev) =>
-        prev?.menuKey === menuKey
+        prev?.menuKey === menuKey && prev.triggerEl === triggerEl
           ? null
-          : { menuKey, top: rect.bottom + 4, left: rect.right - 224 },
+          : { menuKey, top: rect.bottom + 4, left: rect.right - 224, triggerEl },
       );
     },
     [menuKey],

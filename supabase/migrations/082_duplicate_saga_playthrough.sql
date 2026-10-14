@@ -1,11 +1,14 @@
 -- #library-saga-duplicate — Clone a GM playthrough fresh or with current adventure_runtime.
 -- Client cannot SELECT adventure_runtime (#569); copy must happen server-side.
+-- Return only id + public_id (never the full projects row / adventure_runtime).
+
+DROP FUNCTION IF EXISTS public.duplicate_saga_playthrough(UUID, TEXT);
 
 CREATE OR REPLACE FUNCTION public.duplicate_saga_playthrough(
   p_project_id UUID,
   p_mode TEXT DEFAULT 'fresh'
 )
-RETURNS public.projects
+RETURNS TABLE (id UUID, public_id TEXT)
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
@@ -29,7 +32,7 @@ BEGIN
 
   SELECT * INTO src
   FROM public.projects
-  WHERE id = p_project_id;
+  WHERE public.projects.id = p_project_id;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Saga nicht gefunden' USING ERRCODE = 'P0002';
   END IF;
@@ -44,8 +47,8 @@ BEGIN
 
   SELECT * INTO v_ver
   FROM public.saga_definition_versions
-  WHERE id = src.saga_version_id
-    AND saga_id = src.saga_id;
+  WHERE public.saga_definition_versions.id = src.saga_version_id
+    AND public.saga_definition_versions.saga_id = src.saga_id;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Fassung nicht gefunden' USING ERRCODE = 'P0002';
   END IF;
@@ -88,7 +91,7 @@ BEGIN
     role = 'gm',
     status = 'active';
 
-  RETURN created;
+  RETURN QUERY SELECT created.id, created.public_id;
 END;
 $$;
 
@@ -96,4 +99,4 @@ REVOKE ALL ON FUNCTION public.duplicate_saga_playthrough(UUID, TEXT) FROM PUBLIC
 GRANT EXECUTE ON FUNCTION public.duplicate_saga_playthrough(UUID, TEXT) TO authenticated;
 
 COMMENT ON FUNCTION public.duplicate_saga_playthrough(UUID, TEXT) IS
-  'GM-only: clone playthrough. p_mode fresh = version initialAdventure; with_progress = copy adventure_runtime.';
+  'GM-only: clone playthrough. Returns id+public_id only. p_mode fresh = version initialAdventure; with_progress = copy adventure_runtime.';

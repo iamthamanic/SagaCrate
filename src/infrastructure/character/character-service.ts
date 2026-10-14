@@ -234,7 +234,10 @@ class CharacterService {
       sagatree_profile: source.sagaTreeProfile,
       abilities: source.abilities,
       inventory: source.inventory,
-      inventory_v2: source.inventoryV2,
+      // Only copy v2 when already on schema 2 — avoid re-migrating legacy bags.
+      ...(source.inventorySchemaVersion === 2
+        ? { inventory_v2: source.inventoryV2 }
+        : {}),
       abstractResources: source.abstractResources,
       portrait_url: source.portraitUrl,
     });
