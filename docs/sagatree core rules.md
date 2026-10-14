@@ -7,6 +7,32 @@
 > **Aktueller Arbeitsblock:** 19 – Mathematische Prüfung und Spieltests  
 > **Ziel:** Universelles, analog vollständig spielbares Kernregelsystem mit optionalen digitalen Erweiterungen
 
+## Lizenz und ORC-Hinweise
+
+Das funktionale Spielregelmaterial dieses Dokuments wird unter der [Open RPG Creative License (ORC)](https://paizo.com/orclicense) veröffentlicht. Der Quellcode der Software, die die Regeln implementiert, ist separat unter AGPL-3.0-only lizenziert (siehe [LICENSES.md](../LICENSES.md)).
+
+### ORC Notice
+
+This product is licensed under the ORC License located at the Library of Congress at TX 9-307-067 and available online at various locations including https://paizo.com/orclicense. All warranties are disclaimed as set forth therein.
+
+### Attribution Notice
+
+This product is based on the following upstream ORC Licensed Material: none identified in this edition.
+
+If you use our Licensed Material in your own published works, please credit us as follows:
+
+SagaTree Core Rules, © 2026 SagaTree contributors. Credits and version history: https://github.com/iamthamanic/SagaTree.
+
+### Reserved Material Notice
+
+Reserved Material includes the SagaTree name, logos and visual branding; distinctive fictional characters, stories, settings, worlds, maps, illustrations, music and audiovisual material; and other material qualifying as Reserved Material under the ORC License. Game mechanics and expressions reasonably necessary to explain them cannot be reserved where they qualify as ORC Licensed Material.
+
+### Expressly Designated Licensed Material
+
+No otherwise-Reserved Material is expressly designated as additional Licensed Material in this edition.
+
+---
+
 ## Verwendung dieses Dokuments
 
 Dieses Dokument ist die zentrale Arbeitsgrundlage für die SagaTree Core Rules.
