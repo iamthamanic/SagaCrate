@@ -15,7 +15,6 @@ DECLARE
   v_count INT := 0;
   r RECORD;
   v_match BOOLEAN;
-  v_needs_full_sheet BOOLEAN;
 BEGIN
   IF p_project_id IS NULL OR p_user_id IS NULL THEN
     RETURN 0;
@@ -83,48 +82,79 @@ BEGIN
     ) INTO v_match;
 
     IF v_match THEN
-      -- Upgrade thin system stubs only: missing sheet version AND no archetype yet.
-      -- Do not overwrite a user-customized sheet that already chose an archetype.
-      SELECT EXISTS (
-        SELECT 1 FROM public.characters c
-        WHERE c.owner_user_id = p_user_id
-          AND (
-            c.attributes->>'nativeAssetId' = r.asset_id
-            OR (c.project_id = p_project_id AND c.name = r.char_name)
-            OR (c.project_id IS NULL AND c.name = r.char_name)
-          )
-          AND COALESCE(
-            (c.attributes->>'nativeStarterSheetVersion')::int,
-            (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
-            0
-          ) < 1
-          AND (
-            c.sagatree_profile IS NULL
-            OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
-          )
-      ) INTO v_needs_full_sheet;
-
+      -- Per-row upgrade: only thin stubs (no version + no archetype) get the full sheet.
+      -- Customized / already-versioned rows keep their sheet; soft-touch metadata only.
       UPDATE public.characters c
       SET
         project_id = COALESCE(c.project_id, p_project_id),
         class = CASE
-          WHEN v_needs_full_sheet THEN r.class_label
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.class_label
           ELSE COALESCE(NULLIF(BTRIM(c.class), ''), r.class_label)
         END,
         race = CASE
-          WHEN v_needs_full_sheet THEN r.race_key
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.race_key
           ELSE COALESCE(NULLIF(BTRIM(c.race), ''), r.race_key)
         END,
         level = CASE
-          WHEN v_needs_full_sheet THEN r.lvl
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.lvl
           ELSE COALESCE(c.level, r.lvl)
         END,
         ruleset_key = CASE
-          WHEN v_needs_full_sheet THEN 'sagatree-core'
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN 'sagatree-core'
           ELSE COALESCE(NULLIF(BTRIM(c.ruleset_key), ''), 'sagatree-core')
         END,
         attributes = CASE
-          WHEN v_needs_full_sheet THEN r.attrs
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.attrs
           ELSE COALESCE(c.attributes, '{}'::jsonb) || jsonb_build_object(
             'nativeAssetId', r.asset_id,
             'nativeStarterSheetVersion',
@@ -132,11 +162,31 @@ BEGIN
           )
         END,
         skills = CASE
-          WHEN v_needs_full_sheet THEN r.skills
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.skills
           ELSE COALESCE(c.skills, r.skills)
         END,
         sagatree_profile = CASE
-          WHEN v_needs_full_sheet THEN r.profile
+          WHEN (
+            COALESCE(
+              (c.attributes->>'nativeStarterSheetVersion')::int,
+              (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+              0
+            ) < 1
+            AND (
+              c.sagatree_profile IS NULL
+              OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
+            )
+          ) THEN r.profile
           ELSE COALESCE(c.sagatree_profile, r.profile)
         END,
         inventory = CASE
