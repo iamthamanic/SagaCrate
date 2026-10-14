@@ -1,6 +1,6 @@
 # Composition Gate — dornhain-pregen-full-sheets
 
-- HEAD_SHA: PENDING_COMMIT
+- HEAD_SHA: fc8b559144269a76f9acd7d4c91feb709299a297
 - Date: 2026-10-14
 - Verdict: CLEAR
 
