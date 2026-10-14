@@ -385,10 +385,10 @@ export function useLobbyMediaPreview(
       hasWebGL: typeof document !== 'undefined' && hasWebGL(),
     });
     setLiveActStatus(support);
-    setLiveActActive(true);
 
     if (input.selfRole === 'player') {
       if (!input.selfCharacterId) {
+        setLiveActActive(false);
         setLiveActPreview(null);
         setLiveActOptions([]);
         setSelectedLiveActOptionId(null);
@@ -412,6 +412,7 @@ export function useLobbyMediaPreview(
       setLiveActOptions([option]);
       setSelectedLiveActOptionId(option.id);
       setLiveActPreview(option);
+      setLiveActActive(true);
       return;
     }
 
@@ -419,6 +420,7 @@ export function useLobbyMediaPreview(
       const options = await loadNpcOptions();
       setLiveActOptions(options);
       if (options.length === 0) {
+        setLiveActActive(false);
         setLiveActPreview(null);
         setSelectedLiveActOptionId(null);
         setLiveActHintDe('Keine NPCs/Kreaturen in der Bibliothek verfügbar.');
@@ -428,11 +430,14 @@ export function useLobbyMediaPreview(
       const first = options[0]!;
       setSelectedLiveActOptionId(first.id);
       setLiveActPreview(first);
+      setLiveActActive(true);
       return;
     }
 
+    setLiveActActive(false);
     setLiveActPreview(null);
     setLiveActOptions([]);
+    setSelectedLiveActOptionId(null);
     setLiveActHintDe('LiveAct-Vorschau nur für Spieler oder Spielleitung.');
   }, [input.selfCharacterId, input.selfCharacterName, input.selfRole, loadNpcOptions]);
 
