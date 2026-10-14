@@ -68,7 +68,8 @@ Roadmap: follow-up #678/#491 — Lobby UX polish (Stufe B).
 - Known: LiveAct lobby preview remains portrait/icon (no face tracking)
 
 ## Composition Gate
-- HEAD_SHA: 883482fa90bd18adf1c2ff6c491ee5607bc65bb4
+- HEAD_SHA: 07f5ceb5f5649aacffc122836c243f0ac34acaa7
+- BASE_SHA: 6ed009ca33c5e873d101dd973e5d867d5c01fa0f
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-session-lobby-cover-device-bar.md`
 - Skip reason: n/a

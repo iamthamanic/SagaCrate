@@ -1,25 +1,26 @@
 # Composition Gate — session-lobby-cover-device-bar
 
-- HEAD_SHA: 883482fa90bd18adf1c2ff6c491ee5607bc65bb4
+- HEAD_SHA: 07f5ceb5f5649aacffc122836c243f0ac34acaa7
+- BASE_SHA: 6ed009ca33c5e873d101dd973e5d867d5c01fa0f
 - Date: 2026-10-15
 - Verdict: CLEAR
 
 ## Event
-User toggles Cam/Mic/Live in the session lobby device bar (local preview only).
+User toggles Cam/Mic/Live in the session lobby device bar (local preview only); account avatar upload optimizes then stores under the signed-in user path.
 
 ## Hop chain
 User gesture (Cam/Mic/Live) → `LobbyDeviceBar` (App) → `useLobbyMediaPreview` (App hook) → `navigator.mediaDevices.getUserMedia` / `enumerateDevices` (browser) → local `<video>` / AnalyserNode VU / LiveAct portrait|NPC preview.
 
-No fan-out producers, no outbox, no dual SoT fields. Device prefs = `deviceId` only in `localStorage` (`sagatree.lobby-media-prefs.v1`).
+Account avatar: Profile `AccountAvatarSection` → `useMediaOptimizeIntake` (surviveUnmount) → `optimizeMedia` → `supabaseUserProfileRepository.uploadAvatar` → Storage `user-avatars/{uid}/…` + `user_profiles` → `account-avatar-store` / `useAccountAvatar` → shell sidebar + lobby self-seat.
 
-Account avatar display: `userProfileService` / storage signed URL → `account-avatar-store` → `useAccountAvatar` → shell sidebar + lobby self-seat. Upload: intake optimize → `supabaseUserProfileRepository.uploadAvatar` (own `userId` path only).
+No fan-out producers, no outbox, no LiveKit publish. Device prefs = `deviceId` only in `localStorage` (`sagatree.lobby-media-prefs.v1`).
 
 ## Simulations
 | Case | Intended | Composed | Result |
 |------|----------|----------|--------|
-| 1 event, N actors | Each client owns own MediaStream; avatar write own row only | Same — no cross-owner FKs / LiveKit publish | pass |
-| invalid / missing | Denied/unavailable → DE hint; Enter not blocked | `mediaFailureBlocksSessionEnter` unchanged | pass |
-| 2 consumers / crash | Unmount stops tracks + AudioContext; surviveUnmount only for avatar optimize | Hook cleanup + optional surviveUnmount on avatar intake | pass |
+| N-actors | Each client owns own MediaStream; avatar write own row only | Same — no cross-owner FKs / LiveKit publish | pass |
+| Invalid/missing | Denied/unavailable → DE hint; Enter not blocked | `mediaFailureBlocksSessionEnter` unchanged | pass |
+| Two consumers / crash | Unmount stops tracks + AudioContext; surviveUnmount only for avatar optimize | Hook cleanup + optional surviveUnmount on avatar intake | pass |
 
 ## Flags
 | Tag | Severity | Hops | Why local review missed it | Fix |
