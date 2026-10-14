@@ -1,6 +1,6 @@
 # Composition Gate — dornhain-pregen-full-sheets
 
-- HEAD_SHA: 8de020705c6f0608050e9e6cae576d2f8833b32c
+- HEAD_SHA: a6a494e0a8d0d4e758307fbaeb2351493f4623ff
 - BASE_SHA: f165fb8182244f35be9e83de38d31b5a6fd780a0
 - Date: 2026-10-14
 - Verdict: CLEAR
@@ -17,9 +17,10 @@ Dornhain native starter provision/backfill produces complete SagaTree sheets con
 ## Simulations
 | Case | Expected | Result |
 |------|----------|--------|
-| N-actors | Many owners: backfill keyed by nativeAssetId (name only with Dornhain-Starter description) | OK |
+| N-actors | Many owners + same-name draft: upgrade predicate is per-row, not global | OK |
+| N-actors-legacy | Many owners: backfill keyed by nativeAssetId (name only with Dornhain-Starter description) | OK |
 | Invalid/missing | Customized sheet with archetype set is not overwritten; missing archetype thin stubs upgrade | OK |
 | Two consumers / crash | Editor save strips profile version; attributes version + archetype guard prevent wipe on re-seed | OK |
 
 ## Flags
-None.
+None open. Greptile P1 same-name draft: fixed via per-row CASE.
