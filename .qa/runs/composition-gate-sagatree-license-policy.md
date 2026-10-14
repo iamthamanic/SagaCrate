@@ -1,6 +1,6 @@
 # Composition Gate — sagatree-license-policy
 
-- HEAD_SHA: WORKTREE (pre-commit; re-stamp after commit)
+- HEAD_SHA: f1b009719759b1bf000d1c4f7a7eff90e28fb131
 - Date: 2026-10-14
 - Verdict: SKIPPED
 
