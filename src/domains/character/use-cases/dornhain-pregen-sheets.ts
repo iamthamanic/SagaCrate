@@ -69,7 +69,7 @@ export interface DornhainPregenPersistencePayload {
   readonly skills: Record<SagaTreeSkillKey, number>;
   readonly sagatreeProfile: SagaTreeProfileDto;
   readonly inventory: readonly string[];
-  readonly sagadriveMeta: {
+  readonly starterMeta: {
     readonly origin: 'native';
     readonly nativeAssetId: DornhainPregenAssetId;
     readonly starter: true;
@@ -267,7 +267,7 @@ export function buildDornhainPregenPersistence(
     skills,
     sagatreeProfile: profile,
     inventory: def.starterItemDefinitionIds,
-    sagadriveMeta: {
+    starterMeta: {
       origin: 'native',
       nativeAssetId: def.assetId,
       starter: true,
