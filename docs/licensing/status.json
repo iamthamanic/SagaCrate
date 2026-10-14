@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-14T13:59:05.611Z",
+  "updated_at": "2026-10-14T14:00:24.808Z",
   "open_source_release_ready": false,
   "contributor_rights": "pending_owner_attestation",
   "asset_inventory": {
-    "total": 424,
+    "total": 430,
     "cleared": 0,
-    "reserved": 3,
+    "reserved": 9,
     "excluded": 214,
     "owner_pending": 207,
     "uncleared": 0,

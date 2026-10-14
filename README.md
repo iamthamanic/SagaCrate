@@ -315,7 +315,7 @@ SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 
 **SagaTree** trennt Softwarecode und Rollenspielregeln: Eigener Plattformcode steht unter **AGPL-3.0-only** ([LICENSE](LICENSE)); das schriftliche [SagaTree Core Regelwerk](docs/sagatree%20core%20rules.md) stellt sein regeltechnisches Licensed Material unter die **ORC License**. Für spätere eigenständige SDKs ist **Apache-2.0** vorgesehen; aktuell ist noch kein SDK unter dieser Lizenz veröffentlicht. Drittmaterial, Creator-Inhalte, Marken und Medien behalten separate Rechte.
 
-Details: [LICENSES.md](LICENSES.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [TRADEMARKS.md](TRADEMARKS.md).
+Details: [LICENSES.md](LICENSES.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [TRADEMARKS.md](TRADEMARKS.md) · [docs/licensing/](docs/licensing/) (Provenienz, Asset-Inventar, Attest-Vorlagen). Open-Source-Release erst wenn `docs/licensing/status.json` → `open_source_release_ready: true`.
 
 ---
 

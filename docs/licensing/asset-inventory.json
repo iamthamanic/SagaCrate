@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-14T13:59:05.609Z",
+  "generated_at": "2026-10-14T14:00:24.806Z",
   "rules_version": 1,
-  "count": 424,
+  "count": 430,
   "assets": [
     {
       "path": "assets/item-icon-style-refs/style-ref-potion.png",
@@ -2903,6 +2903,19 @@
       "rule_id": "docs-screenshots-reserved"
     },
     {
+      "path": "public/apple-touch-icon.png",
+      "sha256": "a203077da4cea27533932066339b039929c0c9eea5c849850b6fa50e3c4df1f2",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
+    },
+    {
       "path": "public/assets/avatars/species/human-female-quality-20260921-f5-face1.glb",
       "sha256": "a003a7acb04aa0bf2be0329d88d69797009e327dcf887f8c4a9babfa2846890c",
       "source": "Meshy image-to-3d + face authoring (see provenance.json)",
@@ -5085,6 +5098,71 @@
       "runtime_required": true,
       "status": "owner_pending",
       "rule_id": "npc-creature-svg-icons"
+    },
+    {
+      "path": "public/favicon-32.png",
+      "sha256": "cfc1d040479a28b333609e91e3c8b8b37bfd481044f8049ed1b00ae70ebc347a",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
+    },
+    {
+      "path": "public/favicon-48.png",
+      "sha256": "2bc9946aee905469cd69b414059fe799581570a9358a0a8e06239ac4c2a20b6e",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
+    },
+    {
+      "path": "public/favicon-64.png",
+      "sha256": "e733c8e500641c29289ba7b5d2ebbb5e67a2daef5eb8994fb6ea66c1150cacab",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
+    },
+    {
+      "path": "public/favicon.png",
+      "sha256": "8b1d8e79ce8c72a5665a0870c95f45c4cb5af62518896c15005b988a49dbe7d0",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
+    },
+    {
+      "path": "public/favicon.svg",
+      "sha256": "d23963925886b48331d0549034ff09d656595ac0e51ac0f4af81f5a135023368",
+      "source": "SagaTree brand",
+      "creator": "iamthamanic",
+      "license": "All-Rights-Reserved-Trademark",
+      "evidence": "TRADEMARKS.md",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "reserved",
+      "rule_id": "brand-reserved"
     },
     {
       "path": "src/assets/5cdcbab5ea0860d6cbb920fecd888377cdc015a0.png",
