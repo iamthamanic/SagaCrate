@@ -28,7 +28,9 @@ export {
   IMAGE_ENGINE_MAX_PIXELS,
   assertImageInputByteLimit,
   assertImagePixelLimit,
+  computeImageDownscaleFactor,
 } from './resource-limits';
+export { blobToImageDataFittingLimits } from './raster-decode';
 
 export async function optimizeImage(
   request: ImageEngineRequest,

@@ -20,10 +20,15 @@ import {
 import { useAuth } from '../../lib/auth-context';
 import { toast } from 'sonner';
 import { Badge } from '../../shared/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '../../shared/ui/avatar';
 import { isCompactBand, useAdaptiveBand } from '../../shared/ui/adaptive';
 import { ImageWithFallback } from '../../shared/ui/figma/ImageWithFallback';
 import logoImage from '../../assets/sagatree-logo.png';
-import { resolveAccountDisplayName } from '../../domains/user-profile';
+import {
+  initialsFromDisplayName,
+  resolveAccountDisplayName,
+} from '../../domains/user-profile';
+import { useAccountAvatar } from './useAccountAvatar';
 
 
 /** Minimal auth shape for chrome identity — avoid app→@supabase import (#94). */
@@ -73,9 +78,13 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [userExpandedDesktop, setUserExpandedDesktop] = useState(false);
+  const { avatarUrl } = useAccountAvatar();
   const isDesktop = useIsDesktop();
   const viewportBand = useAdaptiveBand();
   const displayName = resolveAuthDisplayName(user);
+  const avatarInitial = displayName
+    ? initialsFromDisplayName(displayName)
+    : '?';
 
   useEffect(() => {
     try {
@@ -229,17 +238,25 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                   title={displayName}
                   aria-label={`Angemeldet als ${displayName}`}
                   data-shell-user-pill="desktop"
+                  data-shell-user-avatar={avatarUrl ? '1' : '0'}
                 >
-                  <Badge
-                    variant="outline"
-                    className={`rounded-full border-sidebar-border bg-sidebar-accent/40 text-sidebar-foreground ${
-                      sidebarCollapsed
-                        ? 'size-9 justify-center px-0 text-xs uppercase'
-                        : 'max-w-[7.5rem] truncate px-2.5 py-1'
-                    }`}
-                  >
-                    {sidebarCollapsed ? displayName.slice(0, 1) : displayName}
-                  </Badge>
+                  {sidebarCollapsed ? (
+                    <Avatar className="size-9 rounded-md border border-sidebar-border bg-sidebar-accent/40 text-sidebar-foreground">
+                      {avatarUrl ? (
+                        <AvatarImage src={avatarUrl} alt="" data-shell-user-avatar-image />
+                      ) : null}
+                      <AvatarFallback className="rounded-md bg-sidebar-accent/40 text-xs font-medium uppercase text-sidebar-foreground">
+                        {avatarInitial}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <Badge
+                      variant="outline"
+                      className="max-w-[7.5rem] truncate rounded-md border-sidebar-border bg-sidebar-accent/40 px-2.5 py-1 text-sidebar-foreground"
+                    >
+                      {displayName}
+                    </Badge>
+                  )}
                 </button>
               ) : null}
               <button
@@ -284,13 +301,23 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                     title={displayName}
                     aria-label={`Angemeldet als ${displayName}`}
                     data-shell-user-pill="mobile"
+                    data-shell-user-avatar={avatarUrl ? '1' : '0'}
                   >
-                    <Badge
-                      variant="outline"
-                      className="max-w-[9rem] truncate rounded-full bg-muted/50 px-2.5 py-1"
-                    >
-                      {displayName}
-                    </Badge>
+                    {avatarUrl ? (
+                      <Avatar className="size-8 rounded-md border border-border">
+                        <AvatarImage src={avatarUrl} alt="" data-shell-user-avatar-image />
+                        <AvatarFallback className="rounded-md text-xs font-medium uppercase">
+                          {avatarInitial}
+                        </AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <Badge
+                        variant="outline"
+                        className="max-w-[9rem] truncate rounded-md bg-muted/50 px-2.5 py-1"
+                      >
+                        {displayName}
+                      </Badge>
+                    )}
                   </button>
                 ) : null}
                 <button

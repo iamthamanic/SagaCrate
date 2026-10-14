@@ -2,7 +2,8 @@
  * AccountAvatarSection — Dropzone box for account avatar (click + drag-drop) (#682).
  * Location: src/app/profile/AccountAvatarSection.tsx
  *
- * Square upload surface is the primary control; Media Optimizer intake unchanged.
+ * Immediate Object-URL preview; optimize + Storage upload continue in the background
+ * (surviveUnmount) so leaving the screen does not cancel the job.
  */
 import {
   useEffect,
@@ -12,7 +13,7 @@ import {
   type DragEvent,
   type KeyboardEvent,
 } from 'react';
-import { ImagePlus, Loader2 } from 'lucide-react';
+import { ImagePlus } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../../lib/auth-context';
 import {
@@ -22,6 +23,7 @@ import {
 } from '../../domains/user-profile';
 import { userProfileService } from '../../infrastructure/user-profile/user-profile-service';
 import { useMediaOptimizeIntake } from '../media';
+import { useAccountAvatar } from '../shell';
 import { Button } from '../../shared/ui/button';
 import { Label } from '../../shared/ui/label';
 import { cn } from '../../shared/ui/utils';
@@ -33,10 +35,27 @@ function isAcceptedImageFile(file: File): boolean {
   return type === 'image/png' || type === 'image/jpeg' || type === 'image/webp';
 }
 
+function uploadFileFromReady(
+  source: File,
+  ready: { uploadBlob: Blob; uploadMimeType: string },
+): File {
+  const base = source.name.replace(/\.[^.]+$/, '') || 'avatar';
+  const ext =
+    ready.uploadMimeType === 'image/webp'
+      ? 'webp'
+      : ready.uploadMimeType === 'image/jpeg'
+        ? 'jpg'
+        : 'png';
+  return new File([ready.uploadBlob], `${base}.${ext}`, {
+    type: ready.uploadMimeType,
+  });
+}
+
 export function AccountAvatarSection() {
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dragDepthRef = useRef(0);
+  const mountedRef = useRef(true);
   const [profile, setProfile] = useState<UserProfileVm | null>(null);
   const [remoteUrl, setRemoteUrl] = useState<string | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -46,7 +65,9 @@ export function AccountAvatarSection() {
   const intake = useMediaOptimizeIntake({
     profileId: 'user-avatar',
     kind: 'image',
+    surviveUnmount: true,
   });
+  const { avatarUrl: sharedAvatarUrl, setAvatarUrl: publishAvatarUrl } = useAccountAvatar();
 
   const authMeta = user?.user_metadata ?? {};
   const displayName =
@@ -58,11 +79,20 @@ export function AccountAvatarSection() {
       email: user?.email ?? null,
     }) ?? 'User';
   const initials = initialsFromDisplayName(displayName);
-  const previewSrc = intake.previewUrl || remoteUrl;
-  const busy = uploading || intake.isBusy || loadingProfile;
+  const previewSrc = intake.previewUrl || remoteUrl || sharedAvatarUrl;
+  const optimizing = intake.status === 'optimizing' || intake.status === 'previewing';
+  const backgroundBusy = uploading || optimizing || intake.status === 'uploading';
+  const pickingLocked = backgroundBusy || loadingProfile;
   const dropHint = previewSrc
     ? 'Profilbild ändern — klicken oder Bild hierher ziehen'
     : 'Profilbild hinzufügen — klicken oder Bild hierher ziehen (PNG/JPEG/WebP)';
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,6 +107,7 @@ export function AccountAvatarSection() {
         if (cancelled) return;
         setProfile(row);
         setRemoteUrl(row?.avatarUrl ?? null);
+        if (row?.avatarUrl) publishAvatarUrl(row.avatarUrl);
       } catch (err) {
         console.error('Account profile load failed:', err);
         if (!cancelled) {
@@ -94,8 +125,14 @@ export function AccountAvatarSection() {
     };
   }, [user]);
 
+  useEffect(() => {
+    if (intake.previewUrl) {
+      publishAvatarUrl(intake.previewUrl);
+    }
+  }, [intake.previewUrl, publishAvatarUrl]);
+
   const openFilePicker = () => {
-    if (busy) return;
+    if (pickingLocked) return;
     fileInputRef.current?.click();
   };
 
@@ -104,7 +141,7 @@ export function AccountAvatarSection() {
       toast.error('Nur PNG, JPEG oder WebP sind erlaubt.');
       return;
     }
-    setUploading(true);
+    if (mountedRef.current) setUploading(true);
     try {
       const outcome = await intake.selectFile(file, {
         profileId: 'user-avatar',
@@ -118,31 +155,22 @@ export function AccountAvatarSection() {
         return;
       }
 
-      const base = file.name.replace(/\.[^.]+$/, '') || 'avatar';
-      const ext =
-        outcome.ready.uploadMimeType === 'image/webp'
-          ? 'webp'
-          : outcome.ready.uploadMimeType === 'image/jpeg'
-            ? 'jpg'
-            : 'png';
-      const uploadFile = new File([outcome.ready.uploadBlob], `${base}.${ext}`, {
-        type: outcome.ready.uploadMimeType,
-      });
-
-      await intake.upload(async () => {
-        const next = await userProfileService.uploadAvatar(uploadFile, {
-          alreadyOptimized: true,
-        });
-        setProfile(next);
-        setRemoteUrl(next.avatarUrl);
+      // Upload from outcome (not intake.upload state) so leave-screen still persists.
+      const uploadFile = uploadFileFromReady(file, outcome.ready);
+      const next = await userProfileService.uploadAvatar(uploadFile, {
+        alreadyOptimized: true,
       });
       toast.success('Profilbild gespeichert');
+      publishAvatarUrl(next.avatarUrl);
+      if (mountedRef.current) {
+        setProfile(next);
+        setRemoteUrl(next.avatarUrl);
+      }
     } catch (err) {
       console.error('Account avatar upload error:', err);
-      // Do not clear remoteUrl — previous avatar survives failed attempts.
       toast.error(err instanceof Error ? err.message : 'Avatar konnte nicht gespeichert werden');
     } finally {
-      setUploading(false);
+      if (mountedRef.current) setUploading(false);
     }
   };
 
@@ -154,27 +182,27 @@ export function AccountAvatarSection() {
   };
 
   const onDragEnter = (event: DragEvent) => {
-    if (busy) return;
+    if (pickingLocked) return;
     event.preventDefault();
     dragDepthRef.current += 1;
     setDragOver(true);
   };
 
   const onDragOver = (event: DragEvent) => {
-    if (busy) return;
+    if (pickingLocked) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'copy';
   };
 
   const onDragLeave = (event: DragEvent) => {
-    if (busy) return;
+    if (pickingLocked) return;
     event.preventDefault();
     dragDepthRef.current = Math.max(0, dragDepthRef.current - 1);
     if (dragDepthRef.current === 0) setDragOver(false);
   };
 
   const onDrop = (event: DragEvent) => {
-    if (busy) return;
+    if (pickingLocked) return;
     event.preventDefault();
     dragDepthRef.current = 0;
     setDragOver(false);
@@ -184,7 +212,7 @@ export function AccountAvatarSection() {
   };
 
   const onZoneKeyDown = (event: KeyboardEvent) => {
-    if (busy) return;
+    if (pickingLocked) return;
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       openFilePicker();
@@ -193,7 +221,7 @@ export function AccountAvatarSection() {
 
   const retry = async () => {
     if (!intake.sourceFile) return;
-    setUploading(true);
+    if (mountedRef.current) setUploading(true);
     try {
       const outcome = await intake.retry();
       if (!outcome || outcome.status !== 'ready' || !outcome.ready || !intake.sourceFile) {
@@ -204,50 +232,47 @@ export function AccountAvatarSection() {
         return;
       }
       const file = intake.sourceFile;
-      const base = file.name.replace(/\.[^.]+$/, '') || 'avatar';
-      const ext =
-        outcome.ready.uploadMimeType === 'image/webp'
-          ? 'webp'
-          : outcome.ready.uploadMimeType === 'image/jpeg'
-            ? 'jpg'
-            : 'png';
-      const uploadFile = new File([outcome.ready.uploadBlob], `${base}.${ext}`, {
-        type: outcome.ready.uploadMimeType,
-      });
-      await intake.upload(async () => {
-        const next = await userProfileService.uploadAvatar(uploadFile, {
-          alreadyOptimized: true,
-        });
-        setProfile(next);
-        setRemoteUrl(next.avatarUrl);
+      const uploadFile = uploadFileFromReady(file, outcome.ready);
+      const next = await userProfileService.uploadAvatar(uploadFile, {
+        alreadyOptimized: true,
       });
       toast.success('Profilbild gespeichert');
+      publishAvatarUrl(next.avatarUrl);
+      if (mountedRef.current) {
+        setProfile(next);
+        setRemoteUrl(next.avatarUrl);
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Avatar konnte nicht gespeichert werden');
     } finally {
-      setUploading(false);
+      if (mountedRef.current) setUploading(false);
     }
   };
+
+  const statusText =
+    uploading && !optimizing
+      ? 'Upload läuft im Hintergrund — du kannst den Bereich verlassen'
+      : intake.statusLabelDe;
 
   return (
     <div className="space-y-4" data-account-avatar-section>
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
         <div
           role="button"
-          tabIndex={busy ? -1 : 0}
+          tabIndex={pickingLocked ? -1 : 0}
           className={cn(
             'group relative flex size-28 shrink-0 flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed transition-colors md:size-32',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             dragOver
               ? 'border-primary bg-primary/10'
               : 'border-border/70 bg-muted/20 hover:border-primary/60 hover:bg-muted/35',
-            busy ? 'cursor-wait opacity-80' : 'cursor-pointer',
+            pickingLocked && !previewSrc ? 'cursor-wait opacity-80' : 'cursor-pointer',
           )}
           data-account-avatar
           data-account-avatar-dropzone
           data-account-avatar-upload
           aria-label={dropHint}
-          aria-busy={busy}
+          aria-busy={backgroundBusy}
           onClick={openFilePicker}
           onKeyDown={onZoneKeyDown}
           onDragEnter={onDragEnter}
@@ -287,14 +312,7 @@ export function AccountAvatarSection() {
             </div>
           ) : null}
 
-          {busy ? (
-            <div
-              className="absolute inset-0 flex items-center justify-center bg-background/60"
-              aria-hidden
-            >
-              <Loader2 className="size-6 animate-spin text-primary" />
-            </div>
-          ) : null}
+          {/* Full overlay only when there is no preview yet (initial load). */}
         </div>
 
         <div className="min-w-0 flex-1 space-y-2">
@@ -309,7 +327,7 @@ export function AccountAvatarSection() {
                 type="button"
                 variant="secondary"
                 className="min-h-11"
-                disabled={busy}
+                disabled={pickingLocked}
                 onClick={() => void retry()}
                 data-account-avatar-retry
               >
@@ -343,7 +361,7 @@ export function AccountAvatarSection() {
 
       <div aria-live="polite" className="text-sm text-muted-foreground" data-account-avatar-status>
         <Label className="sr-only">Avatar-Status</Label>
-        {intake.statusLabelDe}
+        {statusText}
         {intake.errorMessage ? (
           <span className="mt-1 block text-destructive">{intake.errorMessage}</span>
         ) : null}

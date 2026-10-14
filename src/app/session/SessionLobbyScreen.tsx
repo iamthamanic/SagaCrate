@@ -2,8 +2,8 @@
  * SessionLobbyScreen — Canonical Player/GM preflight lobby (#491, #678).
  * Location: src/app/session/SessionLobbyScreen.tsx
  *
- * Shared surface with role-projected CTAs. Media/LiveAct only after user gesture.
- * Join code is the primary share affordance after session create (Peak-End).
+ * Cover-stage layout (sketch Variant B): thin meta row · 16:9 cover · enter ·
+ * Am Tisch seats + Meet-style device bar. Media only after user gesture.
  */
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
@@ -14,10 +14,15 @@ import { AdaptivePage } from '../../shared/ui/adaptive';
 import { decideLobbyEnterLive } from '../../domains/session/contracts/session-lobby';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
 import { initialsFromDisplayName } from '../../domains/user-profile';
+import { useAccountAvatar } from '../shell';
 import { pathForSessionLive } from '../shell';
 import { useSessionLobby } from './hooks/useSessionLobby';
 import { useLobbyMediaPreview } from './hooks/useLobbyMediaPreview';
-import { LobbyMediaPreviewSection } from './LobbyMediaPreviewSection';
+import {
+  LobbyCameraPreview,
+  LobbyDeviceBar,
+  type LobbySeatVideoMode,
+} from './LobbyDeviceBar';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
 
 type SessionLobbyScreenProps = {
@@ -27,13 +32,31 @@ type SessionLobbyScreenProps = {
   onNavigate: (path: string) => void;
 };
 
+const EMPTY_SEAT_TARGET = 4;
+
+/** Top-right ready/wait chip on Am Tisch seat tiles. */
+function LobbySeatReadyBadge({ ready }: { ready: boolean }) {
+  return (
+    <span
+      className={
+        ready
+          ? 'absolute right-2 top-2 z-10 rounded-md border border-emerald-500/45 bg-emerald-500/20 px-2.5 py-0.5 text-[0.65rem] font-semibold text-emerald-400 shadow-sm'
+          : 'absolute right-2 top-2 z-10 animate-pulse rounded-md border border-amber-400/45 bg-amber-400/20 px-2.5 py-0.5 text-[0.65rem] font-semibold text-amber-300 shadow-sm'
+      }
+      data-lobby-ready={ready ? '1' : '0'}
+    >
+      {ready ? 'Bereit' : 'Nicht bereit'}
+    </span>
+  );
+}
+
 export function SessionLobbyScreen({
   sagaPublicId,
   sessionPublicId,
   onNavigateHome,
   onNavigate,
 }: SessionLobbyScreenProps) {
-  const { model, isLoading, error, setReady, refresh } = useSessionLobby({
+  const { model, isLoading, error, setReady } = useSessionLobby({
     sagaPublicId,
     sessionPublicId,
   });
@@ -42,9 +65,11 @@ export function SessionLobbyScreen({
     selfCharacterId: model?.selfCharacterId ?? null,
     selfCharacterName: model?.selfCharacterName ?? null,
   });
+  const { avatarUrl: accountAvatarUrl } = useAccountAvatar();
 
   const selfReady = model?.roster.find((m) => m.isSelf)?.isReady === true;
   const [codeCopied, setCodeCopied] = useState(false);
+  const [seatVideoMode, setSeatVideoMode] = useState<LobbySeatVideoMode>('profile');
 
   const handleCopyCode = async () => {
     const code = model?.summary.code?.trim();
@@ -67,10 +92,10 @@ export function SessionLobbyScreen({
       }
       setCodeCopied(true);
       toast.success('Code kopiert!');
-      window.setTimeout(() => setCodeCopied(false), 2000);
     } catch {
       toast.error('Code konnte nicht kopiert werden');
     }
+    window.setTimeout(() => setCodeCopied(false), 2000);
   };
 
   const handleEnter = () => {
@@ -109,255 +134,402 @@ export function SessionLobbyScreen({
     );
   };
 
+  const characterLabel =
+    model?.selfRole === 'gamemaster'
+      ? 'Spielleitung'
+      : (model?.selfCharacterName ?? 'Nicht zugewiesen');
+
+  const emptySeatCount = model
+    ? Math.max(0, EMPTY_SEAT_TARGET - model.roster.length)
+    : 0;
+
   return (
     <AdaptivePage data-au-surface="session-lobby" className="h-full w-full">
       <div
-        className="mx-auto flex h-full max-w-3xl flex-col gap-4 overflow-y-auto p-4 sm:p-6"
+        className="mx-auto flex h-full w-full min-w-0 max-w-3xl flex-col gap-0 overflow-y-auto p-3 sm:p-5"
         data-session-lobby="v1"
+        data-session-lobby-layout="cover-stage"
       >
-        <header className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              Session-Lobby
-            </p>
-            <h1 className="text-2xl font-semibold text-foreground">
-              {model?.summary.sessionName ?? 'Lobby'}
-            </h1>
-            {model?.summary.sagaName ? (
-              <p className="text-sm text-muted-foreground">{model.summary.sagaName}</p>
-            ) : null}
-          </div>
-          <Button type="button" variant="ghost" className="min-h-11" onClick={onNavigateHome}>
-            Verlassen
-          </Button>
-        </header>
-
-        {isLoading ? (
-          <p className="text-sm text-muted-foreground">Lobby wird geladen…</p>
+        {isLoading && !model ? (
+          <p className="mb-2 text-sm text-muted-foreground">Lobby wird geladen…</p>
         ) : null}
 
         {error ? (
-          <p className="text-sm text-destructive" role="alert" data-session-lobby-error>
+          <p className="mb-2 text-sm text-destructive" role="alert" data-session-lobby-error>
             {error}
           </p>
         ) : null}
 
         {model ? (
-          <div
-            className="flex min-w-0 flex-col gap-3 @[40rem]/main:flex-row @[40rem]/main:items-stretch"
-            data-session-lobby-join-hero
-          >
+          <>
+            {/* Meta: Titel + 16:9-Cover · Code-Box mit Aktionen (kein Overflow) */}
             <div
-              className="relative mx-auto aspect-square w-40 max-w-full shrink-0 overflow-hidden rounded-lg border border-border bg-muted @[40rem]/main:mx-0 @[40rem]/main:w-48"
-              data-session-lobby-saga-cover-frame
+              className="grid min-w-0 grid-cols-1 items-stretch gap-2 pb-1 sm:grid-cols-[minmax(0,1fr)_auto]"
+              data-session-lobby-cover-meta
             >
-              {model.summary.sagaCoverUrl ? (
-                <img
-                  src={model.summary.sagaCoverUrl}
-                  alt={
-                    model.summary.sagaName
-                      ? `Saga-Cover: ${model.summary.sagaName}`
-                      : 'Saga-Cover'
-                  }
-                  className="h-full w-full object-cover object-center"
-                  data-session-lobby-saga-cover
-                />
-              ) : (
-                <div
-                  className="flex h-full w-full items-center justify-center px-2 text-center text-sm font-medium text-muted-foreground"
-                  data-session-lobby-saga-cover-fallback
-                  aria-hidden
-                >
-                  {(model.summary.sagaName ?? 'Saga').slice(0, 1)}
-                </div>
-              )}
-            </div>
-            {model.summary.code ? (
-              <section
-                className="min-w-0 flex-1 rounded-lg border border-primary/40 bg-card/60 p-4 sm:p-5"
-                data-session-lobby-join-code
-              >
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Session-Code
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Teile diesen Code mit deinen Spielern — Beitritt über Session → Beitreten.
-                </p>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <div className="min-w-0 flex-1 rounded-lg bg-muted px-4 py-3 text-center">
-                    <p
-                      className="font-mono text-3xl tracking-[0.2em] text-foreground sm:text-4xl"
-                      data-session-lobby-code
-                    >
-                      {model.summary.code}
+              <div className="flex min-w-0 items-center gap-3 rounded-lg border border-border bg-card/80 px-3 py-2">
+                <div className="min-w-0 flex-1">
+                  {model.summary.sagaName ? (
+                    <p className="truncate text-[0.7rem] uppercase tracking-wide text-muted-foreground">
+                      {model.summary.sagaName}
                     </p>
-                  </div>
+                  ) : (
+                    <p className="text-[0.7rem] uppercase tracking-wide text-muted-foreground">
+                      Session-Lobby
+                    </p>
+                  )}
+                  <h1 className="truncate text-sm font-semibold leading-tight text-foreground sm:text-base">
+                    {model.summary.sessionName ?? 'Lobby'}
+                  </h1>
+                </div>
+                <div
+                  className="relative aspect-video h-12 w-auto shrink-0 overflow-hidden rounded-md border border-border bg-muted sm:h-14"
+                  data-session-lobby-saga-cover-frame
+                  data-session-lobby-join-hero
+                >
+                  {model.summary.sagaCoverUrl ? (
+                    <img
+                      src={model.summary.sagaCoverUrl}
+                      alt={
+                        model.summary.sagaName
+                          ? `Saga-Cover: ${model.summary.sagaName}`
+                          : 'Saga-Cover'
+                      }
+                      className="absolute inset-0 size-full object-cover object-center"
+                      data-session-lobby-saga-cover
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-card text-sm font-semibold text-muted-foreground"
+                      data-session-lobby-saga-cover-fallback
+                      aria-hidden
+                    >
+                      {(model.summary.sagaName ?? model.summary.sessionName ?? 'Saga').slice(0, 1)}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <section
+                className="flex h-full min-w-0 items-center gap-2 self-stretch rounded-lg border border-border bg-card/80 px-2.5 py-2"
+                data-session-lobby-join-code
+                aria-label="Session-Code und Aktionen"
+              >
+                {model.summary.code ? (
+                  <p
+                    className="min-w-0 flex-1 truncate text-center font-mono text-sm tracking-[0.14em] text-foreground"
+                    data-session-lobby-code
+                    translate="no"
+                  >
+                    {model.summary.code}
+                  </p>
+                ) : (
+                  <span className="sr-only">Kein Session-Code</span>
+                )}
+                <div className="flex shrink-0 items-center gap-1">
+                  {model.summary.code ? (
+                    <>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="size-7 shrink-0 rounded-md"
+                        onClick={() => void handleCopyCode()}
+                        aria-label="Session-Code kopieren"
+                        data-session-lobby-copy-code
+                      >
+                        {codeCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                      </Button>
+                      <SessionInviteShareButton
+                        sessionId={model.summary.sessionId}
+                        label="Link"
+                        className="h-7 min-h-7 shrink-0 px-2 text-[0.65rem] font-semibold"
+                      />
+                    </>
+                  ) : null}
                   <Button
                     type="button"
                     variant="outline"
-                    size="icon"
-                    className="min-h-11 min-w-11"
-                    onClick={() => void handleCopyCode()}
-                    aria-label="Session-Code kopieren"
-                    data-session-lobby-copy-code
+                    className="h-7 min-h-7 shrink-0 px-2 text-[0.65rem] font-semibold"
+                    onClick={onNavigateHome}
+                    data-session-lobby-leave
                   >
-                    {codeCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                    Verlassen
                   </Button>
                 </div>
-                <div className="mt-3">
-                  <SessionInviteShareButton
-                    sessionId={model.summary.sessionId}
-                    className="min-h-11 w-full"
-                  />
-                </div>
               </section>
-            ) : null}
-          </div>
-        ) : null}
+            </div>
 
-        {/* Media preview after first paint — never gated on roster load; streams only after gesture. */}
-        <LobbyMediaPreviewSection media={media} />
-
-        {model ? (
-          <>
+            {/* Am Tisch takes the former full-bleed cover slot */}
             <section
-              className="rounded-lg border border-border bg-card/40 p-4"
+              className="mt-1 min-w-0 shrink-0 rounded-lg border border-border bg-card/40 p-3 sm:p-4"
               data-session-lobby-roster
             >
               <div className="flex items-center justify-between gap-2">
-                <h2 className="text-sm font-medium">Teilnehmer</h2>
+                <h2 className="text-sm font-medium">Am Tisch</h2>
                 <p className="text-xs text-muted-foreground">
-                  Online {model.onlineCount} · Bereit {model.readyCount}
+                  <span className="font-semibold text-primary">
+                    {model.readyCount} / {Math.max(model.roster.length, EMPTY_SEAT_TARGET)}
+                  </span>{' '}
+                  bereit
+                  {model.roster.some((m) => !m.isReady)
+                    ? ` · ${model.roster.find((m) => !m.isReady)?.accountDisplayName ?? 'jemand'} fehlt`
+                    : null}
                 </p>
               </div>
-              <ul className="mt-3 space-y-2">
-                {model.roster.length === 0 ? (
-                  <li className="text-sm text-muted-foreground">Noch keine Teilnehmer</li>
-                ) : (
-                  model.roster.map((member) => (
-                    <li
-                      key={member.userId}
-                      className="flex min-w-0 flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-sm"
-                      data-session-lobby-member={member.isSelf ? 'self' : 'peer'}
-                    >
-                      <div className="flex min-w-0 items-center gap-3">
-                        <Avatar className="size-11 shrink-0" data-lobby-member-avatar>
-                          {member.avatarUrl ? (
-                            <AvatarImage
-                              src={member.avatarUrl}
-                              alt={`Avatar von ${member.accountDisplayName}`}
-                            />
-                          ) : null}
-                          <AvatarFallback aria-hidden={Boolean(member.avatarUrl)}>
-                            {initialsFromDisplayName(member.accountDisplayName)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0">
-                          <p className="truncate font-medium" data-lobby-account-name>
-                            {member.accountDisplayName}
-                            {member.isSelf ? ' (du)' : ''}
-                          </p>
-                          <p
-                            className="truncate font-mono text-xs text-muted-foreground"
-                            data-lobby-user-id
-                            title={member.userId}
+
+              <ul className="mt-3 grid grid-cols-2 gap-2 @[40rem]/main:grid-cols-4">
+                {model.roster.map((member) => {
+                  const displayName = member.isSelf
+                    ? (member.characterName ?? member.accountDisplayName)
+                    : member.accountDisplayName;
+                  const roleLabel =
+                    member.role === 'gamemaster'
+                      ? 'Spielleitung'
+                      : member.isSelf
+                        ? 'du'
+                        : (member.characterName ?? 'Player');
+                  const cameraActive =
+                    member.isSelf &&
+                    seatVideoMode === 'camera' &&
+                    media.cameraStatus === 'granted' &&
+                    media.cameraStream != null;
+                  const liveActActive =
+                    member.isSelf &&
+                    seatVideoMode === 'liveact' &&
+                    media.liveActActive &&
+                    media.liveActPreview != null;
+                  const profileActive =
+                    member.isSelf &&
+                    (seatVideoMode === 'profile' || (!cameraActive && !liveActActive));
+                  const selfAvatarUrl = member.isSelf
+                    ? accountAvatarUrl || member.avatarUrl
+                    : member.avatarUrl;
+                  // 4-col × 16:9 was ~90px tall — portrait tile + min-height for overlays
+                  const seatShell =
+                    'relative min-h-[13.5rem] aspect-[4/5] min-w-0 overflow-hidden rounded-md';
+
+                  if (member.isSelf) {
+                    return (
+                      <li
+                        key={member.userId}
+                        className={`${seatShell} border border-primary/50 bg-muted`}
+                        data-session-lobby-member="self"
+                      >
+                        {cameraActive ? (
+                          <div className="absolute inset-0" data-session-lobby-device-preview>
+                            <LobbyCameraPreview stream={media.cameraStream} />
+                          </div>
+                        ) : liveActActive && media.liveActPreview?.imageUrl ? (
+                          <img
+                            src={media.liveActPreview.imageUrl}
+                            alt={media.liveActPreview.name}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            data-session-lobby-liveact-preview
+                          />
+                        ) : liveActActive && media.liveActPreview ? (
+                          <div
+                            className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-muted px-2 pb-14 pt-12 text-center"
+                            data-session-lobby-liveact-preview
                           >
-                            {member.userId}
+                            <span className="text-2xl font-semibold text-muted-foreground">
+                              {media.liveActPreview.name.slice(0, 1).toUpperCase()}
+                            </span>
+                            <span className="line-clamp-2 text-xs text-muted-foreground">
+                              {media.liveActPreview.name}
+                            </span>
+                          </div>
+                        ) : profileActive && selfAvatarUrl ? (
+                          <img
+                            src={selfAvatarUrl}
+                            alt={`Profilbild von ${member.accountDisplayName}`}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            data-lobby-member-avatar
+                            data-session-lobby-profile-preview
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center pb-14 pt-12">
+                            <Avatar
+                              className={
+                                member.isReady
+                                  ? 'size-14 shrink-0 rounded-md ring-2 ring-emerald-500/70 ring-offset-2 ring-offset-background'
+                                  : 'size-14 shrink-0 rounded-md ring-2 ring-amber-400/60 ring-offset-2 ring-offset-background'
+                              }
+                              data-lobby-member-avatar
+                            >
+                              {selfAvatarUrl ? (
+                                <AvatarImage
+                                  src={selfAvatarUrl}
+                                  alt={`Avatar von ${member.accountDisplayName}`}
+                                />
+                              ) : null}
+                              <AvatarFallback
+                                className="rounded-md"
+                                aria-hidden={Boolean(selfAvatarUrl)}
+                              >
+                                {initialsFromDisplayName(member.accountDisplayName)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        )}
+
+                        <div
+                          className="absolute left-2 top-2 z-10 min-w-0 max-w-[calc(100%-5.5rem)] rounded-md border border-border/80 bg-background/90 px-2 py-1 text-left shadow-sm"
+                          data-session-lobby-seat-identity
+                        >
+                          <p
+                            className="truncate text-sm font-medium leading-tight"
+                            data-lobby-account-name
+                          >
+                            {displayName}
                           </p>
-                          <p className="truncate text-xs text-muted-foreground">
-                            {member.role === 'gamemaster' ? 'GM' : 'Player'}
-                            {member.characterName
-                              ? ` · ${member.characterName}`
-                              : member.role === 'gamemaster'
-                                ? ' · Spielleitung'
-                                : ' · Ohne Charakter'}
-                            {member.characterPublicId ? ` · ${member.characterPublicId}` : ''}
+                          <p className="truncate text-[0.7rem] text-muted-foreground">
+                            {roleLabel}
                           </p>
                         </div>
-                      </div>
-                      <div className="flex gap-2 text-xs">
-                        <span
-                          className={
-                            member.isOnline ? 'text-emerald-600' : 'text-muted-foreground'
-                          }
-                          data-lobby-online={member.isOnline ? '1' : '0'}
-                        >
+
+                        <LobbySeatReadyBadge ready={member.isReady} />
+
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background/95 to-transparent" />
+
+                        <div className="absolute inset-x-0 bottom-0 flex justify-center p-2">
+                          <Button
+                            type="button"
+                            variant={selfReady ? 'secondary' : 'default'}
+                            size="sm"
+                            className="pointer-events-auto h-7 min-h-7 shrink-0 px-2.5 text-xs"
+                            onClick={() => setReady(!selfReady)}
+                            data-session-lobby-ready-toggle
+                          >
+                            {selfReady ? 'Nicht bereit' : 'Bereit machen'}
+                          </Button>
+                        </div>
+
+                        <span className="sr-only" data-lobby-online={member.isOnline ? '1' : '0'}>
                           {member.isOnline ? 'Online' : 'Offline'}
                         </span>
-                        <span
-                          className={
-                            member.isReady ? 'text-emerald-600' : 'text-muted-foreground'
-                          }
-                          data-lobby-ready={member.isReady ? '1' : '0'}
-                        >
-                          {member.isReady ? 'Bereit' : 'Wartet'}
+                        <span className="sr-only" data-lobby-user-id title={member.userId}>
+                          {member.userId}
                         </span>
+                        <span className="sr-only" data-session-lobby-character>
+                          Charakter: {characterLabel}
+                        </span>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li
+                      key={member.userId}
+                      className={`${seatShell} border border-border/60 bg-background/40`}
+                      data-session-lobby-member="peer"
+                    >
+                      {member.avatarUrl ? (
+                        <img
+                          src={member.avatarUrl}
+                          alt={`Profilbild von ${member.accountDisplayName}`}
+                          className="absolute inset-0 h-full w-full object-cover"
+                          data-lobby-member-avatar
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center px-2 pt-10 pb-2">
+                          <Avatar
+                            className={
+                              member.isReady
+                                ? 'size-11 shrink-0 rounded-md ring-2 ring-emerald-500/70 ring-offset-2 ring-offset-background'
+                                : 'size-11 shrink-0 rounded-md ring-2 ring-amber-400/60 ring-offset-2 ring-offset-background'
+                            }
+                            data-lobby-member-avatar
+                          >
+                            <AvatarFallback className="rounded-md">
+                              {initialsFromDisplayName(member.accountDisplayName)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      )}
+                      <div
+                        className="absolute left-2 top-2 z-10 min-w-0 max-w-[calc(100%-5.5rem)] rounded-md border border-border/70 bg-background/90 px-2 py-1 text-left shadow-sm"
+                        data-session-lobby-seat-identity
+                      >
+                        <p className="truncate text-sm font-medium" data-lobby-account-name>
+                          {displayName}
+                        </p>
+                        <p className="truncate text-[0.7rem] text-muted-foreground">{roleLabel}</p>
                       </div>
+                      <LobbySeatReadyBadge ready={member.isReady} />
+                      <span className="sr-only" data-lobby-online={member.isOnline ? '1' : '0'}>
+                        {member.isOnline ? 'Online' : 'Offline'}
+                      </span>
+                      <span className="sr-only" data-lobby-user-id title={member.userId}>
+                        {member.userId}
+                      </span>
                     </li>
-                  ))
-                )}
+                  );
+                })}
+                {Array.from({ length: emptySeatCount }, (_, i) => (
+                  <li
+                    key={`empty-${i}`}
+                    className="flex min-h-[13.5rem] aspect-[4/5] min-w-0 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-border/70 px-2 py-3 text-muted-foreground"
+                    data-session-lobby-seat-empty
+                  >
+                    <span className="text-xl leading-none">+</span>
+                    <span className="text-sm">Offen</span>
+                  </li>
+                ))}
               </ul>
-              <Button
-                type="button"
-                variant={selfReady ? 'secondary' : 'default'}
-                className="mt-3 min-h-11"
-                onClick={() => setReady(!selfReady)}
-                data-session-lobby-ready-toggle
-              >
-                {selfReady ? 'Bereitschaft zurücknehmen' : 'Bereit markieren'}
-              </Button>
+
+              <div className="mt-3 flex min-w-0 flex-col gap-2.5 border-t border-border pt-3">
+                {model.canChangeCharacter ? (
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="min-h-11"
+                      onClick={handleChangeCharacter}
+                      data-session-lobby-change-character
+                    >
+                      Charakter ändern
+                    </Button>
+                  </div>
+                ) : null}
+
+                <LobbyDeviceBar
+                  media={media}
+                  hidePreview
+                  videoMode={seatVideoMode}
+                  onVideoModeChange={setSeatVideoMode}
+                />
+              </div>
+
+              {model.enterDisabledReasonDe ? (
+                <p className="mt-2 text-sm text-destructive" role="status">
+                  {model.enterDisabledReasonDe}
+                </p>
+              ) : null}
             </section>
 
-            <footer className="mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-4">
+            <div className="mt-1.5 shrink-0">
               <Button
                 type="button"
-                className="min-h-11"
+                className="min-h-11 w-full"
                 disabled={Boolean(model.enterDisabledReasonDe)}
                 onClick={handleEnter}
                 data-session-lobby-enter
+                data-session-lobby-enter-mid
               >
                 {model.enterCtaLabelDe}
               </Button>
-              {model.canChangeCharacter ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="min-h-11"
-                  onClick={handleChangeCharacter}
-                  data-session-lobby-change-character
-                >
-                  Charakter ändern
-                </Button>
-              ) : null}
-              <Button
-                type="button"
-                variant="ghost"
-                className="min-h-11"
-                onClick={() => void refresh()}
-                data-session-lobby-refresh
-              >
-                Aktualisieren
-              </Button>
-              {model.selfCharacterName || model.selfCharacterPublicId ? (
-                <p className="text-xs text-muted-foreground" data-session-lobby-character>
-                  {model.selfRole === 'gamemaster' ? 'Spielleitung' : 'Charakter'}:{' '}
-                  {model.selfCharacterName ??
-                    (model.selfRole === 'gamemaster' ? '—' : 'Nicht zugewiesen')}
-                  {model.selfCharacterPublicId ? ` (${model.selfCharacterPublicId})` : ''}
-                </p>
-              ) : null}
-              {model.enterDisabledReasonDe ? (
-                <p className="text-sm text-destructive" role="status">
-                  {model.enterDisabledReasonDe}
-                </p>
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  Bereitschaft ist nur ein Signal — keine Spielberechtigung.
-                </p>
-              )}
-            </footer>
+            </div>
           </>
-        ) : null}
+        ) : (
+          <section className="rounded-lg border border-border bg-card/40 p-4">
+            <LobbyDeviceBar
+              media={media}
+              videoMode={seatVideoMode}
+              onVideoModeChange={setSeatVideoMode}
+            />
+          </section>
+        )}
       </div>
     </AdaptivePage>
   );

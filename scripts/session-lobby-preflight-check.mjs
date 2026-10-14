@@ -67,9 +67,11 @@ section('3 · no auto media / pure domain');
   check(/resolveCanonicalLobbyEntry/.test(domain), 'post-join lobby entry');
 
   const screen = read('src/app/session/SessionLobbyScreen.tsx');
-  const mediaUi = existsSync(join(root, 'src/app/session/LobbyMediaPreviewSection.tsx'))
-    ? read('src/app/session/LobbyMediaPreviewSection.tsx')
-    : '';
+  const mediaUi = existsSync(join(root, 'src/app/session/LobbyDeviceBar.tsx'))
+    ? read('src/app/session/LobbyDeviceBar.tsx')
+    : existsSync(join(root, 'src/app/session/LobbyMediaPreviewSection.tsx'))
+      ? read('src/app/session/LobbyMediaPreviewSection.tsx')
+      : '';
   check(/data-au-surface="session-lobby"/.test(screen), 'AU surface');
   check(/enterCtaLabelDe|Session betreten|Session starten/.test(screen), 'DE CTAs');
   check(

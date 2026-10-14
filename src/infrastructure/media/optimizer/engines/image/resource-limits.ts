@@ -12,6 +12,29 @@ export const IMAGE_ENGINE_ABSOLUTE_MAX_EDGE_PX = 8192;
 /** Absolute max pixel count (width * height). */
 export const IMAGE_ENGINE_MAX_PIXELS = 16_777_216; // 4096²
 
+/**
+ * Scale factor (≤1) so decoded raster fits maxEdge and maxPixels.
+ * Used to auto-downscale before hard reject (large phone photos → avatar/portrait).
+ */
+export function computeImageDownscaleFactor(
+  width: number,
+  height: number,
+  maxEdgePx: number,
+  maxPixels: number = IMAGE_ENGINE_MAX_PIXELS,
+): number {
+  if (width < 1 || height < 1) return 1;
+  let scale = 1;
+  const longest = Math.max(width, height);
+  if (maxEdgePx > 0 && longest > maxEdgePx) {
+    scale = Math.min(scale, maxEdgePx / longest);
+  }
+  const pixels = width * height;
+  if (maxPixels > 0 && pixels * scale * scale > maxPixels) {
+    scale = Math.min(scale, Math.sqrt(maxPixels / pixels));
+  }
+  return scale;
+}
+
 export type ResourceLimitFailure = {
   readonly ok: false;
   readonly code: 'invalid-input' | 'over-max-upload';

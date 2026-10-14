@@ -142,6 +142,7 @@ const VIEW_PATHS: Record<
   'adventure-editor': '/adventure-editor',
   gamemaster: '/gamemaster',
   marketplace: '/marketplace',
+  /** Legacy bookmark; canonical entry is `/settings/profile` via pathForView. */
   profile: '/profile',
   join: '/join',
   'session-join': '/session-join',
@@ -158,6 +159,7 @@ const VIEW_ALIASES: Record<
   'session-start': 'session-join',
   home: 'dashboard',
   sagas: 'saga-list',
+  settings: 'profile',
 };
 
 const PATH_TO_VIEW = new Map<string, keyof typeof VIEW_PATHS>(
@@ -216,6 +218,8 @@ export function pathForView(viewId: string): string | null {
   if (normalized === 'saga-list') return '/sagas';
   // Shell "Bibliothek" lands on player-characters (slash router, not bare /library).
   if (normalized === 'library') return pathForLibraryTab('characters');
+  // Account settings: tabbed surface under /settings/:tab (not bare /profile).
+  if (normalized === 'profile') return pathForSettingsTab('profile');
   if (normalized in VIEW_PATHS) {
     return VIEW_PATHS[normalized as keyof typeof VIEW_PATHS];
   }
@@ -311,6 +315,70 @@ export function parseLibraryTabFromPathname(pathname: string): LibraryTabId | nu
 /** Deep-link into Bibliothek tab via slash path (e.g. `/library/player-characters`). */
 export function pathForLibraryTab(tab: LibraryTabId = 'characters'): string {
   return `/library/${LIBRARY_TAB_PATH_SEGMENTS[tab]}`;
+}
+
+/** Account settings tabs under `/settings/…` (shell profile view). */
+export type SettingsTabId =
+  | 'profile'
+  | 'appearance'
+  | 'notifications'
+  | 'audio-video'
+  | 'language'
+  | 'ai'
+  | 'danger';
+
+/** Canonical slash segments under `/settings/…`. */
+export const SETTINGS_TAB_PATH_SEGMENTS: Record<SettingsTabId, string> = {
+  profile: 'profile',
+  appearance: 'appearance',
+  notifications: 'notifications',
+  'audio-video': 'audio-video',
+  language: 'language',
+  ai: 'ai',
+  danger: 'danger',
+};
+
+/** Path segment + legacy German tab ids / `/profile` aliases. */
+const SETTINGS_TAB_ALIASES: Record<string, SettingsTabId> = {
+  profile: 'profile',
+  profil: 'profile',
+  appearance: 'appearance',
+  darstellung: 'appearance',
+  notifications: 'notifications',
+  benachrichtigungen: 'notifications',
+  'audio-video': 'audio-video',
+  language: 'language',
+  sprache: 'language',
+  ai: 'ai',
+  danger: 'danger',
+  gefahrenbereich: 'danger',
+  'danger-zone': 'danger',
+};
+
+export function parseSettingsTabParam(raw: string | null | undefined): SettingsTabId | null {
+  if (!raw) return null;
+  const key = raw.trim().toLowerCase();
+  if (!Object.prototype.hasOwnProperty.call(SETTINGS_TAB_ALIASES, key)) {
+    return null;
+  }
+  return SETTINGS_TAB_ALIASES[key] ?? null;
+}
+
+/**
+ * Resolve settings tab from pathname (`/settings`, `/settings/ai`, `/profile`, …).
+ * Returns null when the path is not an account-settings route.
+ */
+export function parseSettingsTabFromPathname(pathname: string): SettingsTabId | null {
+  const path = normalizePathname(pathname);
+  if (path === '/settings' || path === '/profile') return 'profile';
+  const match = path.match(/^\/settings\/([^/]+)$/);
+  if (!match) return null;
+  return parseSettingsTabParam(match[1] ?? '');
+}
+
+/** Deep-link into account settings tab (e.g. `/settings/ai`). */
+export function pathForSettingsTab(tab: SettingsTabId = 'profile'): string {
+  return `/settings/${SETTINGS_TAB_PATH_SEGMENTS[tab]}`;
 }
 
 /**
@@ -611,6 +679,22 @@ export function resolvePathname(pathname: string): ResolvedRoute {
     if (parseLibraryTabParam(libraryTabMatch[1] ?? '')) {
       return { kind: 'view', view: 'library' };
     }
+    return { kind: 'not-found', attemptedPath: path };
+  }
+
+  if (path === '/settings') {
+    return { kind: 'view', view: 'profile' };
+  }
+
+  const settingsTabMatch = path.match(/^\/settings\/([^/]+)$/);
+  if (settingsTabMatch) {
+    if (parseSettingsTabParam(settingsTabMatch[1] ?? '')) {
+      return { kind: 'view', view: 'profile' };
+    }
+    return { kind: 'not-found', attemptedPath: path };
+  }
+
+  if (path.startsWith('/settings/')) {
     return { kind: 'not-found', attemptedPath: path };
   }
 

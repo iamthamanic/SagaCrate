@@ -6,6 +6,8 @@ export { AuthGate } from './auth/AuthGate';
 export { Layout } from './Layout';
 export { SagaTreeLogo } from './SagaTreeLogo';
 export { ViewLoadingFallback } from './ViewLoadingFallback';
+export { useAccountAvatar } from './useAccountAvatar';
+export type { UseAccountAvatarResult } from './useAccountAvatar';
 export {
   knownViewIds,
   normalizeViewId,
@@ -21,6 +23,10 @@ export {
   parseLibraryTabFromPathname,
   parseLibraryTabParam,
   LIBRARY_TAB_PATH_SEGMENTS,
+  pathForSettingsTab,
+  parseSettingsTabFromPathname,
+  parseSettingsTabParam,
+  SETTINGS_TAB_PATH_SEGMENTS,
   pathForSagaNew,
   pathForSagaDefinitionCreate,
   pathForSagaDefinitionEdit,
@@ -33,6 +39,7 @@ export {
   setNavigationBlocker,
   useAppLocation,
   type LibraryTabId,
+  type SettingsTabId,
   type LiveViewId,
   type ResolvedRoute,
   type SagaSectionId,

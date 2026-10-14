@@ -65,6 +65,12 @@ const cases = [
   ['/library/sagas', 'view', 'library'],
   ['/library/items', 'view', 'library'],
   ['/library/not-a-tab', 'not-found', null],
+  ['/settings', 'view', 'profile'],
+  ['/settings/profile', 'view', 'profile'],
+  ['/settings/ai', 'view', 'profile'],
+  ['/settings/danger', 'view', 'profile'],
+  ['/settings/not-a-tab', 'not-found', null],
+  ['/profile', 'view', 'profile'],
   ['/items/create', 'item-create', null],
   ['/items/create/new/waffe', 'item-create', 'waffe'],
   ['/items/create/new/ruestung', 'item-create', 'ruestung'],
@@ -96,6 +102,18 @@ for (const [path, kind, extra] of cases) {
 
 if (routes.pathForView('library') !== '/library/player-characters') {
   throw new Error('pathForView(library) mismatch');
+}
+if (routes.pathForView('profile') !== '/settings/profile') {
+  throw new Error(`pathForView(profile) expected /settings/profile, got ${routes.pathForView('profile')}`);
+}
+if (routes.pathForSettingsTab('ai') !== '/settings/ai') {
+  throw new Error('pathForSettingsTab(ai) mismatch');
+}
+if (routes.parseSettingsTabFromPathname('/settings/appearance') !== 'appearance') {
+  throw new Error('parseSettingsTabFromPathname(appearance) mismatch');
+}
+if (routes.parseSettingsTabFromPathname('/profile') !== 'profile') {
+  throw new Error('legacy /profile should map to settings profile tab');
 }
 if (routes.pathForLibraryTab('adventures') !== '/library/sagas') {
   throw new Error('pathForLibraryTab(adventures) mismatch');

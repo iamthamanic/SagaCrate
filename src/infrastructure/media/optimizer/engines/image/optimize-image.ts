@@ -8,10 +8,11 @@ import {
   evaluateImageAgainstPolicy,
   normalizeImageMime,
 } from '../../../../../domains/media';
-import { blobToImageData, scaleImageData } from './raster-decode';
+import { blobToImageDataFittingLimits } from './raster-decode';
 import {
   assertImageInputByteLimit,
   assertImagePixelLimit,
+  IMAGE_ENGINE_MAX_PIXELS,
 } from './resource-limits';
 import { encodeWebpWithWorkerFallback } from './webp-worker-client';
 import type { ImageEngineRequest } from './types';
@@ -177,7 +178,12 @@ export async function runOptimizeImage(
   let imageData: ImageData;
   try {
     const blob = toBlob(request.bytes, mime);
-    imageData = await blobToImageData(blob);
+    // Downscale into policy maxEdge + engine pixel ceiling during decode —
+    // large phone photos must not hard-fail before WebP budget encode.
+    imageData = await blobToImageDataFittingLimits(blob, {
+      maxEdgePx: policy.maxEdgePx,
+      maxPixels: IMAGE_ENGINE_MAX_PIXELS,
+    });
   } catch (error) {
     return {
       status: 'failed',
@@ -191,6 +197,7 @@ export async function runOptimizeImage(
 
   const pixelLimit = assertImagePixelLimit(imageData.width, imageData.height);
   if (pixelLimit.ok === false) {
+    // Should be unreachable after fitting decode; keep fail-closed.
     if (pixelLimit.code === 'over-max-upload') {
       return {
         status: 'over-budget',
@@ -210,15 +217,6 @@ export async function runOptimizeImage(
       code: 'invalid-input',
       message: pixelLimit.message,
     };
-  }
-
-  // Optional max-edge pre-scale before budget ladder
-  if (Math.max(imageData.width, imageData.height) > policy.maxEdgePx) {
-    const edge = policy.maxEdgePx;
-    const scale = edge / Math.max(imageData.width, imageData.height);
-    const nw = Math.max(1, Math.floor(imageData.width * scale));
-    const nh = Math.max(1, Math.floor(imageData.height * scale));
-    imageData = await scaleImageData(imageData, nw, nh);
   }
 
   const budgeted = await encodeWebpWithWorkerFallback({
