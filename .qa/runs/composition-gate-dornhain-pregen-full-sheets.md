@@ -1,6 +1,6 @@
 # Composition Gate — dornhain-pregen-full-sheets
 
-- HEAD_SHA: 5caad6d21d4e71a2dbdcfc94af53b3b69c52a50e
+- HEAD_SHA: 77292157fad6c1d60924cea328c8490119a5a5a0
 - Date: 2026-10-14
 - Verdict: CLEAR
 
