@@ -357,6 +357,30 @@ export function isSagaTreeArchetypeKey(value: string): value is SagaTreeArchetyp
 export function isSagaTreeAttributeKey(value: string): value is SagaTreeAttributeKey { return sagaTreeAttributeDefinitions.some((definition) => definition.key === value); }
 export function isSagaTreeEssenceKey(value: string): value is SagaTreeEssenceKey { return sagaTreeEssenceOptions.some((option) => option.value === value); }
 export function isSagaTreeRaceKey(value: string): value is SagaTreeRaceKey { return sagaTreeRaceOptions.some((option) => option.value === value); }
+
+const SAGA_TREE_RACE_KEY_BY_LABEL: Readonly<Record<string, SagaTreeRaceKey>> = {
+  mensch: 'human',
+  human: 'human',
+  elf: 'elf',
+  elfin: 'elf',
+  zwerg: 'dwarf',
+  zwergin: 'dwarf',
+  dwarf: 'dwarf',
+  ork: 'orc',
+  orc: 'orc',
+  halbling: 'halfling',
+  halfling: 'halfling',
+  cyborg: 'cyborg',
+  alien: 'alien',
+};
+
+/** Map DB/UI race strings (DE labels or EN keys) to SpeciesCarousel keys. */
+export function normalizeSagaTreeRaceKey(raw: string | null | undefined): string {
+  if (!raw) return 'human';
+  const trimmed = raw.trim();
+  if (!trimmed) return 'human';
+  return SAGA_TREE_RACE_KEY_BY_LABEL[trimmed.toLowerCase()] ?? trimmed;
+}
 export function isSagaTreeSkillKey(value: string): value is SagaTreeSkillKey { return sagaTreeSkillDefinitions.some((skill) => skill.key === value); }
 export function isSagaTreeSpeciesTraitKey(value: string): value is SagaTreeSpeciesTraitKey { return sagaTreeSpeciesTraitDefinitions.some((trait) => trait.key === value); }
 

@@ -264,6 +264,14 @@ function checkDornhainFullCatalogSeed() {
   });
 }
 
+function checkDornhainPregenFullSheets() {
+  console.log('Dornhain pregen full sheets: race/archetype/essence seed + editor hydrate...');
+  execFileSync(process.execPath, ['scripts/dornhain-pregen-full-sheets-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSessionRecapPersistHandover() {
   console.log('Session recap persist + handover (#572): table, hydrate, domain, hook...');
   execFileSync(process.execPath, ['scripts/session-recap-persist-handover-check.mjs'], {
@@ -2183,6 +2191,7 @@ checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();
 checkDornhainFullCatalogSeed();
+checkDornhainPregenFullSheets();
 checkSessionRecapPersistHandover();
 checkSessionRecapAiSummary();
 checkSagaDefinitionsVersions();

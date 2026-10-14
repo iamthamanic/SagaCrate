@@ -102,6 +102,7 @@ import {
   isSagaTreeArchetypeKey,
   isSagaTreeEssenceKey,
   isSagaTreeSkillKey,
+  normalizeSagaTreeRaceKey,
   sagaTreeAttributeDefinitions,
   sagaTreeRaceOptions,
   sagaTreeSkillDefinitions,
@@ -652,7 +653,7 @@ export function CharacterEditor() {
     setDescription(payload.description);
     setRuleset(payload.rulesetKey === 'dnd-5.5e' ? 'dnd-5.5e' : 'sagatree-core');
     setCharacterLevel(payload.level);
-    setCharacterRace(payload.race);
+    setCharacterRace(normalizeSagaTreeRaceKey(payload.race));
     setCharacterArchetype(profile.archetype && isSagaTreeArchetypeKey(profile.archetype) ? profile.archetype : undefined);
     setEssenceProfile(profile.essence && isSagaTreeEssenceKey(profile.essence) ? profile.essence : undefined);
     setGenderReading(appearance.gender_reading);
@@ -829,20 +830,7 @@ export function CharacterEditor() {
       setCharacterLevel(bootstrap.level);
       if (bootstrap.raceLabel) {
         // SpeciesCarousel keys are EN (dwarf/elf/orc); DB/UI labels may be DE (Zwergin/Elfin/Ork).
-        const raceKeyByLabel: Record<string, string> = {
-          mensch: 'human',
-          human: 'human',
-          elf: 'elf',
-          elfin: 'elf',
-          zwerg: 'dwarf',
-          zwergin: 'dwarf',
-          dwarf: 'dwarf',
-          ork: 'orc',
-          orc: 'orc',
-        };
-        const raceKey =
-          raceKeyByLabel[bootstrap.raceLabel.trim().toLowerCase()] ?? bootstrap.raceLabel;
-        applyRacePreset(raceKey, true);
+        applyRacePreset(normalizeSagaTreeRaceKey(bootstrap.raceLabel), true);
       }
       clearCharacterEditorBootstrap();
       toast.success(
