@@ -1,5 +1,5 @@
 /**
- * SessionLobbyScreen — Canonical Player/GM preflight lobby (#491).
+ * SessionLobbyScreen — Canonical Player/GM preflight lobby (#491, #678).
  * Location: src/app/session/SessionLobbyScreen.tsx
  *
  * Shared surface with role-projected CTAs. Media/LiveAct only after user gesture.
@@ -11,11 +11,13 @@ import { toast } from 'sonner';
 import { Button } from '../../shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../../shared/ui/avatar';
 import { AdaptivePage } from '../../shared/ui/adaptive';
-import { decideLobbyEnterLive, lobbyLiveActStatusLabelDe, lobbyMediaStatusLabelDe } from '../../domains/session/contracts/session-lobby';
+import { decideLobbyEnterLive } from '../../domains/session/contracts/session-lobby';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
 import { initialsFromDisplayName } from '../../domains/user-profile';
 import { pathForSessionLive } from '../shell';
 import { useSessionLobby } from './hooks/useSessionLobby';
+import { useLobbyMediaPreview } from './hooks/useLobbyMediaPreview';
+import { LobbyMediaPreviewSection } from './LobbyMediaPreviewSection';
 import { SessionInviteShareButton } from './SessionInviteShareButton';
 
 type SessionLobbyScreenProps = {
@@ -31,19 +33,15 @@ export function SessionLobbyScreen({
   onNavigateHome,
   onNavigate,
 }: SessionLobbyScreenProps) {
-  const {
-    model,
-    isLoading,
-    error,
-    cameraStatus,
-    microphoneStatus,
-    liveActStatus,
-    setReady,
-    probeCamera,
-    probeMicrophone,
-    probeLiveAct,
-    refresh,
-  } = useSessionLobby({ sagaPublicId, sessionPublicId });
+  const { model, isLoading, error, setReady, refresh } = useSessionLobby({
+    sagaPublicId,
+    sessionPublicId,
+  });
+  const media = useLobbyMediaPreview({
+    selfRole: model?.selfRole ?? null,
+    selfCharacterId: model?.selfCharacterId ?? null,
+    selfCharacterName: model?.selfCharacterName ?? null,
+  });
 
   const selfReady = model?.roster.find((m) => m.isSelf)?.isReady === true;
   const [codeCopied, setCodeCopied] = useState(false);
@@ -217,110 +215,11 @@ export function SessionLobbyScreen({
           </div>
         ) : null}
 
-        {/* Media probes are always available after first paint — never gated on roster load. */}
-        <section
-          className="rounded-lg border border-border bg-card/40 p-4"
-          data-session-lobby-media
-        >
-          <h2 className="text-sm font-medium">Geräte & LiveAct</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Kamera, Mikrofon und LiveAct starten nur nach deinem Klick — nie automatisch.
-            Fehlende Geräte blockieren den Session-Start nicht.
-          </p>
-          <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            <div className="rounded-md border border-border/60 p-3">
-              <p className="text-xs text-muted-foreground">Kamera</p>
-              <p className="text-sm" data-lobby-camera-status>
-                {lobbyMediaStatusLabelDe(cameraStatus)}
-              </p>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className="mt-2 min-h-11 w-full"
-                onClick={() => void probeCamera()}
-                data-session-lobby-probe-camera
-              >
-                Kamera prüfen
-              </Button>
-            </div>
-            <div className="rounded-md border border-border/60 p-3">
-              <p className="text-xs text-muted-foreground">Mikrofon</p>
-              <p className="text-sm" data-lobby-mic-status>
-                {lobbyMediaStatusLabelDe(microphoneStatus)}
-              </p>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className="mt-2 min-h-11 w-full"
-                onClick={() => void probeMicrophone()}
-                data-session-lobby-probe-mic
-              >
-                Mikrofon prüfen
-              </Button>
-            </div>
-            <div className="rounded-md border border-border/60 p-3">
-              <p className="text-xs text-muted-foreground">LiveAct</p>
-              <p className="text-sm" data-lobby-liveact-status>
-                {lobbyLiveActStatusLabelDe(liveActStatus)}
-              </p>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className="mt-2 min-h-11 w-full"
-                onClick={probeLiveAct}
-                data-session-lobby-probe-liveact
-              >
-                LiveAct prüfen
-              </Button>
-            </div>
-          </div>
-        </section>
+        {/* Media preview after first paint — never gated on roster load; streams only after gesture. */}
+        <LobbyMediaPreviewSection media={media} />
 
         {model ? (
           <>
-            <section
-              className="rounded-lg border border-border bg-card/40 p-4"
-              data-session-lobby-self
-            >
-              <h2 className="text-sm font-medium">Dein Platz</h2>
-              <dl className="mt-2 grid gap-1 text-sm">
-                <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">Rolle</dt>
-                  <dd>
-                    {model.selfRole === 'gamemaster'
-                      ? 'Spielleitung'
-                      : model.selfRole === 'player'
-                        ? 'Spieler'
-                        : 'Viewer'}
-                  </dd>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">Charakter</dt>
-                  <dd data-session-lobby-character>
-                    {model.selfCharacterName ??
-                      (model.selfRole === 'gamemaster' ? '—' : 'Nicht zugewiesen')}
-                    {model.selfCharacterPublicId
-                      ? ` (${model.selfCharacterPublicId})`
-                      : ''}
-                  </dd>
-                </div>
-              </dl>
-              {model.canChangeCharacter ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="mt-3 min-h-11"
-                  onClick={handleChangeCharacter}
-                  data-session-lobby-change-character
-                >
-                  Charakter ändern
-                </Button>
-              ) : null}
-            </section>
-
             <section
               className="rounded-lg border border-border bg-card/40 p-4"
               data-session-lobby-roster
@@ -419,6 +318,17 @@ export function SessionLobbyScreen({
               >
                 {model.enterCtaLabelDe}
               </Button>
+              {model.canChangeCharacter ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="min-h-11"
+                  onClick={handleChangeCharacter}
+                  data-session-lobby-change-character
+                >
+                  Charakter ändern
+                </Button>
+              ) : null}
               <Button
                 type="button"
                 variant="ghost"
@@ -428,6 +338,14 @@ export function SessionLobbyScreen({
               >
                 Aktualisieren
               </Button>
+              {model.selfCharacterName || model.selfCharacterPublicId ? (
+                <p className="text-xs text-muted-foreground" data-session-lobby-character>
+                  {model.selfRole === 'gamemaster' ? 'Spielleitung' : 'Charakter'}:{' '}
+                  {model.selfCharacterName ??
+                    (model.selfRole === 'gamemaster' ? '—' : 'Nicht zugewiesen')}
+                  {model.selfCharacterPublicId ? ` (${model.selfCharacterPublicId})` : ''}
+                </p>
+              ) : null}
               {model.enterDisabledReasonDe ? (
                 <p className="text-sm text-destructive" role="status">
                   {model.enterDisabledReasonDe}

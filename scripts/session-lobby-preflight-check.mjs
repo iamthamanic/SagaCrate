@@ -67,16 +67,35 @@ section('3 · no auto media / pure domain');
   check(/resolveCanonicalLobbyEntry/.test(domain), 'post-join lobby entry');
 
   const screen = read('src/app/session/SessionLobbyScreen.tsx');
+  const mediaUi = existsSync(join(root, 'src/app/session/LobbyMediaPreviewSection.tsx'))
+    ? read('src/app/session/LobbyMediaPreviewSection.tsx')
+    : '';
   check(/data-au-surface="session-lobby"/.test(screen), 'AU surface');
   check(/enterCtaLabelDe|Session betreten|Session starten/.test(screen), 'DE CTAs');
-  check(/data-session-lobby-probe-camera/.test(screen), 'camera probe CTA');
+  check(
+    /data-session-lobby-probe-camera/.test(screen) ||
+      /data-session-lobby-probe-camera/.test(mediaUi),
+    'camera probe CTA',
+  );
   check(/data-session-lobby-enter/.test(screen), 'enter CTA');
 
   const hook = read('src/app/session/hooks/useSessionLobby.ts');
-  check(/getUserMedia/.test(hook), 'getUserMedia only in probe helpers');
-  check(/prompting/.test(hook), 'explicit probe state');
-  // Ensure hook does not call getUserMedia on mount (no top-level await getUserMedia in useEffect without probe)
-  check(!/useEffect\(\(\) => \{[^}]*getUserMedia/s.test(hook), 'no auto getUserMedia on mount');
+  const mediaHook = existsSync(join(root, 'src/app/session/hooks/useLobbyMediaPreview.ts'))
+    ? read('src/app/session/hooks/useLobbyMediaPreview.ts')
+    : '';
+  check(
+    /getUserMedia/.test(hook) || /getUserMedia/.test(mediaHook),
+    'getUserMedia in lobby media helpers',
+  );
+  check(/prompting/.test(hook) || /prompting/.test(mediaHook), 'explicit probe state');
+  // Ensure hooks do not call getUserMedia on mount
+  check(!/useEffect\(\(\) => \{[^}]*getUserMedia/s.test(hook), 'no auto getUserMedia on mount (lobby)');
+  if (mediaHook) {
+    check(
+      !/useEffect\(\(\) => \{[^}]*getUserMedia/s.test(mediaHook),
+      'no auto getUserMedia on mount (media preview)',
+    );
+  }
 }
 
 section('4 · domain behaviour');

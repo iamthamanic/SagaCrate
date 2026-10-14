@@ -273,3 +273,52 @@ export function detectLobbyLiveActSupport(input: {
   if (!input.hasWebGL) return 'degraded';
   return 'available';
 }
+
+/** Browser media device descriptor for lobby preview (#678) — no stream handles. */
+export type LobbyMediaDeviceDescriptor = {
+  readonly deviceId: string;
+  readonly label: string;
+  readonly kind: 'videoinput' | 'audioinput';
+};
+
+/** Local-only preferred device ids — never streams/tracks. */
+export type LobbyMediaDevicePrefs = {
+  readonly cameraDeviceId: string | null;
+  readonly microphoneDeviceId: string | null;
+};
+
+export const LOBBY_MEDIA_PREFS_STORAGE_KEY = 'sagatree.lobby-media-prefs.v1';
+
+export function parseLobbyMediaDevicePrefs(raw: unknown): LobbyMediaDevicePrefs {
+  if (!raw || typeof raw !== 'object') {
+    return { cameraDeviceId: null, microphoneDeviceId: null };
+  }
+  const record = raw as Record<string, unknown>;
+  const camera =
+    typeof record.cameraDeviceId === 'string' && record.cameraDeviceId.length > 0
+      ? record.cameraDeviceId
+      : null;
+  const microphone =
+    typeof record.microphoneDeviceId === 'string' && record.microphoneDeviceId.length > 0
+      ? record.microphoneDeviceId
+      : null;
+  return { cameraDeviceId: camera, microphoneDeviceId: microphone };
+}
+
+export function lobbyMediaDeviceLabel(
+  device: LobbyMediaDeviceDescriptor,
+  index: number,
+): string {
+  const trimmed = device.label.trim();
+  if (trimmed.length > 0) return trimmed;
+  if (device.kind === 'videoinput') return `Kamera ${index + 1}`;
+  return `Mikrofon ${index + 1}`;
+}
+
+/** GM LiveAct preview option — id must come from an authorized catalog, never client-claimed. */
+export type LobbyLiveActPreviewOption = {
+  readonly id: string;
+  readonly name: string;
+  readonly imageUrl: string | null;
+  readonly kind: 'character' | 'npc';
+};
