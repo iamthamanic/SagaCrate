@@ -29,7 +29,7 @@ BEGIN
         'Kämpferin',
         'dwarf',
         2,
-        '{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2,"nativeAssetId":"pregen.warrior"}'::jsonb,
+        '{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2,"nativeAssetId":"pregen.warrior","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":3,"acrobatics":1,"sleight":0,"stealth":0,"melee":3,"ranged":0,"awareness":1,"insight":0,"survival":0,"investigation":0,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":0,"deception":0,"intimidation":2,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.longsword","builtin.fantasy.rope"]'::jsonb,
         '{"archetype":"fighter","essence":"physical","speciesTraitInstances":[{"trait":"natural-protection","source":"species-creation","acquiredAtLevel":1},{"trait":"sharpened-sense","source":"species-creation","acquiredAtLevel":1,"option":"sense-hearing"}],"backgroundTemplateId":"sport-competition","background":{"name":"Sport & Wettkampf","skillPool":["athletics","acrobatics","awareness","performance"],"trainedSkills":["athletics"],"backgroundSkillPoints":{"athletics":2},"specialization":{"skill":"athletics","name":"Kraftakt","source":"background","acquiredAtLevel":1},"milieuAccess":"Arenen & Zwergenhallen","contact":"Waffenmeisterin aus dem Clan","complication":"Alte Blutschuld","communication":"Kampfzeichen"},"archetypeTrainingSkill":"melee","freeSkillRanks":{"melee":2,"intimidation":2,"athletics":1,"awareness":1,"acrobatics":1},"specializations":[{"skill":"athletics","name":"Kraftakt","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -40,7 +40,7 @@ BEGIN
         'Späher',
         'orc',
         2,
-        '{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2,"nativeAssetId":"pregen.scout"}'::jsonb,
+        '{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2,"nativeAssetId":"pregen.scout","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":2,"sleight":2,"stealth":3,"melee":0,"ranged":0,"awareness":1,"insight":0,"survival":0,"investigation":0,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":0,"deception":2,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.shortbow","builtin.fantasy.lockpicks"]'::jsonb,
         '{"archetype":"rebel","essence":"physical","speciesTraitInstances":[{"trait":"natural-protection","source":"species-creation","acquiredAtLevel":1},{"trait":"natural-weapon","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"smuggler","background":{"name":"Unterwelt & Grauzone","skillPool":["driving","deception","stealth","sleight"],"trainedSkills":["stealth","deception"],"backgroundSkillPoints":{"stealth":1,"deception":1},"specialization":{"skill":"stealth","name":"Urbane Tarnung","source":"background","acquiredAtLevel":1},"milieuAccess":"Randgebiete & Schleichwege","contact":"Schmugglerin an der Grenze","complication":"Teufelsauge — Markenzeichen und Gefahr","communication":"Handzeichen"},"archetypeTrainingSkill":"stealth","freeSkillRanks":{"stealth":1,"sleight":2,"acrobatics":2,"deception":1,"awareness":1},"specializations":[{"skill":"stealth","name":"Urbane Tarnung","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -51,7 +51,7 @@ BEGIN
         'Mystikerin',
         'elf',
         2,
-        '{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3,"nativeAssetId":"pregen.mystic"}'::jsonb,
+        '{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3,"nativeAssetId":"pregen.mystic","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":0,"sleight":0,"stealth":0,"melee":0,"ranged":0,"awareness":2,"insight":1,"survival":0,"investigation":2,"knowledge":3,"technology":0,"medicine":0,"driving":0,"persuasion":2,"deception":0,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.quarterstaff","builtin.fantasy.healer-kit"]'::jsonb,
         '{"archetype":"thinker","essence":"spiritual","speciesTraitInstances":[{"trait":"enhanced-sight","source":"species-creation","acquiredAtLevel":1,"option":"darkvision"},{"trait":"low-rest-need","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"academy-research","background":{"name":"Akademie & Forschung","skillPool":["knowledge","investigation","awareness","persuasion"],"trainedSkills":["knowledge"],"backgroundSkillPoints":{"knowledge":2},"specialization":{"skill":"knowledge","name":"Okkultes","source":"background","acquiredAtLevel":1},"milieuAccess":"Archive & Mondtempel","contact":"Mentorin der Akademie","complication":"Umstrittene Theorie","communication":"Akademischer Fachjargon"},"archetypeTrainingSkill":"knowledge","freeSkillRanks":{"investigation":2,"awareness":2,"persuasion":2,"insight":1},"specializations":[{"skill":"knowledge","name":"Okkultes","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -62,7 +62,7 @@ BEGIN
         'Diplomat',
         'human',
         2,
-        '{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4,"nativeAssetId":"pregen.diplomat"}'::jsonb,
+        '{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4,"nativeAssetId":"pregen.diplomat","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":0,"sleight":0,"stealth":0,"melee":0,"ranged":0,"awareness":2,"insight":3,"survival":0,"investigation":2,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":2,"deception":1,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.dagger","builtin.fantasy.writing-kit"]'::jsonb,
         '{"archetype":"diplomat","essence":"mental","speciesTraitInstances":[{"trait":"sharpened-sense","source":"species-creation","acquiredAtLevel":1,"option":"sense-sight"},{"trait":"narrow-resistance","source":"species-creation","acquiredAtLevel":1,"option":"poison-toxins"},{"trait":"enduring-organism","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"investigator","background":{"name":"Ermittlung & Information","skillPool":["investigation","awareness","insight","persuasion"],"trainedSkills":["insight","investigation"],"backgroundSkillPoints":{"insight":1,"investigation":1},"specialization":{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1},"milieuAccess":"Höfe & Schreibstuben","contact":"Archivarin der Stadt","complication":"Offene Schuld gegenüber einem Gönner","communication":"Diplomatische Formeln"},"archetypeTrainingSkill":"insight","freeSkillRanks":{"insight":1,"persuasion":2,"awareness":2,"deception":1,"investigation":1},"specializations":[{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -74,8 +74,11 @@ BEGIN
       WHERE c.owner_user_id = p_user_id
         AND (
           c.attributes->>'nativeAssetId' = r.asset_id
-          OR (c.project_id = p_project_id AND c.name = r.char_name)
-          OR (c.project_id IS NULL AND c.name = r.char_name)
+          OR (
+            c.name = r.char_name
+            AND COALESCE(c.project_id, p_project_id) = p_project_id
+            AND c.description LIKE 'Dornhain-Starter%'
+          )
         )
     ) INTO v_match;
 
@@ -90,7 +93,11 @@ BEGIN
             OR (c.project_id = p_project_id AND c.name = r.char_name)
             OR (c.project_id IS NULL AND c.name = r.char_name)
           )
-          AND COALESCE((c.sagatree_profile->>'nativeStarterSheetVersion')::int, 0) < 1
+          AND COALESCE(
+            (c.attributes->>'nativeStarterSheetVersion')::int,
+            (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+            0
+          ) < 1
           AND (
             c.sagatree_profile IS NULL
             OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL
@@ -118,7 +125,11 @@ BEGIN
         END,
         attributes = CASE
           WHEN v_needs_full_sheet THEN r.attrs
-          ELSE COALESCE(c.attributes, '{}'::jsonb) || jsonb_build_object('nativeAssetId', r.asset_id)
+          ELSE COALESCE(c.attributes, '{}'::jsonb) || jsonb_build_object(
+            'nativeAssetId', r.asset_id,
+            'nativeStarterSheetVersion',
+            COALESCE((c.attributes->>'nativeStarterSheetVersion')::int, 1)
+          )
         END,
         skills = CASE
           WHEN v_needs_full_sheet THEN r.skills
@@ -142,8 +153,11 @@ BEGIN
       WHERE c.owner_user_id = p_user_id
         AND (
           c.attributes->>'nativeAssetId' = r.asset_id
-          OR (c.project_id = p_project_id AND c.name = r.char_name)
-          OR (c.project_id IS NULL AND c.name = r.char_name)
+          OR (
+            c.name = r.char_name
+            AND COALESCE(c.project_id, p_project_id) = p_project_id
+            AND c.description LIKE 'Dornhain-Starter%'
+          )
         );
     ELSE
       INSERT INTO public.characters (
@@ -201,7 +215,7 @@ FROM (VALUES
         'Kämpferin',
         'dwarf',
         2,
-        '{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2,"nativeAssetId":"pregen.warrior"}'::jsonb,
+        '{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2,"nativeAssetId":"pregen.warrior","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":3,"acrobatics":1,"sleight":0,"stealth":0,"melee":3,"ranged":0,"awareness":1,"insight":0,"survival":0,"investigation":0,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":0,"deception":0,"intimidation":2,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.longsword","builtin.fantasy.rope"]'::jsonb,
         '{"archetype":"fighter","essence":"physical","speciesTraitInstances":[{"trait":"natural-protection","source":"species-creation","acquiredAtLevel":1},{"trait":"sharpened-sense","source":"species-creation","acquiredAtLevel":1,"option":"sense-hearing"}],"backgroundTemplateId":"sport-competition","background":{"name":"Sport & Wettkampf","skillPool":["athletics","acrobatics","awareness","performance"],"trainedSkills":["athletics"],"backgroundSkillPoints":{"athletics":2},"specialization":{"skill":"athletics","name":"Kraftakt","source":"background","acquiredAtLevel":1},"milieuAccess":"Arenen & Zwergenhallen","contact":"Waffenmeisterin aus dem Clan","complication":"Alte Blutschuld","communication":"Kampfzeichen"},"archetypeTrainingSkill":"melee","freeSkillRanks":{"melee":2,"intimidation":2,"athletics":1,"awareness":1,"acrobatics":1},"specializations":[{"skill":"athletics","name":"Kraftakt","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":4,"dexterity":3,"endurance":3,"mind":1,"perception":2,"charisma":2},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -212,7 +226,7 @@ FROM (VALUES
         'Späher',
         'orc',
         2,
-        '{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2,"nativeAssetId":"pregen.scout"}'::jsonb,
+        '{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2,"nativeAssetId":"pregen.scout","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":2,"sleight":2,"stealth":3,"melee":0,"ranged":0,"awareness":1,"insight":0,"survival":0,"investigation":0,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":0,"deception":2,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.shortbow","builtin.fantasy.lockpicks"]'::jsonb,
         '{"archetype":"rebel","essence":"physical","speciesTraitInstances":[{"trait":"natural-protection","source":"species-creation","acquiredAtLevel":1},{"trait":"natural-weapon","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"smuggler","background":{"name":"Unterwelt & Grauzone","skillPool":["driving","deception","stealth","sleight"],"trainedSkills":["stealth","deception"],"backgroundSkillPoints":{"stealth":1,"deception":1},"specialization":{"skill":"stealth","name":"Urbane Tarnung","source":"background","acquiredAtLevel":1},"milieuAccess":"Randgebiete & Schleichwege","contact":"Schmugglerin an der Grenze","complication":"Teufelsauge — Markenzeichen und Gefahr","communication":"Handzeichen"},"archetypeTrainingSkill":"stealth","freeSkillRanks":{"stealth":1,"sleight":2,"acrobatics":2,"deception":1,"awareness":1},"specializations":[{"skill":"stealth","name":"Urbane Tarnung","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":4,"endurance":3,"mind":2,"perception":3,"charisma":2},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -223,7 +237,7 @@ FROM (VALUES
         'Mystikerin',
         'elf',
         2,
-        '{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3,"nativeAssetId":"pregen.mystic"}'::jsonb,
+        '{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3,"nativeAssetId":"pregen.mystic","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":0,"sleight":0,"stealth":0,"melee":0,"ranged":0,"awareness":2,"insight":1,"survival":0,"investigation":2,"knowledge":3,"technology":0,"medicine":0,"driving":0,"persuasion":2,"deception":0,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.quarterstaff","builtin.fantasy.healer-kit"]'::jsonb,
         '{"archetype":"thinker","essence":"spiritual","speciesTraitInstances":[{"trait":"enhanced-sight","source":"species-creation","acquiredAtLevel":1,"option":"darkvision"},{"trait":"low-rest-need","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"academy-research","background":{"name":"Akademie & Forschung","skillPool":["knowledge","investigation","awareness","persuasion"],"trainedSkills":["knowledge"],"backgroundSkillPoints":{"knowledge":2},"specialization":{"skill":"knowledge","name":"Okkultes","source":"background","acquiredAtLevel":1},"milieuAccess":"Archive & Mondtempel","contact":"Mentorin der Akademie","complication":"Umstrittene Theorie","communication":"Akademischer Fachjargon"},"archetypeTrainingSkill":"knowledge","freeSkillRanks":{"investigation":2,"awareness":2,"persuasion":2,"insight":1},"specializations":[{"skill":"knowledge","name":"Okkultes","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":2,"endurance":2,"mind":4,"perception":3,"charisma":3},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
@@ -234,14 +248,18 @@ FROM (VALUES
         'Diplomat',
         'human',
         2,
-        '{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4,"nativeAssetId":"pregen.diplomat"}'::jsonb,
+        '{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4,"nativeAssetId":"pregen.diplomat","nativeStarterSheetVersion":1}'::jsonb,
         '{"athletics":0,"acrobatics":0,"sleight":0,"stealth":0,"melee":0,"ranged":0,"awareness":2,"insight":3,"survival":0,"investigation":2,"knowledge":0,"technology":0,"medicine":0,"driving":0,"persuasion":2,"deception":1,"intimidation":0,"performance":0}'::jsonb,
         '["builtin.fantasy.healing-potion","builtin.fantasy.dagger","builtin.fantasy.writing-kit"]'::jsonb,
         '{"archetype":"diplomat","essence":"mental","speciesTraitInstances":[{"trait":"sharpened-sense","source":"species-creation","acquiredAtLevel":1,"option":"sense-sight"},{"trait":"narrow-resistance","source":"species-creation","acquiredAtLevel":1,"option":"poison-toxins"},{"trait":"enduring-organism","source":"species-creation","acquiredAtLevel":1}],"backgroundTemplateId":"investigator","background":{"name":"Ermittlung & Information","skillPool":["investigation","awareness","insight","persuasion"],"trainedSkills":["insight","investigation"],"backgroundSkillPoints":{"insight":1,"investigation":1},"specialization":{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1},"milieuAccess":"Höfe & Schreibstuben","contact":"Archivarin der Stadt","complication":"Offene Schuld gegenüber einem Gönner","communication":"Diplomatische Formeln"},"archetypeTrainingSkill":"insight","freeSkillRanks":{"insight":1,"persuasion":2,"awareness":2,"deception":1,"investigation":1},"specializations":[{"skill":"insight","name":"Lügen erkennen","source":"background","acquiredAtLevel":1}],"baseAttributes":{"strength":1,"dexterity":2,"endurance":2,"mind":3,"perception":3,"charisma":4},"nativeStarterSheetVersion":1,"drive":3,"momentum":0,"attributeAdvances":{}}'::jsonb
       )
 ) AS v(asset_id, char_name, class_label, race_key, lvl, attrs, skills, inv, profile)
 WHERE c.attributes->>'nativeAssetId' = v.asset_id
-  AND COALESCE((c.sagatree_profile->>'nativeStarterSheetVersion')::int, 0) < 1
+  AND COALESCE(
+    (c.attributes->>'nativeStarterSheetVersion')::int,
+    (c.sagatree_profile->>'nativeStarterSheetVersion')::int,
+    0
+  ) < 1
   AND (
     c.sagatree_profile IS NULL
     OR NULLIF(BTRIM(COALESCE(c.sagatree_profile->>'archetype', '')), '') IS NULL

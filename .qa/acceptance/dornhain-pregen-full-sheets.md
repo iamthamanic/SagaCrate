@@ -41,3 +41,7 @@ N/A — data/provisioning; no new layout recomposition
 - Migration `082_dornhain_pregen_full_sheets.sql` rewrites seed + one-shot backfill via `nativeStarterSheetVersion`.
 - Editor hydrate + Library labels use `normalizeSagaTreeRaceKey`.
 - Kael attrs corrected to Core start array (was illegal `[4,4,2,2,2,2]`).
+
+## Composition Gate
+- Verdict: CLEAR
+- Proof: `.qa/runs/composition-gate-dornhain-pregen-full-sheets.md`
