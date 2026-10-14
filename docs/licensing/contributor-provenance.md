@@ -29,7 +29,7 @@ No rights, consents, or assignments are invented here.
 - No GitHub user `Raccoovaclaw` exists (API 404). Commit `author` / `committer` on GitHub are `null` (no linked account).
 - Name pattern matches owner-side OpenClaw / “Raccoova” branding present on the same workstation (`2-DEV-PROJEKTE/Raccoova`, OpenClaw install under `~/.openclaw`).
 - Commits were introduced into a repository owned by `iamthamanic` immediately after Figma Make imports.
-- **Missing:** written attestation linking `raccoovaclaw@gmx.de` to the project owner, work-made-for-hire / commissioned-agent statement, or CLA / assignment / AGPL grant from that identity.
+- **Filed 2026-10-14:** owner attestation linking these agent identities (incl. `raccoovaclaw@gmx.de`) to GitHub user `iamthamanic` with AGPL-3.0-only grant — [attestations/2026-10-14-agent-identities.md](attestations/2026-10-14-agent-identities.md). Optional civil/legal name line left blank for the owner to type if required.
 
 ### Surviving material (HEAD blame, `raccoovaclaw@gmx.de`)
 
@@ -56,13 +56,13 @@ These paths remain in the redistributable tree. An exclusion note in `LICENSES.m
 - Initial application tree imported via Figma Make (`70d4a232`, `cbab7df2`).
 - `src/Attributions.md` records shadcn/ui (MIT) and Unsplash photos.
 - Substantial UI has since been rewritten under `iamthamanic`, but residual Make-exported lines remain (e.g. portions of `src/App.tsx`, legacy assets such as `src/assets/5cdcbab5ea0860d6cbb920fecd888377cdc015a0.png`).
-- **Missing:** recorded statement that the Make file owner is `iamthamanic` and that Make output may be relicensed AGPL, subject to third-party component licenses.
+- **Filed 2026-10-14:** owner attestation that the Make project was controlled by `iamthamanic` and surviving original Make expression is relicensed AGPL-3.0-only (third-party terms preserved) — [attestations/2026-10-14-figma-make.md](attestations/2026-10-14-figma-make.md).
 
 ### OpenClaw / OpenClaw Slay / Halteverbot Social Mac Pro / github-actions[bot]
 
 - Single commits each; later OpenClaw commits are merge/refactor under agent emails.
 - Treated as **agent/machine commit identities** on the owner’s workstation unless proven otherwise.
-- Still require the same owner attestation pattern as Raccoovaclaw for any original expression that survives.
+- Covered by the same § A attestation as Raccoovaclaw ([2026-10-14-agent-identities.md](attestations/2026-10-14-agent-identities.md)).
 
 ## Existing grants
 
@@ -70,13 +70,15 @@ These paths remain in the redistributable tree. An exclusion note in `LICENSES.m
 | --- | --- |
 | CLA / DCO | No |
 | Contributor assignment | No |
-| Written Raccoovaclaw AGPL assent | No |
+| Written Raccoovaclaw / agent AGPL assent | Yes — [2026-10-14-agent-identities.md](attestations/2026-10-14-agent-identities.md) |
+| Figma Make AGPL relicense assent | Yes — [2026-10-14-figma-make.md](attestations/2026-10-14-figma-make.md) |
 | Retroactive `CONTRIBUTING.md` effect | No (forward-looking only) |
 
 ## Minimal remedies (human)
 
-1. **Preferred:** Owner executes [OWNER_ATTESTATIONS.md](OWNER_ATTESTATIONS.md) § A (Raccoovaclaw / agent identities) and § B (Figma Make), then record signed copies under `docs/licensing/attestations/`.
-2. **Alternative:** Replace or rewrite every surviving Raccoovaclaw-attributed and uncleared Make-attributed expression; keep blame clean; re-run provenance.
-3. **Not sufficient:** Documentation-only exclusion while the code remains published.
+1. **Done (2026-10-14):** Owner executed [OWNER_ATTESTATIONS.md](OWNER_ATTESTATIONS.md) § A and § B under `docs/licensing/attestations/`.
+2. **Still open:** § C first-party media; SRD/OGL/Open5e review (see `status.json`).
+3. **Alternative (not taken):** Replace or rewrite every surviving Raccoovaclaw-attributed and uncleared Make-attributed expression.
+4. **Not sufficient:** Documentation-only exclusion while the code remains published.
 
 Until (1) or (2) is done, `docs/licensing/status.json` → `open_source_release_ready` stays `false` and PR merge must remain **NEEDS_HUMAN**.
