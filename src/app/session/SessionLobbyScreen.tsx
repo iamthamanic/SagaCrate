@@ -250,7 +250,7 @@ export function SessionLobbyScreen({
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-7 min-h-7 shrink-0 px-2 text-[0.65rem] font-semibold"
+                    className="h-11 min-h-11 shrink-0 px-3 text-xs font-semibold sm:text-sm"
                     onClick={onNavigateHome}
                     data-session-lobby-leave
                   >
@@ -523,6 +523,17 @@ export function SessionLobbyScreen({
           </>
         ) : (
           <section className="rounded-lg border border-border bg-card/40 p-4">
+            <div className="mb-3 flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                className="h-11 min-h-11 shrink-0 px-3"
+                onClick={onNavigateHome}
+                data-session-lobby-leave
+              >
+                Verlassen
+              </Button>
+            </div>
             <LobbyDeviceBar
               media={media}
               videoMode={seatVideoMode}

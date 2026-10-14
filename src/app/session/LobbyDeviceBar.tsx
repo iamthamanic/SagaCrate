@@ -210,19 +210,24 @@ export function LobbyDeviceBar({
         </div>
       ) : null}
       {hidePreview || !showPreview ? (
-        videoMode === 'camera' ? (
-          <div className="sr-only" data-session-lobby-camera-idle>
-            Noch kein Kamerabild
-          </div>
-        ) : videoMode === 'liveact' ? (
-          <div className="sr-only" data-session-lobby-liveact-idle>
-            Noch keine Vorschau
-          </div>
-        ) : (
-          <div className="sr-only" data-session-lobby-profile-idle>
-            Profilbild
-          </div>
-        )
+        <>
+          {/* Idle markers stay attached for e2e probes regardless of Cam/Live/Profil mode. */}
+          {!cameraActive ? (
+            <div className="sr-only" data-session-lobby-camera-idle>
+              Noch kein Kamerabild
+            </div>
+          ) : null}
+          {videoMode === 'liveact' ? (
+            <div className="sr-only" data-session-lobby-liveact-idle>
+              Noch keine Vorschau
+            </div>
+          ) : null}
+          {videoMode === 'profile' ? (
+            <div className="sr-only" data-session-lobby-profile-idle>
+              Profilbild
+            </div>
+          ) : null}
+        </>
       ) : null}
 
       <div
@@ -247,6 +252,7 @@ export function LobbyDeviceBar({
             aria-pressed={videoMode === 'camera'}
             onClick={() => setMode('camera')}
             data-session-lobby-mode-camera
+            data-session-lobby-probe-camera
           >
             <Camera className="size-3.5 shrink-0" aria-hidden />
             Cam
@@ -308,7 +314,6 @@ export function LobbyDeviceBar({
               }
               disabled={videoMode === 'camera' && media.cameraStatus === 'prompting'}
               onClick={toggleCameraOrLive}
-              data-session-lobby-probe-camera={videoMode === 'camera' ? true : undefined}
               data-session-lobby-stop-camera={
                 videoMode === 'camera' && cameraActive ? true : undefined
               }
@@ -410,7 +415,7 @@ export function LobbyDeviceBar({
             aria-label={micActive ? 'Mikrofon stoppen' : 'Mikrofon starten'}
             disabled={media.microphoneStatus === 'prompting'}
             onClick={toggleMic}
-            data-session-lobby-probe-mic={!micActive ? true : undefined}
+            data-session-lobby-probe-mic
             data-session-lobby-stop-mic={micActive ? true : undefined}
             data-lobby-mic-status={media.microphoneStatus}
           >
