@@ -1,6 +1,6 @@
 # Composition Gate — sagatree-license-policy
 
-- HEAD_SHA: 66f160d9b748b44b04255032980fb6cec34c50b4
+- HEAD_SHA: 1150e809424f022653e137900dd178e99ceb0156
 - Date: 2026-10-14
 - Verdict: SKIPPED
 
