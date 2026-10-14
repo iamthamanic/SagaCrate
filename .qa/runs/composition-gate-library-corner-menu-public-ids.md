@@ -1,7 +1,7 @@
 # Composition Gate — library-corner-menu-public-ids
 
-- HEAD_SHA: def8a9d1fcde7d96aed2204118fca2f1772bf850
-- BASE_SHA: f165fb8182244f35be9e83de38d31b5a6fd780a0
+- HEAD_SHA: e72842a00956accee2fa293e367b244cd065a2a8
+- BASE_SHA: 86783b540e9cc2cb13ed51cb79e164d403f001dd
 - Date: 2026-10-14
 - Verdict: CLEAR
 
