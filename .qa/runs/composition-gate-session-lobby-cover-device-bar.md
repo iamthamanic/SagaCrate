@@ -1,6 +1,6 @@
 # Composition Gate — session-lobby-cover-device-bar
 
-- HEAD_SHA: db7e90c33d22165738a284aa2b73550e88f6f76c
+- HEAD_SHA: 09d67d9698d4fd7c32c5cdd4bb532019edde5cd3
 - Date: 2026-10-15
 - Verdict: CLEAR
 
