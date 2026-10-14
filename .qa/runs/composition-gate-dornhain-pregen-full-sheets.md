@@ -1,8 +1,9 @@
 # Composition Gate — dornhain-pregen-full-sheets
 
-- HEAD_SHA: 77292157fad6c1d60924cea328c8490119a5a5a0
+- HEAD_SHA: faf16eac83db7c67ed78491f428961c01f85c831
 - Date: 2026-10-14
 - Verdict: CLEAR
+- Note: CODE_SHA `77292157` (starterMeta rename + migration backfill guard); PR tip may include chore stamp of this proof only.
 
 ## Event
 Dornhain native starter character provision / backfill → Character Editor hydrate + Library meta + Session join (`sheet_status=complete`).
