@@ -136,6 +136,7 @@ section('4 · domain behaviour');
       sagaPublicId: 'SA-K7M4Q',
       sessionName: 'Test',
       sagaName: 'Saga',
+      sagaCoverUrl: null,
       status: 'scheduled',
       code: 'ABCDEF',
     },

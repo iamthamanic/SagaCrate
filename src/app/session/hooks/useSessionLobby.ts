@@ -25,6 +25,7 @@ import {
   type LobbyPreflightViewModel,
   type LobbyRosterMember,
 } from '../../../domains/session/contracts/session-lobby';
+import { sagatreeNativeSagaCoverUrlFromDisplayName } from '../../../domains/saga/use-cases/sagatree-native-saga-covers';
 import { resolveAccountDisplayName } from '../../../domains/user-profile';
 
 type UseSessionLobbyInput = {
@@ -244,13 +245,18 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
           ? characterMeta.get(selfPlayer.characterId)
           : null;
 
+        const sagaName = project.name ?? null;
+        // Native pack cover — tolerates group-run display names ("… · Gruppe").
+        const sagaCoverUrl = sagatreeNativeSagaCoverUrlFromDisplayName(sagaName ?? '');
+
         const next = buildLobbyPreflightViewModel({
           summary: {
             sessionId: session.id,
             sessionPublicId: input.sessionPublicId.trim().toUpperCase(),
             sagaPublicId: input.sagaPublicId.trim().toUpperCase(),
             sessionName: detail.name || session.name || 'Session',
-            sagaName: project.name ?? null,
+            sagaName,
+            sagaCoverUrl,
             status: detail.status,
             code: detail.code,
           },

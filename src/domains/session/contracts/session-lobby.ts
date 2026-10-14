@@ -45,6 +45,8 @@ export type LobbySessionSummary = {
   readonly sagaPublicId: string;
   readonly sessionName: string;
   readonly sagaName: string | null;
+  /** Public cover asset URL when resolvable (native pack); null → UI fallback. */
+  readonly sagaCoverUrl: string | null;
   readonly status: string;
   readonly code: string;
 };

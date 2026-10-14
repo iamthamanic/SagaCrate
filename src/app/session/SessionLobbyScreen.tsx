@@ -144,45 +144,77 @@ export function SessionLobbyScreen({
           </p>
         ) : null}
 
-        {model?.summary.code ? (
-          <section
-            className="rounded-lg border border-primary/40 bg-card/60 p-4 sm:p-5"
-            data-session-lobby-join-code
+        {model ? (
+          <div
+            className="flex min-w-0 flex-col gap-3 @[40rem]/main:flex-row @[40rem]/main:items-stretch"
+            data-session-lobby-join-hero
           >
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              Session-Code
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Teile diesen Code mit deinen Spielern — Beitritt über Session → Beitreten.
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <div className="min-w-0 flex-1 rounded-lg bg-muted px-4 py-3 text-center">
-                <p
-                  className="font-mono text-3xl tracking-[0.2em] text-foreground sm:text-4xl"
-                  data-session-lobby-code
+            <div
+              className="relative mx-auto aspect-square w-40 max-w-full shrink-0 overflow-hidden rounded-lg border border-border bg-muted @[40rem]/main:mx-0 @[40rem]/main:w-48"
+              data-session-lobby-saga-cover-frame
+            >
+              {model.summary.sagaCoverUrl ? (
+                <img
+                  src={model.summary.sagaCoverUrl}
+                  alt={
+                    model.summary.sagaName
+                      ? `Saga-Cover: ${model.summary.sagaName}`
+                      : 'Saga-Cover'
+                  }
+                  className="h-full w-full object-cover object-center"
+                  data-session-lobby-saga-cover
+                />
+              ) : (
+                <div
+                  className="flex h-full w-full items-center justify-center px-2 text-center text-sm font-medium text-muted-foreground"
+                  data-session-lobby-saga-cover-fallback
+                  aria-hidden
                 >
-                  {model.summary.code}
-                </p>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                className="min-h-11 min-w-11"
-                onClick={() => void handleCopyCode()}
-                aria-label="Session-Code kopieren"
-                data-session-lobby-copy-code
+                  {(model.summary.sagaName ?? 'Saga').slice(0, 1)}
+                </div>
+              )}
+            </div>
+            {model.summary.code ? (
+              <section
+                className="min-w-0 flex-1 rounded-lg border border-primary/40 bg-card/60 p-4 sm:p-5"
+                data-session-lobby-join-code
               >
-                {codeCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
-              </Button>
-            </div>
-            <div className="mt-3">
-              <SessionInviteShareButton
-                sessionId={model.summary.sessionId}
-                className="min-h-11 w-full"
-              />
-            </div>
-          </section>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Session-Code
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Teile diesen Code mit deinen Spielern — Beitritt über Session → Beitreten.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <div className="min-w-0 flex-1 rounded-lg bg-muted px-4 py-3 text-center">
+                    <p
+                      className="font-mono text-3xl tracking-[0.2em] text-foreground sm:text-4xl"
+                      data-session-lobby-code
+                    >
+                      {model.summary.code}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="min-h-11 min-w-11"
+                    onClick={() => void handleCopyCode()}
+                    aria-label="Session-Code kopieren"
+                    data-session-lobby-copy-code
+                  >
+                    {codeCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                  </Button>
+                </div>
+                <div className="mt-3">
+                  <SessionInviteShareButton
+                    sessionId={model.summary.sessionId}
+                    className="min-h-11 w-full"
+                  />
+                </div>
+              </section>
+            ) : null}
+          </div>
         ) : null}
 
         {/* Media probes are always available after first paint — never gated on roster load. */}
