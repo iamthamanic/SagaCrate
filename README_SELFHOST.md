@@ -46,8 +46,8 @@
 ### Prerequisites
 
 - Docker & Docker Compose
-- 8GB+ RAM recommended
-- 20GB+ disk space
+- **Core (default):** ~8 GB RAM / 40+ GB disk (e.g. Hostinger KVM 2) + cloud/remote LLM
+- **Full stack + local Ollama:** 16 GB+ RAM recommended
 
 ### Setup
 
@@ -63,31 +63,43 @@ chmod +x setup.sh
 # Or manually:
 cp .env.example .env
 # Edit .env with your secrets
-docker-compose up -d
+# Core only (Postgres, Auth, Rest, Realtime, Storage, Kong, Edge, Redis):
+docker compose up -d
 ./scripts/apply-migrations.sh
 ```
 
-### Download LLM Model
+Compose profiles (optional extras — see [`docs/ops/compose-profiles.md`](docs/ops/compose-profiles.md)):
 
 ```bash
-# Small model (fast, less capable)
-docker exec -it sagatree-ollama ollama pull llama3.2
+docker compose --profile graph up -d          # + Neo4j
+docker compose --profile dev-tools up -d      # + Studio
+docker compose --profile ai-local up -d       # + local Ollama
+docker compose --profile full up -d           # everything
+```
 
-# Large model (slower, more capable)
-docker exec -it sagatree-ollama ollama pull llama3.1:8b
+### LLM (cloud preferred on small VPS)
+
+Set cloud/remote credentials in `.env` (`CHARACTER_AI_PROVIDER=openai-compatible` + `CHARACTER_AI_BASE_URL` / `CHARACTER_AI_API_KEY`). Do **not** enable `ai-local`.
+
+Local Ollama only when you have RAM/GPU:
+
+```bash
+docker compose --profile ai-local up -d
+docker exec -it sagatree-ollama ollama pull llama3.2
+# or: docker exec -it sagatree-ollama ollama pull llama3.1:8b
 ```
 
 ## 📱 Access Points
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **Studio** | http://localhost:3000 | Supabase Dashboard |
 | **API Gateway** | http://localhost:8000 | Kong API Gateway |
-| **Functions** | http://localhost:9998 | Edge Functions Runtime |
-| **PostgreSQL** | localhost:5432 | Database |
-| **Neo4j Browser** | http://localhost:7474 | Knowledge Graph |
-| **Redis** | localhost:6379 | Session Cache |
-| **Ollama** | http://localhost:11434 | LLM API |
+| **Functions** | http://127.0.0.1:9998 | Edge (prefer Kong `/functions/v1`) |
+| **PostgreSQL** | 127.0.0.1:5432 | Database |
+| **Redis** | 127.0.0.1:6379 | Session Cache |
+| **Studio** | http://127.0.0.1:3000 | Dashboard (`--profile dev-tools`) |
+| **Neo4j Browser** | http://127.0.0.1:7474 | Graph (`--profile graph`) |
+| **Ollama** | http://127.0.0.1:11434 | Local LLM (`--profile ai-local`) |
 
 ## 🔧 Edge Functions
 
