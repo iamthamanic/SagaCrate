@@ -8,6 +8,7 @@ export * from './contracts/character.commands';
 export * from './contracts/character.views';
 export * from './use-cases/normalize-character';
 export * from './use-cases/assert-character-persistence';
+export * from './use-cases/dornhain-pregen-sheets';
 export * from './contracts/character-preset.types';
 export * from './contracts/character-adventure-arc.types';
 export * from './contracts/character-lore.types';

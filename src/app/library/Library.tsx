@@ -40,6 +40,11 @@ import {
 } from '../../domains/character/use-cases/sagatree-native-pregen-portraits';
 import { SAGATREE_NATIVE_CHIP } from './libraryNativeBadge';
 import {
+  getCharacterCreationOptionLabel,
+  normalizeSagaTreeRaceKey,
+  sagaTreeRaceOptions,
+} from '../../domains/rules/sagatree/character-creation';
+import {
   sagatreeNativeSagaCoverUrl,
   sagatreeNativeSagaCoverUrlByTitle,
 } from '../../domains/saga/use-cases/sagatree-native-saga-covers';
@@ -540,7 +545,11 @@ export function Library({
     char.name.toLowerCase().includes(normalizedSearch) ||
     char.class.toLowerCase().includes(normalizedSearch) ||
     char.race.toLowerCase().includes(normalizedSearch) ||
-    (char.publicId ?? '').toLowerCase().includes(normalizedSearch)
+    (char.publicId ?? '').toLowerCase().includes(normalizedSearch) ||
+    getCharacterCreationOptionLabel(
+      sagaTreeRaceOptions,
+      normalizeSagaTreeRaceKey(char.race),
+    ).toLowerCase().includes(normalizedSearch)
   );
   const filteredWorlds = worlds.filter((world) =>
     world.name.toLowerCase().includes(normalizedSearch) ||
@@ -752,7 +761,7 @@ export function Library({
     return (
     <EntityBrowserCard
       title={char.name}
-      meta={`Level ${char.level} · ${char.race} · ${char.class || '—'}`}
+      meta={`Level ${char.level} · ${getCharacterCreationOptionLabel(sagaTreeRaceOptions, normalizeSagaTreeRaceKey(char.race))} · ${char.class || '—'}`}
       metaChips={isNativeCharacter ? [SAGATREE_NATIVE_CHIP] : undefined}
       badges={
         char.sheetStatus === 'incomplete'
