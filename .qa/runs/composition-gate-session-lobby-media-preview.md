@@ -1,6 +1,6 @@
 # Composition Gate — session-lobby-media-preview
 
-- HEAD_SHA: 332b56415ef95415577eb330ba6153f207ca2140
+- HEAD_SHA: 04e3033f1ee8dfd71734aacffb08e874d50217d0
 - BASE_SHA: 4d4ca6bdc37eeb4f6bcdba17c59e404a80bc2ad6
 - Date: 2026-10-14
 - Verdict: CLEAR (manual); automated composition-gate.mjs SKIPPED — single-hop application diff without downstream side-effect path
