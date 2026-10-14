@@ -38,9 +38,11 @@ Ein späteres, **eigenständiges** SDK unter Apache-2.0 und etwaige proprietäre
 
 Diese Punkte sind dokumentiert und **nicht** durch technische CI-Tests erledigt:
 
-1. **Rechte früherer Beiträge:** Die Git-Historie enthält substanzielle Commits von Dritten (u. a. Autor `Raccoovaclaw`). `CONTRIBUTING.md` gilt für künftige Einreichungen. Vor verlässlicher pauschaler AGPL-Freigabe des gesamten Bestands müssen Zustimmung, Abtretung oder anderweitige Berechtigung nachgewiesen oder betroffener Code ersetzt/ausdrücklich ausgenommen werden.
-2. **Runtime-Assets:** `src/assets/`, `public/assets/`, `docs/brand/` und ähnliche Pfade sind nicht pauschal AGPL-lizenziert. Vor Redistribution eines vollständigen Self-Host-Builds müssen Nutzungs- und Weitergaberechte sowie Attribution pro mitgelieferter Datei geklärt oder unklare Dateien ersetzt werden.
+1. **Rechte früherer Beiträge:** Die Git-Historie enthält substanzielle Commits von Dritten (u. a. Autor `Raccoovaclaw`). `CONTRIBUTING.md` gilt für künftige Einreichungen. Vor verlässlicher pauschaler AGPL-Freigabe des gesamten Bestands müssen Zustimmung, Abtretung oder anderweitige Berechtigung nachgewiesen oder betroffener Code ersetzt/ausdrücklich ausgenommen werden. Faktenstand und Vorlagen: [docs/licensing/contributor-provenance.md](docs/licensing/contributor-provenance.md), [docs/licensing/OWNER_ATTESTATIONS.md](docs/licensing/OWNER_ATTESTATIONS.md).
+2. **Runtime-Assets:** `src/assets/`, `public/assets/`, `docs/brand/` und ähnliche Pfade sind nicht pauschal AGPL-lizenziert. Vor Redistribution eines vollständigen Self-Host-Builds müssen Nutzungs- und Weitergaberechte sowie Attribution pro mitgelieferter Datei geklärt oder unklare Dateien ersetzt werden. Klassifikationsregeln (ohne inventierte Freigabe): [docs/licensing/asset-classification-rules.json](docs/licensing/asset-classification-rules.json).
 3. **ORC-Autorencredits:** Die Attribution im kanonischen Regelwerk nennt „SagaTree contributors“. Konkrete individuelle Credits und Versionshistorie sind vor kommerzieller Regelwerksveröffentlichung zu vervollständigen, sofern gewünscht oder vertraglich erforderlich.
 4. **Drittmaterial in Abhängigkeiten:** npm-/Deno-Abhängigkeiten, Google-Fonts (z. B. Darker Grotesque) und vorhandene Attributionen behalten eigene Bedingungen; eine vollständige SBOM-/Compliance-Prüfung ist separat durchzuführen.
+
+Unterschriebene Attestierungen gehören nach `docs/licensing/attestations/` (siehe Vorlagen). Ohne ausgefüllte Attestierung bleiben die Blocker offen.
 
 Diese Dokumentation ersetzt keine rechtliche Prüfung.
