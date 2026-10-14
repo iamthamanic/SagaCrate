@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+/**
+ * session-lobby-media-preview-check — Meet-style lobby media preview (#678).
+ * Location: scripts/session-lobby-media-preview-check.mjs
+ */
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import process from 'node:process';
+
+const root = process.cwd();
+let failures = 0;
+let group = '';
+
+function section(name) {
+  group = name;
+}
+
+function check(condition, message) {
+  if (!condition) {
+    failures += 1;
+    console.error(`FAIL [${group}]: ${message}`);
+  }
+}
+
+function read(relPath) {
+  return readFileSync(join(root, relPath), 'utf8');
+}
+
+function mustExist(relPath) {
+  check(existsSync(join(root, relPath)), `missing ${relPath}`);
+}
+
+section('1 · files exist');
+[
+  'src/domains/session/contracts/session-lobby.ts',
+  'src/app/session/hooks/useLobbyMediaPreview.ts',
+  'src/app/session/LobbyMediaPreviewSection.tsx',
+  'src/app/session/SessionLobbyScreen.tsx',
+  '.qa/acceptance/session-lobby-media-preview.md',
+].forEach(mustExist);
+
+section('2 · domain prefs + descriptors');
+{
+  const domain = read('src/domains/session/contracts/session-lobby.ts');
+  check(!/from ['"]react['"]/.test(domain), 'domain React-free');
+  check(!/supabase/.test(domain), 'domain Supabase-free');
+  check(/LobbyMediaDeviceDescriptor/.test(domain), 'device descriptor type');
+  check(/LOBBY_MEDIA_PREFS_STORAGE_KEY/.test(domain), 'prefs storage key');
+  check(/parseLobbyMediaDevicePrefs/.test(domain), 'prefs parser');
+  check(/LobbyLiveActPreviewOption/.test(domain), 'liveact preview option');
+}
+
+section('3 · hook holds streams, no mount auto-start');
+{
+  const hook = read('src/app/session/hooks/useLobbyMediaPreview.ts');
+  check(/getUserMedia/.test(hook), 'getUserMedia in preview hook');
+  check(/enumerateDevices/.test(hook), 'enumerateDevices');
+  check(/AnalyserNode|createAnalyser/.test(hook), 'mic analyser');
+  check(/devicechange/.test(hook), 'devicechange listener');
+  check(/track\.stop|getTracks\(\)\.forEach/.test(hook), 'track stop cleanup');
+  check(!/useEffect\(\(\) => \{[^}]*getUserMedia/s.test(hook), 'no auto getUserMedia on mount');
+  check(!/useSessionMediaPlane/.test(hook), 'no LiveKit media plane');
+}
+
+section('4 · UI preview affordances + Dein Platz removed');
+{
+  const screen = read('src/app/session/SessionLobbyScreen.tsx');
+  const sectionUi = read('src/app/session/LobbyMediaPreviewSection.tsx');
+  check(/LobbyMediaPreviewSection/.test(screen), 'screen mounts media preview section');
+  check(!/data-session-lobby-self/.test(screen), 'Dein Platz section removed');
+  check(/data-session-lobby-change-character/.test(screen), 'Charakter ändern retained');
+  check(/data-session-lobby-camera-preview/.test(sectionUi), 'camera video preview');
+  check(/data-session-lobby-mic-meter/.test(sectionUi), 'mic meter');
+  check(/data-session-lobby-liveact-preview/.test(sectionUi), 'liveact preview');
+  check(/data-session-lobby-camera-select/.test(sectionUi), 'camera select');
+  check(/data-session-lobby-mic-select/.test(sectionUi), 'mic select');
+  check(/data-session-lobby-probe-camera/.test(sectionUi), 'camera probe CTA');
+}
+
+if (failures > 0) {
+  console.error(`\nsession-lobby-media-preview-check: ${failures} failure(s)`);
+  process.exit(1);
+}
+console.log('session-lobby-media-preview-check: OK');

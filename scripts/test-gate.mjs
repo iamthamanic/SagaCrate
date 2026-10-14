@@ -907,6 +907,14 @@ function checkSessionLobbyPreflight() {
   });
 }
 
+function checkSessionLobbyMediaPreview() {
+  console.log('Session lobby media preview (#678): Meet-style cam/mic/LiveAct...');
+  execFileSync(process.execPath, ['scripts/session-lobby-media-preview-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSessionPrepareRecap() {
   console.log('Session prepare/recap (#492): lifecycle screens + status resolution...');
   execFileSync(process.execPath, ['scripts/session-prepare-recap-check.mjs'], {
@@ -2172,6 +2180,7 @@ checkBasicLookAdaptionUx();
 checkCanonicalSagaWorkspace();
 checkSessionInviteShareEntry();
 checkSessionLobbyPreflight();
+checkSessionLobbyMediaPreview();
 checkSessionPrepareRecap();
 checkProductionUxIntegrity();
 checkCharacterStartingTemplatesDesignV1();
