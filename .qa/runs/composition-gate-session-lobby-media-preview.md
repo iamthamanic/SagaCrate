@@ -3,7 +3,7 @@
 - HEAD_SHA: 6aa99d53555f7b8c7bece20969b51e3fc3a6d655
 - BASE_SHA: 4d4ca6bdc37eeb4f6bcdba17c59e404a80bc2ad6
 - Date: 2026-10-14
-- Verdict: CLEAR
+- Verdict: CLEAR (manual); automated composition-gate.mjs SKIPPED — single-hop application diff without downstream side-effect path
 
 ## Event
 User opens Session Lobby → clicks Kamera/Mikrofon/LiveAct prüfen → local browser MediaStream / Analyser / portrait preview; preferred deviceIds may be written to localStorage only.

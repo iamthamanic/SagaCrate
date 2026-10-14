@@ -63,5 +63,5 @@ Lobby-Media-Karten zeigen nach expliziter Geste ein Meet/Zoom-ähnliches Prüfer
 - LiveAct lobby preview Phase 1 = portrait/icon idle (no face tracking in lobby)
 
 ## Composition Gate
-- Verdict: CLEAR
+- Verdict: CLEAR (manual hop analysis); automated `composition-gate.mjs` → SKIPPED (single-hop application diff without downstream side-effect path)
 - Proof: `.qa/runs/composition-gate-session-lobby-media-preview.md`
