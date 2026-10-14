@@ -1,6 +1,6 @@
 # Composition Gate — session-lobby-media-preview
 
-- HEAD_SHA: 04e3033f1ee8dfd71734aacffb08e874d50217d0
+- HEAD_SHA: 9421cf537091ddbcf2af24a223dc98e888465d40
 - BASE_SHA: 4d4ca6bdc37eeb4f6bcdba17c59e404a80bc2ad6
 - Date: 2026-10-14
 - Verdict: CLEAR
