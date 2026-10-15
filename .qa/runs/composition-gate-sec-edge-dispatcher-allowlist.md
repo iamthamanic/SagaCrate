@@ -2,7 +2,7 @@
 
 **Verdict:** SKIPPED  
 **Reason:** Edge dispatcher / Deno shared only — no React UI composition or adaptive surfaces.  
-**HEAD:** (filled at ship)
+**HEAD:** 88e069c78314b8c02755f3532d7c1e9efd00d74e
 
 ## Scope
 
