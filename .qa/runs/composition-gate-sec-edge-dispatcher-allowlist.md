@@ -1,6 +1,6 @@
 # Composition Gate — sec-edge-dispatcher-allowlist
 
-- HEAD_SHA: 3adaecf3f799d0bc991f0039b63ea121a819bd57
+- HEAD_SHA: 1860598c7b6212414c1fd54d9019a7f50062937d
 - BASE_SHA: 84c2ee9df9b674a83e29ef024948239e70093821
 - Date: 2026-10-15
 - Verdict: SKIPPED
