@@ -51,18 +51,20 @@ docker compose --profile full up -d
 
 ## Cloud / remote LLM (recommended on small VPS)
 
-Do **not** enable `ai-local`. Point Edge at a remote API via `.env`:
+Do **not** enable `ai-local`. Configure Edge via `.env` — the same vars feed **ai-gm**, character-lore, and session-recap:
 
 ```bash
-# OpenAI-compatible (incl. many cloud gateways)
+# OpenAI-compatible cloud (preferred on ~8 GB hosts)
 CHARACTER_AI_PROVIDER=openai-compatible
 CHARACTER_AI_BASE_URL=https://your-provider.example/v1
 CHARACTER_AI_API_KEY=…
 CHARACTER_AI_MODEL=your-model
 
-# Or remote Ollama API (no local container)
-# OLLAMA_HOST=https://your-ollama-host
+# Or remote Ollama API (no local container) — ai-gm uses /api/generate
 # CHARACTER_AI_PROVIDER=ollama
+# OLLAMA_HOST=https://your-ollama-host
+# CHARACTER_AI_BASE_URL=https://your-ollama-host
+# OLLAMA_MODEL=llama3.2
 ```
 
 Then recreate Edge:
@@ -70,6 +72,8 @@ Then recreate Edge:
 ```bash
 docker compose up -d --force-recreate --no-deps supabase-edge
 ```
+
+Without `ai-local` and without a reachable `OLLAMA_HOST` / openai-compatible credentials, GM narrative calls fail.
 
 ## Memory knobs (optional)
 

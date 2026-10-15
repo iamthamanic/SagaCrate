@@ -42,6 +42,33 @@ echo "✅ Docker Compose: $(docker-compose --version 2>/dev/null || docker compo
 echo ""
 echo "🔐 Generating secrets..."
 
+# Mint HS256 Supabase-style JWTs (Kong key-auth + PostgREST expect role claims).
+mint_supabase_jwt() {
+    local role="$1"
+    local secret="$2"
+    if ! command -v node &>/dev/null; then
+        echo "❌ node is required to mint SUPABASE_ANON_KEY / SERVICE_ROLE JWTs" >&2
+        exit 1
+    fi
+    node -e '
+const crypto = require("crypto");
+const role = process.argv[1];
+const secret = process.argv[2];
+const b64url = (value) =>
+  Buffer.from(typeof value === "string" ? value : JSON.stringify(value)).toString("base64url");
+const header = b64url({ alg: "HS256", typ: "JWT" });
+const now = Math.floor(Date.now() / 1000);
+const payload = b64url({
+  role,
+  iss: "supabase",
+  iat: now,
+  exp: now + 10 * 365 * 24 * 3600,
+});
+const sig = crypto.createHmac("sha256", secret).update(`${header}.${payload}`).digest("base64url");
+process.stdout.write(`${header}.${payload}.${sig}`);
+' "$role" "$secret"
+}
+
 if [ ! -f .env ]; then
     # Generate JWT Secret (32 bytes hex)
     JWT_SECRET=$(openssl rand -hex 32)
@@ -49,16 +76,15 @@ if [ ! -f .env ]; then
     # Generate POSTGRES Password (32 bytes hex)
     POSTGRES_PASSWORD=$(openssl rand -hex 16)
     
-    # Generate ANON Key (base64)
-    ANON_KEY=$(openssl rand -base64 32)
-    
-    # Generate SERVICE_ROLE Key (base64)
-    SERVICE_ROLE_KEY=$(openssl rand -base64 32)
+    # Signed anon / service_role JWTs (not raw base64)
+    ANON_KEY=$(mint_supabase_jwt anon "$JWT_SECRET")
+    SERVICE_ROLE_KEY=$(mint_supabase_jwt service_role "$JWT_SECRET")
     
     # Generate Neo4j Password (only used with --profile graph|full)
     NEO4J_PASSWORD=$(openssl rand -hex 16)
 
-    SECRET_KEY_BASE=$(openssl rand -base64 64)
+    # openssl base64 wraps at 64 cols — strip newlines for a valid dotenv value
+    SECRET_KEY_BASE=$(openssl rand -base64 64 | tr -d '\n\r')
     DB_ENC_KEY=$(openssl rand -hex 8)
     
     cat > .env << EOF
