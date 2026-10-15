@@ -239,12 +239,118 @@ async function main() {
     record('rest.non_member_project_deny', false, 'skipped — no project');
   }
 
+  // #669 — rulesets / world_graphs must not leak to non-members by id.
+  let rulesetId = null;
+  let worldGraphId = null;
+  if (project?.id) {
+    const rulesetRes = await jsonFetch(`${base}/rest/v1/rulesets?select=id,project_id,name`, {
+      method: 'POST',
+      headers: authHeaders(gm.token),
+      body: JSON.stringify({
+        project_id: project.id,
+        name: `naz-ruleset-${stamp}`,
+        version: '1',
+        description: 'negative-authz #669',
+        rules: { probe: true },
+        is_active: true,
+      }),
+    });
+    const rulesetRow = Array.isArray(rulesetRes.body) ? rulesetRes.body[0] : rulesetRes.body;
+    rulesetId = rulesetRow?.id || null;
+    record(
+      'rest.member_rulesets_allow',
+      rulesetRes.res.status < 300 && Boolean(rulesetId),
+      `status=${rulesetRes.res.status}`,
+    );
+
+    const graphRes = await jsonFetch(
+      `${base}/rest/v1/world_graphs?select=id,project_id,name`,
+      {
+        method: 'POST',
+        headers: authHeaders(gm.token),
+        body: JSON.stringify({
+          project_id: project.id,
+          name: `naz-graph-${stamp}`,
+          description: 'negative-authz #669',
+          settings: {},
+        }),
+      },
+    );
+    const graphRow = Array.isArray(graphRes.body) ? graphRes.body[0] : graphRes.body;
+    worldGraphId = graphRow?.id || null;
+    record(
+      'rest.member_world_graphs_allow',
+      graphRes.res.status < 300 && Boolean(worldGraphId),
+      `status=${graphRes.res.status}`,
+    );
+  } else {
+    record('rest.member_rulesets_allow', false, 'skipped — no project');
+    record('rest.member_world_graphs_allow', false, 'skipped — no project');
+  }
+
+  if (rulesetId) {
+    const strangerRuleset = await jsonFetch(
+      `${base}/rest/v1/rulesets?id=eq.${rulesetId}&select=id,name`,
+      { headers: authHeaders(stranger.token) },
+    );
+    const rulesetRows = Array.isArray(strangerRuleset.body) ? strangerRuleset.body : [];
+    const rulesetDenied =
+      isDenied(strangerRuleset.res.status) ||
+      (strangerRuleset.res.status === 200 && rulesetRows.length === 0);
+    record(
+      'rest.non_member_rulesets_deny',
+      rulesetDenied,
+      `status=${strangerRuleset.res.status} rows=${rulesetRows.length}`,
+    );
+
+    const strangerPatch = await jsonFetch(`${base}/rest/v1/rulesets?id=eq.${rulesetId}`, {
+      method: 'PATCH',
+      headers: authHeaders(stranger.token),
+      body: JSON.stringify({ name: 'hijacked-by-stranger' }),
+    });
+    const patchBody = Array.isArray(strangerPatch.body) ? strangerPatch.body : [];
+    const patchDenied =
+      isDenied(strangerPatch.res.status) ||
+      (strangerPatch.res.status === 200 &&
+        (Array.isArray(strangerPatch.body) ? patchBody.length === 0 : !strangerPatch.body));
+    record(
+      'rest.non_member_rulesets_update_deny',
+      patchDenied,
+      `status=${strangerPatch.res.status}`,
+    );
+  } else {
+    record('rest.non_member_rulesets_deny', false, 'skipped — no ruleset');
+    record('rest.non_member_rulesets_update_deny', false, 'skipped — no ruleset');
+  }
+
+  if (worldGraphId) {
+    const strangerGraph = await jsonFetch(
+      `${base}/rest/v1/world_graphs?id=eq.${worldGraphId}&select=id,name`,
+      { headers: authHeaders(stranger.token) },
+    );
+    const graphRows = Array.isArray(strangerGraph.body) ? strangerGraph.body : [];
+    const graphDenied =
+      isDenied(strangerGraph.res.status) ||
+      (strangerGraph.res.status === 200 && graphRows.length === 0);
+    record(
+      'rest.non_member_world_graphs_deny',
+      graphDenied,
+      `status=${strangerGraph.res.status} rows=${graphRows.length}`,
+    );
+  } else {
+    record('rest.non_member_world_graphs_deny', false, 'skipped — no world_graph');
+  }
+
   const required = [
     'edge.anon_no_bearer_deny',
     'edge.invalid_jwt_deny',
     'edge.member_jwt_allow',
     'edge.ai_gm_foreign_session_deny',
     'rest.non_member_project_deny',
+    'rest.member_rulesets_allow',
+    'rest.non_member_rulesets_deny',
+    'rest.non_member_rulesets_update_deny',
+    'rest.non_member_world_graphs_deny',
   ];
   const byName = Object.fromEntries(report.checks.map((c) => [c.name, c]));
   report.ok = required.every((n) => byName[n]?.pass);

@@ -2,7 +2,7 @@
   "ok": true,
   "suite": "negative-authz-suite",
   "gateway": "http://localhost:8000",
-  "startedAt": "2026-10-13T23:03:11.217Z",
+  "startedAt": "2026-10-15T21:14:57.565Z",
   "checks": [
     {
       "name": "edge.anon_no_bearer_deny",
@@ -43,8 +43,33 @@
       "name": "rest.non_member_project_deny",
       "pass": true,
       "detail": "status=200 rows=0"
+    },
+    {
+      "name": "rest.member_rulesets_allow",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "rest.member_world_graphs_allow",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "rest.non_member_rulesets_deny",
+      "pass": true,
+      "detail": "status=200 rows=0"
+    },
+    {
+      "name": "rest.non_member_rulesets_update_deny",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "rest.non_member_world_graphs_deny",
+      "pass": true,
+      "detail": "status=200 rows=0"
     }
   ],
   "errors": [],
-  "finishedAt": "2026-10-13T23:03:11.504Z"
+  "finishedAt": "2026-10-15T21:14:58.246Z"
 }

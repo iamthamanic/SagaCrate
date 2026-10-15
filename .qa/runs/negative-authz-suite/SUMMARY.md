@@ -2,6 +2,6 @@
 
 - ok: **true**
 - gateway: `http://localhost:8000`
-- checks: 8/8 pass
+- checks: 13/13 pass
 
 See `report.json`.
