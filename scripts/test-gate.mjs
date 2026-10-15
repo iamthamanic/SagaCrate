@@ -248,6 +248,14 @@ function checkRlsOpenTables() {
   });
 }
 
+function checkAiGmAuthRateLimit() {
+  console.log('AI GM + auth rate limits (#670): persistent RPC + Kong/GoTrue...');
+  execFileSync(process.execPath, ['scripts/ai-gm-auth-rate-limit-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2222,6 +2230,7 @@ checkComposeHardenDefaults();
 checkNegativeAuthzSuite();
 checkEdgeDispatcherAllowlist();
 checkRlsOpenTables();
+checkAiGmAuthRateLimit();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();

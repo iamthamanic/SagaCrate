@@ -24,6 +24,8 @@ check(/VERIFY_JWT:\s*\$\{VERIFY_JWT:-true\}/.test(compose), 'VERIFY_JWT default 
 check(/127\.0\.0\.1:5432:5432/.test(compose), 'DB bound to loopback');
 check(/127\.0\.0\.1:9998:9998/.test(compose), 'Edge bound to loopback');
 check(!/VERIFY_JWT:\s*"false"/.test(compose), 'no hard-coded VERIFY_JWT false');
+check(/rate-limiting/.test(compose), 'Kong plugins include rate-limiting (#670)');
+check(/GOTRUE_RATE_LIMIT_EMAIL_SENT/.test(compose), 'GoTrue email rate limit env (#670)');
 
 const kong = readFileSync(join(root, 'supabase/config/kong.yml'), 'utf8');
 const routeBlocks = kong.split(/^\s*-\s*name:/m).slice(1);
@@ -31,6 +33,8 @@ const keyAuthOnRoutes = routeBlocks.some(
   (b) => /plugins:[\s\S]*key-auth/.test(b) && !/consumers:/.test(b),
 );
 check(!keyAuthOnRoutes, 'no key-auth plugin on Kong routes');
+check(/name:\s*rate-limiting/.test(kong), 'Kong auth-v1 rate-limiting plugin (#670)');
+check(/fault_tolerant:\s*false/.test(kong), 'Kong rate-limiting fail-closed (#670)');
 
 const envEx = readFileSync(join(root, '.env.example'), 'utf8');
 check(/KONG_NGINX_WORKER_PROCESSES|VERIFY_JWT/.test(envEx), '.env.example documents Kong/JWT knobs');

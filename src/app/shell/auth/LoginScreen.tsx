@@ -12,6 +12,18 @@ import { Loader2, AlertCircle, Moon, Sun } from 'lucide-react';
 import { toast } from 'sonner';
 import { SagaTreeLogo } from '../SagaTreeLogo';
 
+/** Map Kong/GoTrue rate-limit responses (#670) to a clear DE message. */
+function authErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === 'object') {
+    const status = 'status' in err ? Number((err as { status?: number }).status) : NaN;
+    const raw = err instanceof Error ? err.message : '';
+    if (status === 429 || /rate limit|too many requests|429/i.test(raw)) {
+      return 'Zu viele Anmeldeversuche. Bitte warte kurz und versuche es erneut.';
+    }
+    if (raw) return raw;
+  }
+  return fallback;
+}
 
 export function LoginScreen() {
   const { signIn, signUp } = useAuth();
@@ -36,7 +48,7 @@ export function LoginScreen() {
       await signIn(loginIdentifier.trim(), password);
       toast.success('Erfolgreich eingeloggt!');
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Login fehlgeschlagen';
+      const message = authErrorMessage(err, 'Login fehlgeschlagen');
       setError(message);
       toast.error(message);
     } finally {
@@ -55,7 +67,7 @@ export function LoginScreen() {
       // Auto switch to login tab after signup
       setPassword('');
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Registrierung fehlgeschlagen';
+      const message = authErrorMessage(err, 'Registrierung fehlgeschlagen');
       setError(message);
       toast.error(message);
     } finally {
