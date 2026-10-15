@@ -2,10 +2,15 @@ version: '3.8'
 
 # ===========================================
 # SagaTree Self-Host Stack
-# - Supabase (Auth, DB, Storage, Realtime, Functions)
-# - Ollama (LLM)
-# - Neo4j (Knowledge Graph)
-# - Redis (Session Cache)
+# Default (`docker compose up -d`): core only
+#   Postgres · Auth · Rest · Realtime · Storage · Kong · Edge · Redis
+# Optional profiles (add with --profile …; `full` enables all):
+#   ai-local  — local Ollama container
+#   graph     — Neo4j (Lorekeeper)
+#   dev-tools — Studio + postgres-meta
+#   full      — ai-local + graph + dev-tools
+# Slim target: ~8 GB VPS (e.g. Hostinger KVM 2) + cloud LLM
+# See docs/ops/compose-profiles.md
 # ===========================================
 
 x-supabase-env: &supabase-env
@@ -178,10 +183,12 @@ services:
     networks:
       - sagatree-network
 
-  # Meta API (for Studio)
+  # Meta API (for Studio) — profile: dev-tools | full
   supabase-meta:
     image: supabase/postgres-meta:v0.75.0
     container_name: sagatree-meta
+    profiles: ["dev-tools", "full"]
+    mem_limit: ${META_MEM_LIMIT:-256m}
     environment:
       PG_META_PORT: 8080
       PG_META_DB_HOST: supabase-db
@@ -206,6 +213,9 @@ services:
       JWT_SECRET: ${JWT_SECRET:-your-jwt-secret}
       # Prod-safe default; local opt-out: VERIFY_JWT=false (#605)
       VERIFY_JWT: ${VERIFY_JWT:-true}
+      # Local Ollama: enable profile ai-local and leave defaults.
+      # Cloud / remote: set CHARACTER_AI_PROVIDER=openai-compatible + BASE_URL/API_KEY
+      #   or point OLLAMA_HOST at a remote Ollama API (no ai-local profile needed).
       OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
       CHARACTER_AI_PROVIDER: ${CHARACTER_AI_PROVIDER:-ollama}
@@ -242,10 +252,12 @@ services:
     networks:
       - sagatree-network
 
-  # Studio Dashboard
+  # Studio Dashboard — profile: dev-tools | full
   supabase-studio:
     image: supabase/studio:20240318-6cf0f6f
     container_name: sagatree-studio
+    profiles: ["dev-tools", "full"]
+    mem_limit: ${STUDIO_MEM_LIMIT:-512m}
     environment:
       STUDIO_PG_META_URL: http://supabase-meta:8080
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-your-super-secret-password}
@@ -254,7 +266,7 @@ services:
       SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
       AUTH_JWT_SECRET: ${JWT_SECRET:-your-jwt-secret}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       supabase-db:
         condition: service_healthy
@@ -266,15 +278,18 @@ services:
       - sagatree-network
 
   # ===========================================
-  # AI SERVICES
+  # OPTIONAL SERVICES (profiles)
   # ===========================================
 
-  # Ollama (LLM for AI Game Master)
+  # Local Ollama — profile: ai-local | full
+  # Prefer cloud / remote LLM on small VPS (no this profile).
   ollama:
     image: ollama/ollama:latest
     container_name: sagatree-ollama
+    profiles: ["ai-local", "full"]
+    mem_limit: ${OLLAMA_MEM_LIMIT:-4g}
     ports:
-      - "11434:11434"
+      - "127.0.0.1:11434:11434"
     volumes:
       - ollama-data:/root/.ollama
     environment:
@@ -290,33 +305,37 @@ services:
     #           count: 1
     #           capabilities: [gpu]
 
-  # Neo4j (Knowledge Graph for Lorekeeper)
+  # Neo4j (Lorekeeper) — profile: graph | full
+  # Defaults tuned for ~8 GB hosts; raise NEO4J_HEAP_* on larger machines.
   neo4j:
     image: neo4j:5.13.0
     container_name: sagatree-neo4j
+    profiles: ["graph", "full"]
+    mem_limit: ${NEO4J_MEM_LIMIT:-768m}
     ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
+      - "127.0.0.1:7474:7474"  # HTTP
+      - "127.0.0.1:7687:7687"  # Bolt
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password}
       NEO4J_PLUGINS: '["apoc"]'
-      NEO4J_dbms_memory_heap_initial__size: 512m
-      NEO4J_dbms_memory_heap_max__size: 1G
+      NEO4J_dbms_memory_heap_initial__size: ${NEO4J_HEAP_INITIAL:-256m}
+      NEO4J_dbms_memory_heap_max__size: ${NEO4J_HEAP_MAX:-512m}
     volumes:
       - neo4j-data:/data
       - neo4j-logs:/logs
     networks:
       - sagatree-network
 
-  # Redis (Session Cache for DM Tools)
+  # Redis (Session Cache for DM Tools) — always on (small footprint)
   redis:
     image: redis:7-alpine
     container_name: sagatree-redis
+    mem_limit: ${REDIS_MEM_LIMIT:-128m}
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis-data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-96mb} --maxmemory-policy allkeys-lru
     networks:
       - sagatree-network
 

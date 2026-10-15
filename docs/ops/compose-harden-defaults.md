@@ -2,6 +2,8 @@
 
 Never delete volumes (`docker compose down -v`).
 
+Slim / optional services: [`compose-profiles.md`](compose-profiles.md) (`ai-local`, `graph`, `dev-tools`, `full`).
+
 ## Defaults
 
 | Setting | Default | Override |

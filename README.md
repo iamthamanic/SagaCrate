@@ -211,8 +211,9 @@ CORS und fehlende Provider-Keys sind fail-closed (kein Default `*`). Rate-Limits
 
 Kern-Services für den Produktbetrieb:
 
-**Postgres · Auth · PostgREST · Storage · Realtime · Kong**  
-Edge / Ollama / Meshy sind **optional** für AI-Features. Studio/Meta sind Dev-Tooling.
+**Postgres · Auth · PostgREST · Storage · Realtime · Kong · Edge · Redis**  
+(`docker compose up -d` = dieses Core-Profil; gut für ~8 GB-VPS + Cloud-LLM.)  
+Ollama / Neo4j / Studio sind **Compose-Profile** (`ai-local` / `graph` / `dev-tools` / `full`) — siehe [`docs/ops/compose-profiles.md`](docs/ops/compose-profiles.md). Meshy bleibt optional (BYOK).
 
 Relevante Character-/Asset-Migrationen (Reihenfolge):
 

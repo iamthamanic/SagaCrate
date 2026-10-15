@@ -85,6 +85,19 @@ interface GMResponse {
 
 const OLLAMA_HOST = Deno.env.get("OLLAMA_HOST") || "http://ollama:11434"
 const OLLAMA_MODEL = Deno.env.get("OLLAMA_MODEL") || "llama3.2"
+/** Same env family as character-lore / session-recap — cloud LLM without local Ollama. */
+const AI_PROVIDER = (Deno.env.get("CHARACTER_AI_PROVIDER") || "ollama").trim()
+const AI_MODEL = (
+  Deno.env.get("CHARACTER_AI_MODEL") ||
+  Deno.env.get("OLLAMA_MODEL") ||
+  "llama3.2"
+).trim()
+const AI_BASE_URL = (
+  Deno.env.get("CHARACTER_AI_BASE_URL") ||
+  Deno.env.get("OLLAMA_HOST") ||
+  "http://ollama:11434"
+).replace(/\/+$/, "")
+const AI_API_KEY = (Deno.env.get("CHARACTER_AI_API_KEY") || "").trim()
 const LOREKEEPER_URL = Deno.env.get("LOREKEEPER_URL") || "http://localhost:9998/functions/v1/lorekeeper"
 const SESSIONS_URL = Deno.env.get("SESSIONS_URL") || "http://localhost:9998/functions/v1/sessions"
 
@@ -270,18 +283,104 @@ async function updateSessionWorldState(sessionId: string, worldState: Partial<Wo
 }
 
 // ===========================================
-// OLLAMA LLM INTEGRATION (KISS)
+// LLM INTEGRATION (Ollama local/remote or openai-compatible cloud)
 // ===========================================
+
+async function* generateOpenAiCompatibleNarrative(
+  prompt: string,
+  stream: boolean,
+): AsyncGenerator<{ type: string; content?: string; done?: boolean }> {
+  if (!AI_BASE_URL || !AI_API_KEY) {
+    throw new Error(
+      "openai-compatible requires CHARACTER_AI_BASE_URL and CHARACTER_AI_API_KEY",
+    )
+  }
+
+  const response = await fetch(`${AI_BASE_URL}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${AI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: AI_MODEL,
+      stream,
+      temperature: 0.85,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are the SagaTree AI Game Master. Follow the user prompt faithfully.",
+        },
+        { role: "user", content: prompt },
+      ],
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`OpenAI-compatible provider error: ${response.status} ${response.statusText}`)
+  }
+
+  if (!stream) {
+    const data = await response.json() as {
+      choices?: Array<{ message?: { content?: string } }>
+    }
+    const content = data.choices?.[0]?.message?.content?.trim()
+    if (!content) throw new Error("OpenAI-compatible provider returned empty content")
+    yield { type: "narrative", content }
+    yield { type: "complete", done: true }
+    return
+  }
+
+  const reader = response.body?.getReader()
+  if (!reader) throw new Error("No response stream")
+  const decoder = new TextDecoder()
+  let buffer = ""
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split("\n")
+      buffer = lines.pop() ?? ""
+      for (const raw of lines) {
+        const line = raw.trim()
+        if (!line.startsWith("data:")) continue
+        const payload = line.slice(5).trim()
+        if (!payload || payload === "[DONE]") continue
+        try {
+          const chunk = JSON.parse(payload) as {
+            choices?: Array<{ delta?: { content?: string } }>
+          }
+          const content = chunk.choices?.[0]?.delta?.content
+          if (content) yield { type: "narrative", content }
+        } catch {
+          // ignore partial JSON frames
+        }
+      }
+    }
+    yield { type: "complete", done: true }
+  } finally {
+    reader.releaseLock()
+  }
+}
 
 async function* generateNarrative(
   prompt: string,
   stream: boolean = true
 ): AsyncGenerator<{ type: string; content?: string; done?: boolean }> {
-  const response = await fetch(`${OLLAMA_HOST}/api/generate`, {
+  if (AI_PROVIDER === "openai-compatible") {
+    yield* generateOpenAiCompatibleNarrative(prompt, stream)
+    return
+  }
+
+  const ollamaHost = AI_BASE_URL || OLLAMA_HOST
+  const response = await fetch(`${ollamaHost}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: OLLAMA_MODEL,
+      model: AI_MODEL || OLLAMA_MODEL,
       prompt,
       stream,
     }),
@@ -415,7 +514,8 @@ serve(async (req: Request) => {
   if (req.method === "GET" && req.url.endsWith('/health')) {
     return new Response(JSON.stringify({
       status: 'ok',
-      model: OLLAMA_MODEL,
+      provider: AI_PROVIDER,
+      model: AI_MODEL || OLLAMA_MODEL,
       timestamp: new Date().toISOString(),
     }), {
       headers: { ...headers, "Content-Type": "application/json" },
