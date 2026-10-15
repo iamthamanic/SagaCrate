@@ -1,6 +1,6 @@
 # Composition Gate — sec-rls-rulesets-world-graphs
 
-- HEAD_SHA: 629be8533bf102eeeff8947ddec0b48afa3cf462
+- HEAD_SHA: e256d488158cddfd05dcc250fee84f590a95cde7
 - BASE_SHA: f13dd95182fab57d925e5e3c0bd8a08c89dea25c
 - Date: 2026-10-15
 - Verdict: CLEAR
