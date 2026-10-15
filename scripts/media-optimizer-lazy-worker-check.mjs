@@ -71,6 +71,7 @@ writeFileSync(
   IMAGE_ENGINE_MAX_PIXELS,
   assertImageInputByteLimit,
   assertImagePixelLimit,
+  computeImageDownscaleFactor,
 } from '${join(root, 'src/infrastructure/media/optimizer/engines/image/resource-limits.ts').replace(/\\/g, '/')}';
 `,
 );
@@ -91,6 +92,22 @@ check(limits.assertImagePixelLimit(9000, 9000).ok === false, 'edge too large');
 check(
   limits.assertImagePixelLimit(5000, 5000).ok === false,
   'pixel count over max',
+);
+check(
+  typeof limits.computeImageDownscaleFactor === 'function',
+  'downscale factor helper exported',
+);
+{
+  // ~6610×4180 ≈ 27.6M px → must scale below 4096²
+  const factor = limits.computeImageDownscaleFactor(6610, 4180, 768, limits.IMAGE_ENGINE_MAX_PIXELS);
+  check(factor < 1, 'oversized photo gets scale < 1');
+  const outPx = Math.floor(6610 * factor) * Math.floor(4180 * factor);
+  check(outPx <= limits.IMAGE_ENGINE_MAX_PIXELS, 'scaled pixels within engine ceiling');
+  check(Math.max(Math.floor(6610 * factor), Math.floor(4180 * factor)) <= 768, 'respects maxEdge');
+}
+check(
+  /blobToImageDataFittingLimits/.test(optimize),
+  'optimize-image uses fitting decode (auto-downscale)',
 );
 
 section('3 · app entry graph does not statically pull jsquash');

@@ -1,8 +1,8 @@
 /**
- * Profile — Einstellungen with top-level tabs per section + AI sub-tabs (Bild/3D/Video/Audio).
+ * Profile — Account settings under `/settings/:tab` + AI sub-tabs (Bild/3D/Video/Audio).
  * Location: src/app/profile/Profile.tsx
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/card';
 import { Button } from '../../shared/ui/button';
 import { Input } from '../../shared/ui/input';
@@ -23,30 +23,73 @@ import {
   Video,
   AudioLines,
   AlertTriangle,
+  Check,
+  Copy,
 } from 'lucide-react';
 import { useAuth } from '../../lib/auth-context';
 import { useTheme } from '../../lib/theme-provider';
 import { toast } from 'sonner';
+import {
+  pathForSettingsTab,
+  parseSettingsTabFromPathname,
+  useAppLocation,
+  type SettingsTabId,
+} from '../shell';
 import { AiProviderCredentialsPanel } from './AiProviderCredentialsPanel';
 import { AccountAvatarSection } from './AccountAvatarSection';
 import { DEFERRED_SETTING_HINT_DE } from '../../domains/session/contracts/production-ux-integrity';
 
-type SettingsTab =
-  | 'profil'
-  | 'darstellung'
-  | 'benachrichtigungen'
-  | 'audio-video'
-  | 'sprache'
-  | 'ai'
-  | 'gefahrenbereich';
-
 type AiSubTab = 'bild' | '3d' | 'video' | 'audio';
+
+function readSettingsTabFromLocation(): SettingsTabId {
+  if (typeof window === 'undefined') return 'profile';
+  return parseSettingsTabFromPathname(window.location.pathname) ?? 'profile';
+}
 
 export function Profile() {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
-  const [settingsTab, setSettingsTab] = useState<SettingsTab>('profil');
+  const { pathname, navigateToPath } = useAppLocation();
+  const [settingsTab, setSettingsTab] = useState<SettingsTabId>(readSettingsTabFromLocation);
   const [aiSubTab, setAiSubTab] = useState<AiSubTab>('bild');
+  const [userIdCopied, setUserIdCopied] = useState(false);
+
+  // Keep tab + URL in sync (`/settings/ai`, legacy `/profile`, bare `/settings`).
+  useEffect(() => {
+    const tab = parseSettingsTabFromPathname(pathname) ?? 'profile';
+    setSettingsTab(tab);
+    const canonical = pathForSettingsTab(tab);
+    if (pathname !== canonical) {
+      navigateToPath(canonical, { replace: true });
+    }
+  }, [pathname, navigateToPath]);
+
+  const handleCopyUserId = async () => {
+    const id = user?.id?.trim();
+    if (!id) {
+      toast.error('User ID nicht verfügbar');
+      return;
+    }
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(id);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = id;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setUserIdCopied(true);
+      toast.success('User ID kopiert');
+      window.setTimeout(() => setUserIdCopied(false), 2000);
+    } catch {
+      toast.error('User ID konnte nicht kopiert werden');
+    }
+  };
 
   const isDarkMode =
     theme === 'dark' ||
@@ -71,42 +114,54 @@ export function Profile() {
 
         <Tabs
           value={settingsTab}
-          onValueChange={(value) => setSettingsTab(value as SettingsTab)}
+          onValueChange={(value) => {
+            const tab = value as SettingsTabId;
+            setSettingsTab(tab);
+            navigateToPath(pathForSettingsTab(tab));
+          }}
           className="gap-4"
           data-settings-tabs
         >
           <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1">
-            <TabsTrigger value="profil" className="gap-1.5">
+            <TabsTrigger value="profile" className="gap-1.5" data-settings-tab="profile">
               <User className="size-3.5" aria-hidden="true" />
               Profil
             </TabsTrigger>
-            <TabsTrigger value="darstellung" className="gap-1.5">
+            <TabsTrigger value="appearance" className="gap-1.5" data-settings-tab="appearance">
               <Palette className="size-3.5" aria-hidden="true" />
               Darstellung
             </TabsTrigger>
-            <TabsTrigger value="benachrichtigungen" className="gap-1.5">
+            <TabsTrigger
+              value="notifications"
+              className="gap-1.5"
+              data-settings-tab="notifications"
+            >
               <Bell className="size-3.5" aria-hidden="true" />
               Benachrichtigungen
             </TabsTrigger>
-            <TabsTrigger value="audio-video" className="gap-1.5">
+            <TabsTrigger value="audio-video" className="gap-1.5" data-settings-tab="audio-video">
               <Volume2 className="size-3.5" aria-hidden="true" />
               Audio & Video
             </TabsTrigger>
-            <TabsTrigger value="sprache" className="gap-1.5">
+            <TabsTrigger value="language" className="gap-1.5" data-settings-tab="language">
               <Languages className="size-3.5" aria-hidden="true" />
               Sprache
             </TabsTrigger>
-            <TabsTrigger value="ai" className="gap-1.5" data-settings-tab-ai>
+            <TabsTrigger value="ai" className="gap-1.5" data-settings-tab="ai" data-settings-tab-ai>
               <Sparkles className="size-3.5" aria-hidden="true" />
               AI
             </TabsTrigger>
-            <TabsTrigger value="gefahrenbereich" className="gap-1.5 text-destructive">
+            <TabsTrigger
+              value="danger"
+              className="gap-1.5 text-destructive"
+              data-settings-tab="danger"
+            >
               <AlertTriangle className="size-3.5" aria-hidden="true" />
               Gefahrenbereich
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profil">
+          <TabsContent value="profile">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -130,7 +185,30 @@ export function Profile() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="user-id">User ID</Label>
-                    <Input id="user-id" defaultValue={user?.id} disabled data-account-user-id />
+                    <div className="flex min-w-0 items-center gap-2">
+                      <Input
+                        id="user-id"
+                        defaultValue={user?.id}
+                        disabled
+                        className="min-w-0 flex-1 font-mono text-xs sm:text-sm"
+                        data-account-user-id
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="size-11 shrink-0 px-0"
+                        onClick={() => void handleCopyUserId()}
+                        disabled={!user?.id}
+                        aria-label="User ID kopieren"
+                        data-account-user-id-copy
+                      >
+                        {userIdCopied ? (
+                          <Check className="size-4" aria-hidden />
+                        ) : (
+                          <Copy className="size-4" aria-hidden />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
@@ -147,7 +225,7 @@ export function Profile() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="darstellung">
+          <TabsContent value="appearance">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -191,7 +269,7 @@ export function Profile() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="benachrichtigungen">
+          <TabsContent value="notifications">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -281,7 +359,7 @@ export function Profile() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="sprache">
+          <TabsContent value="language">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -381,7 +459,7 @@ export function Profile() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="gefahrenbereich">
+          <TabsContent value="danger">
             <Card className="border-destructive">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base text-destructive md:text-lg">

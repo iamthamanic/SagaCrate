@@ -52,6 +52,7 @@ check(/export \{ useMediaOptimizeIntake \}/.test(barrel), 'barrel exports useMed
 check(!/engines\/image/.test(barrel), 'barrel does not leak image engine');
 check(/createObjectURL|registry\.create|ensureRegistry/.test(hook), 'hook creates Object URL');
 check(/previewing/.test(hook) && /optimizing/.test(hook), 'hook uses previewing then optimizing');
+check(/surviveUnmount/.test(hook), 'hook supports surviveUnmount for leave-screen uploads');
 check(
   ['ready', 'uploading', 'complete', 'aborted', 'failed'].every((s) => types.includes(`'${s}'`)),
   'intake statuses include ready/uploading/complete/aborted/failed',
@@ -149,6 +150,10 @@ check(
   typeof mod.mediaIntakeStatusLabelDe('optimizing') === 'string' &&
     mod.mediaIntakeStatusLabelDe('optimizing').length > 0,
   'DE label',
+);
+check(
+  /Hintergrund/.test(mod.mediaIntakeStatusLabelDe('optimizing')),
+  'optimizing label is background / leave-friendly',
 );
 check(mod.MEDIA_INTAKE_STATUSES.includes('previewing'), 'previewing in statuses');
 

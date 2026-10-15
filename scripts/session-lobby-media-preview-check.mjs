@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * session-lobby-media-preview-check — Meet-style lobby media preview (#678).
+ * session-lobby-media-preview-check — Meet-style lobby device bar (#678 → cover device bar).
  * Location: scripts/session-lobby-media-preview-check.mjs
  */
 import { existsSync, readFileSync } from 'node:fs';
@@ -34,9 +34,11 @@ section('1 · files exist');
 [
   'src/domains/session/contracts/session-lobby.ts',
   'src/app/session/hooks/useLobbyMediaPreview.ts',
+  'src/app/session/LobbyDeviceBar.tsx',
   'src/app/session/LobbyMediaPreviewSection.tsx',
   'src/app/session/SessionLobbyScreen.tsx',
   '.qa/acceptance/session-lobby-media-preview.md',
+  '.qa/acceptance/session-lobby-cover-device-bar.md',
 ].forEach(mustExist);
 
 section('2 · domain prefs + descriptors');
@@ -62,19 +64,27 @@ section('3 · hook holds streams, no mount auto-start');
   check(!/useSessionMediaPlane/.test(hook), 'no LiveKit media plane');
 }
 
-section('4 · UI preview affordances + Dein Platz removed');
+section('4 · device bar in Am Tisch + cover stage');
 {
   const screen = read('src/app/session/SessionLobbyScreen.tsx');
-  const sectionUi = read('src/app/session/LobbyMediaPreviewSection.tsx');
-  check(/LobbyMediaPreviewSection/.test(screen), 'screen mounts media preview section');
+  const barUi = read('src/app/session/LobbyDeviceBar.tsx');
+  const compat = read('src/app/session/LobbyMediaPreviewSection.tsx');
+  check(/LobbyDeviceBar/.test(screen), 'screen mounts LobbyDeviceBar');
+  check(/cover-stage|data-session-lobby-cover-meta/.test(screen), 'cover-stage meta');
+  check(/Am Tisch/.test(screen), 'Am Tisch roster label');
   check(!/data-session-lobby-self/.test(screen), 'Dein Platz section removed');
   check(/data-session-lobby-change-character/.test(screen), 'Charakter ändern retained');
-  check(/data-session-lobby-camera-preview/.test(sectionUi), 'camera video preview');
-  check(/data-session-lobby-mic-meter/.test(sectionUi), 'mic meter');
-  check(/data-session-lobby-liveact-preview/.test(sectionUi), 'liveact preview');
-  check(/data-session-lobby-camera-select/.test(sectionUi), 'camera select');
-  check(/data-session-lobby-mic-select/.test(sectionUi), 'mic select');
-  check(/data-session-lobby-probe-camera/.test(sectionUi), 'camera probe CTA');
+  check(/LobbyDeviceBar/.test(compat), 'compat re-export from LobbyMediaPreviewSection');
+  check(/data-session-lobby-camera-preview/.test(barUi), 'camera video preview');
+  check(/data-session-lobby-mic-meter/.test(barUi), 'mic meter');
+  check(/data-session-lobby-liveact-preview/.test(barUi), 'liveact preview');
+  check(/data-session-lobby-camera-select/.test(barUi), 'camera select');
+  check(/data-session-lobby-mic-select/.test(barUi), 'mic select');
+  check(/data-session-lobby-probe-camera/.test(barUi), 'camera probe CTA');
+  check(/data-session-lobby-probe-liveact/.test(barUi), 'liveact probe CTA');
+  check(/data-session-lobby-mode-camera/.test(barUi), 'cam/live mode toggle');
+  check(/data-session-lobby-mode-profile/.test(barUi), 'profile mode toggle');
+  check(/getUserMedia/.test(read('src/app/session/hooks/useLobbyMediaPreview.ts')), 'real media access');
 }
 
 if (failures > 0) {

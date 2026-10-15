@@ -75,16 +75,36 @@ function mapRow(row: UserProfileRow, avatarUrl: string | null): UserProfileVm {
   };
 }
 
+function formatSupabaseError(error: { message?: string; code?: string; details?: string } | null): string {
+  if (!error) return 'unbekannter Fehler';
+  const parts = [error.message, error.code ? `[${error.code}]` : null, error.details]
+    .map((part) => (typeof part === 'string' ? part.trim() : ''))
+    .filter((part) => part.length > 0);
+  return parts.length > 0 ? parts.join(' ') : 'unbekannter Fehler';
+}
+
 class SupabaseUserProfileRepository {
+  /**
+   * Ensure a row exists for the signed-in user. Select-then-insert avoids
+   * upsert edge cases; duplicate insert (race) is treated as success.
+   */
   async ensureOwnProfileRow(): Promise<void> {
     const userId = await getAuthenticatedUserId();
-    const { error } = await supabase.from('user_profiles').upsert(
-      { id: userId },
-      { onConflict: 'id', ignoreDuplicates: true },
-    );
-    if (error) {
-      throw new Error(`Profil konnte nicht angelegt werden: ${error.message}`);
+    const { data, error: selectError } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+    if (selectError) {
+      throw new Error(`Profil konnte nicht geladen werden: ${formatSupabaseError(selectError)}`);
     }
+    if (data) return;
+
+    const { error: insertError } = await supabase.from('user_profiles').insert({ id: userId });
+    if (!insertError) return;
+    // Concurrent ensure / signup trigger already created the row.
+    if (insertError.code === '23505') return;
+    throw new Error(`Profil konnte nicht angelegt werden: ${formatSupabaseError(insertError)}`);
   }
 
   async getOwnProfile(): Promise<UserProfileVm | null> {
@@ -96,7 +116,7 @@ class SupabaseUserProfileRepository {
       .eq('id', userId)
       .maybeSingle();
     if (error) {
-      throw new Error(`Profil konnte nicht geladen werden: ${error.message}`);
+      throw new Error(`Profil konnte nicht geladen werden: ${formatSupabaseError(error)}`);
     }
     if (!data) return null;
     const row = data as UserProfileRow;
@@ -116,7 +136,7 @@ class SupabaseUserProfileRepository {
       .select('id, display_name, avatar_path, updated_at')
       .in('id', ids);
     if (error) {
-      throw new Error(`Profile konnten nicht geladen werden: ${error.message}`);
+      throw new Error(`Profile konnten nicht geladen werden: ${formatSupabaseError(error)}`);
     }
     const rows = (data ?? []) as UserProfileRow[];
     const mapped = await Promise.all(
@@ -149,7 +169,7 @@ class SupabaseUserProfileRepository {
         upsert: false,
       });
     if (uploadError) {
-      throw new Error(`Avatar-Upload fehlgeschlagen: ${uploadError.message}`);
+      throw new Error(`Avatar-Upload fehlgeschlagen: ${formatSupabaseError(uploadError)}`);
     }
 
     const { data: previous } = await supabase
@@ -173,7 +193,7 @@ class SupabaseUserProfileRepository {
       await supabase.storage.from(USER_AVATARS_BUCKET).remove([filePath]);
       throw new Error(
         updateError
-          ? `Avatar konnte nicht gespeichert werden: ${updateError.message}`
+          ? `Avatar konnte nicht gespeichert werden: ${formatSupabaseError(updateError)}`
           : 'Avatar konnte nicht gespeichert werden',
       );
     }

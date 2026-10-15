@@ -37,9 +37,10 @@ export const MEDIA_INTAKE_STATUSES = [
 export const MEDIA_INTAKE_STATUS_LABEL_DE: Readonly<Record<MediaIntakeStatus, string>> = {
   idle: 'Keine Datei ausgewählt',
   previewing: 'Vorschau wird angezeigt',
-  optimizing: 'Medien werden optimiert',
+  optimizing:
+    'Medien werden im Hintergrund optimiert — du kannst den Bereich verlassen',
   ready: 'Optimierung abgeschlossen – bereit zum Hochladen',
-  uploading: 'Upload läuft',
+  uploading: 'Upload läuft im Hintergrund — du kannst den Bereich verlassen',
   complete: 'Upload abgeschlossen',
   aborted: 'Vorgang abgebrochen',
   failed: 'Optimierung oder Upload fehlgeschlagen',

@@ -54,6 +54,8 @@ export type UseLobbyMediaPreviewResult = {
   readonly startLiveAct: () => Promise<void>;
   readonly stopLiveAct: () => void;
   readonly selectLiveActOption: (optionId: string) => void;
+  /** Re-run enumerateDevices (labels often empty until after a successful getUserMedia). */
+  readonly refreshDevices: () => Promise<void>;
 };
 
 function readPrefs(): LobbyMediaDevicePrefs {
@@ -256,11 +258,10 @@ export function useLobbyMediaPreview(
     async (deviceId: string) => {
       setSelectedCameraId(deviceId);
       writePrefs({ cameraDeviceId: deviceId });
-      if (cameraStreamRef.current || cameraStatus === 'granted') {
-        await openCamera(deviceId);
-      }
+      // Dropdown choice is a user gesture — start/switch immediately (Meet-style).
+      await openCamera(deviceId);
     },
-    [cameraStatus, openCamera],
+    [openCamera],
   );
 
   const startMicMeter = useCallback((stream: MediaStream) => {
@@ -339,11 +340,10 @@ export function useLobbyMediaPreview(
     async (deviceId: string) => {
       setSelectedMicrophoneId(deviceId);
       writePrefs({ microphoneDeviceId: deviceId });
-      if (micStreamRef.current || microphoneStatus === 'granted') {
-        await openMicrophone(deviceId);
-      }
+      // Dropdown choice is a user gesture — start/switch immediately (Meet-style).
+      await openMicrophone(deviceId);
     },
-    [microphoneStatus, openMicrophone],
+    [openMicrophone],
   );
 
   const loadNpcOptions = useCallback(async (): Promise<LobbyLiveActPreviewOption[]> => {
@@ -474,5 +474,6 @@ export function useLobbyMediaPreview(
     startLiveAct,
     stopLiveAct,
     selectLiveActOption,
+    refreshDevices: refreshDeviceLists,
   };
 }

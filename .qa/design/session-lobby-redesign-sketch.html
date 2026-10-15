@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SagaTree — Session-Lobby Redesign Skizze</title>
+  <!--
+    Design sketch only — mirrors src/styles/globals.css + SessionLobbyScreen primitives.
+    Cover: public/assets/marketplace/dornhain/saga-cover.png (real asset).
+    Open via file:// or any static server from repo root.
+  -->
+  <style>
+    /* === Tokens from src/styles/globals.css (.dark) === */
+    :root, .dark {
+      --background: #0F172A;
+      --foreground: #F1F5F9;
+      --card: #1E293B;
+      --card-foreground: #F1F5F9;
+      --primary: #06B6D4;
+      --primary-foreground: #0F172A;
+      --secondary: #334155;
+      --secondary-foreground: #F1F5F9;
+      --muted: #1E293B;
+      --muted-foreground: #94A3B8;
+      --accent: #F59E0B;
+      --accent-foreground: #0F172A;
+      --destructive: #F87171;
+      --border: #334155;
+      --input: #1E293B;
+      --ring: #06B6D4;
+      --radius: 0.5rem;
+      --font-ui: "Darker Grotesque", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font-ui);
+      background: #020617;
+      color: var(--foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 16px 40px;
+    }
+
+    /* Toolbar (sketch chrome only) */
+    .sketch-bar {
+      width: min(720px, 100%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted-foreground);
+    }
+    .sketch-bar .label {
+      width: 100%;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+    }
+    .sketch-bar button {
+      min-height: 40px;
+      padding: 0 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--foreground);
+      font: inherit;
+      cursor: pointer;
+    }
+    .sketch-bar button[aria-pressed="true"] {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .sketch-note { font-size: 12px; max-width: 48ch; }
+
+    /* App shell = AdaptivePage area */
+    .lobby-shell {
+      position: relative; /* sticky-actions must stay inside frame */
+      width: min(48rem, 100%); /* max-w-3xl like real lobby */
+      height: min(780px, 88dvh);
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+    }
+    .lobby-shell.phone {
+      width: 390px;
+      height: min(780px, calc(100dvh - 140px));
+      border-radius: 28px;
+      outline: 8px solid #0b1220;
+    }
+
+    /* Scroll column — mirrors SessionLobbyScreen outer div */
+    .lobby {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem; /* gap-4 */
+      padding: 1rem; /* p-4 */
+    }
+    .lobby-shell:not(.phone) .lobby { padding: 1.5rem; } /* sm:p-6 */
+    .lobby-shell.phone .lobby {
+      padding: 0;
+      gap: 0;
+      /* room for sticky Bereit bar */
+      padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* === Real Button primitives (button.tsx) === */
+    .btn {
+      display: inline-flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: inherit;
+      border: 1px solid transparent;
+      transition: background-color 150ms, border-color 150ms, color 150ms, transform 150ms;
+      outline: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:focus-visible {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+    }
+    .btn-default {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+    }
+    .btn-default:hover {
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+    .btn-outline {
+      border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+      background: color-mix(in srgb, var(--input) 30%, transparent);
+      color: var(--foreground);
+    }
+    .btn-outline:hover {
+      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      color: var(--accent);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+    }
+    .btn-ghost:hover {
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      color: var(--accent);
+    }
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+    .min-h-11 { min-height: 2.75rem; }
+    .min-w-11 { min-width: 2.75rem; }
+    .w-full { width: 100%; }
+    .size-icon { width: 2.25rem; height: 2.25rem; padding: 0; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+
+    /* === Avatar (avatar.tsx + lobby size-11) === */
+    .avatar {
+      position: relative;
+      display: flex;
+      width: 2.75rem; /* size-11 */
+      height: 2.75rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: 9999px;
+      background: var(--muted);
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted-foreground);
+    }
+
+    /* === Typography helpers from lobby === */
+    .text-xs { font-size: 0.75rem; line-height: 1rem; }
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .font-semibold { font-weight: 600; }
+    .font-medium { font-weight: 500; }
+    .uppercase { text-transform: uppercase; }
+    .tracking-wide { letter-spacing: 0.05em; }
+    .text-muted { color: var(--muted-foreground); }
+    .text-fg { color: var(--foreground); }
+    .text-destructive { color: var(--destructive); }
+    .text-ok { color: #34d399; }
+
+    /* Header — real lobby */
+    .lobby-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .lobby-shell.phone .lobby-header {
+      padding: 0.75rem 1rem;
+      padding-top: calc(0.75rem + env(safe-area-inset-top, 0px));
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--background) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ========== VARIANT A: Seat Stage ========== */
+    .v-a { display: none; flex-direction: column; gap: 1rem; }
+    .lobby-shell[data-variant="a"] .v-a { display: flex; }
+    .lobby-shell.phone[data-variant="a"] .v-a { gap: 0.75rem; padding: 0 1rem 1rem; }
+
+    /* Join hero — real structure, phone = cover FULL WIDTH 16:9 */
+    .join-hero {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+    .lobby-shell:not(.phone) .join-hero {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .cover-frame {
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      aspect-ratio: 1 / 1;
+      width: 10rem; /* w-40 */
+      max-width: 100%;
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--muted);
+    }
+    .lobby-shell:not(.phone) .cover-frame {
+      margin: 0;
+      width: 12rem; /* w-48 */
+    }
+    /* Phone: REAL cover visibility — landscape banner, edge to edge of content */
+    .lobby-shell.phone[data-variant="a"] .cover-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9; /* asset is 1280x720 */
+      margin: 0;
+      border-radius: var(--radius);
+    }
+    .cover-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .join-code {
+      min-width: 0;
+      flex: 1;
+      border-radius: var(--radius);
+      border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+      background: color-mix(in srgb, var(--card) 60%, transparent);
+      padding: 1rem;
+    }
+    .lobby-shell.player .join-code { display: none; }
+    .lobby-shell.player .player-in-hint { display: block; }
+    .lobby-shell.gm .player-in-hint { display: none; }
+    .player-in-hint {
+      display: none;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 40%, transparent);
+    }
+
+    .code-row {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .code-box {
+      min-width: 0;
+      flex: 1;
+      border-radius: var(--radius);
+      background: var(--muted);
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
+    .code-box p {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 1.875rem;
+      letter-spacing: 0.2em;
+      color: var(--foreground);
+    }
+    .lobby-shell.phone .code-box p { font-size: 1.5rem; }
+
+    /* Roster section — real card chrome */
+    .section-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 40%, transparent);
+      padding: 1rem;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    /* Seats (redesign) — still using avatar + border tokens from lobby */
+    .seats {
+      margin-top: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+    .lobby-shell:not(.phone) .seats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .seat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      text-align: center;
+      border-radius: calc(var(--radius) - 2px);
+      border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+      background: color-mix(in srgb, var(--background) 40%, transparent);
+      padding: 0.75rem 0.5rem;
+      min-width: 0;
+    }
+    .seat.self { border-color: color-mix(in srgb, var(--primary) 50%, var(--border)); }
+    .seat.empty {
+      border-style: dashed;
+      color: var(--muted-foreground);
+      justify-content: center;
+      min-height: 8.5rem;
+    }
+    .seat .avatar.ready-ring { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #34d399; }
+    .seat .avatar.wait-ring { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #fbbf24; }
+    .seat .name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .seat .meta { font-size: 0.7rem; color: var(--muted-foreground); }
+    .seat .st { font-size: 0.7rem; font-weight: 600; }
+    .seat .st.ok { color: #34d399; }
+    .seat .st.wait { color: #fbbf24; }
+
+    .you-row {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Sticky footer actions — phone only for redesign */
+    .sticky-actions {
+      display: none;
+    }
+    .lobby-shell.phone .sticky-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 100%;
+      z-index: 30;
+      padding: 0.55rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 96%, #000);
+      box-sizing: border-box;
+    }
+    .media-row { display: none; }
+    .lobby-shell.phone .sticky-actions .text-xs { display: none; }
+    .cta-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .lobby-shell.phone .cta-row .btn {
+      min-height: 2.75rem;
+    }
+    .desk-footer {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .lobby-shell.phone .desk-footer { display: none; }
+    .lobby-shell:not(.phone) .sticky-actions { display: none; }
+
+    .media-section { display: none !important; }
+    .media-preview {
+      aspect-ratio: 16 / 9;
+      border-radius: calc(var(--radius) - 2px);
+      background: var(--muted);
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      text-align: center;
+      padding: 0.5rem;
+    }
+
+    /* Character device strip (Meet-style) inside Am Tisch */
+    .you-row-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .device-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+    .mode-toggle {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: color-mix(in srgb, var(--background) 50%, transparent);
+      flex-shrink: 0;
+    }
+    .mode-toggle button {
+      min-height: 2.5rem;
+      padding: 0 0.65rem;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted-foreground);
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .mode-toggle button + button {
+      border-left: 1px solid var(--border);
+    }
+    .mode-toggle button[aria-pressed="true"] {
+      background: color-mix(in srgb, var(--primary) 22%, transparent);
+      color: var(--primary);
+    }
+    .mode-toggle svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      flex-shrink: 0;
+    }
+    .device-split {
+      position: relative;
+      display: inline-flex;
+      align-items: stretch;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: color-mix(in srgb, var(--background) 40%, transparent);
+      flex-shrink: 0;
+    }
+    .device-split .dev-main,
+    .device-split .dev-chev {
+      min-height: 2.5rem;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--foreground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .device-split .dev-main {
+      width: 2.5rem;
+      gap: 0;
+    }
+    .device-split .dev-chev {
+      width: 1.5rem;
+      border-left: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+    .device-split .dev-main[aria-pressed="true"] {
+      color: var(--primary);
+      background: color-mix(in srgb, var(--primary) 14%, transparent);
+    }
+    .device-split .dev-main.is-off {
+      color: var(--destructive);
+    }
+    .device-split svg {
+      width: 1.05rem;
+      height: 1.05rem;
+    }
+    .device-split .dev-chev svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+    .device-menu {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 0.35rem);
+      left: 0;
+      min-width: 11rem;
+      z-index: 40;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 0.25rem;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+    }
+    .device-menu[data-open="true"] { display: block; }
+    .device-menu button {
+      width: 100%;
+      min-height: 2.25rem;
+      border: none;
+      border-radius: calc(var(--radius) - 2px);
+      background: transparent;
+      color: var(--foreground);
+      font: inherit;
+      font-size: 0.8rem;
+      text-align: left;
+      padding: 0 0.55rem;
+      cursor: pointer;
+    }
+    .device-menu button[aria-selected="true"] {
+      background: color-mix(in srgb, var(--primary) 18%, transparent);
+      color: var(--primary);
+    }
+    .device-menu button:hover {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+    .vocal-meter {
+      flex: 1 1 4.5rem;
+      min-width: 4rem;
+      max-width: 7.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      padding: 0.35rem 0.4rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--muted);
+    }
+    .vocal-meter span {
+      flex: 1;
+      min-width: 0;
+      border-radius: 1px;
+      background: var(--border);
+      transition: background-color 80ms, height 80ms;
+    }
+    .vocal-meter span.on {
+      background: var(--primary);
+    }
+    .lobby-shell.phone[data-variant="b"] .device-bar {
+      gap: 0.35rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .mode-toggle button {
+      padding: 0 0.5rem;
+      font-size: 0.7rem;
+    }
+
+    /* ========== VARIANT B: Cover Stage (alt) ========== */
+    .v-b { display: none; flex-direction: column; gap: 1rem; }
+    .lobby-shell[data-variant="b"] .v-b { display: flex; }
+    .lobby-shell.phone[data-variant="b"] .v-b {
+      --b-inset: 0.65rem;
+      gap: 0;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .cover-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--muted);
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-stage {
+      /* Align left/right edges with cover-meta + Am Tisch cards */
+      width: calc(100% - (2 * var(--b-inset)));
+      max-width: calc(100% - (2 * var(--b-inset)));
+      margin: 0 var(--b-inset);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: none;
+    }
+    .cover-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+    }
+    /* Soft bottom fade on art only */
+    .cover-stage .scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, #0f172acc 0%, transparent 35%);
+      pointer-events: none;
+    }
+    /* Titel wide · Code + Verlassen shorter (same height) */
+    .cover-meta {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(4.5rem, 0.72fr);
+      grid-auto-rows: 1fr;
+      align-items: stretch;
+      gap: 0.5rem;
+      padding: 0.65rem 0.75rem 0.25rem;
+      min-width: 0;
+      box-sizing: border-box;
+      background: var(--background);
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-meta {
+      padding: 0.55rem var(--b-inset) 0.2rem;
+      gap: 0.4rem;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(4.25rem, 0.68fr);
+    }
+    .lobby-shell:not(.phone)[data-variant="b"] .cover-meta {
+      padding: 0 0 0.3rem;
+    }
+    .lobby-shell.player .cover-meta {
+      grid-template-columns: minmax(0, 1.7fr) minmax(4.25rem, 0.7fr);
+    }
+    .lobby-shell.player .cover-code { display: none; }
+
+    .cover-title,
+    .cover-code,
+    .cover-leave {
+      min-width: 0;
+      align-self: stretch;
+      min-height: 2.5rem;
+      padding: 0.3rem 0.45rem;
+      border-radius: var(--radius);
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-title,
+    .lobby-shell.phone[data-variant="b"] .cover-code,
+    .lobby-shell.phone[data-variant="b"] .cover-leave {
+      min-height: 2.5rem;
+      height: 2.5rem;
+      padding: 0.28rem 0.4rem;
+    }
+    .cover-title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cover-title .eyebrow {
+      margin: 0;
+      font-size: 0.52rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted-foreground);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cover-title h2 {
+      margin: 0.05rem 0 0;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.1;
+      text-wrap: balance;
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-title h2 {
+      font-size: 0.78rem;
+    }
+    .cover-code {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.25rem;
+      border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+    }
+    .cover-code .code-box {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 0;
+      background: transparent;
+      text-align: left;
+    }
+    .cover-code .code-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-shrink: 0;
+    }
+    .cover-code .code-box p {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      margin: 0;
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-code .code-box p {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+    }
+    .cover-code .btn {
+      min-height: 1.4rem;
+      min-width: 1.4rem;
+      width: 1.4rem;
+      height: 1.4rem;
+      padding: 0;
+      border-radius: calc(var(--radius) - 2px);
+    }
+    .cover-code .btn svg {
+      width: 0.7rem;
+      height: 0.7rem;
+    }
+    .cover-code .btn-invite {
+      min-width: auto;
+      width: auto;
+      padding: 0 0.35rem;
+      font-size: 0.62rem;
+      font-weight: 600;
+      border-radius: calc(var(--radius) - 2px);
+    }
+    .cover-leave {
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      padding: 0;
+    }
+    .cover-leave .btn {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      border: none;
+      background: transparent;
+      color: var(--foreground);
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+    }
+    .lobby-shell.phone[data-variant="b"] .cover-leave .btn {
+      font-size: 0.72rem;
+    }
+    .cover-leave .btn:hover {
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    /* Variant B: header chrome lives in cover-meta — hide duplicate header */
+    .lobby-shell[data-variant="b"] .lobby-header {
+      display: none;
+    }
+
+    /* Primary enter between cover and Am Tisch */
+    .mid-enter {
+      display: none;
+      padding: 0.3rem 0.75rem 0;
+      box-sizing: border-box;
+    }
+    .lobby-shell[data-variant="b"] .mid-enter {
+      display: block;
+    }
+    .lobby-shell.phone[data-variant="b"] .mid-enter {
+      padding: 0.25rem var(--b-inset) 0;
+    }
+    .lobby-shell:not(.phone)[data-variant="b"] .mid-enter {
+      padding: 0.3rem 0 0;
+    }
+    .mid-enter .btn {
+      width: 100%;
+    }
+    .lobby-shell[data-variant="b"] #enterBtn {
+      display: none;
+    }
+    .lobby-shell[data-variant="b"] .cta-row {
+      grid-template-columns: 1fr;
+    }
+    .lobby-shell[data-variant="b"] .desk-footer {
+      display: none;
+    }
+
+    .b-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .b-body {
+      padding: 0.35rem var(--b-inset) 0.25rem;
+      gap: 0.65rem;
+    }
+    .lobby-shell:not(.phone)[data-variant="b"] .b-body {
+      padding-top: 0.35rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .section-card {
+      padding: 0.75rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .seats {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .seat {
+      min-height: 0;
+      padding: 0.55rem 0.35rem;
+      gap: 0.2rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .seat .avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+      margin-bottom: 0.15rem;
+      font-size: 0.7rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .seat.empty {
+      min-height: 6.5rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .you-row {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      gap: 0.5rem;
+    }
+    .lobby-shell.phone[data-variant="b"] .you-row-top .btn {
+      min-height: 2.5rem;
+      font-size: 0.8rem;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    dialog.sheet {
+      border: 1px solid var(--border);
+      border-radius: 12px 12px 0 0;
+      background: var(--card);
+      color: var(--foreground);
+      width: min(420px, 100%);
+      margin: auto 0 0 auto;
+      padding: 0;
+    }
+    dialog.sheet::backdrop { background: rgb(0 0 0 / 0.55); }
+    .sheet-body { padding: 1rem; }
+    .sheet-body h4 { margin: 0 0 0.5rem; font-size: 1rem; }
+    .sheet-body p { margin: 0 0 0.75rem; color: var(--muted-foreground); font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <div class="sketch-bar">
+    <span class="label">Variante</span>
+    <button type="button" id="varA" aria-pressed="false">A · Seat + Cover</button>
+    <button type="button" id="varB" aria-pressed="true">B · Cover Stage</button>
+    <button type="button" id="roleGm" aria-pressed="true">GM</button>
+    <button type="button" id="rolePlayer" aria-pressed="false">Player</button>
+    <button type="button" id="sizeDesk" aria-pressed="false">Desktop</button>
+    <button type="button" id="sizePhone" aria-pressed="true">Phone</button>
+    <p class="sketch-note" id="note">
+      B: 3 Boxen auf dem Cover — Titel · Code · Verlassen (gleiche Höhe).
+    </p>
+  </div>
+
+  <div
+    class="lobby-shell phone gm"
+    id="frame"
+    data-variant="b"
+    data-au-surface="session-lobby"
+  >
+    <div class="lobby" data-session-lobby="sketch">
+      <header class="lobby-header">
+        <div class="titles-block">
+          <p class="text-xs uppercase tracking-wide text-muted">Session-Lobby</p>
+          <h1 class="text-2xl font-semibold text-fg" style="margin:0">Session 3</h1>
+          <p class="text-sm text-muted" style="margin:0.15rem 0 0">Das Flüstern unter Dornhain</p>
+        </div>
+        <button type="button" class="btn btn-ghost min-h-11 px-4">Verlassen</button>
+      </header>
+
+      <!-- ===== A ===== -->
+      <div class="v-a">
+        <div class="join-hero" data-session-lobby-join-hero>
+          <div class="cover-frame" data-session-lobby-saga-cover-frame>
+            <img
+              src="../../public/assets/marketplace/dornhain/saga-cover.png?v=3"
+              alt="Saga-Cover: Das Flüstern unter Dornhain"
+              data-session-lobby-saga-cover
+              width="1280"
+              height="720"
+            />
+          </div>
+
+          <section class="join-code" data-session-lobby-join-code>
+            <p class="text-xs uppercase tracking-wide text-muted" style="margin:0">Session-Code</p>
+            <p class="text-sm text-muted" style="margin:0.25rem 0 0">
+              Teile diesen Code mit deinen Spielern — Beitritt über Session → Beitreten.
+            </p>
+            <div class="code-row">
+              <div class="code-box">
+                <p data-session-lobby-code translate="no">AB7K</p>
+              </div>
+              <button
+                type="button"
+                class="btn btn-outline size-icon min-h-11 min-w-11"
+                aria-label="Session-Code kopieren"
+                data-session-lobby-copy-code
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+            </div>
+            <div style="margin-top:0.75rem">
+              <button type="button" class="btn btn-default min-h-11 w-full px-4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                Einladung kopieren
+              </button>
+            </div>
+          </section>
+
+          <p class="player-in-hint">Du bist drin. Code braucht nur der Host.</p>
+        </div>
+
+        <section class="media-section" data-session-lobby-media>
+          <h2 class="text-sm font-medium" style="margin:0">Geräte &amp; LiveAct</h2>
+          <p class="text-xs text-muted" style="margin:0.25rem 0 0">
+            Kamera, Mikrofon und LiveAct starten nur nach deinem Klick — nie automatisch.
+          </p>
+          <div class="media-grid">
+            <div class="media-card">
+              <p class="text-xs text-muted" style="margin:0">Kamera</p>
+              <p class="text-sm" style="margin:0.15rem 0 0">Bereit zum Prüfen</p>
+              <div class="media-preview">Noch kein Kamerabild</div>
+              <button type="button" class="btn btn-outline min-h-11 w-full px-4" style="margin-top:0.5rem">Kamera prüfen</button>
+            </div>
+            <div class="media-card">
+              <p class="text-xs text-muted" style="margin:0">Mikrofon</p>
+              <p class="text-sm" style="margin:0.15rem 0 0">Bereit zum Prüfen</p>
+              <div class="media-preview">Pegel</div>
+              <button type="button" class="btn btn-outline min-h-11 w-full px-4" style="margin-top:0.5rem">Mikrofon prüfen</button>
+            </div>
+            <div class="media-card">
+              <p class="text-xs text-muted" style="margin:0">LiveAct</p>
+              <p class="text-sm" style="margin:0.15rem 0 0">Bereit zum Prüfen</p>
+              <div class="media-preview">Noch keine Vorschau</div>
+              <button type="button" class="btn btn-outline min-h-11 w-full px-4" style="margin-top:0.5rem">LiveAct prüfen</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" data-session-lobby-roster>
+          <div class="section-head">
+            <h2>Am Tisch</h2>
+            <p class="text-xs text-muted" style="margin:0">Online 3 · Bereit 2</p>
+          </div>
+          <div class="seats">
+            <article class="seat">
+              <div class="avatar ready-ring">GM</div>
+              <div class="name">Ben</div>
+              <div class="meta">Spielleitung</div>
+              <div class="st ok">Bereit</div>
+            </article>
+            <article class="seat self">
+              <div class="avatar ready-ring">Ka</div>
+              <div class="name">Kara Voss</div>
+              <div class="meta">Player · du</div>
+              <div class="st ok">Bereit</div>
+            </article>
+            <article class="seat">
+              <div class="avatar wait-ring">Le</div>
+              <div class="name">Lea</div>
+              <div class="meta">Player · Torin</div>
+              <div class="st wait">Wartet</div>
+            </article>
+            <article class="seat empty">
+              <span style="font-size:1.25rem">+</span>
+              <span class="text-sm">Platz offen</span>
+              <button type="button" class="btn btn-outline min-h-11 px-4" style="margin-top:0.25rem">Einladen</button>
+            </article>
+          </div>
+          <div class="you-row">
+            <div class="you-row-top">
+              <p class="text-sm text-muted" style="margin:0">Dein Platz: <span class="text-fg font-medium">Kara Voss</span></p>
+              <button type="button" class="btn btn-outline min-h-11 px-4">Charakter ändern</button>
+            </div>
+            <div class="device-bar" aria-label="Kamera, LiveAct und Mikrofon">
+              <div class="mode-toggle" role="group" aria-label="Kamera oder LiveAct">
+                <button type="button" class="mode-cam" aria-pressed="true" title="Kamera">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M23 7l-7 5 7 5V7z" />
+                    <rect x="1" y="5" width="15" height="14" rx="2" />
+                  </svg>
+                  Cam
+                </button>
+                <button type="button" class="mode-live" aria-pressed="false" title="LiveAct">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20a8 8 0 0 1 16 0" />
+                  </svg>
+                  Live
+                </button>
+              </div>
+              <div class="device-split cam-split">
+                <button type="button" class="dev-main cam-toggle" aria-pressed="false" aria-label="Kamera ein/aus" title="Kamera">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M23 7l-7 5 7 5V7z" />
+                    <rect x="1" y="5" width="15" height="14" rx="2" />
+                  </svg>
+                </button>
+                <button type="button" class="dev-chev cam-menu-btn" aria-label="Kamera wählen" aria-haspopup="listbox" aria-expanded="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <div class="device-menu cam-menu" role="listbox" data-open="false">
+                  <button type="button" role="option" aria-selected="true">FaceTime HD</button>
+                  <button type="button" role="option" aria-selected="false">USB Capture</button>
+                  <button type="button" role="option" aria-selected="false">iPhone Continuity</button>
+                </div>
+              </div>
+              <div class="device-split mic-split">
+                <button type="button" class="dev-main mic-toggle" aria-pressed="false" aria-label="Mikrofon ein/aus" title="Mikrofon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" y1="19" x2="12" y2="23" />
+                    <line x1="8" y1="23" x2="16" y2="23" />
+                  </svg>
+                </button>
+                <button type="button" class="dev-chev mic-menu-btn" aria-label="Mikrofon wählen" aria-haspopup="listbox" aria-expanded="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <div class="device-menu mic-menu" role="listbox" data-open="false">
+                  <button type="button" role="option" aria-selected="true">MacBook Mikrofon</button>
+                  <button type="button" role="option" aria-selected="false">AirPods Pro</button>
+                  <button type="button" role="option" aria-selected="false">USB Condenser</button>
+                </div>
+              </div>
+              <div class="vocal-meter" aria-label="Mikrofonpegel" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span style="height:18%"></span><span style="height:28%"></span><span style="height:40%"></span>
+                <span style="height:52%"></span><span style="height:64%"></span><span style="height:76%"></span>
+                <span style="height:88%"></span><span style="height:100%"></span><span style="height:86%"></span>
+                <span style="height:70%"></span><span style="height:54%"></span><span style="height:38%"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="desk-footer">
+          <button type="button" class="btn btn-default min-h-11 px-4" id="enterDesk">Session starten</button>
+          <button type="button" class="btn btn-outline min-h-11 px-4">Charakter ändern</button>
+          <p class="text-xs text-muted" style="margin:0">Bereitschaft ist nur ein Signal — keine Spielberechtigung.</p>
+        </footer>
+      </div>
+
+      <!-- ===== B Cover Stage ===== -->
+      <div class="v-b">
+        <div class="cover-meta">
+          <div class="cover-title">
+            <p class="eyebrow">Das Flüstern unter Dornhain</p>
+            <h2>Session 3</h2>
+          </div>
+          <div class="cover-code" aria-label="Session-Code">
+            <div class="code-box"><p translate="no">AB7K</p></div>
+            <div class="code-actions">
+              <button type="button" class="btn btn-outline" aria-label="Session-Code kopieren">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+              <button type="button" class="btn btn-default btn-invite" aria-label="Einladung kopieren">Link</button>
+            </div>
+          </div>
+          <div class="cover-leave">
+            <button type="button" class="btn">Verlassen</button>
+          </div>
+        </div>
+
+        <section class="cover-stage" aria-label="Saga-Cover">
+          <img
+            src="../../public/assets/marketplace/dornhain/saga-cover.png?v=3"
+            alt="Saga-Cover: Das Flüstern unter Dornhain"
+            width="1280"
+            height="720"
+          />
+          <div class="scrim" aria-hidden="true"></div>
+        </section>
+
+        <div class="mid-enter">
+          <button type="button" class="btn btn-default min-h-11 px-4" id="enterMid">
+            Session starten
+          </button>
+        </div>
+
+        <div class="b-body">
+          <section class="section-card">
+            <div class="section-head">
+              <h2>Am Tisch</h2>
+              <p class="text-xs text-muted" style="margin:0"><span style="color:var(--primary);font-weight:600">2 / 4</span> bereit · Lea fehlt</p>
+            </div>
+            <div class="seats">
+              <article class="seat">
+                <div class="avatar ready-ring">GM</div>
+                <div class="name">Ben</div>
+                <div class="meta">Spielleitung</div>
+                <div class="st ok">Bereit</div>
+              </article>
+              <article class="seat self">
+                <div class="avatar ready-ring">Ka</div>
+                <div class="name">Kara Voss</div>
+                <div class="meta">du</div>
+                <div class="st ok">Bereit</div>
+              </article>
+              <article class="seat">
+                <div class="avatar wait-ring">Le</div>
+                <div class="name">Lea</div>
+                <div class="meta">Torin</div>
+                <div class="st wait">Wartet</div>
+              </article>
+              <article class="seat empty">
+                <span style="font-size:1.25rem">+</span>
+                <span class="text-sm">Offen</span>
+              </article>
+            </div>
+            <div class="you-row">
+              <div class="you-row-top">
+                <p class="text-sm text-muted" style="margin:0">Charakter: <span class="text-fg font-medium">Kara Voss</span></p>
+                <button type="button" class="btn btn-outline min-h-11 px-4">Ändern</button>
+              </div>
+              <div class="device-bar" aria-label="Kamera, LiveAct und Mikrofon">
+                <div class="mode-toggle" role="group" aria-label="Kamera oder LiveAct">
+                  <button type="button" class="mode-cam" aria-pressed="true" title="Kamera">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M23 7l-7 5 7 5V7z" />
+                      <rect x="1" y="5" width="15" height="14" rx="2" />
+                    </svg>
+                    Cam
+                  </button>
+                  <button type="button" class="mode-live" aria-pressed="false" title="LiveAct">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M4 20a8 8 0 0 1 16 0" />
+                    </svg>
+                    Live
+                  </button>
+                </div>
+
+                <div class="device-split cam-split">
+                  <button type="button" class="dev-main cam-toggle" aria-pressed="false" aria-label="Kamera ein/aus" title="Kamera">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M23 7l-7 5 7 5V7z" />
+                      <rect x="1" y="5" width="15" height="14" rx="2" />
+                    </svg>
+                  </button>
+                  <button type="button" class="dev-chev cam-menu-btn" aria-label="Kamera wählen" aria-haspopup="listbox" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  <div class="device-menu cam-menu" role="listbox" data-open="false">
+                    <button type="button" role="option" aria-selected="true">FaceTime HD</button>
+                    <button type="button" role="option" aria-selected="false">USB Capture</button>
+                    <button type="button" role="option" aria-selected="false">iPhone Continuity</button>
+                  </div>
+                </div>
+
+                <div class="device-split mic-split">
+                  <button type="button" class="dev-main mic-toggle" aria-pressed="false" aria-label="Mikrofon ein/aus" title="Mikrofon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                      <line x1="12" y1="19" x2="12" y2="23" />
+                      <line x1="8" y1="23" x2="16" y2="23" />
+                    </svg>
+                  </button>
+                  <button type="button" class="dev-chev mic-menu-btn" aria-label="Mikrofon wählen" aria-haspopup="listbox" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  <div class="device-menu mic-menu" role="listbox" data-open="false">
+                    <button type="button" role="option" aria-selected="true">MacBook Mikrofon</button>
+                    <button type="button" role="option" aria-selected="false">AirPods Pro</button>
+                    <button type="button" role="option" aria-selected="false">USB Condenser</button>
+                  </div>
+                </div>
+
+                <div class="vocal-meter" aria-label="Mikrofonpegel" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <span style="height:18%"></span>
+                  <span style="height:28%"></span>
+                  <span style="height:40%"></span>
+                  <span style="height:52%"></span>
+                  <span style="height:64%"></span>
+                  <span style="height:76%"></span>
+                  <span style="height:88%"></span>
+                  <span style="height:100%"></span>
+                  <span style="height:86%"></span>
+                  <span style="height:70%"></span>
+                  <span style="height:54%"></span>
+                  <span style="height:38%"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <footer class="desk-footer">
+            <button type="button" class="btn btn-default min-h-11 px-4">Session starten</button>
+            <p class="text-xs text-muted" style="margin:0">Bereitschaft ist nur ein Signal — keine Spielberechtigung.</p>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky-actions">
+      <div class="cta-row">
+        <button type="button" class="btn btn-secondary min-h-11 px-4" id="readyBtn">Bereit</button>
+        <button type="button" class="btn btn-default min-h-11 px-4" id="enterBtn">Starten</button>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="sheet" id="sheet">
+    <div class="sheet-body">
+      <h4 id="sheetTitle">Kamera prüfen</h4>
+      <p>Wie LobbyMediaPreviewSection: nur nach Geste, blockiert Enter nicht.</p>
+      <div class="media-preview" id="sheetPreview" style="margin-bottom:0.75rem">Noch kein Kamerabild</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <button type="button" class="btn btn-default min-h-11 px-4" id="sheetOk">Gerät starten</button>
+        <button type="button" class="btn btn-outline min-h-11 px-4" id="sheetClose">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const frame = document.getElementById("frame");
+    const enterBtn = document.getElementById("enterBtn");
+    const enterMid = document.getElementById("enterMid");
+    const enterDesk = document.getElementById("enterDesk");
+    const readyBtn = document.getElementById("readyBtn");
+    const note = document.getElementById("note");
+    const sheet = document.getElementById("sheet");
+
+    function setPressed(id, on) {
+      document.getElementById(id).setAttribute("aria-pressed", String(on));
+    }
+
+    function syncCta() {
+      const gm = frame.classList.contains("gm");
+      const label = gm ? "Session starten" : "Session betreten";
+      const short = gm ? "Starten" : "Betreten";
+      if (enterBtn) enterBtn.textContent = short;
+      if (enterMid) enterMid.textContent = label;
+      if (enterDesk) enterDesk.textContent = label;
+    }
+
+    document.getElementById("varA").onclick = () => {
+      frame.dataset.variant = "a";
+      setPressed("varA", true);
+      setPressed("varB", false);
+      note.textContent = "A: Cover als 16:9 Banner (Phone) / Square (Desktop), echte Join-Code-Card, Seats 2×2.";
+    };
+    document.getElementById("varB").onclick = () => {
+      frame.dataset.variant = "b";
+      setPressed("varA", false);
+      setPressed("varB", true);
+      note.textContent = "B: Geräte in Am Tisch · Cam/Live + Mic-Dropdowns + Vocalmeter.";
+    };
+    document.getElementById("roleGm").onclick = () => {
+      frame.classList.add("gm");
+      frame.classList.remove("player");
+      setPressed("roleGm", true);
+      setPressed("rolePlayer", false);
+      syncCta();
+    };
+    document.getElementById("rolePlayer").onclick = () => {
+      frame.classList.add("player");
+      frame.classList.remove("gm");
+      setPressed("roleGm", false);
+      setPressed("rolePlayer", true);
+      syncCta();
+    };
+    document.getElementById("sizeDesk").onclick = () => {
+      frame.classList.remove("phone");
+      setPressed("sizeDesk", true);
+      setPressed("sizePhone", false);
+    };
+    document.getElementById("sizePhone").onclick = () => {
+      frame.classList.add("phone");
+      setPressed("sizeDesk", false);
+      setPressed("sizePhone", true);
+    };
+
+    let ready = false;
+    readyBtn.onclick = () => {
+      ready = !ready;
+      readyBtn.textContent = ready ? "Nicht bereit" : "Bereit";
+      readyBtn.className = ready
+        ? "btn btn-outline min-h-11 px-4"
+        : "btn btn-secondary min-h-11 px-4";
+    };
+
+    document.getElementById("sheetClose").onclick = () => sheet.close();
+    document.getElementById("sheetOk").onclick = () => sheet.close();
+
+    function closeAllMenus(except) {
+      document.querySelectorAll(".device-menu[data-open='true']").forEach((menu) => {
+        if (menu === except) return;
+        menu.dataset.open = "false";
+        const chev = menu.parentElement && menu.parentElement.querySelector(".dev-chev");
+        if (chev) chev.setAttribute("aria-expanded", "false");
+      });
+    }
+
+    function wireMenu(btn, menu) {
+      if (!btn || !menu) return;
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = menu.dataset.open === "true";
+        closeAllMenus(open ? null : menu);
+        menu.dataset.open = open ? "false" : "true";
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+      });
+      menu.querySelectorAll("[role='option']").forEach((opt) => {
+        opt.addEventListener("click", () => {
+          menu.querySelectorAll("[role='option']").forEach((o) => o.setAttribute("aria-selected", "false"));
+          opt.setAttribute("aria-selected", "true");
+          menu.dataset.open = "false";
+          btn.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    function setLiveMode(bar, live) {
+      const modeCam = bar.querySelector(".mode-cam");
+      const modeLive = bar.querySelector(".mode-live");
+      const camToggle = bar.querySelector(".cam-toggle");
+      const camMenuBtn = bar.querySelector(".cam-menu-btn");
+      if (modeCam) modeCam.setAttribute("aria-pressed", String(!live));
+      if (modeLive) modeLive.setAttribute("aria-pressed", String(live));
+      if (camToggle) {
+        camToggle.setAttribute("aria-label", live ? "LiveAct ein/aus" : "Kamera ein/aus");
+        camToggle.title = live ? "LiveAct" : "Kamera";
+      }
+      if (camMenuBtn) {
+        camMenuBtn.setAttribute("aria-label", live ? "LiveAct-Quelle wählen" : "Kamera wählen");
+      }
+    }
+
+    document.querySelectorAll(".device-bar").forEach((bar) => {
+      const modeCam = bar.querySelector(".mode-cam");
+      const modeLive = bar.querySelector(".mode-live");
+      const camToggle = bar.querySelector(".cam-toggle");
+      const micToggle = bar.querySelector(".mic-toggle");
+      const camMenuBtn = bar.querySelector(".cam-menu-btn");
+      const micMenuBtn = bar.querySelector(".mic-menu-btn");
+      const camMenu = bar.querySelector(".cam-menu");
+      const micMenu = bar.querySelector(".mic-menu");
+      const meter = bar.querySelector(".vocal-meter");
+
+      if (modeCam) {
+        modeCam.addEventListener("click", () => setLiveMode(bar, false));
+      }
+      if (modeLive) {
+        modeLive.addEventListener("click", () => setLiveMode(bar, true));
+      }
+
+      if (camToggle) {
+        camToggle.addEventListener("click", () => {
+          const on = camToggle.getAttribute("aria-pressed") !== "true";
+          camToggle.setAttribute("aria-pressed", String(on));
+          camToggle.classList.toggle("is-off", !on);
+        });
+      }
+      if (micToggle) {
+        micToggle.addEventListener("click", () => {
+          const on = micToggle.getAttribute("aria-pressed") !== "true";
+          micToggle.setAttribute("aria-pressed", String(on));
+          micToggle.classList.toggle("is-off", !on);
+          if (meter) meter.dataset.active = on ? "true" : "false";
+        });
+      }
+
+      wireMenu(camMenuBtn, camMenu);
+      wireMenu(micMenuBtn, micMenu);
+    });
+
+    document.addEventListener("click", () => closeAllMenus(null));
+
+    /* Mock vocal meter — pulses when mic is on */
+    const bars = () => Array.from(document.querySelectorAll(".vocal-meter"));
+    setInterval(() => {
+      bars().forEach((meter) => {
+        const micOn = meter.dataset.active === "true";
+        const spans = meter.querySelectorAll("span");
+        let level = 0;
+        spans.forEach((span, i) => {
+          if (!micOn) {
+            span.classList.remove("on");
+            return;
+          }
+          const t = Date.now() / 180 + i * 0.55;
+          const h = 18 + Math.abs(Math.sin(t)) * 72 + (i % 3) * 4;
+          span.style.height = `${Math.min(100, h)}%`;
+          const on = h > 28 + (spans.length - i) * 2;
+          span.classList.toggle("on", on);
+          if (on) level = Math.max(level, Math.round(h));
+        });
+        meter.setAttribute("aria-valuenow", String(micOn ? level : 0));
+      });
+    }, 90);
+
+    syncCta();
+  </script>
+</body>
+</html>

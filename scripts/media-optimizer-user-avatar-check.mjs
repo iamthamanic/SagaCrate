@@ -28,8 +28,12 @@ section('1 · files');
 
 const paths = [
   'src/app/profile/AccountAvatarSection.tsx',
+  'src/app/shell/useAccountAvatar.ts',
+  'src/app/shell/Layout.tsx',
+  'src/app/session/SessionLobbyScreen.tsx',
   'src/infrastructure/user-profile/user-profile-service.ts',
   'src/infrastructure/user-profile/supabase-user-profile.repository.ts',
+  'src/infrastructure/user-profile/account-avatar-store.ts',
   'src/domains/user-profile/display-name.ts',
   'supabase/migrations/081_user_profiles_and_avatars.sql',
 ];
@@ -55,15 +59,25 @@ const contract = readFileSync(
 const policy = readFileSync(join(root, 'src/domains/media/optimization-policy.ts'), 'utf8');
 const lobbyHook = readFileSync(join(root, 'src/app/session/hooks/useSessionLobby.ts'), 'utf8');
 const lobbyUi = readFileSync(join(root, 'src/app/session/SessionLobbyScreen.tsx'), 'utf8');
+const layout = readFileSync(join(root, 'src/app/shell/Layout.tsx'), 'utf8');
+const lobbyScreen = readFileSync(join(root, 'src/app/session/SessionLobbyScreen.tsx'), 'utf8');
+const avatarHook = readFileSync(join(root, 'src/app/shell/useAccountAvatar.ts'), 'utf8');
+const avatarStore = readFileSync(
+  join(root, 'src/infrastructure/user-profile/account-avatar-store.ts'),
+  'utf8',
+);
+const profileBarrel = readFileSync(join(root, 'src/app/profile/index.ts'), 'utf8');
 const migration = readFileSync(
   join(root, 'supabase/migrations/081_user_profiles_and_avatars.sql'),
   'utf8',
 );
 
 check(/useMediaOptimizeIntake/.test(ui), 'UI uses intake hook');
+check(/surviveUnmount:\s*true/.test(ui), 'avatar upload survives leaving the screen');
 check(/profileId:\s*['"]user-avatar['"]/.test(ui), 'intake profile user-avatar');
 check(/alreadyOptimized:\s*true/.test(ui), 'upload skips double-optimize after intake');
 check(/previewUrl \|\| remoteUrl/.test(ui), 'immediate preview before remote URL');
+check(/Hintergrund/.test(ui), 'status mentions background optimize / leave OK');
 check(/aria-live/.test(ui), 'UI aria-live for status');
 check(/Erneut|Abbrechen|Bestehendes Avatar bleibt erhalten/.test(ui), 'retry/abort/keep prior');
 check(/data-account-avatar-dropzone/.test(ui), 'clickable dropzone box');
@@ -77,6 +91,9 @@ check(/kein stilles Original|no silent/.test(service), 'service fails closed on 
 check(/sniffUserAvatarMime/.test(repo), 'repository magic-byte sniff');
 check(/image\/webp/.test(repo), 'repository accepts webp');
 check(/user-avatars/.test(repo), 'repository uses user-avatars bucket');
+check(/ensureOwnProfileRow/.test(repo), 'repository ensures profile row');
+check(/select\('id'\)/.test(repo) && /\.insert\(/.test(repo), 'ensure is select-then-insert');
+check(/formatSupabaseError/.test(repo), 'errors format code/message (no undefined)');
 check(/'user-avatar'/.test(contract), 'contract lists user-avatar');
 check(/profileId:\s*['"]user-avatar['"]/.test(policy), 'policy defines user-avatar');
 check(/gifAnimation:\s*['"]reject['"]/.test(policy) && /USER_AVATAR/.test(policy), 'avatar rejects gif');
@@ -88,6 +105,20 @@ check(/accountDisplayName/.test(lobbyHook), 'lobby maps accountDisplayName');
 check(/data-lobby-account-name/.test(lobbyUi), 'lobby renders account name');
 check(/data-lobby-user-id/.test(lobbyUi), 'lobby renders user id');
 check(/data-lobby-member-avatar/.test(lobbyUi), 'lobby renders avatar');
+check(/useAccountAvatar/.test(layout), 'shell uses shared account avatar hook');
+check(/useAccountAvatar/.test(lobbyScreen), 'lobby uses shared account avatar hook');
+check(/useAccountAvatar/.test(ui), 'profile section uses shared account avatar hook');
+check(/export \{[^}]*useAccountAvatar/.test(profileBarrel), 'profile barrel exports useAccountAvatar');
+check(/ensureAccountAvatarLoaded/.test(avatarStore) && /publishAccountAvatarUrl/.test(avatarStore), 'avatar store load+publish');
+check(/ensureAccountAvatarLoaded/.test(avatarHook), 'hook loads via shared store');
+check(/accountAvatarUrl \|\| member\.avatarUrl|selfAvatarUrl/.test(lobbyScreen), 'lobby self seat prefers shared avatar');
+check(/data-shell-user-avatar-image|AvatarImage/.test(layout), 'shell pill can render avatar image');
+check(/rounded-md/.test(layout) && /data-shell-user-avatar-image/.test(layout), 'shell avatar is square (rounded-md)');
+check(/rounded-md/.test(lobbyScreen) && /data-lobby-member-avatar/.test(lobbyScreen), 'lobby account avatar is square');
+check(
+  /data-account-user-id-copy/.test(readFileSync(join(root, 'src/app/profile/Profile.tsx'), 'utf8')),
+  'profile User ID has copy control',
+);
 
 section('4 · migration RLS');
 
