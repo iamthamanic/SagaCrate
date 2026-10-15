@@ -24,6 +24,13 @@ services:
           - /auth/v1
     plugins:
       - name: cors
+      # #670: IP-keyed throttle on login/signup/token (fail closed at gateway)
+      - name: rate-limiting
+        config:
+          minute: 30
+          policy: local
+          fault_tolerant: false
+          hide_client_headers: false
 
   - name: rest-v1
     url: http://supabase-rest:3000

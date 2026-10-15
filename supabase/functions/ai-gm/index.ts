@@ -3,6 +3,7 @@ import {
   handleOptions,
   type CorsOptions,
 } from '../_shared/cors.ts';
+import { consumePersistentAiGmRateLimit } from '../_shared/ai-gm-rate-limit.ts';
 import { assertSessionMemberAccess } from '../_shared/session-membership-gate.ts';
 
 const CORS_OPTS: CorsOptions = {
@@ -85,6 +86,9 @@ interface GMResponse {
 
 const OLLAMA_HOST = Deno.env.get("OLLAMA_HOST") || "http://ollama:11434"
 const OLLAMA_MODEL = Deno.env.get("OLLAMA_MODEL") || "llama3.2"
+/** Persistent AI GM quota (#670). Override with AI_GM_RATE_LIMIT (1–60). */
+const AI_GM_RATE_LIMIT_WINDOW_SECONDS = 60
+const DEFAULT_AI_GM_RATE_LIMIT = 12
 /** Same env family as character-lore / session-recap — cloud LLM without local Ollama. */
 const AI_PROVIDER = (Deno.env.get("CHARACTER_AI_PROVIDER") || "ollama").trim()
 const AI_MODEL = (
@@ -112,6 +116,96 @@ const SYSTEM_PROMPTS: Record<string, string> = {
 // ===========================================
 // UTILITY FUNCTIONS (SOLID: Single Responsibility)
 // ===========================================
+
+function getAiGmRateLimit(): number {
+  const raw = Number.parseInt(Deno.env.get('AI_GM_RATE_LIMIT') || '', 10)
+  if (!Number.isInteger(raw)) return DEFAULT_AI_GM_RATE_LIMIT
+  return Math.min(60, Math.max(1, raw))
+}
+
+function getSupabaseServiceConfig(): { url: string; serviceRoleKey: string; anonKey: string } | null {
+  const url = (
+    Deno.env.get('SUPABASE_URL') ||
+    Deno.env.get('API_EXTERNAL_URL') ||
+    ''
+  ).replace(/\/+$/, '')
+  const serviceRoleKey = (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '').trim()
+  const anonKey = (Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('ANON_KEY') || '').trim()
+  if (!url || !serviceRoleKey || !anonKey) return null
+  return { url, serviceRoleKey, anonKey }
+}
+
+/** Resolve caller user id from Bearer JWT (same path as membership gate). */
+async function resolveCallerUserId(req: Request): Promise<string | null> {
+  const auth = req.headers.get('Authorization')
+  if (!auth?.toLowerCase().startsWith('bearer ')) return null
+  const config = getSupabaseServiceConfig()
+  if (!config) return null
+  const userRes = await fetch(`${config.url}/auth/v1/user`, {
+    headers: {
+      apikey: config.anonKey,
+      Authorization: auth,
+      'Content-Type': 'application/json',
+    },
+  })
+  if (!userRes.ok) return null
+  const body = (await userRes.json()) as { id?: string }
+  return typeof body.id === 'string' && body.id ? body.id : null
+}
+
+async function enforceAiGmRateLimit(req: Request, headers: HeadersInit): Promise<Response | null> {
+  const config = getSupabaseServiceConfig()
+  if (!config) {
+    console.error('AI GM persistent rate limit unavailable: missing service-role configuration')
+    return new Response(JSON.stringify({
+      error: 'AI Game Master ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.',
+    }), {
+      status: 503,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    })
+  }
+
+  const userId = await resolveCallerUserId(req)
+  if (!userId) {
+    return new Response(JSON.stringify({ error: 'Authentication required' }), {
+      status: 401,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    })
+  }
+
+  try {
+    const allowed = await consumePersistentAiGmRateLimit(
+      {
+        url: config.url,
+        serviceRoleKey: config.serviceRoleKey,
+        limit: getAiGmRateLimit(),
+        windowSeconds: AI_GM_RATE_LIMIT_WINDOW_SECONDS,
+      },
+      userId,
+    )
+    if (!allowed) {
+      return new Response(JSON.stringify({
+        error: 'Zu viele AI-GM-Anfragen. Bitte warte kurz und versuche es erneut.',
+      }), {
+        status: 429,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      })
+    }
+  } catch (error) {
+    console.error(
+      'AI GM persistent rate limit failed:',
+      error instanceof Error ? error.message : 'unknown error',
+    )
+    return new Response(JSON.stringify({
+      error: 'AI Game Master ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.',
+    }), {
+      status: 503,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    })
+  }
+
+  return null
+}
 
 function validateRequest(body: unknown): { valid: boolean; error?: string } {
   if (!body || typeof body !== 'object') {
@@ -547,6 +641,10 @@ serve(async (req: Request) => {
           headers: { ...headers, 'Content-Type': 'application/json' },
         })
       }
+
+      // #670: persistent user quota before any LLM / lorekeeper fan-out
+      const rateLimited = await enforceAiGmRateLimit(req, headers)
+      if (rateLimited) return rateLimited
       
       // Fetch additional NPC context from Lorekeeper
       if (request.context?.npcs) {

@@ -107,6 +107,7 @@ migrations=(
   084_look_profiles_public_id.sql
   085_fix_function_bodies_sagatree.sql
   086_rls_rulesets_world_graphs.sql
+  087_ai_gm_rate_limits.sql
 )
 
 only="${1:-}"
