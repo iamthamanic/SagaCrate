@@ -232,6 +232,14 @@ function checkNegativeAuthzSuite() {
   });
 }
 
+function checkEdgeDispatcherAllowlist() {
+  console.log('Edge dispatcher allowlist (#668): deny-by-default mounts...');
+  execFileSync(process.execPath, ['scripts/edge-dispatcher-allowlist-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2204,6 +2212,7 @@ checkSagatreeCoreWorkflowsContract();
 checkRealtimeComposeBootContract();
 checkComposeHardenDefaults();
 checkNegativeAuthzSuite();
+checkEdgeDispatcherAllowlist();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();
