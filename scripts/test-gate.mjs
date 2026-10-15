@@ -240,6 +240,14 @@ function checkEdgeDispatcherAllowlist() {
   });
 }
 
+function checkRlsOpenTables() {
+  console.log('RLS open tables (#669): rulesets / world_graphs migration contract...');
+  execFileSync(process.execPath, ['scripts/rls-open-tables-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2213,6 +2221,7 @@ checkRealtimeComposeBootContract();
 checkComposeHardenDefaults();
 checkNegativeAuthzSuite();
 checkEdgeDispatcherAllowlist();
+checkRlsOpenTables();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();

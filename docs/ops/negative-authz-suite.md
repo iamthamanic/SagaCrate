@@ -11,6 +11,7 @@ Regression suite for deny paths on the promoted Compose stack.
 | Valid member JWT → `dm-tools/dice` | `200` |
 | Stranger JWT → `ai-gm` for foreign session | deny (`401`/`403`/`404`) |
 | Stranger REST read of non-member project | empty or deny |
+| Stranger REST read/update of foreign `rulesets` / `world_graphs` (#669) | empty or deny |
 | Local Admin `admin`/`1234` | **DEV-only** (`import.meta.env.DEV`) |
 | Weak seeds on internet-facing binds | blocked by loopback DB/Edge defaults (#605) |
 

@@ -95,8 +95,21 @@ for (const needle of [
   'edge.invalid_jwt_deny',
   'edge.ai_gm_foreign_session_deny',
   'rest.non_member_project_deny',
+  'rest.non_member_rulesets_deny',
+  'rest.non_member_world_graphs_deny',
+  'rest.non_member_rulesets_update_deny',
 ]) {
   if (!liveSrc.includes(needle)) fail(`live suite missing check ${needle}`);
+}
+
+const rlsMigration = 'supabase/migrations/086_rls_rulesets_world_graphs.sql';
+if (!existsSync(join(root, rlsMigration))) fail(`missing ${rlsMigration}`);
+const rlsSql = read(rlsMigration);
+if (!/ALTER TABLE public\.rulesets ENABLE ROW LEVEL SECURITY/.test(rlsSql)) {
+  fail('086 must enable RLS on rulesets');
+}
+if (!/ALTER TABLE public\.world_graphs ENABLE ROW LEVEL SECURITY/.test(rlsSql)) {
+  fail('086 must enable RLS on world_graphs');
 }
 
 if (!existsSync(join(root, reportRel))) {
@@ -119,6 +132,10 @@ const required = [
   'edge.member_jwt_allow',
   'edge.ai_gm_foreign_session_deny',
   'rest.non_member_project_deny',
+  'rest.member_rulesets_allow',
+  'rest.non_member_rulesets_deny',
+  'rest.non_member_rulesets_update_deny',
+  'rest.non_member_world_graphs_deny',
 ];
 const byName = Object.fromEntries((report.checks || []).map((c) => [c.name, c]));
 for (const name of required) {
