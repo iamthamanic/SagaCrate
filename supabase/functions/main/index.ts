@@ -1,5 +1,5 @@
 /**
- * main — Edge Runtime dispatcher for all supabase/functions/* workers.
+ * main — Edge Runtime dispatcher for allowlisted supabase/functions/* workers.
  * Location: supabase/functions/main/index.ts
  *
  * Nginx may strip `/functions/v1`; workers still expect that prefix in pathname.
@@ -7,8 +7,11 @@
  *
  * #607: Enforce VERIFY_JWT here — stock edge-runtime JWT checks do not wrap
  * userWorkers created by this custom main.
+ * #668: Deny-by-default allowlist — unknown / legacy mounts return 404 without
+ * starting a worker (fail-closed AuthZ surface).
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { isEdgeDispatcherAllowed } from '../_shared/edge-dispatcher-allowlist.ts';
 import { gateEdgeRequestJwt } from '../_shared/edge-jwt-gate.ts';
 
 declare const EdgeRuntime: {
@@ -23,8 +26,6 @@ declare const EdgeRuntime: {
     }) => Promise<{ fetch: (req: Request) => Promise<Response> }>;
   };
 };
-
-const BLOCKED = new Set(['main', '_shared']);
 
 function resolveServiceName(pathname: string): string | null {
   const segments = pathname.split('/').filter(Boolean);
@@ -54,9 +55,6 @@ console.log('SagaTree edge main dispatcher started');
 
 serve(async (req: Request) => {
   try {
-    const jwtDenied = await gateEdgeRequestJwt(req);
-    if (jwtDenied) return jwtDenied;
-
     const url = new URL(req.url);
     const serviceName = resolveServiceName(url.pathname);
 
@@ -67,12 +65,16 @@ serve(async (req: Request) => {
       });
     }
 
-    if (BLOCKED.has(serviceName) || serviceName.includes('..')) {
+    // Fail closed before JWT / worker create — legacy mounts never start.
+    if (!isEdgeDispatcherAllowed(serviceName)) {
       return new Response(JSON.stringify({ error: 'Not found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    const jwtDenied = await gateEdgeRequestJwt(req);
+    if (jwtDenied) return jwtDenied;
 
     const servicePath = `/home/deno/functions/${serviceName}`;
     const envVarsObj = {

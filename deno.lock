@@ -54,6 +54,9 @@
     "packageJson": {
       "dependencies": [
         "npm:@gltf-transform/core@^4.5.0",
+        "npm:@jsquash/jpeg@1.6.0",
+        "npm:@jsquash/png@3.1.1",
+        "npm:@jsquash/webp@^1.5.0",
         "npm:@jsr/supabase__supabase-js@^2.49.8",
         "npm:@mediapipe/tasks-vision@0.10.14",
         "npm:@pixiv/three-vrm@3.5.1",
