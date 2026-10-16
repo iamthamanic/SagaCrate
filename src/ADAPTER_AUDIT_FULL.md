@@ -494,8 +494,8 @@ const { data: { user } } = await supabase.auth.getUser();
 **Client-Side Hardcoded (!!):**
 ```typescript
 // /utils/supabase/info.tsx – Zeilen 3-4
-export const projectId = "dnhotyjazjnhneqbqocq"
-export const publicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // JWT ANON KEY
+export const projectId = "<rotated-hosted-ref>"
+export const publicAnonKey = "<redacted-anon-jwt>" // JWT ANON KEY
 ```
 
 ⚠️ **Sicherheit:** 
@@ -624,7 +624,7 @@ export const publicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // JWT AN
 
 **Client-Side:**
 - **Hardcoded in `/utils/supabase/info.tsx`:**
-  - `projectId` = `"dnhotyjazjnhneqbqocq"`
+  - `projectId` = `"<rotated-hosted-ref>"`
   - `publicAnonKey` = `"eyJhbGci..."`
 
 **Fundstellen:**
@@ -635,7 +635,7 @@ export const publicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // JWT AN
 | `/supabase/functions/server/index.tsx` | 26 | `SUPABASE_SERVICE_ROLE_KEY` | `Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')` |
 | `/supabase/functions/server/kv_store.tsx` | 16 | `SUPABASE_URL` | `Deno.env.get('SUPABASE_URL')` |
 | `/supabase/functions/server/kv_store.tsx` | 17 | `SUPABASE_SERVICE_ROLE_KEY` | `Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')` |
-| `/utils/supabase/info.tsx` | 3 | `projectId` | **Hardcoded** `"dnhotyjazjnhneqbqocq"` |
+| `/utils/supabase/info.tsx` | 3 | `projectId` | **Hardcoded** `"<rotated-hosted-ref>"` |
 | `/utils/supabase/info.tsx` | 4 | `publicAnonKey` | **Hardcoded** JWT String |
 | `/lib/supabase.ts` | 2 | Import | `import { projectId, publicAnonKey } from '../utils/supabase/info'` |
 | `/lib/supabase.ts` | 4 | URL-Build | `const supabaseUrl = \`https://\${projectId}.supabase.co\`` |
@@ -972,7 +972,7 @@ export const API_CONFIG = {
 VITE_STORAGE_API_URL=http://localhost:54321/functions/v1
 
 # .env.production
-VITE_STORAGE_API_URL=https://dnhotyjazjnhneqbqocq.supabase.co/functions/v1
+VITE_STORAGE_API_URL=https://<rotated-hosted-ref>.supabase.co/functions/v1
 ```
 
 **Schritt 3:** Service umstellen
@@ -1371,7 +1371,7 @@ class PostgresQueryBuilder<T> implements QueryBuilder<T> {
 **ENV-Migration:**
 ```bash
 # .env.production (vorher)
-VITE_SUPABASE_URL=https://dnhotyjazjnhneqbqocq.supabase.co
+VITE_SUPABASE_URL=https://<rotated-hosted-ref>.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGci...
 
 # .env.production (nachher - Self-Hosted)
