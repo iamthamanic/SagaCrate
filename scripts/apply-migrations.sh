@@ -114,6 +114,7 @@ migrations=(
   091_saga_overview_world_profile_id.sql
   092_fix_projects_rls_recursion.sql
   093_fix_saga_overview_shared_adventure.sql
+  094_world_atlas.sql
 )
 
 only="${1:-}"

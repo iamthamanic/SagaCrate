@@ -12,6 +12,7 @@ import {
   pathForLookEdit,
   pathForNpcCreatureCreate,
   pathForNpcCreatureEdit,
+  pathForWorldAtlas,
   pathForSagaList,
   pathForSagaNew,
   pathForSagaDefinitionCreate,
@@ -93,6 +94,7 @@ export function useAppLocation() {
     route.kind === 'saga-definition-edit' ? route.sagaDefinitionId : null;
   const npcCreatureDefinitionId =
     route.kind === 'npc-creature-edit' ? route.definitionId : null;
+  const worldPublicId = route.kind === 'world-atlas' ? route.worldPublicId : null;
   const sagaPublicId =
     route.kind === 'saga-section'
     || route.kind === 'session-phase'
@@ -163,6 +165,10 @@ export function useAppLocation() {
     navigateToPath(pathForNpcCreatureEdit(definitionId), options);
   };
 
+  const navigateToWorldAtlas = (worldPublicId: string, options?: { replace?: boolean }) => {
+    navigateToPath(pathForWorldAtlas(worldPublicId), options);
+  };
+
   const navigateToSagaList = (options?: { replace?: boolean }) => {
     navigateToPath(pathForSagaList(), options);
   };
@@ -227,6 +233,7 @@ export function useAppLocation() {
     lookId,
     sagaDefinitionId,
     npcCreatureDefinitionId,
+    worldPublicId,
     sagaPublicId,
     sessionPublicId,
     characterPublicId,
@@ -238,6 +245,7 @@ export function useAppLocation() {
     navigateToLookEdit,
     navigateToNpcCreatureCreate,
     navigateToNpcCreatureEdit,
+    navigateToWorldAtlas,
     navigateToSagaList,
     navigateToSagaNew,
     navigateToSagaDefinitionCreate,

@@ -9,6 +9,7 @@ export type SagaWorkspaceTopId = 'overview' | 'world' | 'settings';
 
 export type SagaWorldSubId =
   | 'places'
+  | 'map'
   | 'npc-creatures'
   | 'items'
   | 'quests'
@@ -19,6 +20,7 @@ export type SagaNavSectionId =
   | 'overview'
   | 'characters'
   | 'world'
+  | 'map'
   | 'npc-creatures'
   | 'items'
   | 'quests'
@@ -28,6 +30,7 @@ export type SagaNavSectionId =
 
 const WORLD_SUBS = new Set<SagaNavSectionId>([
   'world',
+  'map',
   'npc-creatures',
   'items',
   'quests',
@@ -44,6 +47,8 @@ export function resolveSagaWorldSub(section: SagaNavSectionId): SagaWorldSubId |
   switch (section) {
     case 'world':
       return 'places';
+    case 'map':
+      return 'map';
     case 'npc-creatures':
       return 'npc-creatures';
     case 'items':
@@ -67,5 +72,6 @@ export function pathSectionForTop(top: SagaWorkspaceTopId): SagaNavSectionId {
 /** Section path for a Welt subtab. */
 export function pathSectionForWorldSub(sub: SagaWorldSubId): SagaNavSectionId {
   if (sub === 'places') return 'world';
+  if (sub === 'map') return 'map';
   return sub;
 }

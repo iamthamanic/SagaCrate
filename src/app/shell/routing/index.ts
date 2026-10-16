@@ -12,6 +12,7 @@ export {
   pathForLookEdit,
   pathForNpcCreatureCreate,
   pathForNpcCreatureEdit,
+  pathForWorldAtlas,
   pathForLibraryTab,
   pathForSagaList,
   parseLibraryTabFromPathname,
