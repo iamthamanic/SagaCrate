@@ -77,7 +77,7 @@ Tracking: GitHub #702.
 
 ## Composition Gate
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: e75f311567bb77241f36f1726e64424cfb52f250
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-world-atlas-editor.md`
 - Skip reason: n/a
