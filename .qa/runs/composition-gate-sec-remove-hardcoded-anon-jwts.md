@@ -1,6 +1,6 @@
 # Composition Gate — sec-remove-hardcoded-anon-jwts
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: e621756a69d8e25a6f01a1905065ec99d8df46ab
 - BASE_SHA: 93f451c570a7b6011f2b9edc5b958fd551a2e042
 - Date: 2026-10-16
 - Verdict: SKIPPED
