@@ -73,6 +73,6 @@ Tracking: GitHub #702 / unified-canvas follow-up.
 
 ## Composition Gate
 
-- HEAD_SHA: pin on commit (see proof; workspace built on 23ecfd73 + uncommitted unified canvas)
+- HEAD_SHA: e6e645bae8f47431a39d52f0f6488a2c67203c17
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-world-atlas-editor.md`

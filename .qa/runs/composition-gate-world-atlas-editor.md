@@ -1,6 +1,6 @@
 # Composition Gate — world-atlas-editor
 
-- HEAD_SHA: 23ecfd73c6f647c4d35b3e46078ea895c0b9fbd9 (pre-commit workspace; re-pin after unified-canvas commit)
+- HEAD_SHA: e6e645bae8f47431a39d52f0f6488a2c67203c17
 - BASE_SHA: b73e1544dfe9f7def986abd0348005acc343750e
 - Date: 2026-10-17
 - Verdict: CLEAR
