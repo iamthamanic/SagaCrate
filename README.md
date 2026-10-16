@@ -300,6 +300,7 @@ SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 
 ## Recent changes
 
+- **2026-10-17** — Weltatlas: Unified Canvas (Multi-Scale-Zoom, Pinsel/Stempel, Demo Eldoria); Speichern in `generator_meta.unifiedCanvas` (`#702` / PR branch)
 - **2026-10-15** — Session-Lobby: Cover-Meta + Meet-Device-Bar; Account-Avatar in Shell/Lobby; Settings-Routen `/settings/*`; Avatar-Upload mit Auto-Downscale
 - **2026-10-14** — Bibliothek: ⋮-Menüs (Copy Public-ID / Duplizieren), Liste·Grid·Karussell für alle Tabs, WO-/LK-Public-IDs, SagaTree-Native-Badge
 - **2026-10-13** — Bibliothek: Slash-Routen (`/library/player-characters`, `/library/sagas`, …); Karussell-Karten breiter + portrait-/cover-sichere Bildframes

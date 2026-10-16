@@ -2,7 +2,7 @@
  * WorldAtlasWorkbench — shared Library + Saga atlas workstation (#702).
  * Location: src/app/world/atlas/WorldAtlasWorkbench.tsx
  *
- * Desktop: hierarchy | Leaflet | properties. Phone: map first, panes as sheets.
+ * Default: Unified Canvas multi-scale editor. Legacy tiles keep tile editor.
  */
 import { useRef, useState } from 'react';
 import {
@@ -25,8 +25,8 @@ import {
   SheetTrigger,
 } from '../../../shared/ui/sheet';
 import { WorldMapEditorScreen } from '../map';
-import { WorldAtlasLeafletMap } from './WorldAtlasLeafletMap';
 import { useWorldAtlasEditor } from './useWorldAtlasEditor';
+import { UnifiedAtlasEditor } from './unified';
 import { worldAtlasService } from '../../../infrastructure/world/world-atlas-service';
 
 export type WorldAtlasWorkbenchProps = {
@@ -48,8 +48,10 @@ export function WorldAtlasWorkbench({
   const fileRef = useRef<HTMLInputElement>(null);
   const [childTitle, setChildTitle] = useState('Detailkarte');
   const [hierarchyOpen, setHierarchyOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
 
   const showLegacyTiles = editor.map?.kind === 'legacy_tiles';
+  const showUnified = Boolean(editor.map && !showLegacyTiles);
 
   const hierarchyList = (
     <ul className="space-y-1" data-world-atlas-hierarchy>
@@ -78,6 +80,107 @@ export function WorldAtlasWorkbench({
     </ul>
   );
 
+  const metaPanel = (
+    <div className="space-y-4">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Eigenschaften
+        </p>
+        {editor.map ? (
+          <dl className="mt-2 space-y-1 text-sm">
+            <div>
+              <dt className="text-muted-foreground">Titel</dt>
+              <dd className="font-medium">{editor.map.title}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">Typ</dt>
+              <dd>{editor.map.kind}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">Revision</dt>
+              <dd>{editor.map.revision}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p className="mt-2 text-sm text-muted-foreground">Keine Auswahl.</p>
+        )}
+      </div>
+
+      {canEdit ? (
+        <div className="space-y-2 border-t border-border pt-3">
+          <Label htmlFor="atlas-child-title">Detailkarte anlegen</Label>
+          <Input
+            id="atlas-child-title"
+            className="min-h-11"
+            value={childTitle}
+            onChange={(e) => setChildTitle(e.target.value)}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            className="min-h-11 w-full"
+            disabled={editor.saving || !editor.map}
+            onClick={() => void editor.createChildMap(childTitle)}
+          >
+            <Plus className="size-4" aria-hidden />
+            Detailkarte verknüpfen
+          </Button>
+        </div>
+      ) : null}
+
+      {canEdit ? (
+        <div className="space-y-2 border-t border-border pt-3">
+          <p className="text-sm font-medium">Azgaar Fantasy Map</p>
+          <p className="text-xs text-muted-foreground">
+            Speichert die native <code>.map</code>-Datei in Storage. Zum Weiterbearbeiten
+            herunterladen und erneut importieren.
+          </p>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".map,.zip,application/octet-stream"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              e.target.value = '';
+              if (file) void editor.importAzgaarMap(file);
+            }}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            className="min-h-11 w-full"
+            disabled={editor.saving || !editor.map}
+            onClick={() => fileRef.current?.click()}
+          >
+            <Upload className="size-4" aria-hidden />
+            .map importieren
+          </Button>
+          {editor.map?.azgaarMapStoragePath ? (
+            <Button
+              type="button"
+              variant="ghost"
+              className="min-h-11 w-full"
+              onClick={() => {
+                void worldAtlasService
+                  .createSignedUrl(editor.map!.azgaarMapStoragePath!)
+                  .then((url) => {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                  })
+                  .catch((err: unknown) => {
+                    console.error(err);
+                  });
+              }}
+            >
+              <Download className="size-4" aria-hidden />
+              .map herunterladen
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+
   return (
     <div
       className="@container/main flex h-full min-h-0 w-full min-w-0 flex-col gap-3"
@@ -90,29 +193,42 @@ export function WorldAtlasWorkbench({
           </Button>
         ) : null}
         <h1 className="min-w-0 flex-1 truncate text-xl font-bold">{title}</h1>
-        <div className="@[48rem]:hidden">
-          <Sheet open={hierarchyOpen} onOpenChange={setHierarchyOpen}>
+        <Sheet open={hierarchyOpen} onOpenChange={setHierarchyOpen}>
+          <SheetTrigger asChild>
+            <Button type="button" variant="outline" className="min-h-11 @[48rem]:hidden">
+              <MapIcon className="size-4" aria-hidden />
+              Karten
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[min(100%,20rem)]">
+            <SheetHeader>
+              <SheetTitle>Kartenhierarchie</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4">{hierarchyList}</div>
+          </SheetContent>
+        </Sheet>
+        {showUnified ? (
+          <Sheet open={toolsOpen} onOpenChange={setToolsOpen}>
             <SheetTrigger asChild>
-              <Button type="button" variant="outline" className="min-h-11">
-                <MapIcon className="size-4" aria-hidden />
-                Karten
+              <Button type="button" variant="outline" className="min-h-11 @[64rem]:hidden">
+                Meta
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[min(100%,20rem)]">
+            <SheetContent side="right" className="w-[min(100%,20rem)]">
               <SheetHeader>
-                <SheetTitle>Kartenhierarchie</SheetTitle>
+                <SheetTitle>Atlas</SheetTitle>
               </SheetHeader>
-              <div className="mt-4">{hierarchyList}</div>
+              <div className="mt-4">{metaPanel}</div>
             </SheetContent>
           </Sheet>
-        </div>
-        {canEdit && editor.map && !showLegacyTiles ? (
+        ) : null}
+        {canEdit && editor.map && showUnified ? (
           <Button
             type="button"
             className="min-h-11"
-            disabled={editor.saving || !editor.dirtyLayers}
+            disabled={editor.saving || !editor.dirtyCanvas}
             onClick={() => {
-              if (editor.dirtyLayers) void editor.saveLayers(editor.dirtyLayers);
+              void editor.saveCanvas();
             }}
           >
             {editor.saving ? (
@@ -152,13 +268,21 @@ export function WorldAtlasWorkbench({
         </nav>
       ) : null}
 
-      <div className="grid min-h-0 flex-1 gap-3 @[48rem]:grid-cols-[14rem_minmax(0,1fr)_16rem]">
-        <aside className="hidden min-h-0 overflow-auto rounded-lg border border-border p-2 @[48rem]:block">
-          <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Hierarchie
-          </p>
-          {hierarchyList}
-        </aside>
+      <div
+        className={
+          showUnified
+            ? 'grid min-h-0 flex-1 gap-3 @[64rem]:grid-cols-[minmax(0,1fr)_14rem]'
+            : 'grid min-h-0 flex-1 gap-3 @[48rem]:grid-cols-[14rem_minmax(0,1fr)_16rem]'
+        }
+      >
+        {!showUnified ? (
+          <aside className="hidden min-h-0 overflow-auto rounded-lg border border-border p-2 @[48rem]:block">
+            <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Hierarchie
+            </p>
+            {hierarchyList}
+          </aside>
+        ) : null}
 
         <section className="relative min-h-[24rem] min-w-0 overflow-hidden">
           {editor.loading && !editor.map ? (
@@ -169,38 +293,26 @@ export function WorldAtlasWorkbench({
           ) : showLegacyTiles && editor.map ? (
             <div className="flex h-full min-h-0 flex-col gap-2" data-world-atlas-legacy-tiles>
               <p className="text-sm text-muted-foreground">
-                Legacy-Kachelkarte — bestehende Pins und Terrain bleiben erhalten.
+                Legacy-Kachelkarte — bestehende Pins und Terrain bleiben erhalten. Für den Unified
+                Atlas die Karte „Weltkarte (Unified)“ in der Hierarchie wählen.
               </p>
               <div className="min-h-0 flex-1 overflow-auto">
                 {canEdit ? (
                   <WorldMapEditorScreen worldProfileId={worldProfileId} embedded />
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Ansicht nur für Bearbeiter mit Kachel-Editor. Wechsle zu einer Leaflet-Karte
-                    in der Hierarchie, sobald eine angelegt ist.
+                    Ansicht nur für Bearbeiter mit Kachel-Editor.
                   </p>
                 )}
               </div>
             </div>
-          ) : editor.map ? (
-            <div className="relative h-full min-h-[24rem]">
-              <WorldAtlasLeafletMap
-                key={`${editor.map.id}:${editor.map.revision}`}
-                bounds={editor.map.bounds}
-                layers={editor.map.layers}
-                canEdit={canEdit}
-                onLayersChange={canEdit ? editor.setDirtyLayers : undefined}
-              />
-              {(editor.dirtyLayers ?? editor.map.layers).features.length === 0 ? (
-                <div
-                  className="pointer-events-none absolute inset-x-0 top-3 z-[1000] mx-auto max-w-md rounded-lg border border-border bg-card/95 px-3 py-2 text-center text-sm text-muted-foreground shadow"
-                  data-world-atlas-empty-hint
-                >
-                  Noch keine Regionen/Orte. Links die Werkzeuge nutzen: Polygon oder Marker
-                  zeichnen, dann Speichern.
-                </div>
-              ) : null}
-            </div>
+          ) : showUnified && editor.map ? (
+            <UnifiedAtlasEditor
+              key={`${editor.map.id}:${editor.map.revision}`}
+              doc={editor.canvasDoc}
+              canEdit={canEdit}
+              onDocChange={editor.updateCanvasDoc}
+            />
           ) : (
             <div className="flex h-full min-h-[24rem] items-center justify-center text-sm text-muted-foreground">
               Keine Karte ausgewählt.
@@ -208,105 +320,31 @@ export function WorldAtlasWorkbench({
           )}
         </section>
 
-        <aside className="min-h-0 space-y-4 overflow-auto rounded-lg border border-border p-3">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Eigenschaften
-            </p>
-            {editor.map ? (
-              <dl className="mt-2 space-y-1 text-sm">
-                <div>
-                  <dt className="text-muted-foreground">Titel</dt>
-                  <dd className="font-medium">{editor.map.title}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Typ</dt>
-                  <dd>{editor.map.kind}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Revision</dt>
-                  <dd>{editor.map.revision}</dd>
-                </div>
-              </dl>
-            ) : (
-              <p className="mt-2 text-sm text-muted-foreground">Keine Auswahl.</p>
-            )}
-          </div>
-
-          {canEdit ? (
-            <div className="space-y-2 border-t border-border pt-3">
-              <Label htmlFor="atlas-child-title">Detailkarte anlegen</Label>
-              <Input
-                id="atlas-child-title"
-                className="min-h-11"
-                value={childTitle}
-                onChange={(e) => setChildTitle(e.target.value)}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                className="min-h-11 w-full"
-                disabled={editor.saving || !editor.map}
-                onClick={() => void editor.createChildMap(childTitle)}
-              >
-                <Plus className="size-4" aria-hidden />
-                Detailkarte verknüpfen
-              </Button>
-            </div>
-          ) : null}
-
-          {canEdit ? (
-            <div className="space-y-2 border-t border-border pt-3">
-              <p className="text-sm font-medium">Azgaar Fantasy Map</p>
-              <p className="text-xs text-muted-foreground">
-                Speichert die native <code>.map</code>-Datei in Storage (kein erfundenes SDK).
-                Zum Weiterbearbeiten in Azgaar herunterladen und erneut importieren.
+        <aside
+          className={`min-h-0 space-y-4 overflow-auto rounded-lg border border-border p-3 ${
+            showUnified ? 'hidden @[64rem]:block' : 'hidden @[48rem]:block'
+          }`}
+        >
+          {!showUnified ? (
+            <>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Hierarchie
               </p>
-              <input
-                ref={fileRef}
-                type="file"
-                accept=".map,.zip,application/octet-stream"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  e.target.value = '';
-                  if (file) void editor.importAzgaarMap(file);
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                className="min-h-11 w-full"
-                disabled={editor.saving || !editor.map}
-                onClick={() => fileRef.current?.click()}
-              >
-                <Upload className="size-4" aria-hidden />
-                .map importieren
-              </Button>
-              {editor.map?.azgaarMapStoragePath ? (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="min-h-11 w-full"
-                  onClick={() => {
-                    void worldAtlasService
-                      .createSignedUrl(editor.map!.azgaarMapStoragePath!)
-                      .then((url) => {
-                        window.open(url, '_blank', 'noopener,noreferrer');
-                      })
-                      .catch((err: unknown) => {
-                        console.error(err);
-                      });
-                  }}
-                >
-                  <Download className="size-4" aria-hidden />
-                  .map herunterladen
-                </Button>
-              ) : null}
-            </div>
+              {hierarchyList}
+            </>
           ) : null}
+          {metaPanel}
         </aside>
       </div>
+
+      {showUnified ? (
+        <aside className="hidden rounded-lg border border-border p-2 @[48rem]:block @[64rem]:hidden">
+          <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            DB-Karten
+          </p>
+          {hierarchyList}
+        </aside>
+      ) : null}
     </div>
   );
 }

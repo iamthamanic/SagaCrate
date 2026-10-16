@@ -30,3 +30,19 @@ export {
   setTileAt,
 } from './validate-world-map';
 export { buildDornhainStarterMapData } from './dornhain-starter-map';
+export {
+  atlasDetailActive,
+  atlasFitCamera,
+  atlasLocalToRoot,
+  atlasOpacity,
+  atlasPanBy,
+  atlasRootToLocal,
+  atlasScreenToWorld,
+  atlasWorldToScreen,
+  atlasZoomAt,
+  type AtlasAnchor,
+  type AtlasCamera,
+  type AtlasPoint,
+  type AtlasRect,
+  type AtlasSize,
+} from './atlas-camera';

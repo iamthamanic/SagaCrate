@@ -25,10 +25,17 @@ Viable approaches (tested against public docs/wiki, not invented APIs):
 
 **Decision for Phase 4:** Prefer (1) later; ship (2) in foundation (`generator_meta` + Storage path). Never claim “Azgaar React SDK”.
 
-### Leaflet / React
+### Renderer (updated 2026-10-17)
 
-- App uses React 18.3 → `leaflet` + `react-leaflet` v4 + `@geoman-io/leaflet-geoman-free`.
-- Fantasy maps: `L.CRS.Simple`, image/SVG overlays, GeoJSON layers.
+- **Primary:** Canvas 2D unified multi-scale viewport (`src/app/world/atlas/unified/**`) — continuous camera, LOD fade, brush/stamp/room/wall (HTML prototype parity).
+- **Persistence:** `generator_meta.unifiedCanvas` (`sagatree-unified-atlas-v1`); `layers` remains GeoJSON FeatureCollection for RPC compatibility.
+- **Demoted:** Leaflet + Geoman (kept in repo, not default UI).
+- **Legacy:** `legacy_tiles` still opens tile editor.
+
+### Leaflet / React (legacy path)
+
+- App may still load `leaflet` + `react-leaflet` v4 + Geoman for optional GeoJSON experiments.
+- Fantasy maps historically used `L.CRS.Simple`.
 
 ### Data model
 
@@ -64,4 +71,9 @@ Saga must not write another saga’s discovery; world geometry writes require wo
 
 - Full Azgaar iframe product chrome
 - SettleMaker city gen
-- Automatic zoom-to-region navigation (explicit map switch only)
+- PixiJS / GPU renderer
+- Real uploaded child-map LOD alignment (demo nested rects are sample geometry)
+
+## Unified canvas note
+
+Automatic zoom-to-region **within the demo scene graph** is in scope (camera animation + fade). Discrete DB map-id switching remains for real child maps / legacy.
