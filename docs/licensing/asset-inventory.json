@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-14T14:00:24.806Z",
+  "generated_at": "2026-10-16T20:04:51.719Z",
   "rules_version": 1,
-  "count": 430,
+  "count": 431,
   "assets": [
     {
       "path": "assets/item-icon-style-refs/style-ref-potion.png",
@@ -5098,6 +5098,19 @@
       "runtime_required": true,
       "status": "owner_pending",
       "rule_id": "npc-creature-svg-icons"
+    },
+    {
+      "path": "public/assets/session/gm-earthspirit.jpg",
+      "sha256": "6781a2e4d8345082436af65473c89743351937aac43469c7887caaa055219a33",
+      "source": "SagaTree GM presence portrait (Meshy / first-party pipeline)",
+      "creator": "iamthamanic",
+      "license": "UNDECLARED-first-party",
+      "evidence": "git history (iamthamanic); OWNER_ATTESTATIONS.md § C; migration 088",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending",
+      "rule_id": "session-gm-presence-art"
     },
     {
       "path": "public/favicon-32.png",
