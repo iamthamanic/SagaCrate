@@ -256,6 +256,14 @@ function checkAiGmAuthRateLimit() {
   });
 }
 
+function checkNoCommittedAnonJwt() {
+  console.log('No committed anon JWTs (#672): src must use env only...');
+  execFileSync(process.execPath, ['scripts/no-committed-anon-jwt-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaOverviewRpc() {
   console.log('Saga overview RPC (#570): checking migration, domain VM, hook, audience safety...');
   execFileSync(process.execPath, ['scripts/saga-overview-rpc-check.mjs'], {
@@ -2240,6 +2248,7 @@ checkNegativeAuthzSuite();
 checkEdgeDispatcherAllowlist();
 checkRlsOpenTables();
 checkAiGmAuthRateLimit();
+checkNoCommittedAnonJwt();
 checkSagaOverviewRpc();
 checkSagaOverviewHubUi();
 checkSagaPermissionGrants();

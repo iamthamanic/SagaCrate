@@ -1,17 +1,44 @@
 import { createClient } from '@supabase/supabase-js';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
 
-const configuredSupabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const configuredSupabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+const viteEnv = (import.meta as ImportMeta & { env?: Record<string, string | boolean | undefined> })
+  .env;
+const configuredSupabaseUrl = String(viteEnv?.VITE_SUPABASE_URL ?? '').trim();
+const configuredSupabaseAnonKey = String(viteEnv?.VITE_SUPABASE_ANON_KEY ?? '').trim();
 
-if (Boolean(configuredSupabaseUrl) !== Boolean(configuredSupabaseAnonKey)) {
+const hasUrl = Boolean(configuredSupabaseUrl);
+const hasAnon = Boolean(configuredSupabaseAnonKey);
+
+if (hasUrl !== hasAnon) {
   throw new Error(
     'VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be configured together.',
   );
 }
 
-const supabaseUrl = configuredSupabaseUrl || `https://${projectId}.supabase.co`;
-const supabaseAnonKey = configuredSupabaseAnonKey || publicAnonKey;
+/**
+ * #672 — no committed hosted JWT fallback.
+ * Browser/Vite and production builds fail closed when env is missing.
+ * Node tooling that bundles this module (no Vite env) gets inert placeholders
+ * so offline checks can import the graph without real credentials.
+ */
+const isBrowser = typeof window !== 'undefined';
+const mustHaveEnv = Boolean(viteEnv?.PROD) || isBrowser;
+
+if (mustHaveEnv && (!hasUrl || !hasAnon)) {
+  throw new Error(
+    'VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required (see .env.example).',
+  );
+}
+
+if (
+  viteEnv?.PROD &&
+  hasAnon &&
+  !/^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\./.test(configuredSupabaseAnonKey)
+) {
+  throw new Error('VITE_SUPABASE_ANON_KEY must be a valid anon JWT from your Supabase project.');
+}
+
+const supabaseUrl = configuredSupabaseUrl || 'http://127.0.0.1:9';
+const supabaseAnonKey = configuredSupabaseAnonKey || 'missing-vite-supabase-anon-key';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -44,7 +71,7 @@ export function rewriteBrowserStorageUrl(url: string): string {
   }
 }
 
-// Server client for authenticated requests
+/** Server client for authenticated requests (same public anon config). */
 export const createServerClient = () => {
   return createClient(supabaseUrl, supabaseAnonKey);
 };

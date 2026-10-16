@@ -2,6 +2,8 @@
  * Dev-only activity tracking for Figma Make / Lovable workflows.
  * Loaded dynamically from App.tsx only when import.meta.env.DEV is true.
  * Location: src/lib/devtrack.ts
+ *
+ * #672 — credentials from VITE_DEVTRACK_* only; no-op when unset (no committed JWTs).
  */
 
 declare global {
@@ -13,19 +15,27 @@ declare global {
 
 export function initDevTrack(): void {
   if (typeof window === 'undefined') return;
+  if (!import.meta.env.DEV) return;
 
   if (window.DEVTRACK_INSTANCE_ID) {
     console.warn('⚠️ DevTrack: Already initialized with instance ID:', window.DEVTRACK_INSTANCE_ID, '- SKIPPING!');
     return;
   }
 
+  const DEVTRACK_SNIPPET_KEY = (import.meta.env.VITE_DEVTRACK_SNIPPET_KEY ?? '').trim();
+  const DEVTRACK_API_URL = (import.meta.env.VITE_DEVTRACK_API_URL ?? '').trim();
+  const DEVTRACK_AUTH_KEY = (import.meta.env.VITE_DEVTRACK_AUTH_KEY ?? '').trim();
+
+  if (!DEVTRACK_SNIPPET_KEY || !DEVTRACK_API_URL || !DEVTRACK_AUTH_KEY) {
+    console.info(
+      'DevTrack: disabled (set VITE_DEVTRACK_SNIPPET_KEY, VITE_DEVTRACK_API_URL, VITE_DEVTRACK_AUTH_KEY to enable).',
+    );
+    return;
+  }
+
   const instanceId = Math.random().toString(36).substring(7);
   window.DEVTRACK_INSTANCE_ID = instanceId;
   console.log('🆕 DevTrack: New instance created:', instanceId);
-
-  const DEVTRACK_SNIPPET_KEY = '6b4e7b96-e392-42df-8dfc-ea581d599fca';
-  const DEVTRACK_API_URL = 'https://vjpfbedynctazvwywlqj.supabase.co/functions/v1/DevTrack-Logs';
-  const DEVTRACK_AUTH_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqcGZiZWR5bmN0YXp2d3l3bHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NTY2MDQsImV4cCI6MjA3NzMzMjYwNH0.P7GyqRzB-PjVLx9bIv9pOom6Fss2hPOVqwEm1AITS6k';
 
   let activeTime = 0;
   let sessionStart = Date.now();
