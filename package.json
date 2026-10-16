@@ -67,7 +67,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "gltf-validator": "^2.0.0-dev.3.10",
     "tailwindcss": "4.1.12",
-    "vite": "6.3.5"
+    "vite": "6.4.4"
   },
   "scripts": {
     "dev": "vite",
