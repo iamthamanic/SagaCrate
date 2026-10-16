@@ -4,3 +4,4 @@
  */
 export * from './project.types';
 export * from './saga-overview';
+export * from './saga-workspace-nav';

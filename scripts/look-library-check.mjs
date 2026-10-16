@@ -51,7 +51,12 @@ section('2 · Library composes Looks slice');
   const library = read('src/app/library/Library.tsx');
   check(/LookLibraryBrowser/.test(library), 'Library imports/renders LookLibraryBrowser');
   check(/value=["']looks["']/.test(library), 'Looks tab trigger present');
-  check(/>Looks</.test(library) || /truncate">Looks</.test(library), 'Looks tab label');
+  check(
+    />Looks</.test(library)
+      || /truncate">Looks</.test(library)
+      || /label:\s*['"]Looks['"]/.test(library),
+    'Looks tab label',
+  );
   check(/canMutateLooks/.test(library), 'Library exposes canMutateLooks gate');
   check(/onNavigateToLookCreate/.test(library), 'Library receives look create nav');
   check(/onNavigateToLookEdit/.test(library), 'Library receives look edit nav');

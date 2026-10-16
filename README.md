@@ -5,7 +5,7 @@
 
 **Die Open-Source-Plattform für immersive Pen-&-Paper Abenteuer .**
 
-Charaktere · Sessions · Welten — für Spielleitung und Spieler
+Charaktere · Sessions · Welten — für Gamemaster und Spieler
 </div>
 
 <p align="center">
@@ -42,9 +42,9 @@ Charaktere · Sessions · Welten — für Spielleitung und Spieler
 
 ### Elevator Pitch
 
-**SagaTree** verbindet Spielleitung und Spieler in einer App: Charaktere bauen, Sessions live führen, Kampagne und Welt behalten.
+**SagaTree** verbindet Gamemaster und Spieler in einer App: Charaktere bauen, Sessions live führen, Kampagne und Welt behalten.
 
-- **Für Spielleitung** — Session vorbereiten und am Tisch steuern; Welten, Bibliothek und Live-Runtime an einem Ort.
+- **Für Gamemaster** — Session vorbereiten und am Tisch steuern; Welten, Bibliothek und Live-Runtime an einem Ort.
 - **Für Spieler** — Charakter mit SagaTree Core erstellen, der Gruppe beitreten, Inventar und Look dort haben, wo gespielt wird.
 
 ### Produkt & Stack
@@ -55,7 +55,7 @@ Dieses Repo: **React + Vite**-Frontend mit **selbst gehostetem Supabase-Stack** 
 
 | Rolle | Nutzen |
 | --- | --- |
-| **Spielleitung** | Projekte, Sessions, Bibliothek, Weltprofile, Live-Steuerung |
+| **Gamemaster** | Projekte, Sessions, Bibliothek, Weltprofile, Live-Steuerung |
 | **Spieler** | Charaktereditor (SagaTree Core), Inventar, Session-Join, Look / LiveAct |
 | **Creator** | Items, NPCs, Avatar-Assets, optional Meshy 2D/3D (BYOK) |
 

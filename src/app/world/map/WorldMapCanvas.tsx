@@ -64,7 +64,8 @@ export function WorldMapCanvas({
     for (let y = 0; y < data.size; y += 1) {
       for (let x = 0; x < data.size; x += 1) {
         const tile = data.tiles[tileKey(x, y)];
-        ctx.fillStyle = FILL[tile?.type ?? 'empty'] ?? FILL.empty;
+        // Missing tiles = grass so sparse/legacy maps still show a basic landmass.
+        ctx.fillStyle = FILL[tile?.type ?? 'grass'] ?? FILL.grass;
         ctx.fillRect(x * tilePx, y * tilePx, tilePx + 0.5, tilePx + 0.5);
       }
     }

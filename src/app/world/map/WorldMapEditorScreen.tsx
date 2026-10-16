@@ -11,9 +11,11 @@ import { WorldMapPinDialogs } from './WorldMapPinDialogs';
 
 type Props = {
   worldProfileId: string;
+  /** Hub atlas embed: skip duplicate title + pin sidebar. */
+  embedded?: boolean;
 };
 
-export function WorldMapEditorScreen({ worldProfileId }: Props) {
+export function WorldMapEditorScreen({ worldProfileId, embedded = false }: Props) {
   const editor = useWorldMapEditor({ worldProfileId });
   const [pinDraft, setPinDraft] = useState<{ x: number; y: number } | null>(null);
 
@@ -21,14 +23,18 @@ export function WorldMapEditorScreen({ worldProfileId }: Props) {
     <div
       className="flex flex-col gap-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
       data-world-map-editor-screen
+      data-world-map-editor-embedded={embedded ? 'true' : undefined}
       data-au-surface="journey"
     >
-      <header className="space-y-1">
-        <h2 className="text-lg font-semibold text-foreground">Weltkarte</h2>
-        <p className="text-sm text-muted-foreground">
-          Kacheln und Pins — speichert serverseitig, keine Base64-Bilder.
-        </p>
-      </header>
+      {embedded ? null : (
+        <header className="space-y-1">
+          <h2 className="text-lg font-semibold text-foreground">Weltkarte</h2>
+          <p className="text-sm text-muted-foreground">
+            Kacheln und Pins — speichert serverseitig, keine Base64-Bilder. Mit
+            „Karte erweitern“ wächst der Rand um leere Grasflächen.
+          </p>
+        </header>
+      )}
 
       {editor.isLoading ? (
         <p className="text-sm text-muted-foreground">Karte wird geladen…</p>
@@ -58,8 +64,8 @@ export function WorldMapEditorScreen({ worldProfileId }: Props) {
         }}
       />
 
-      <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="min-w-0 flex-1">
+      <div className={embedded ? 'min-w-0 w-full' : 'flex flex-col gap-4 lg:flex-row'}>
+        <div className="min-w-0 flex-1 overflow-x-auto">
           <WorldMapCanvas
             data={editor.data}
             zoom={editor.zoom}
@@ -68,11 +74,13 @@ export function WorldMapEditorScreen({ worldProfileId }: Props) {
             onPinPlace={(x, y) => setPinDraft({ x, y })}
           />
         </div>
-        <WorldMapSidebar
-          data={editor.data}
-          onSelectPin={() => undefined}
-          onRemovePin={editor.removePin}
-        />
+        {embedded ? null : (
+          <WorldMapSidebar
+            data={editor.data}
+            onSelectPin={() => undefined}
+            onRemovePin={editor.removePin}
+          />
+        )}
       </div>
 
       <WorldMapPinDialogs

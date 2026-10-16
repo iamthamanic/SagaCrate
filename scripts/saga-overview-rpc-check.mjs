@@ -45,7 +45,11 @@ const migration = read(migrationPath);
 requireMatch(migration, /CREATE OR REPLACE FUNCTION public\.get_saga_overview\(p_public_id TEXT\)/i, 'get_saga_overview');
 requireMatch(migration, /SECURITY DEFINER/i, 'SECURITY DEFINER');
 requireMatch(migration, /current_user_is_active_project_member/i, 'membership gate');
-requireMatch(migration, /sagadrive_project_shared_adventure/i, 'audience projection helper');
+requireMatch(
+  migration,
+  /sagatree_project_shared_adventure|sagadrive_project_shared_adventure/i,
+  'audience projection helper',
+);
 requireMatch(migration, /GRANT EXECUTE ON FUNCTION public\.get_saga_overview\(TEXT\) TO authenticated/i, 'EXECUTE grant');
 requireMatch(migration, /REVOKE ALL ON FUNCTION public\.get_saga_overview\(TEXT\) FROM PUBLIC/i, 'REVOKE PUBLIC');
 rejectMatch(migration, /CREATE POLICY/i, 'must not add table policies in overview migration');

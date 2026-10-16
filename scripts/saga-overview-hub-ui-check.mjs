@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * saga-overview-hub-ui-check — #571 four hub sections + Library primary CTA.
+ * saga-overview-hub-ui-check — Saga hub overview chrome (#571 / #saga-workspace-ia).
  * Location: scripts/saga-overview-hub-ui-check.mjs
  */
 import { existsSync, readFileSync } from 'node:fs';
@@ -39,16 +39,14 @@ function mustNotInclude(file, needles, label) {
 }
 
 const components = [
-  'src/app/project/overview/SagaOverviewHero.tsx',
+  'src/app/project/overview/SagaHubMetaBar.tsx',
   'src/app/project/overview/SagaEpisodeList.tsx',
   'src/app/project/overview/SagaEnsembleStrip.tsx',
-  'src/app/project/overview/SagaWorldStatePanel.tsx',
 ];
 
 for (const file of components) {
   const text = read(file);
   if (!text.includes('Location:')) fail(`${file}: missing Location comment`);
-  if (!text.includes('#571')) fail(`${file}: missing issue ref`);
   if (/\bas any\b|eslint-disable|@ts-ignore/.test(text)) fail(`${file}: escape hatch`);
   if (/supabase|\.rpc\(/.test(text)) fail(`${file}: must stay presentational`);
   if (/gm_only|adventure_runtime|world_state/.test(text)) {
@@ -61,19 +59,20 @@ mustInclude(
   [
     'useSagaOverview',
     'resolveSagaPrimaryAction',
-    'SagaOverviewHero',
+    'SagaHubMetaBar',
     'SagaEpisodeList',
     'SagaEnsembleStrip',
-    'SagaWorldStatePanel',
-    'data-saga-section="overview"',
+    'useSagaEnsembleProfiles',
+    'data-saga-hub-overview-panels',
+    "data-saga-section={",
   ],
   'resource screen wiring',
 );
 
 mustNotInclude(
   'src/app/project/SagaResourceScreen.tsx',
-  ['adventure_runtime', 'data-saga-session-start'],
-  'overview must not use raw runtime or old session-start CTA',
+  ['SagaOverviewHero', 'adventure_runtime', 'data-saga-session-start'],
+  'overview must not use hero, raw runtime, or old session-start CTA',
 );
 
 mustInclude(

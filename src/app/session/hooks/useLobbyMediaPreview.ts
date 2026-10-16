@@ -438,7 +438,7 @@ export function useLobbyMediaPreview(
     setLiveActPreview(null);
     setLiveActOptions([]);
     setSelectedLiveActOptionId(null);
-    setLiveActHintDe('LiveAct-Vorschau nur für Spieler oder Spielleitung.');
+    setLiveActHintDe('LiveAct-Vorschau nur für Spieler oder Gamemaster.');
   }, [input.selfCharacterId, input.selfCharacterName, input.selfRole, loadNpcOptions]);
 
   const selectLiveActOption = useCallback(

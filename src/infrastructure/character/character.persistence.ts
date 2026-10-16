@@ -21,7 +21,7 @@ export interface CharacterDto {
   world_id?: string;
   project_id?: string;
   parent_character_id?: string;
-  character_type: 'pc' | 'npc' | 'companion' | 'monster';
+  character_type: 'pc' | 'npc' | 'companion' | 'monster' | 'gm_presence';
   ruleset_id?: string;
   ruleset_key?: CharacterRulesetKey;
   name: string;

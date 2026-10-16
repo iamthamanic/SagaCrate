@@ -91,6 +91,16 @@ export function WorldMapToolbar({
         </div>
       ) : null}
       <div className="flex flex-wrap items-end gap-3">
+        <Button
+          type="button"
+          variant="secondary"
+          className="min-h-11"
+          disabled={size >= maxSize}
+          data-world-map-expand
+          onClick={() => onSize(Math.min(maxSize, size + 4))}
+        >
+          Karte erweitern (+4)
+        </Button>
         <div className="space-y-1">
           <Label htmlFor="world-map-size">Größe (max {maxSize})</Label>
           <input

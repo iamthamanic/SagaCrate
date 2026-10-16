@@ -151,7 +151,7 @@ export function LoginScreen() {
                       <p className="text-xs text-muted-foreground" data-dev-demo-login-hint>
                         DEV Demo-Login:{' '}
                         <span className="font-mono">admin</span> oder{' '}
-                        <span className="font-mono">player</span> /{' '}
+                        <span className="font-mono">player1</span> /{' '}
                         <span className="font-mono">1234</span>
                       </p>
                     ) : null}

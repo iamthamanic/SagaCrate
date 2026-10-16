@@ -34,7 +34,7 @@ export function SagaEditorThreatsSection({ draft, readOnly, onChange }: Props) {
   return (
     <section className="flex flex-col gap-4" data-saga-editor-section="threats">
       <p className="text-sm text-muted-foreground">
-        Bedrohungen mit Stufen (0…max) und Doom-Texten für Spieler und Spielleitung.
+        Bedrohungen mit Stufen (0…max) und Doom-Texten für Spieler und Gamemaster.
       </p>
       <ul className="flex flex-col gap-4">
         {threats.map((t, index) => (

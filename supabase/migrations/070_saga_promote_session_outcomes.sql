@@ -102,7 +102,7 @@ BEGIN
 
   SELECT * INTO v_project FROM public.projects WHERE id = v_session.project_id;
   IF NOT public.is_project_gm(v_project.id, v_user) THEN
-    RAISE EXCEPTION 'Nur Spielleitung darf übernehmen' USING ERRCODE = '42501';
+    RAISE EXCEPTION 'Nur Gamemaster darf übernehmen' USING ERRCODE = '42501';
   END IF;
 
   IF v_project.saga_id IS NULL THEN
@@ -247,7 +247,7 @@ BEGIN
 
   SELECT * INTO v_project FROM public.projects WHERE id = v_session.project_id;
   IF NOT public.is_project_gm(v_project.id, v_user) THEN
-    RAISE EXCEPTION 'Nur Spielleitung darf übernehmen' USING ERRCODE = '42501';
+    RAISE EXCEPTION 'Nur Gamemaster darf übernehmen' USING ERRCODE = '42501';
   END IF;
 
   v_world := v_project.world_profile_id;

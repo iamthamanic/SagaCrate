@@ -7,6 +7,8 @@
  */
 export { useCharacters, useCharacterSummaries } from './list';
 export { CreateCharacterEntryDialog } from './creation/CreateCharacterEntryDialog';
+export { ArchetypeIcon } from './creation/ArchetypeIcon';
+export { EssenceIcon } from './creation/EssenceIcon';
 export { getSpeciesSketchUrl } from './creation/speciesSketches';
 export {
   setCharacterEditorBootstrap,

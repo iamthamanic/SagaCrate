@@ -1,21 +1,27 @@
 /**
- * SagaWorkspaceNav — Section links inside a Saga (#489).
+ * SagaWorkspaceNav — Top chrome: Übersicht / Welt / Einstellungen (#saga-workspace-ia).
  * Location: src/app/project/SagaWorkspaceNav.tsx
+ *
+ * Library-style TabsList grid; deep-link sections map via resolveSagaWorkspaceTop.
  */
-import { Button } from '../../shared/ui/button';
+import { BookOpen, LayoutDashboard, Settings } from 'lucide-react';
+import {
+  pathSectionForTop,
+  resolveSagaWorkspaceTop,
+  type SagaWorkspaceTopId,
+} from '../../domains/project/contracts/saga-workspace-nav';
+import { Tabs, TabsList, TabsTrigger } from '../../shared/ui/tabs';
 import type { SagaSectionId } from '../shell';
 import { pathForSagaSection } from '../shell';
 
-const SECTIONS: readonly { id: SagaSectionId; label: string }[] = [
-  { id: 'overview', label: 'Übersicht' },
-  { id: 'characters', label: 'Spieler-Charaktere' },
-  { id: 'world', label: 'Welt' },
-  { id: 'npc-creatures', label: 'NSCs / Kreaturen' },
-  { id: 'items', label: 'Gegenstände' },
-  { id: 'quests', label: 'Quests' },
-  { id: 'lore', label: 'Lore / Verlauf' },
-  { id: 'sessions', label: 'Sessions' },
-  { id: 'settings', label: 'Einstellungen' },
+const TOP_TABS: readonly {
+  id: SagaWorkspaceTopId;
+  label: string;
+  icon: typeof LayoutDashboard;
+}[] = [
+  { id: 'overview', label: 'Übersicht', icon: LayoutDashboard },
+  { id: 'world', label: 'Welt', icon: BookOpen },
+  { id: 'settings', label: 'Einstellungen', icon: Settings },
 ];
 
 export type SagaWorkspaceNavProps = {
@@ -29,26 +35,41 @@ export function SagaWorkspaceNav({
   active,
   onNavigate,
 }: SagaWorkspaceNavProps) {
+  const top = resolveSagaWorkspaceTop(active);
+
   return (
-    <nav
-      className="flex flex-wrap gap-2"
-      aria-label="Saga-Bereiche"
+    <Tabs
+      value={top}
+      onValueChange={(value) => {
+        const next = value as SagaWorkspaceTopId;
+        onNavigate(pathForSagaSection(sagaPublicId, pathSectionForTop(next)));
+      }}
+      className="@container w-full min-w-0"
       data-saga-workspace-nav
     >
-      {SECTIONS.map((section) => (
-        <Button
-          key={section.id}
-          type="button"
-          size="sm"
-          variant={active === section.id ? 'default' : 'outline'}
-          className="min-h-11"
-          onClick={() => onNavigate(pathForSagaSection(sagaPublicId, section.id))}
-          data-saga-nav={section.id}
-          aria-current={active === section.id ? 'page' : undefined}
-        >
-          {section.label}
-        </Button>
-      ))}
-    </nav>
+      <TabsList
+        className="grid h-auto w-full max-w-full min-w-0 grid-cols-3 gap-1"
+        aria-label="Saga-Bereiche"
+      >
+        {TOP_TABS.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <TabsTrigger
+              key={tab.id}
+              value={tab.id}
+              className="min-h-11 min-w-0 max-w-full gap-1.5 px-2 text-xs sm:text-sm"
+              data-saga-nav={tab.id}
+              onClick={() => {
+                // Click fallback — Radix activates primarily on mousedown.
+                onNavigate(pathForSagaSection(sagaPublicId, pathSectionForTop(tab.id)));
+              }}
+            >
+              <Icon className="size-4 shrink-0" aria-hidden />
+              <span className="truncate">{tab.label}</span>
+            </TabsTrigger>
+          );
+        })}
+      </TabsList>
+    </Tabs>
   );
 }

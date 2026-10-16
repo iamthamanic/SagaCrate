@@ -38,7 +38,7 @@ BEGIN
   END IF;
 
   IF src.gm_user_id IS DISTINCT FROM actor THEN
-    RAISE EXCEPTION 'Nur die Spielleitung kann duplizieren' USING ERRCODE = '42501';
+    RAISE EXCEPTION 'Nur der Gamemaster kann duplizieren' USING ERRCODE = '42501';
   END IF;
 
   IF src.saga_id IS NULL OR src.saga_version_id IS NULL THEN

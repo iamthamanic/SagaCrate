@@ -68,9 +68,16 @@ export interface CharacterSummaryVm {
   portraitUrl?: string;
 }
 
-/** Slim roster row for session lobby — id/name/publicId only (no full sheet). */
+/** Slim roster row for session lobby / saga hub — id/name/publicId/portrait (+ identity for ensemble). */
 export interface CharacterRosterMetaVm {
   id: string;
   publicId: string | null;
   name: string;
+  portraitUrl: string | null;
+  level: number | null;
+  /** Display class / archetype label (characters.class). */
+  classLabel: string | null;
+  raceKey: string | null;
+  essenceKey: string | null;
+  archetypeKey: string | null;
 }

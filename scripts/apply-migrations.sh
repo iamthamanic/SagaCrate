@@ -108,6 +108,12 @@ migrations=(
   085_fix_function_bodies_sagatree.sql
   086_rls_rulesets_world_graphs.sql
   087_ai_gm_rate_limits.sql
+  088_gm_earthspirit_presence_character.sql
+  089_gm_presence_character_type.sql
+  090_dornhain_basic_world_map.sql
+  091_saga_overview_world_profile_id.sql
+  092_fix_projects_rls_recursion.sql
+  093_fix_saga_overview_shared_adventure.sql
 )
 
 only="${1:-}"

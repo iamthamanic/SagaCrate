@@ -1,13 +1,16 @@
 /**
  * Cached character summaries for Bibliothek/Dashboard list views.
  * Location: src/app/character/list/useCharacterSummaries.ts
+ *
+ * Excludes GM presence rows (character_type=gm_presence / Weltgeist) — not playable PCs.
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ENTITY_CACHE_KEYS, entityCache } from '../../../lib/entityCache';
 import { useCachedEntityList } from '../../../lib/useCachedEntityList';
 import { characterService } from '../../../infrastructure/character/character-service';
 import type { CharacterSummaryVm } from '../../../domains/character';
+import { isGmPresenceCharacterSummary } from '../../../domains/character/use-cases/sagatree-native-gm-presence';
 
 interface UseCharacterSummariesOptions {
   enabled?: boolean;
@@ -23,6 +26,11 @@ export function useCharacterSummaries(options: UseCharacterSummariesOptions = {}
     fetcher,
     [],
     { enabled },
+  );
+
+  const playableCharacters = useMemo(
+    () => items.filter((char) => !isGmPresenceCharacterSummary(char)),
+    [items],
   );
 
   const deleteCharacter = useCallback(async (id: string): Promise<boolean> => {
@@ -59,7 +67,7 @@ export function useCharacterSummaries(options: UseCharacterSummariesOptions = {}
   }, [refresh]);
 
   return {
-    characters: items,
+    characters: playableCharacters,
     isLoading,
     error,
     deleteCharacter,

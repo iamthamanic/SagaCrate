@@ -13,6 +13,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../shared/ui/avatar';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { decideLobbyEnterLive } from '../../domains/session/contracts/session-lobby';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
+import {
+  GM_DEFAULT_CHARACTER_ROLE_LABEL,
+  GM_PRESENCE_DISPLAY_NAME,
+  gmDefaultCharacterPortraitUrl,
+} from '../../domains/character/use-cases/sagatree-native-gm-presence';
 import { initialsFromDisplayName } from '../../domains/user-profile';
 import { useAccountAvatar } from '../shell';
 import { pathForSessionLive } from '../shell';
@@ -136,8 +141,9 @@ export function SessionLobbyScreen({
 
   const characterLabel =
     model?.selfRole === 'gamemaster'
-      ? 'Spielleitung'
+      ? `${GM_PRESENCE_DISPLAY_NAME} · ${GM_DEFAULT_CHARACTER_ROLE_LABEL}`
       : (model?.selfCharacterName ?? 'Nicht zugewiesen');
+  const gmPresencePortraitUrl = gmDefaultCharacterPortraitUrl();
 
   const emptySeatCount = model
     ? Math.max(0, EMPTY_SEAT_TARGET - model.roster.length)
@@ -285,7 +291,7 @@ export function SessionLobbyScreen({
                     : member.accountDisplayName;
                   const roleLabel =
                     member.role === 'gamemaster'
-                      ? 'Spielleitung'
+                      ? 'Gamemaster'
                       : member.isSelf
                         ? 'du'
                         : (member.characterName ?? 'Player');
@@ -302,9 +308,12 @@ export function SessionLobbyScreen({
                   const profileActive =
                     member.isSelf &&
                     (seatVideoMode === 'profile' || (!cameraActive && !liveActActive));
-                  const selfAvatarUrl = member.isSelf
-                    ? accountAvatarUrl || member.avatarUrl
-                    : member.avatarUrl;
+                  const isGmSeat = member.role === 'gamemaster';
+                  const selfAvatarUrl = isGmSeat
+                    ? gmPresencePortraitUrl
+                    : member.isSelf
+                      ? accountAvatarUrl || member.avatarUrl
+                      : member.avatarUrl;
                   // 4-col × 16:9 was ~90px tall — portrait tile + min-height for overlays
                   const seatShell =
                     'relative min-h-[13.5rem] aspect-[4/5] min-w-0 overflow-hidden rounded-md';
@@ -342,10 +351,15 @@ export function SessionLobbyScreen({
                         ) : profileActive && selfAvatarUrl ? (
                           <img
                             src={selfAvatarUrl}
-                            alt={`Profilbild von ${member.accountDisplayName}`}
+                            alt={
+                              isGmSeat
+                                ? `Gamemaster-Präsenz`
+                                : `Profilbild von ${member.accountDisplayName}`
+                            }
                             className="absolute inset-0 h-full w-full object-cover"
                             data-lobby-member-avatar
                             data-session-lobby-profile-preview
+                            data-session-lobby-gm-presence={isGmSeat ? '1' : undefined}
                           />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center pb-14 pt-12">
@@ -418,18 +432,27 @@ export function SessionLobbyScreen({
                     );
                   }
 
+                  const peerSeatImageUrl = isGmSeat
+                    ? gmPresencePortraitUrl
+                    : member.avatarUrl;
+
                   return (
                     <li
                       key={member.userId}
                       className={`${seatShell} border border-border/60 bg-background/40`}
                       data-session-lobby-member="peer"
                     >
-                      {member.avatarUrl ? (
+                      {peerSeatImageUrl ? (
                         <img
-                          src={member.avatarUrl}
-                          alt={`Profilbild von ${member.accountDisplayName}`}
+                          src={peerSeatImageUrl}
+                          alt={
+                            isGmSeat
+                              ? `Gamemaster-Präsenz`
+                              : `Profilbild von ${member.accountDisplayName}`
+                          }
                           className="absolute inset-0 h-full w-full object-cover"
                           data-lobby-member-avatar
+                          data-session-lobby-gm-presence={isGmSeat ? '1' : undefined}
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center px-2 pt-10 pb-2">

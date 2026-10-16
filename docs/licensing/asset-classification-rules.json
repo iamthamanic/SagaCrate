@@ -114,6 +114,18 @@
       "status": "owner_pending"
     },
     {
+      "id": "session-gm-presence-art",
+      "match": "^public/assets/session/",
+      "source": "SagaTree GM presence portrait (Meshy / first-party pipeline)",
+      "creator": "iamthamanic",
+      "license": "UNDECLARED-first-party",
+      "evidence": "git history (iamthamanic); OWNER_ATTESTATIONS.md § C; migration 088",
+      "redistributable": true,
+      "attribution_required": false,
+      "runtime_required": true,
+      "status": "owner_pending"
+    },
+    {
       "id": "src-species-and-inventory-art",
       "match": "^src/assets/(species|inventory|items)/",
       "source": "SagaTree UI art",

@@ -1,6 +1,6 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '../../shared/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui/tabs';
+import { Tabs, TabsContent } from '../../shared/ui/tabs';
 import { Input } from '../../shared/ui/input';
 import {
   Dialog,
@@ -104,6 +104,8 @@ const NpcCreatureLibraryBrowser = lazy(() =>
 );
 
 interface LibraryProps {
+  /** Shell pathname — keeps tab in sync without remounting on every /library/:tab. */
+  pathname?: string;
   onNavigate: (view: string) => void;
   onNavigateToItem: (itemId: string) => void;
   onNavigateToLookCreate?: () => void;
@@ -183,7 +185,21 @@ type LibraryEntityMenuState =
       anchor: EntityBrowserCornerMenuAnchor;
     };
 
+const LIBRARY_TAB_BUTTONS: readonly {
+  id: LibraryTab;
+  label: string;
+  icon: typeof User;
+}[] = [
+  { id: 'characters', label: 'Charaktere', icon: User },
+  { id: 'npcs', label: 'NPCs & Kreaturen', icon: Users },
+  { id: 'adventures', label: 'Sagas', icon: BookOpen },
+  { id: 'worlds', label: 'Welten', icon: Globe2 },
+  { id: 'items', label: 'Items', icon: Package },
+  { id: 'looks', label: 'Looks', icon: Palette },
+];
+
 export function Library({
+  pathname: pathnameProp,
   onNavigate,
   onNavigateToItem,
   onNavigateToLookCreate,
@@ -253,27 +269,31 @@ export function Library({
     void refreshCharacters({ force: true });
   }, [refreshCharacters]);
 
-  // Honor `/library/:tab` (and legacy `?tab=`) from deep links / back-forward.
+  // Keep tab in sync with shell pathname (deep links, back/forward, sidebar).
   useEffect(() => {
-    const applyTabFromUrl = () => {
-      // popstate can fire while Library is still mounted after Back leaves
-      // `/library…` — never rewrite non-library destinations.
-      if (parseLibraryTabFromPathname(window.location.pathname) === null) {
-        return;
-      }
-      const tab = readLibraryTabFromLocation();
-      setActiveTab(tab);
-      setVisitedTabs((current) => new Set(current).add(tab));
-      const canonical = pathForLibraryTab(tab);
-      const current = `${window.location.pathname}${window.location.search}`;
-      // Normalize bare `/library` and `?tab=` bookmarks onto slash paths.
-      if (current !== canonical) {
-        window.history.replaceState(null, '', canonical);
-      }
-    };
-    applyTabFromUrl();
-    window.addEventListener('popstate', applyTabFromUrl);
-    return () => window.removeEventListener('popstate', applyTabFromUrl);
+    const path = pathnameProp
+      ?? (typeof window !== 'undefined' ? window.location.pathname : '');
+    if (parseLibraryTabFromPathname(path) === null && path !== '' && path !== '/library') {
+      return;
+    }
+    const tab = parseLibraryTabFromPathname(path) ?? readLibraryTabFromLocation();
+    setActiveTab((current) => (current === tab ? current : tab));
+    setVisitedTabs((current) => (current.has(tab) ? current : new Set(current).add(tab)));
+  }, [pathnameProp]);
+
+  const onNavigateRef = useRef(onNavigate);
+  onNavigateRef.current = onNavigate;
+
+  // One-shot: normalize bare `/library` / `?tab=` bookmarks onto slash paths.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (parseLibraryTabFromPathname(window.location.pathname) === null) return;
+    const tab = readLibraryTabFromLocation();
+    const canonical = pathForLibraryTab(tab);
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (current !== canonical) {
+      onNavigateRef.current(canonical);
+    }
   }, []);
 
   const handleTabChange = (value: string) => {
@@ -281,8 +301,8 @@ export function Library({
     setActiveTab(tab);
     setVisitedTabs((current) => new Set(current).add(tab));
     const nextPath = pathForLibraryTab(tab);
-    if (typeof window !== 'undefined' && `${window.location.pathname}${window.location.search}` !== nextPath) {
-      window.history.replaceState(null, '', nextPath);
+    if (`${window.location.pathname}${window.location.search}` !== nextPath) {
+      onNavigate(nextPath);
     }
   };
 
@@ -426,7 +446,7 @@ export function Library({
       return;
     }
     if (project.gmUserId !== user?.id) {
-      toast.error('Nur die Spielleitung kann eine Saga duplizieren');
+      toast.error('Nur der Gamemaster kann eine Saga duplizieren');
       return;
     }
     setSagaMenuBusyId(project.id);
@@ -454,7 +474,7 @@ export function Library({
 
   const deleteSagaRun = async (project: ProjectSummaryVm) => {
     if (project.gmUserId !== user?.id) {
-      toast.error('Nur die Spielleitung kann eine Saga löschen');
+      toast.error('Nur der Gamemaster kann eine Saga löschen');
       return;
     }
     const title = project.sagaTitle?.trim() || project.name;
@@ -541,16 +561,19 @@ export function Library({
   );
 
   const normalizedSearch = searchQuery.trim().toLowerCase();
-  const filteredCharacters = characters.filter(char =>
-    char.name.toLowerCase().includes(normalizedSearch) ||
-    char.class.toLowerCase().includes(normalizedSearch) ||
-    char.race.toLowerCase().includes(normalizedSearch) ||
-    (char.publicId ?? '').toLowerCase().includes(normalizedSearch) ||
-    getCharacterCreationOptionLabel(
-      sagaTreeRaceOptions,
-      normalizeSagaTreeRaceKey(char.race),
-    ).toLowerCase().includes(normalizedSearch)
-  );
+  const filteredCharacters = characters.filter((char) => {
+    if (!normalizedSearch) return true;
+    return (
+      char.name.toLowerCase().includes(normalizedSearch)
+      || char.class.toLowerCase().includes(normalizedSearch)
+      || char.race.toLowerCase().includes(normalizedSearch)
+      || (char.publicId ?? '').toLowerCase().includes(normalizedSearch)
+      || getCharacterCreationOptionLabel(
+        sagaTreeRaceOptions,
+        normalizeSagaTreeRaceKey(char.race),
+      ).toLowerCase().includes(normalizedSearch)
+    );
+  });
   const filteredWorlds = worlds.filter((world) =>
     world.name.toLowerCase().includes(normalizedSearch) ||
     world.description.toLowerCase().includes(normalizedSearch) ||
@@ -742,7 +765,7 @@ export function Library({
         portraitUrl: char.portraitUrl,
       },
     });
-    // Prefer owner portrait → Dornhain native pregen art → Spezies-Skizze.
+    // Prefer owner portrait → Dornhain native art → Spezies-Skizze.
     const nativePortrait = sagatreeNativePregenPortraitUrlByName(char.name);
     const isNativeCharacter = isSagatreeNativePregenName(char.name);
     const imageUrl =
@@ -880,50 +903,40 @@ export function Library({
         ) : null}
 
         <Tabs value={activeTab} onValueChange={handleTabChange} className="@container w-full min-w-0">
-          <TabsList className="grid h-auto w-full max-w-full min-w-0 grid-cols-2 gap-1 @[36rem]:grid-cols-3 @[60rem]:grid-cols-6">
-            <TabsTrigger
-              value="characters"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <User className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">Charaktere</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="npcs"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <Users className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">NPCs & Kreaturen</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="adventures"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <BookOpen className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">Sagas</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="worlds"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <Globe2 className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">Welten</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="items"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <Package className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">Items</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="looks"
-              className="min-h-11 min-w-0 max-w-full px-2 text-xs sm:text-sm"
-            >
-              <Palette className="mr-1.5 size-4 shrink-0 sm:mr-2" />
-              <span className="truncate">Looks</span>
-            </TabsTrigger>
-          </TabsList>
+          {/*
+            Plain buttons (not Radix TabsTrigger): Radix activates on mousedown only.
+            Coverflow/Embla and some pointer paths can swallow mousedown before React;
+            click remains reliable. Tabs Root still drives TabsContent panels.
+          */}
+          <div
+            role="tablist"
+            aria-label="Bibliothek"
+            className="bg-muted/60 text-muted-foreground relative z-20 grid h-auto w-full max-w-full min-w-0 grid-cols-2 gap-1 rounded-lg border border-foreground/10 p-1 shadow-sm @[36rem]:grid-cols-3 @[60rem]:grid-cols-6"
+          >
+            {LIBRARY_TAB_BUTTONS.map((tab) => {
+              const Icon = tab.icon;
+              const selected = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  data-state={selected ? 'active' : 'inactive'}
+                  data-library-tab={tab.id}
+                  className={
+                    selected
+                      ? 'border-primary bg-primary text-primary-foreground shadow-sm hover:bg-accent hover:border-accent hover:text-accent-foreground inline-flex min-h-11 min-w-0 max-w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2 text-xs font-medium transition-[background-color,border-color,box-shadow,color,transform] duration-150 active:scale-[0.98] sm:text-sm'
+                      : 'text-muted-foreground hover:border-accent/40 hover:bg-accent/10 hover:text-accent inline-flex min-h-11 min-w-0 max-w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-2 text-xs font-medium transition-[background-color,border-color,box-shadow,color,transform] duration-150 active:scale-[0.98] sm:text-sm'
+                  }
+                  onClick={() => handleTabChange(tab.id)}
+                >
+                  <Icon className="mr-1.5 size-4 shrink-0 sm:mr-2" aria-hidden />
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
           <TabsContent value="characters" className="min-w-0 space-y-4">
             {error && (

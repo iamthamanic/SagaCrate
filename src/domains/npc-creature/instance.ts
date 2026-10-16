@@ -244,7 +244,7 @@ export function planNpcCreatureInstanceSpawn(
     return {
       ok: false,
       code: 'not_gm',
-      message: 'Nur die Spielleitung darf Instanzen erzeugen.',
+      message: 'Nur der Gamemaster darf Instanzen erzeugen.',
     };
   }
 
@@ -332,7 +332,7 @@ export function planNpcCreatureInstanceRuntimeUpdate(
     return {
       ok: false,
       code: 'not_gm',
-      message: 'Nur die Spielleitung darf Instanz-Status ändern.',
+      message: 'Nur der Gamemaster darf Instanz-Status ändern.',
     };
   }
 

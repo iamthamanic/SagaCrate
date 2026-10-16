@@ -288,7 +288,7 @@ serve(async (request: Request) => {
     }
     const project = projects[0];
     if (project.gm_user_id !== userId) {
-      return jsonResponse(request, { status: 'error', message: 'Nur die Spielleitung darf generieren.' }, 403);
+      return jsonResponse(request, { status: 'error', message: 'Nur der Gamemaster darf generieren.' }, 403);
     }
 
     // Ensure recap skeleton exists / load snapshot via RPC helper (service role).

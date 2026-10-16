@@ -106,7 +106,7 @@ export function SessionRecapScreen({
                   <dt className="text-muted-foreground">Rolle</dt>
                   <dd>
                     {model.selfRole === 'gamemaster'
-                      ? 'Spielleitung'
+                      ? 'Gamemaster'
                       : model.selfRole === 'player'
                         ? 'Spieler'
                         : 'Viewer'}

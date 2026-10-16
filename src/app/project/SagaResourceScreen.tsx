@@ -1,9 +1,9 @@
 /**
- * SagaResourceScreen — Canonical /sagas/** workspace shell (#276 / #489 / #571).
+ * SagaResourceScreen — Canonical /sagas/** workspace shell (#276 / #489 / #571 / #saga-workspace-ia).
  * Location: src/app/project/SagaResourceScreen.tsx
  *
- * List + create are real product surfaces; overview hub uses useSagaOverview +
- * four section components. Internal domain remains „project“.
+ * Top chrome: Übersicht · Welt · Einstellungen. Sessions + party live on Overview;
+ * NSCs / Items / Quests / Lore nest under Welt subtabs. Deep-link section ids stay.
  */
 import type { ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -11,26 +11,33 @@ import { Button } from '../../shared/ui/button';
 import { AdaptivePage } from '../../shared/ui/adaptive';
 import { Skeleton } from '../../shared/ui/skeleton';
 import { buildSessionJoinPath } from '../../domains/session/contracts/session-entry-routing';
-import {
-  resolveLifecycleScreenFromStatus,
-} from '../../domains/session/contracts/session-prepare-recap';
+import { resolveHubSessionEntryPhase } from '../../domains/session/contracts/session-prepare-recap';
 import { resolveSagaPrimaryAction } from '../../domains/project/use-cases/saga-primary-action';
+import {
+  resolveSagaWorldSub,
+  resolveSagaWorkspaceTop,
+} from '../../domains/project/contracts/saga-workspace-nav';
 import type { SagaEpisodeVm } from '../../domains/project/contracts/saga-overview';
 import type { SagaSectionId } from '../shell';
 import { pathForSagaList, pathForSagaSection, pathForSessionPhase } from '../shell';
 import { SagaCreateForm } from './SagaCreateForm';
 import { SagaListPanel } from './SagaListPanel';
 import { SagaWorkspaceNav } from './SagaWorkspaceNav';
+import { SagaWorldSubNav } from './SagaWorldSubNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
-import { SagaWorldCatalogPanel } from './SagaWorldCatalogPanel';
+import { SagaWorldAtlasPanel } from './SagaWorldAtlasPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
+import { toast } from 'sonner';
+import { sessionService } from '../../infrastructure/session/session-service';
 import { useSagaOverview } from './hooks/useSagaOverview';
-import { SagaOverviewHero } from './overview/SagaOverviewHero';
+import { useSagaEnsembleProfiles } from './hooks/useSagaEnsembleProfiles';
+import { gmDefaultCharacterPortraitUrl } from '../../domains/character/use-cases/sagatree-native-gm-presence';
+import { sagatreeNativeSagaCoverUrlFromDisplayName } from '../../domains/saga/use-cases/sagatree-native-saga-covers';
+import { SagaHubMetaBar } from './overview/SagaHubMetaBar';
 import { SagaEpisodeList } from './overview/SagaEpisodeList';
 import { SagaEnsembleStrip } from './overview/SagaEnsembleStrip';
-import { SagaWorldStatePanel } from './overview/SagaWorldStatePanel';
 
 type SagaResourceScreenProps = {
   mode: 'list' | 'new' | 'section';
@@ -52,13 +59,15 @@ const SECTION_LABELS: Record<SagaSectionId, string> = {
   settings: 'Einstellungen',
 };
 
-const CATALOG_SECTIONS = new Set<SagaSectionId>([
-  'characters',
+const WORLD_CONTENT = new Set<SagaSectionId>([
+  'world',
   'npc-creatures',
   'items',
   'quests',
   'lore',
 ]);
+
+const HUB_SECTIONS = new Set<SagaSectionId>(['overview', 'sessions', 'characters']);
 
 export function SagaResourceScreen({
   mode,
@@ -76,15 +85,6 @@ export function SagaResourceScreen({
       window.history.pushState(null, '', view.startsWith('/') ? view : `/${view}`);
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
-  };
-
-  const goSessionJoin = () => {
-    navigate(
-      buildSessionJoinPath({
-        sagaPublicId: sagaPublicId ?? null,
-        intent: 'create',
-      }),
-    );
   };
 
   if (mode === 'list') {
@@ -114,18 +114,31 @@ export function SagaResourceScreen({
   }
 
   const id = sagaPublicId?.trim() || null;
+  const top = resolveSagaWorkspaceTop(section);
+
+  const topTitle =
+    top === 'overview' ? 'Übersicht' : top === 'world' ? 'Welt' : 'Einstellungen';
 
   const header = (
     <div className="space-y-3">
-      <div>
+      <div className="space-y-1">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">Saga</p>
-        <h1 className="text-2xl font-semibold text-foreground">
-          {id ?? 'Unbekannte Saga'}
-          {section !== 'overview' ? ` · ${SECTION_LABELS[section]}` : ''}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Berechtigungen kommen aus Membership/RLS — nicht aus der URL.
-        </p>
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h1 className="text-2xl font-semibold text-foreground">{topTitle}</h1>
+          {id ? (
+            <span
+              className="rounded-md border border-border bg-card px-2 py-0.5 font-mono text-xs text-muted-foreground"
+              translate="no"
+            >
+              {id}
+            </span>
+          ) : (
+            <span className="text-sm text-destructive">Unbekannte Saga</span>
+          )}
+        </div>
+        {top === 'world' && section !== 'world' ? (
+          <p className="text-sm text-muted-foreground">{SECTION_LABELS[section]}</p>
+        ) : null}
       </div>
       {id ? (
         <SagaWorkspaceNav sagaPublicId={id} active={section} onNavigate={navigate} />
@@ -155,6 +168,7 @@ export function SagaResourceScreen({
         <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 md:p-6" data-saga-section="settings">
           {header}
           <SagaVisualStyleSettings sagaPublicId={id} onNavigate={onNavigate} />
+          <WorldLookPreviewPanel sagaPublicId={id} onNavigate={onNavigate} />
           <SagaPermissionSettings sagaPublicId={id} />
           <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
             Zurück
@@ -164,44 +178,11 @@ export function SagaResourceScreen({
     );
   }
 
-  if (section === 'world') {
+  if (WORLD_CONTENT.has(section)) {
     return (
-      <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
-        <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 md:p-6" data-saga-section="world">
-          {header}
-          <SagaWorldCatalogPanel sagaPublicId={id} />
-          <WorldLookPreviewPanel sagaPublicId={id} onNavigate={onNavigate} />
-          <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
-            Zurück
-          </Button>
-        </div>
-      </AdaptivePage>
-    );
-  }
-
-  if (section === 'sessions') {
-    return (
-      <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
-        <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6" data-saga-section="sessions">
-          {header}
-          <p className="text-sm text-muted-foreground">
-            Starte oder betrete eine Spielsession über die Session-UI.
-          </p>
-          <Button type="button" className="min-h-11 self-start" onClick={goSessionJoin} data-saga-sessions-join>
-            Session starten / beitreten
-          </Button>
-          <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
-            Zurück
-          </Button>
-        </div>
-      </AdaptivePage>
-    );
-  }
-
-  if (section === 'overview') {
-    return (
-      <SagaOverviewSection
+      <SagaWorldShell
         sagaPublicId={id}
+        section={section}
         header={header}
         onNavigate={navigate}
         onNavigateHome={onNavigateHome}
@@ -209,21 +190,14 @@ export function SagaResourceScreen({
     );
   }
 
-  if (CATALOG_SECTIONS.has(section)) {
+  if (HUB_SECTIONS.has(section)) {
     return (
-      <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
-        <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6" data-saga-section={section}>
-          {header}
-          <SagaWorkspaceCatalogSection
-            sagaPublicId={id}
-            section={section as 'characters' | 'npc-creatures' | 'items' | 'quests' | 'lore'}
-            onNavigate={navigate}
-          />
-          <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
-            Zurück
-          </Button>
-        </div>
-      </AdaptivePage>
+      <SagaOverviewSection
+        sagaPublicId={id}
+        section={section}
+        onNavigate={navigate}
+        onNavigateHome={onNavigateHome}
+      />
     );
   }
 
@@ -243,25 +217,105 @@ export function SagaResourceScreen({
 }
 
 /**
- * Overview hub — wires useSagaOverview into the four section components (#571).
- * Kept in this file to avoid a fifth presentational hub wrapper.
+ * Welt shell — subtabs + places catalog or scoped catalog sections.
  */
-function SagaOverviewSection({
+function SagaWorldShell({
   sagaPublicId,
+  section,
   header,
   onNavigate,
   onNavigateHome,
 }: {
   sagaPublicId: string;
+  section: SagaSectionId;
   header: ReactNode;
   onNavigate: (view: string) => void;
   onNavigateHome: () => void;
 }) {
+  const sub = resolveSagaWorldSub(section) ?? 'places';
+
+  return (
+    <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
+      <div
+        className="@container mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 md:p-6"
+        data-saga-section={section}
+        data-saga-world-shell
+        data-au-content-width="saga-world"
+      >
+        {header}
+        <SagaWorldSubNav
+          sagaPublicId={sagaPublicId}
+          active={section}
+          onNavigate={onNavigate}
+        />
+
+        {sub === 'places' ? (
+          <SagaWorldAtlasPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
+        ) : (
+          <SagaWorkspaceCatalogSection
+            sagaPublicId={sagaPublicId}
+            section={sub}
+            onNavigate={onNavigate}
+          />
+        )}
+
+        <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
+          Zurück
+        </Button>
+      </div>
+    </AdaptivePage>
+  );
+}
+
+/**
+ * Overview hub — story title as H1, Library tabs, episodes + ensemble (#saga-workspace-ia).
+ */
+function SagaOverviewSection({
+  sagaPublicId,
+  section,
+  onNavigate,
+  onNavigateHome,
+}: {
+  sagaPublicId: string;
+  section: SagaSectionId;
+  onNavigate: (view: string) => void;
+  onNavigateHome: () => void;
+}) {
   const { model, isLoading, error, refresh } = useSagaOverview({ sagaPublicId });
+  const ensembleMembers = useSagaEnsembleProfiles(model?.ensemble ?? []);
+  const showCharacterCatalog = section === 'characters';
+  const pageTitle =
+    section === 'characters'
+      ? 'Spieler-Charaktere'
+      : section === 'sessions'
+        ? 'Sessions'
+        : model?.title?.trim() || 'Übersicht';
 
   const openEpisode = (episode: SagaEpisodeVm) => {
-    const phase = resolveLifecycleScreenFromStatus(episode.status);
+    const phase = resolveHubSessionEntryPhase(episode.status);
     onNavigate(pathForSessionPhase(sagaPublicId, episode.sessionPublicId, phase));
+  };
+
+  const deleteEpisode = async (episode: SagaEpisodeVm) => {
+    if (!model?.isGm && model?.selfRole !== 'gamemaster') {
+      toast.error('Nur der Gamemaster kann Sessions löschen.');
+      return;
+    }
+    const title = episode.name?.trim() || `Session ${episode.sessionNumber}`;
+    if (
+      !window.confirm(
+        `Möchtest du die Session „${title}“ (${episode.sessionPublicId}) wirklich löschen?`,
+      )
+    ) {
+      return;
+    }
+    try {
+      await sessionService.deleteSession(episode.sessionId);
+      toast.success('Session gelöscht');
+      await refresh({ force: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Löschen fehlgeschlagen');
+    }
   };
 
   const runPrimary = () => {
@@ -281,8 +335,8 @@ function SagaOverviewSection({
     if (action.sessionPublicId) {
       const episode = model.episodes.find((e) => e.sessionPublicId === action.sessionPublicId);
       const phase = episode
-        ? resolveLifecycleScreenFromStatus(episode.status)
-        : 'prepare';
+        ? resolveHubSessionEntryPhase(episode.status)
+        : 'lobby';
       onNavigate(pathForSessionPhase(sagaPublicId, action.sessionPublicId, phase));
     }
   };
@@ -290,11 +344,47 @@ function SagaOverviewSection({
   return (
     <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
       <div
-        className="mx-auto flex w-full max-w-3xl flex-col gap-10 p-4 md:p-6"
-        data-saga-section="overview"
+        className="@container mx-auto flex w-full max-w-7xl flex-col gap-3 p-4 md:p-6"
+        data-saga-section={section === 'sessions' ? 'sessions' : section === 'characters' ? 'characters' : 'overview'}
+        data-saga-hub
         data-au-content-width="saga-overview"
       >
-        {header}
+        <div className="space-y-3">
+          {isLoading && !model ? (
+            <div className="space-y-2" data-saga-overview-loading-meta aria-busy="true">
+              <Skeleton className="h-16 w-full" />
+            </div>
+          ) : model ? (
+            <SagaHubMetaBar
+              sagaTitle={
+                showCharacterCatalog ? pageTitle : model.title.trim() || pageTitle
+              }
+              sagaPublicId={sagaPublicId}
+              coverUrl={sagatreeNativeSagaCoverUrlFromDisplayName(model.title)}
+              roleLabel={
+                model.isGm || model.selfRole === 'gamemaster'
+                  ? 'Gamemaster'
+                  : model.selfRole === 'viewer'
+                    ? 'Beobachter'
+                    : 'Spieler'
+              }
+              onLeave={onNavigateHome}
+            />
+          ) : (
+            <SagaHubMetaBar
+              sagaTitle={pageTitle}
+              sagaPublicId={sagaPublicId}
+              coverUrl={null}
+              roleLabel="—"
+              onLeave={onNavigateHome}
+            />
+          )}
+          <SagaWorkspaceNav
+            sagaPublicId={sagaPublicId}
+            active={section}
+            onNavigate={onNavigate}
+          />
+        </div>
 
         {error ? (
           <div className="space-y-3" role="alert" data-saga-overview-error>
@@ -319,9 +409,7 @@ function SagaOverviewSection({
 
         {!error && isLoading && !model ? (
           <div className="space-y-4" data-saga-overview-loading aria-busy="true">
-            <Skeleton className="h-8 w-2/3" />
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-11 w-44" />
+            <Skeleton className="h-[min(70vh,28rem)] w-full" />
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="size-4 animate-spin" aria-hidden />
               Übersicht wird geladen…
@@ -329,25 +417,49 @@ function SagaOverviewSection({
           </div>
         ) : null}
 
-        {!error && model ? (
-          <>
-            <SagaOverviewHero
-              model={model}
-              primaryAction={resolveSagaPrimaryAction(model, model.selfRole)}
-              onPrimary={runPrimary}
-            />
-            <SagaEpisodeList episodes={model.episodes} onOpenEpisode={openEpisode} />
-            <SagaEnsembleStrip ensemble={model.ensemble} />
-            <SagaWorldStatePanel
-              summary={model.worldStateSummary}
-              worldProfileId={model.worldProfileId}
-            />
-          </>
+        {!error && model && !showCharacterCatalog ? (
+          <div
+            className="mt-1 flex min-h-0 w-full min-w-0 flex-col gap-3"
+            data-saga-hub-overview-panels
+          >
+            <div
+              className="flex min-h-0 min-w-0 flex-col"
+              data-saga-hub-sessions-panel
+            >
+              <SagaEpisodeList
+                episodes={model.episodes}
+                sagaTitle={model.title}
+                onOpenEpisode={openEpisode}
+                canDeleteEpisodes={model.isGm || model.selfRole === 'gamemaster'}
+                onDeleteEpisode={deleteEpisode}
+                primaryAction={resolveSagaPrimaryAction(model, model.selfRole)}
+                onPrimary={runPrimary}
+              />
+            </div>
+            <div
+              className="flex max-h-[min(70vh,28rem)] min-h-0 min-w-0 flex-col"
+              data-saga-hub-ensemble
+            >
+              <SagaEnsembleStrip
+                ensemble={ensembleMembers}
+                gmWorldPortraitUrl={gmDefaultCharacterPortraitUrl()}
+                onManageCharacters={() =>
+                  onNavigate(pathForSagaSection(sagaPublicId, 'characters'))
+                }
+              />
+            </div>
+          </div>
         ) : null}
 
-        <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
-          Zurück
-        </Button>
+        {showCharacterCatalog ? (
+          <div className="space-y-3" data-saga-hub-character-catalog>
+            <SagaWorkspaceCatalogSection
+              sagaPublicId={sagaPublicId}
+              section="characters"
+              onNavigate={onNavigate}
+            />
+          </div>
+        ) : null}
       </div>
     </AdaptivePage>
   );

@@ -29,3 +29,4 @@ export {
   projectWorldMapForPlayer,
   setTileAt,
 } from './validate-world-map';
+export { buildDornhainStarterMapData } from './dornhain-starter-map';

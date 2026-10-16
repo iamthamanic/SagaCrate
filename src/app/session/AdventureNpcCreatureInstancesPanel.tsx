@@ -226,7 +226,7 @@ export function AdventureNpcCreatureInstancesPanel({
       >
         <Users className="mx-auto mb-3 size-10 text-muted-foreground" aria-hidden="true" />
         <p className="text-sm text-muted-foreground">
-          Instanzen verwalten erfordert ein Abenteuer, das du als Spielleitung führst.
+          Instanzen verwalten erfordert ein Abenteuer, das du als Gamemaster führst.
         </p>
       </div>
     );
@@ -514,7 +514,7 @@ export function AdventureNpcCreatureInstancesPanel({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={UNASSIGNED_VALUE}>Spielleitung</SelectItem>
+                    <SelectItem value={UNASSIGNED_VALUE}>Gamemaster</SelectItem>
                     {members.map((member) => (
                       <SelectItem key={member.user_id} value={member.user_id}>
                         {member.user_id.slice(0, 8)}…

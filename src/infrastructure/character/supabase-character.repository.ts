@@ -163,18 +163,39 @@ export class SupabaseCharacterRepository {
     const { data, error } = await raceWithTimeoutReject(
       supabase
         .from(this.tableName)
-        .select('id, public_id, name')
+        .select('id, public_id, name, portrait_url, level, class, race, sagatree_profile')
         .eq('owner_user_id', userId)
         .in('id', unique),
       SUPABASE_QUERY_TIMEOUT_MS,
       'Failed to fetch character roster meta: request timed out',
     );
     if (error) throw new Error(`Failed to fetch character roster meta: ${error.message}`);
-    return (data ?? []).map((row) => ({
-      id: row.id as string,
-      publicId: typeof row.public_id === 'string' ? row.public_id : null,
-      name: typeof row.name === 'string' && row.name.length > 0 ? row.name : 'Charakter',
-    }));
+    return (data ?? []).map((row) => {
+      const profile =
+        row.sagatree_profile && typeof row.sagatree_profile === 'object'
+          ? (row.sagatree_profile as Record<string, unknown>)
+          : null;
+      const essenceRaw = profile && typeof profile.essence === 'string' ? profile.essence : null;
+      const archetypeRaw =
+        profile && typeof profile.archetype === 'string' ? profile.archetype : null;
+      return {
+        id: row.id as string,
+        publicId: typeof row.public_id === 'string' ? row.public_id : null,
+        name: typeof row.name === 'string' && row.name.length > 0 ? row.name : 'Charakter',
+        portraitUrl: typeof row.portrait_url === 'string' && row.portrait_url.length > 0
+          ? row.portrait_url
+          : null,
+        level: typeof row.level === 'number' && Number.isFinite(row.level) ? row.level : null,
+        classLabel: typeof row.class === 'string' && row.class.trim().length > 0
+          ? row.class.trim()
+          : null,
+        raceKey: typeof row.race === 'string' && row.race.trim().length > 0
+          ? row.race.trim()
+          : null,
+        essenceKey: essenceRaw,
+        archetypeKey: archetypeRaw,
+      };
+    });
   }
 
   async getCharacterByPublicId(publicId: string): Promise<CharacterVm> {

@@ -39,7 +39,7 @@ forbidMatch(creation, /label:\s*'SagaDrive Core'/, 'ruleset still labeled SagaDr
 
 const readme = read('README.md');
 requireMatch(readme, /### Elevator Pitch/, 'README Elevator Pitch section');
-requireMatch(readme, /\*\*Für Spielleitung\*\*/, 'README pitch for DMs');
+requireMatch(readme, /\*\*Für Gamemaster\*\*/, 'README pitch for DMs');
 requireMatch(readme, /\*\*Für Spieler\*\*/, 'README pitch for players');
 requireMatch(readme, /SagaTree Core/, 'README SagaTree Core');
 forbidMatch(readme, /heißt weiterhin \*\*SagaDrive Core\*\*/, 'README still keeps SagaDrive Core');

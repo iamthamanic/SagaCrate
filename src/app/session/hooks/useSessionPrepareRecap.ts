@@ -142,7 +142,7 @@ export function useSessionPrepareRecap(
       if (detail.gmUserId) {
         roster.push({
           userId: detail.gmUserId,
-          displayName: detail.gmUserId === user.id ? 'Du (Spielleitung)' : 'Spielleitung',
+          displayName: detail.gmUserId === user.id ? 'Du (Gamemaster)' : 'Gamemaster',
           role: 'gamemaster',
           characterName: null,
           isSelf: detail.gmUserId === user.id,
@@ -294,7 +294,7 @@ export function useSessionPrepareRecap(
 
   const createNextSession = useCallback(async () => {
     if (!projectId || !baseMeta || baseMeta.selfRole !== 'gamemaster') {
-      setError('Nur die Spielleitung kann die nächste Session erstellen.');
+      setError('Nur der Gamemaster kann die nächste Session erstellen.');
       return null;
     }
     setIsCreatingNext(true);

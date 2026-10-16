@@ -135,7 +135,7 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
         ];
         const characterMeta = new Map<
           string,
-          { name: string; publicId: string | null }
+          { name: string; publicId: string | null; portraitUrl: string | null }
         >();
         try {
           const rows = await characterService.getCharacterRosterMetaByIds(characterIds);
@@ -143,6 +143,7 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
             characterMeta.set(row.id, {
               name: row.name,
               publicId: row.publicId,
+              portraitUrl: row.portraitUrl,
             });
           }
         } catch (err) {
@@ -150,7 +151,7 @@ export function useSessionLobby(input: UseSessionLobbyInput): UseSessionLobbyRes
         }
         for (const id of characterIds) {
           if (!characterMeta.has(id)) {
-            characterMeta.set(id, { name: 'Charakter', publicId: null });
+            characterMeta.set(id, { name: 'Charakter', publicId: null, portraitUrl: null });
           }
         }
 
