@@ -79,8 +79,8 @@ jobs:
     name: Browser E2E
     needs: test-gate
     runs-on: ubuntu-latest
-    # Suite ~8m; retries under load need headroom (was hitting 15m / flake races).
-    timeout-minutes: 25
+    # Suite often ~20m under Actions load; 25m was cancelling mid-run (#671).
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
