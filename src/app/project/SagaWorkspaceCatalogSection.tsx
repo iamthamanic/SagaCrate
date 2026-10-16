@@ -1,15 +1,18 @@
 /**
- * SagaWorkspaceCatalogSection — saga-scoped catalog lists + Lore (#617 Phase 2).
+ * SagaWorkspaceCatalogSection — saga-scoped catalog + Lore (#617 Phase 2).
+ * Bindings use Library EntityBrowser (Liste / Grid / Karussell), not plain lists.
  * Location: src/app/project/SagaWorkspaceCatalogSection.tsx
- *
- * Characters still use library summaries; bindings list + reveal for other kinds;
- * Lore/Verlauf loads get_saga_lore_timeline. Dornhain seed fill remains Phase 3.
  */
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Loader2, Package, Plus, ScrollText, User, Users } from 'lucide-react';
 import {
+  resolveSagaBindingImageObjectFit,
+  resolveSagaBindingImageSrc,
+} from '../../domains/saga/bindings';
+import {
   hasSagaPermission,
+  revealLabelDe,
   type SagaAssetKind,
   type SagaPermissionKey,
 } from '../../domains/saga/permissions';
@@ -20,6 +23,12 @@ import {
 } from '../../infrastructure/project/saga-permission-service';
 import { Button } from '../../shared/ui/button';
 import { useCharacterSummaries } from '../character';
+import {
+  EntityBrowser,
+  EntityBrowserCard,
+  type EntityBrowserChip,
+  type EntityBrowserRenderContext,
+} from '../library';
 import { pathForLibraryTab, pathForNpcCreatureCreate, type SagaSectionId } from '../shell';
 import { SagaBindingRevealControl } from './SagaBindingRevealControl';
 import { SagaLoreTimelinePanel } from './SagaLoreTimelinePanel';
@@ -152,25 +161,24 @@ export function SagaWorkspaceCatalogSection({
   }
 
   if (section === 'characters') {
+    const createBtn = canCreate ? (
+      <Button
+        type="button"
+        size="sm"
+        className="min-h-11"
+        onClick={() => onNavigate('character-editor')}
+        data-saga-characters-create
+      >
+        <Plus className="mr-2 size-4" aria-hidden />
+        Neuer Charakter
+      </Button>
+    ) : null;
+
     return (
-      <div className="space-y-4" data-saga-catalog="characters">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm text-muted-foreground">
-            Spieler-Charaktere dieser Saga. Gebundene Einträge erscheinen unten; Library-Charaktere
-            helfen beim Anlegen.
-          </p>
-          {canCreate ? (
-            <Button
-              type="button"
-              className="min-h-11"
-              onClick={() => onNavigate('character-editor')}
-              data-saga-characters-create
-            >
-              <Plus className="mr-2 size-4" />
-              Neuer Charakter
-            </Button>
-          ) : null}
-        </div>
+      <div className="@container w-full min-w-0 space-y-4" data-saga-catalog="characters">
+        <p className="text-sm text-muted-foreground">
+          Spieler-Charaktere dieser Saga. Gebundene Einträge und Library-Charaktere.
+        </p>
         {error ? (
           <p className="text-sm text-destructive" role="alert">
             {error}
@@ -191,40 +199,50 @@ export function SagaWorkspaceCatalogSection({
           bindings={bindings}
           projectId={projectId}
           canReveal={canReveal}
+          storageKey="sagatree_saga_hub_characters_bindings_view_mode"
+          toolbarRight={
+            <div className="flex flex-wrap items-center gap-2">
+              {createBtn}
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="min-h-11"
+                onClick={() => onNavigate(pathForLibraryTab('characters'))}
+              >
+                In Bibliothek anzeigen
+              </Button>
+            </div>
+          }
         />
         {!isLoading && characters.length === 0 && bindings.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border p-6 text-center">
             <User className="mx-auto mb-2 size-8 text-muted-foreground" aria-hidden />
             <p className="text-sm text-muted-foreground">Noch keine Spieler-Charaktere.</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">{createBtn}</div>
           </div>
         ) : null}
-        <ul className="space-y-2" data-saga-characters-list>
-          {characters.map((c) => (
-            <li
-              key={c.id}
-              className="flex min-h-11 items-center justify-between gap-2 rounded-lg border border-border px-3 py-2"
-            >
-              <span className="truncate text-sm font-medium">{c.name}</span>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className="min-h-11 shrink-0"
-                onClick={() => onNavigate('character-editor')}
+        {characters.length > 0 ? (
+          <ul className="space-y-2" data-saga-characters-list>
+            {characters.map((c) => (
+              <li
+                key={c.id}
+                className="flex min-h-11 items-center justify-between gap-2 rounded-lg border border-border px-3 py-2"
               >
-                Öffnen
-              </Button>
-            </li>
-          ))}
-        </ul>
-        <Button
-          type="button"
-          variant="ghost"
-          className="min-h-11"
-          onClick={() => onNavigate(pathForLibraryTab('characters'))}
-        >
-          In Bibliothek anzeigen
-        </Button>
+                <span className="truncate text-sm font-medium">{c.name}</span>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="min-h-11 shrink-0"
+                  onClick={() => onNavigate('character-editor')}
+                >
+                  Öffnen
+                </Button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     );
   }
@@ -282,39 +300,98 @@ export function SagaWorkspaceCatalogSection({
   );
 }
 
+function assetKindLabelDe(kind: SagaAssetKind | string): string {
+  switch (kind) {
+    case 'character':
+      return 'Charakter';
+    case 'npc':
+      return 'NSC';
+    case 'item':
+      return 'Gegenstand';
+    case 'quest':
+      return 'Quest';
+    default:
+      return String(kind);
+  }
+}
+
+function revealChip(reveal: SagaAssetBindingVm['reveal']): EntityBrowserChip {
+  if (reveal === 'party') return { label: revealLabelDe(reveal), tone: 'success' };
+  if (reveal === 'gm_only') return { label: revealLabelDe(reveal), tone: 'native' };
+  return { label: revealLabelDe(reveal), tone: 'muted' };
+}
+
+type BindingBrowserItem = SagaAssetBindingVm & { id: string };
+
 function BindingList(props: {
   bindings: SagaAssetBindingVm[];
   projectId: string | null;
   canReveal: boolean;
+  storageKey: string;
+  toolbarRight?: ReactNode;
 }) {
-  if (props.bindings.length === 0) {
+  const items = useMemo<BindingBrowserItem[]>(
+    () => props.bindings.map((b) => ({ ...b, id: b.id })),
+    [props.bindings],
+  );
+
+  if (items.length === 0) {
     return null;
   }
+
+  const renderItem = (binding: BindingBrowserItem, context: EntityBrowserRenderContext) => {
+    const title = binding.label.trim() || binding.assetId;
+    const chips: EntityBrowserChip[] = [
+      { label: assetKindLabelDe(binding.assetKind), tone: 'muted' },
+      revealChip(binding.reveal),
+    ];
+    const imageUrl = resolveSagaBindingImageSrc(binding.assetKind, binding.assetId) ?? undefined;
+    return (
+      <EntityBrowserCard
+        title={title}
+        meta={assetKindLabelDe(binding.assetKind)}
+        metaChips={chips}
+        imageUrl={imageUrl}
+        imageFallback={title}
+        imageAlt={`${assetKindLabelDe(binding.assetKind)} ${title}`}
+        imageAspect="square"
+        imageObjectFit={resolveSagaBindingImageObjectFit(binding.assetKind)}
+        variant={context.variant}
+        isCenter={context.isCenter}
+        actions={
+          props.canReveal && props.projectId ? (
+            <div
+              className="w-full"
+              onClick={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
+            >
+              <SagaBindingRevealControl
+                projectId={props.projectId}
+                bindingId={binding.id}
+                reveal={binding.reveal}
+              />
+            </div>
+          ) : undefined
+        }
+      />
+    );
+  };
+
   return (
-    <ul className="space-y-2" data-saga-bindings-list>
-      {props.bindings.map((b) => (
-        <li
-          key={b.id}
-          className="flex min-h-11 flex-wrap items-center justify-between gap-2 rounded-lg border border-border px-3 py-2"
-        >
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">
-              {b.label || b.assetId}
-            </p>
-            <p className="text-xs text-muted-foreground">{b.assetKind}</p>
-          </div>
-          {props.canReveal && props.projectId ? (
-            <SagaBindingRevealControl
-              projectId={props.projectId}
-              bindingId={b.id}
-              reveal={b.reveal}
-            />
-          ) : (
-            <span className="text-xs text-muted-foreground">{b.reveal}</span>
-          )}
-        </li>
-      ))}
-    </ul>
+    <div data-saga-bindings-list>
+      <EntityBrowser
+        storageKey={props.storageKey}
+        items={items}
+        getId={(item) => item.id}
+        renderItem={renderItem}
+        toolbarLeft={
+          <span>
+            {items.length === 1 ? '1 Eintrag' : `${items.length} Einträge`}
+          </span>
+        }
+        toolbarRight={props.toolbarRight}
+      />
+    </div>
   );
 }
 
@@ -333,8 +410,30 @@ function CatalogWithBindings(props: {
   secondaryLabel?: string;
   onSecondary?: () => void;
 }) {
+  const actionButtons = (
+    <>
+      {props.primaryLabel && props.onPrimary ? (
+        <Button type="button" size="sm" className="min-h-11" onClick={props.onPrimary}>
+          <Plus className="mr-2 size-4" aria-hidden />
+          {props.primaryLabel}
+        </Button>
+      ) : null}
+      {props.secondaryLabel && props.onSecondary ? (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="min-h-11"
+          onClick={props.onSecondary}
+        >
+          {props.secondaryLabel}
+        </Button>
+      ) : null}
+    </>
+  );
+
   return (
-    <div className="space-y-4" data-saga-catalog={props.testId}>
+    <div className="@container w-full min-w-0 space-y-4" data-saga-catalog={props.testId}>
       {props.bindingsError ? (
         <p className="text-sm text-destructive" role="alert">
           {props.bindingsError}
@@ -346,44 +445,21 @@ function CatalogWithBindings(props: {
           Katalog wird geladen…
         </div>
       ) : null}
-      <BindingList
-        bindings={props.bindings}
-        projectId={props.projectId}
-        canReveal={props.canReveal}
-      />
       {!props.bindingsLoading && props.bindings.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-6 text-center">
           {props.icon}
           <p className="text-sm font-medium text-foreground">{props.title}</p>
           <p className="mt-1 text-sm text-muted-foreground">{props.body}</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {props.primaryLabel && props.onPrimary ? (
-              <Button type="button" className="min-h-11" onClick={props.onPrimary}>
-                <Plus className="mr-2 size-4" />
-                {props.primaryLabel}
-              </Button>
-            ) : null}
-            {props.secondaryLabel && props.onSecondary ? (
-              <Button type="button" variant="outline" className="min-h-11" onClick={props.onSecondary}>
-                {props.secondaryLabel}
-              </Button>
-            ) : null}
-          </div>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">{actionButtons}</div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
-          {props.primaryLabel && props.onPrimary ? (
-            <Button type="button" className="min-h-11" onClick={props.onPrimary}>
-              <Plus className="mr-2 size-4" />
-              {props.primaryLabel}
-            </Button>
-          ) : null}
-          {props.secondaryLabel && props.onSecondary ? (
-            <Button type="button" variant="outline" className="min-h-11" onClick={props.onSecondary}>
-              {props.secondaryLabel}
-            </Button>
-          ) : null}
-        </div>
+        <BindingList
+          bindings={props.bindings}
+          projectId={props.projectId}
+          canReveal={props.canReveal}
+          storageKey={`sagatree_saga_hub_${props.testId}_view_mode`}
+          toolbarRight={<div className="flex flex-wrap items-center gap-2">{actionButtons}</div>}
+        />
       )}
     </div>
   );

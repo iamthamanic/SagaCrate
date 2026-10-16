@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="de" class="dark" style="color-scheme: dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SagaTree · Saga Workspace (Library-UI)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* Tokens = globals.css .dark + Library Tabs / EntityBrowser patterns */
+    :root {
+      --background: #0F172A;
+      --foreground: #F1F5F9;
+      --card: #1E293B;
+      --muted: #1E293B;
+      --muted-foreground: #94A3B8;
+      --primary: #06B6D4;
+      --primary-foreground: #0F172A;
+      --accent: #F59E0B;
+      --accent-foreground: #0F172A;
+      --border: #334155;
+      --radius: 0.5rem;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --font: "Darker Grotesque", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.45;
+      background: var(--background);
+      color: var(--foreground);
+      touch-action: manipulation;
+    }
+    button, input { font-family: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    .shell { display: flex; min-height: 100dvh; }
+    .rail {
+      width: 72px; flex-shrink: 0; border-right: 1px solid var(--border);
+      background: #0B1220; display: flex; flex-direction: column; align-items: center;
+      padding: 12px 0; gap: 8px;
+    }
+    .rail-btn {
+      width: 44px; height: 44px; border-radius: 8px; border: 1px solid transparent;
+      background: transparent; color: var(--muted-foreground); display: grid; place-items: center;
+    }
+    .rail-btn[aria-current="page"] {
+      background: rgba(6, 182, 212, 0.14); color: var(--primary);
+      border-color: rgba(6, 182, 212, 0.35);
+    }
+    .rail-btn:hover { color: var(--accent); }
+    .rail-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .rail-spacer { flex: 1; }
+    .rail svg { width: 20px; height: 20px; }
+
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+    .page {
+      flex: 1; min-height: 0; overflow: auto; overflow-x: hidden;
+      padding: 16px 16px calc(24px + var(--safe-b));
+      container-type: inline-size; container-name: main;
+    }
+    @container main (min-width: 48rem) {
+      .page { padding: 32px 32px calc(32px + var(--safe-b)); }
+    }
+    .page-inner { margin: 0 auto; max-width: 80rem; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+    @container main (min-width: 48rem) {
+      .page-inner { gap: 24px; }
+    }
+
+    .page-title { margin: 0; font-size: 1.25rem; font-weight: 700; }
+    @container main (min-width: 48rem) {
+      .page-title { font-size: 1.5rem; }
+    }
+    .page-sub { margin: 4px 0 0; color: var(--muted-foreground); font-size: 0.875rem; }
+    @container main (min-width: 48rem) {
+      .page-sub { font-size: 1rem; }
+    }
+    .id-row {
+      display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 8px;
+    }
+    .meta-chip {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px;
+      border-radius: 6px; border: 1px solid var(--border); background: var(--card);
+      font-family: var(--mono); font-size: 12px; color: var(--muted-foreground);
+    }
+    .role-pill {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px;
+      border-radius: 999px; background: rgba(6, 182, 212, 0.14); color: var(--primary);
+      font-size: 12px; font-weight: 600;
+    }
+
+    /* Search — Library Input */
+    .search-wrap { position: relative; min-width: 0; }
+    .search-wrap svg {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--muted-foreground); pointer-events: none;
+    }
+    .search {
+      width: 100%; min-height: 40px; padding: 0 12px 0 40px;
+      border-radius: var(--radius); border: 1px solid var(--border);
+      background: var(--card); color: var(--foreground); font: inherit;
+    }
+    .search::placeholder { color: var(--muted-foreground); }
+    .search:focus {
+      outline: none; border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+    }
+
+    /*
+      Library TabsList / TabsTrigger
+      TabsList: bg-muted/60 border rounded-lg p-1 grid
+      TabsTrigger active: bg-primary text-primary-foreground (dark on cyan)
+    */
+    .tabs { display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0; }
+    .tabs-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      height: auto;
+      padding: 4px;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(241, 245, 249, 0.1);
+      background: rgba(30, 41, 59, 0.6);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      color: var(--muted-foreground);
+    }
+    @container main (min-width: 36rem) {
+      .tabs-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @container main (min-width: 60rem) {
+      .tabs-list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+
+    .tabs-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      min-width: 0;
+      max-width: 100%;
+      padding: 0 8px;
+      border-radius: calc(var(--radius) - 2px);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.12s;
+    }
+    @container main (min-width: 40rem) {
+      .tabs-trigger { font-size: 14px; gap: 8px; padding: 0 10px; }
+    }
+    .tabs-trigger svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .tabs-trigger span { truncate: true; overflow: hidden; text-overflow: ellipsis; }
+    .tabs-trigger:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+    .tabs-trigger[aria-selected="true"] {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .tabs-trigger[aria-selected="true"]:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+    .tabs-trigger:active { transform: scale(0.98); }
+    .tabs-trigger:focus-visible {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+    }
+
+    .hint {
+      margin: 0; padding: 8px 12px; border-radius: 8px;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--muted-foreground); font-size: 13px;
+    }
+    .hint strong { color: var(--foreground); }
+
+    /* EntityBrowser toolbar */
+    .eb-toolbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 12px;
+    }
+    .eb-count { font-size: 14px; color: var(--muted-foreground); font-weight: 500; }
+    .eb-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 36px; padding: 0 12px; border-radius: calc(var(--radius) - 2px);
+      border: 1px solid transparent; font-size: 14px; font-weight: 600;
+    }
+    .btn-sm { min-height: 32px; padding: 0 10px; font-size: 13px; }
+    .btn-primary {
+      background: var(--primary); color: var(--primary-foreground);
+    }
+    .btn-primary:hover { background: var(--accent); color: var(--accent-foreground); }
+    .btn-ghost {
+      background: transparent; border-color: rgba(241, 245, 249, 0.2); color: var(--foreground);
+    }
+    .btn-ghost:hover { border-color: rgba(245, 158, 11, 0.5); color: var(--accent); background: rgba(245, 158, 11, 0.1); }
+    .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .view-toggle {
+      display: flex; align-items: center; gap: 4px;
+      padding: 4px; border-radius: 0.5rem; border: 1px solid var(--border);
+    }
+    .view-toggle button {
+      width: 32px; height: 32px; border: 0; border-radius: 6px;
+      background: transparent; color: var(--muted-foreground);
+      display: grid; place-items: center;
+    }
+    .view-toggle button[aria-pressed="true"] {
+      background: var(--background); color: var(--foreground);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .view-toggle button:hover { color: var(--accent); }
+    .view-toggle button:focus-visible { outline: 2px solid var(--primary); }
+
+    /* EntityBrowser cards — list + grid */
+    .card-list { display: flex; flex-direction: column; gap: 10px; }
+    .card-grid {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    @container main (min-width: 36rem) {
+      .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @container main (min-width: 60rem) {
+      .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .eb-card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      overflow: hidden;
+      transition: border-color 0.15s;
+      text-align: left;
+      color: inherit;
+      width: 100%;
+      padding: 0;
+    }
+    .eb-card:hover { border-color: rgba(6, 182, 212, 0.4); }
+    .eb-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .eb-card.is-list {
+      display: flex; align-items: center; gap: 12px; padding: 12px;
+    }
+    .eb-card.is-list .thumb {
+      width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0;
+      background: linear-gradient(135deg, #334155, #1E293B);
+      border: 1px solid var(--border);
+      display: grid; place-items: center; font-weight: 700; color: var(--primary); font-size: 14px;
+    }
+    .eb-card.is-list .body { min-width: 0; flex: 1; }
+    .eb-card.is-list .actions { flex-shrink: 0; }
+
+    .eb-card.is-grid { display: flex; flex-direction: column; }
+    .eb-card.is-grid .stage {
+      aspect-ratio: 1; background: linear-gradient(145deg, #243247, #1E293B);
+      border-bottom: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 28px; font-weight: 700; color: var(--primary);
+    }
+    .eb-card.is-grid .body { padding: 12px; }
+
+    .eb-title { margin: 0; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .eb-meta { margin: 2px 0 0; font-size: 12px; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .chip {
+      display: inline-flex; align-items: center; min-height: 22px; padding: 0 8px;
+      border-radius: 6px; border: 1px solid var(--border);
+      font-size: 11px; font-weight: 600; color: var(--muted-foreground);
+    }
+    .chip.is-public { color: var(--primary); border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.12); }
+    .chip.is-gm { color: var(--accent); border-color: rgba(245, 158, 11, 0.4); }
+
+    /* Overview hub still story-first */
+    .hero {
+      display: grid; gap: 16px; padding: 20px;
+      border: 1px solid var(--border); border-radius: 12px; background: var(--card);
+      background-image: radial-gradient(120% 80% at 0% 0%, rgba(6, 182, 212, 0.12), transparent 55%);
+    }
+    @container main (min-width: 40rem) {
+      .hero { grid-template-columns: 1fr auto; align-items: end; }
+    }
+    .blurb { margin: 0; max-width: 62ch; color: var(--muted-foreground); font-size: 15px; font-weight: 500; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      min-height: 28px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--border);
+      color: var(--muted-foreground); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center;
+    }
+    .progress {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .progress-label { font-size: 13px; font-weight: 600; color: var(--muted-foreground); }
+    .progress-track { flex: 1; min-width: 120px; height: 6px; border-radius: 999px; background: #0F172A; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: var(--primary); }
+    .progress-nums { font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); }
+    .cta-block { display: flex; flex-direction: column; gap: 8px; min-width: min(100%, 220px); }
+    .cta-hint { margin: 0; font-size: 13px; color: var(--muted-foreground); text-align: center; }
+    .btn-lg { min-height: 44px; padding: 0 18px; font-size: 16px; font-weight: 700; border-radius: 8px; }
+
+    .panel {
+      border: 1px solid var(--border); border-radius: 12px; background: var(--card); margin-top: 12px;
+    }
+    .panel-head {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+      padding: 14px 16px 10px; align-items: baseline;
+    }
+    .panel-title { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    .panel-sub { margin: 0; font-size: 13px; color: var(--muted-foreground); }
+    .next-up {
+      margin: 0 12px 12px; padding: 14px; border-radius: 10px;
+      border: 1px solid rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.14);
+      display: grid; gap: 10px;
+    }
+    @container main (min-width: 36rem) {
+      .next-up { grid-template-columns: auto 1fr auto; align-items: center; }
+    }
+    .ep-num { font-family: var(--mono); font-size: 12px; color: var(--primary); }
+    .ep-title { margin: 0; font-weight: 700; font-size: 15px; }
+    .ep-meta { margin: 2px 0 0; font-size: 13px; color: var(--muted-foreground); }
+    .status { color: var(--accent); font-weight: 600; font-size: 12px; }
+
+    .map-preview {
+      height: 160px; margin: 0 0 12px; border-radius: 10px; border: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(6, 182, 212, 0.08), transparent 40%),
+        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(51, 65, 85, 0.5) 18px, rgba(51, 65, 85, 0.5) 19px),
+        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(51, 65, 85, 0.5) 18px, rgba(51, 65, 85, 0.5) 19px),
+        #0F172A;
+      display: grid; place-items: center; color: var(--muted-foreground); font-size: 13px; font-weight: 600;
+    }
+
+    .form-stack { display: grid; gap: 14px; padding: 16px; }
+    .field label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+    .field select {
+      width: 100%; min-height: 44px; padding: 0 12px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: #0F172A; color: var(--foreground); font: inherit;
+    }
+    .help { margin: 6px 0 0; font-size: 12px; color: var(--muted-foreground); }
+
+    .timeline { list-style: none; margin: 0; padding: 0 16px 16px; }
+    .timeline li { position: relative; padding: 12px 0 12px 18px; border-left: 2px solid var(--border); }
+    .timeline li::before {
+      content: ""; position: absolute; left: -5px; top: 18px; width: 8px; height: 8px;
+      border-radius: 50%; background: var(--primary);
+    }
+    .tl-kind { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary); }
+    .tl-title { margin: 2px 0; font-weight: 700; font-size: 14px; }
+    .tl-body { margin: 0; font-size: 13px; color: var(--muted-foreground); }
+
+    .grid-2 { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @container main (min-width: 48rem) {
+      .grid-2 { grid-template-columns: 1.2fr 0.8fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tabs-trigger, .btn, .eb-card { transition: none; }
+      .tabs-trigger:active { transform: none; }
+    }
+    @media (max-width: 639px) { .rail { width: 56px; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="App-Navigation">
+      <button class="rail-btn" type="button" aria-label="Start">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </button>
+      <button class="rail-btn" type="button" aria-current="page" aria-label="Bibliothek">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn" type="button" aria-label="Abmelden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      </button>
+    </aside>
+
+    <div class="main">
+      <div class="page">
+        <div class="page-inner">
+          <header>
+            <h1 class="page-title">Das Flüstern unter Dornhain</h1>
+            <p class="page-sub">Saga-Arbeitsbereich · Geschichte, Gruppe und Katalog</p>
+            <div class="id-row">
+              <span class="meta-chip" translate="no">SA-E979J</span>
+              <span class="role-pill">Du bist Spielleitung</span>
+            </div>
+          </header>
+
+          <p class="hint"><strong>Prototype an Library angeglichen:</strong> TabsList-Grid + Icons (wie Bibliothek), EntityBrowser-Toolbar, Card-Liste/Grid.</p>
+
+          <div class="search-wrap" data-search-for="catalog">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input class="search" type="search" placeholder="Suche in dieser Saga…" spellcheck="false" />
+          </div>
+
+          <div class="tabs" data-slot="tabs">
+            <div class="tabs-list" role="tablist" aria-label="Saga-Bereiche" data-saga-workspace-nav>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="overview" aria-selected="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Übersicht</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="characters" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Spieler-Charaktere</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="world" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <span>Welt</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="npc-creatures" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>NSCs / Kreaturen</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="items" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span>Gegenstände</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="quests" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1V6.5L15.5 2z"/><path d="M3 7.6v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8"/><path d="M15 2v5h5"/></svg>
+                <span>Quests</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="lore" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <span>Lore / Verlauf</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="sessions" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Sessions</span>
+              </button>
+              <button type="button" role="tab" class="tabs-trigger" data-screen="settings" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span>Einstellungen</span>
+              </button>
+            </div>
+
+            <!-- OVERVIEW -->
+            <section data-screen-panel="overview" role="tabpanel">
+              <div class="hero">
+                <div>
+                  <p class="blurb">Fantasy-Mystery-Sandbox für einen Abend (60–90&nbsp;Min). Die Gruppe folgt Gerüchten unter Dornhain, bevor die Stadt erwacht.</p>
+                  <div class="tags">
+                    <span class="tag">Fassung 1.0</span>
+                    <span class="tag">Fantasy · Mystery</span>
+                    <span class="tag">60–90 Min</span>
+                  </div>
+                  <div class="progress">
+                    <span class="progress-label">Gruppenfortschritt</span>
+                    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="18"><div class="progress-fill"></div></div>
+                    <span class="progress-nums">0 / 18</span>
+                  </div>
+                </div>
+                <div class="cta-block">
+                  <button type="button" class="btn btn-primary btn-lg" data-goto="sessions">Session hosten</button>
+                  <p class="cta-hint">Startet Episode #1 · Wartend</p>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div class="panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2 class="panel-title">Nächste Episode</h2>
+                      <p class="panel-sub">Danach die letzten Abende</p>
+                    </div>
+                  </div>
+                  <div class="next-up">
+                    <span class="ep-num">#1</span>
+                    <div>
+                      <p class="ep-title">Das Flüstern unter Dornhain E001</p>
+                      <p class="ep-meta"><span class="status">Wartend</span></p>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-goto="sessions">Öffnen</button>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head">
+                    <div>
+                      <h2 class="panel-title">Ensemble</h2>
+                      <p class="panel-sub">3 aktiv</p>
+                    </div>
+                  </div>
+                  <div class="card-list" style="padding: 0 12px 12px">
+                    <div class="eb-card is-list"><div class="thumb">SL</div><div class="body"><p class="eb-title">Ben</p><p class="eb-meta">Spielleitung · du</p></div></div>
+                    <div class="eb-card is-list"><div class="thumb">M</div><div class="body"><p class="eb-title">Mira Dornfeld</p><p class="eb-meta">Spieler · Scout</p></div></div>
+                    <div class="eb-card is-list"><div class="thumb">T</div><div class="body"><p class="eb-title">Torven Grau</p><p class="eb-meta">Spieler · Adept</p></div></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- CHARACTERS — EntityBrowser pattern -->
+            <section data-screen-panel="characters" role="tabpanel" hidden>
+              <div class="eb-toolbar">
+                <span class="eb-count">3 Charaktere</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    Neuer Charakter
+                  </button>
+                  <div class="view-toggle" role="group" aria-label="Ansicht wählen" data-view-for="characters">
+                    <button type="button" aria-label="Listenansicht" aria-pressed="true" data-view="list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></button>
+                    <button type="button" aria-label="Grid-Ansicht" aria-pressed="false" data-view="grid"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+                    <button type="button" aria-label="Karussell-Ansicht" aria-pressed="false" data-view="carousel"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="3" height="8" rx="0.5" fill="currentColor" opacity="0.6"/><rect x="6" y="2" width="4" height="12" rx="0.5" fill="currentColor"/><rect x="12" y="4" width="3" height="8" rx="0.5" fill="currentColor" opacity="0.6"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-list" data-cards="characters">
+                <button type="button" class="eb-card is-list">
+                  <div class="thumb">M</div>
+                  <div class="body">
+                    <p class="eb-title">Mira Dornfeld</p>
+                    <p class="eb-meta">Level 2 · Mensch · Scout · Lea</p>
+                    <div class="chips"><span class="chip is-public">Sichtbar</span></div>
+                  </div>
+                  <div class="actions"><span class="btn btn-ghost btn-sm">Bearbeiten</span></div>
+                </button>
+                <button type="button" class="eb-card is-list">
+                  <div class="thumb">T</div>
+                  <div class="body">
+                    <p class="eb-title">Torven Grau</p>
+                    <p class="eb-meta">Level 2 · Zwerg · Adept · Jonas</p>
+                    <div class="chips"><span class="chip is-public">Sichtbar</span></div>
+                  </div>
+                  <div class="actions"><span class="btn btn-ghost btn-sm">Bearbeiten</span></div>
+                </button>
+                <button type="button" class="eb-card is-list">
+                  <div class="thumb">?</div>
+                  <div class="body">
+                    <p class="eb-title">Noch kein Charakter</p>
+                    <p class="eb-meta">Spieler: Sam · Einladung offen</p>
+                    <div class="chips"><span class="chip">Offen</span></div>
+                  </div>
+                  <div class="actions"><span class="btn btn-ghost btn-sm">Zuweisen</span></div>
+                </button>
+              </div>
+            </section>
+
+            <!-- WORLD -->
+            <section data-screen-panel="world" role="tabpanel" hidden>
+              <div class="map-preview">Kachelkarte · Partei: Kellergewölbe</div>
+              <div class="eb-toolbar">
+                <span class="eb-count">5 Einträge</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">Ort / Karte binden</button>
+                  <div class="view-toggle" role="group" aria-label="Ansicht wählen" data-view-for="world">
+                    <button type="button" aria-label="Listenansicht" aria-pressed="true" data-view="list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></button>
+                    <button type="button" aria-label="Grid-Ansicht" aria-pressed="false" data-view="grid"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-list" data-cards="world">
+                <button type="button" class="eb-card is-list"><div class="thumb">KG</div><div class="body"><p class="eb-title">Kellergewölbe</p><p class="eb-meta">Location · Partei hier</p><div class="chips"><span class="chip is-public">Öffentlich</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">GF</div><div class="body"><p class="eb-title">Gasthaus Zum Flüstern</p><p class="eb-meta">Location</p><div class="chips"><span class="chip is-public">Öffentlich</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">KA</div><div class="body"><p class="eb-title">Krypta der Alten</p><p class="eb-meta">Location</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">DU</div><div class="body"><p class="eb-title">Dornhain Überblick</p><p class="eb-meta">Map</p><div class="chips"><span class="chip is-public">Öffentlich</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">UP</div><div class="body"><p class="eb-title">Unterstadt Plan</p><p class="eb-meta">Map</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+              </div>
+            </section>
+
+            <!-- NPC -->
+            <section data-screen-panel="npc-creatures" role="tabpanel" hidden>
+              <div class="eb-toolbar">
+                <span class="eb-count">4 NPCs &amp; Kreaturen</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">+ NSC anlegen</button>
+                  <div class="view-toggle" role="group" aria-label="Ansicht wählen" data-view-for="npc-creatures">
+                    <button type="button" aria-label="Listenansicht" aria-pressed="false" data-view="list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></button>
+                    <button type="button" aria-label="Grid-Ansicht" aria-pressed="true" data-view="grid"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-grid" data-cards="npc-creatures">
+                <button type="button" class="eb-card is-grid"><div class="stage">E</div><div class="body"><p class="eb-title">Wirtin Elsbeth</p><p class="eb-meta">NSC · Verbündet</p><div class="chips"><span class="chip is-public">Sichtbar</span></div></div></button>
+                <button type="button" class="eb-card is-grid"><div class="stage">C</div><div class="body"><p class="eb-title">Nachtwächter Corren</p><p class="eb-meta">NSC · Neutral</p><div class="chips"><span class="chip is-public">Sichtbar</span></div></div></button>
+                <button type="button" class="eb-card is-grid"><div class="stage">F</div><div class="body"><p class="eb-title">Das Flüstern</p><p class="eb-meta">Kreatur · Geheim</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+                <button type="button" class="eb-card is-grid"><div class="stage">K</div><div class="body"><p class="eb-title">Kellerkrabbler</p><p class="eb-meta">Kreatur · Kampf</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+              </div>
+            </section>
+
+            <!-- ITEMS -->
+            <section data-screen-panel="items" role="tabpanel" hidden>
+              <div class="eb-toolbar">
+                <span class="eb-count">3 Gegenstände</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">+ Gegenstand</button>
+                  <div class="view-toggle" role="group" aria-label="Ansicht wählen" data-view-for="items">
+                    <button type="button" aria-label="Listenansicht" aria-pressed="true" data-view="list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></button>
+                    <button type="button" aria-label="Grid-Ansicht" aria-pressed="false" data-view="grid"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-list" data-cards="items">
+                <button type="button" class="eb-card is-list"><div class="thumb">KS</div><div class="body"><p class="eb-title">Rostiger Kellerschlüssel</p><p class="eb-meta">Quest-Item · bei Mira</p><div class="chips"><span class="chip is-public">Sichtbar</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">LW</div><div class="body"><p class="eb-title">Laterne der Wache</p><p class="eb-meta">Ausrüstung</p><div class="chips"><span class="chip is-public">Sichtbar</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">SA</div><div class="body"><p class="eb-title">Siegel der Alten</p><p class="eb-meta">Plot · versteckt</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+              </div>
+            </section>
+
+            <!-- QUESTS -->
+            <section data-screen-panel="quests" role="tabpanel" hidden>
+              <div class="eb-toolbar">
+                <span class="eb-count">3 Quests</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">+ Quest anlegen</button>
+                  <button type="button" class="btn btn-ghost btn-sm">Nur offene</button>
+                </div>
+              </div>
+              <div class="card-list" data-cards="quests">
+                <button type="button" class="eb-card is-list"><div class="thumb">!</div><div class="body"><p class="eb-title">Das Flüstern finden</p><p class="eb-meta">Haupt · 0/3 Hinweise</p><div class="chips"><span class="chip is-public">Aktiv</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">!</div><div class="body"><p class="eb-title">Elsbeths Kellerlicht</p><p class="eb-meta">Neben</p><div class="chips"><span class="chip is-public">Aktiv</span></div></div></button>
+                <button type="button" class="eb-card is-list"><div class="thumb">!</div><div class="body"><p class="eb-title">Wer zahlt die Wache?</p><p class="eb-meta">Neben · Vorbereitung</p><div class="chips"><span class="chip is-gm">Nur SL</span></div></div></button>
+              </div>
+            </section>
+
+            <!-- LORE -->
+            <section data-screen-panel="lore" role="tabpanel" hidden>
+              <div class="panel" style="margin:0">
+                <div class="panel-head">
+                  <div>
+                    <h2 class="panel-title">Zeitlinie</h2>
+                    <p class="panel-sub">Freigegebene Recaps &amp; Wissen</p>
+                  </div>
+                </div>
+                <ul class="timeline">
+                  <li><div class="tl-kind">Wissen</div><p class="tl-title">Gerücht: Stimmen unter dem Markt</p><p class="tl-body">Händler sprechen von Klopfen in den Abwasserkanälen.</p></li>
+                  <li><div class="tl-kind">Lore</div><p class="tl-title">Dornhain · Kurze Stadtnotiz</p><p class="tl-body">Handelsstadt am Fluss. Die Unterstadt ist älter als die Mauern darüber.</p></li>
+                  <li><div class="tl-kind">Recap</div><p class="tl-title">Noch kein Session-Recap</p><p class="tl-body">Erscheint nach der ersten abgeschlossenen Episode.</p></li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- SESSIONS -->
+            <section data-screen-panel="sessions" role="tabpanel" hidden>
+              <div class="eb-toolbar">
+                <span class="eb-count">0 von 18 abgeschlossen</span>
+                <div class="eb-actions">
+                  <button type="button" class="btn btn-primary btn-sm">Session hosten</button>
+                  <button type="button" class="btn btn-ghost btn-sm">Beitreten</button>
+                </div>
+              </div>
+              <div class="panel" style="margin:0">
+                <div class="next-up" style="margin-top:12px">
+                  <span class="ep-num">#1</span>
+                  <div>
+                    <p class="ep-title">Das Flüstern unter Dornhain E001</p>
+                    <p class="ep-meta"><span class="status">Wartend</span></p>
+                  </div>
+                  <button type="button" class="btn btn-primary">Vorbereiten</button>
+                </div>
+                <div class="card-list" style="padding:0 12px 12px">
+                  <button type="button" class="eb-card is-list"><div class="thumb">#2</div><div class="body"><p class="eb-title">Das Flüstern unter Dornhain E002</p><p class="eb-meta">Wartend</p></div></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section data-screen-panel="settings" role="tabpanel" hidden>
+              <div class="panel" style="margin:0 0 12px">
+                <div class="panel-head"><div><h2 class="panel-title">Visueller Stil</h2><p class="panel-sub">Look-Profil für Szenen</p></div></div>
+                <div class="form-stack">
+                  <div class="field">
+                    <label for="look">Look-Profil</label>
+                    <select id="look"><option>Dornhain Dunkel</option><option>Nebelwald</option></select>
+                    <p class="help">Gilt für neue Szenen in dieser Saga.</p>
+                  </div>
+                  <button type="button" class="btn btn-primary" style="justify-self:start">Look speichern</button>
+                </div>
+              </div>
+              <div class="panel" style="margin:0">
+                <div class="panel-head"><div><h2 class="panel-title">Rechte</h2><p class="panel-sub">Bundle pro Mitglied</p></div></div>
+                <div class="card-list" style="padding:0 12px 12px">
+                  <div class="eb-card is-list"><div class="thumb">B</div><div class="body"><p class="eb-title">Ben</p><p class="eb-meta">du</p></div><select aria-label="Bundle Ben" style="min-height:36px;border-radius:6px;border:1px solid var(--border);background:#0F172A;color:var(--foreground);padding:0 8px"><option selected>Spielleitung</option><option>Spieler</option></select></div>
+                  <div class="eb-card is-list"><div class="thumb">L</div><div class="body"><p class="eb-title">Lea</p><p class="eb-meta">Mitglied</p></div><select aria-label="Bundle Lea" style="min-height:36px;border-radius:6px;border:1px solid var(--border);background:#0F172A;color:var(--foreground);padding:0 8px"><option>Spielleitung</option><option selected>Spieler</option></select></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tabs = Array.from(document.querySelectorAll(".tabs-trigger[data-screen]"));
+      const panels = Array.from(document.querySelectorAll("[data-screen-panel]"));
+      const searchWrap = document.querySelector("[data-search-for]");
+      const catalogScreens = new Set(["characters", "world", "npc-creatures", "items", "quests"]);
+
+      function show(id) {
+        tabs.forEach((t) => {
+          const on = t.getAttribute("data-screen") === id;
+          t.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panels.forEach((p) => {
+          p.hidden = p.getAttribute("data-screen-panel") !== id;
+        });
+        if (searchWrap) searchWrap.hidden = !catalogScreens.has(id);
+        history.replaceState(null, "", "#" + id);
+        document.querySelector(".page")?.scrollTo({ top: 0 });
+      }
+
+      tabs.forEach((t) => t.addEventListener("click", () => show(t.getAttribute("data-screen"))));
+      document.querySelectorAll("[data-goto]").forEach((el) => {
+        el.addEventListener("click", () => show(el.getAttribute("data-goto")));
+      });
+
+      document.querySelectorAll(".view-toggle").forEach((group) => {
+        group.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-view]");
+          if (!btn) return;
+          const mode = btn.getAttribute("data-view");
+          const key = group.getAttribute("data-view-for");
+          const container = document.querySelector('[data-cards="' + key + '"]');
+          group.querySelectorAll("[data-view]").forEach((b) => {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+          });
+          if (!container || mode === "carousel") return;
+          const toGrid = mode === "grid";
+          container.classList.toggle("card-grid", toGrid);
+          container.classList.toggle("card-list", !toGrid);
+          container.querySelectorAll(".eb-card").forEach((card) => {
+            card.classList.toggle("is-grid", toGrid);
+            card.classList.toggle("is-list", !toGrid);
+            const thumb = card.querySelector(".thumb");
+            const stage = card.querySelector(".stage");
+            if (toGrid && thumb && !stage) {
+              const s = document.createElement("div");
+              s.className = "stage";
+              s.textContent = (thumb.textContent || "?").trim().slice(0, 2);
+              thumb.replaceWith(s);
+            }
+            if (!toGrid && stage && !thumb) {
+              const t = document.createElement("div");
+              t.className = "thumb";
+              t.textContent = (stage.textContent || "?").trim().slice(0, 2);
+              stage.replaceWith(t);
+            }
+          });
+        });
+      });
+
+      const initial = (location.hash || "#overview").slice(1);
+      const valid = panels.some((p) => p.getAttribute("data-screen-panel") === initial);
+      show(valid ? initial : "overview");
+    })();
+  </script>
+</body>
+</html>

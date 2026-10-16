@@ -50,7 +50,7 @@ export function sessionStatusLabelDe(status: string): string {
 /**
  * Map persisted project-session status to the product lifecycle screen.
  * Extends #276: scheduled→prepare; active/paused→live; completed/cancelled→recap.
- * Unknown / waiting → prepare (safe pre-live default).
+ * Unknown / waiting → prepare (safe pre-live default for neutral /sessions/:id).
  */
 export function resolveLifecycleScreenFromStatus(
   status: ProjectSessionLifecycleStatus | string,
@@ -65,6 +65,18 @@ export function resolveLifecycleScreenFromStatus(
     return resolveNeutralSessionPhase(status);
   }
   return 'prepare';
+}
+
+/**
+ * Saga-hub „Öffnen“ / host entry — play surface, not prepare tooling.
+ * waiting|scheduled → lobby (hosting); active|paused → live; done → recap.
+ */
+export function resolveHubSessionEntryPhase(
+  status: ProjectSessionLifecycleStatus | string,
+): SessionLifecycleScreen {
+  if (status === 'active' || status === 'paused') return 'live';
+  if (status === 'completed' || status === 'cancelled') return 'recap';
+  return 'lobby';
 }
 
 export function buildPreparePrimaryCta(input: {

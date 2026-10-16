@@ -302,6 +302,27 @@ class SessionService {
   }
 
   /**
+   * GM deletes a play session (RLS: "GMs can manage sessions"). Cascades players/runtime.
+   */
+  async deleteSession(sessionId: string): Promise<void> {
+    await this.requireAuthUser();
+    const id = sessionId.trim();
+    if (!id) {
+      throw new Error('Session-ID fehlt');
+    }
+
+    const { error } = await supabase.from(this.tableName).delete().eq('id', id);
+
+    if (error) {
+      throw new Error(
+        error.message.includes('row-level security')
+          ? 'Nur die Spielleitung kann Sessions löschen.'
+          : `Session konnte nicht gelöscht werden: ${error.message}`,
+      );
+    }
+  }
+
+  /**
    * GM creates (and rotates) an opaque invite token for share links (#490).
    */
   async createSessionInvite(sessionId: string): Promise<SessionInviteCreateResult> {

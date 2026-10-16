@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="de" style="color-scheme: dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SagaTree · Saga-Hub Entwurf v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* SagaTree tokens — THEME_GUIDE dark */
+    :root {
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-2: #243247;
+      --border: #334155;
+      --fg: #F1F5F9;
+      --muted: #94A3B8;
+      --cyan: #06B6D4;
+      --cyan-hover: #F59E0B;
+      --cyan-dim: rgba(6, 182, 212, 0.14);
+      --amber: #F59E0B;
+      --danger: #F87171;
+      --ok: #34D399;
+      --radius-ctl: 8px;
+      --radius-card: 12px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+      --font: "Darker Grotesque", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.45;
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { color: var(--amber); }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* App chrome (simplified shell) */
+    .shell {
+      display: flex;
+      min-height: 100dvh;
+      padding-top: var(--safe-t);
+    }
+    .rail {
+      width: 72px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: #0B1220;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 8px;
+    }
+    .rail-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-ctl);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+    }
+    .rail-btn[aria-current="page"] {
+      background: var(--cyan-dim);
+      color: var(--cyan);
+      border-color: rgba(6, 182, 212, 0.35);
+    }
+    .rail-btn:hover { color: var(--amber); border-color: rgba(245, 158, 11, 0.35); }
+    .rail-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .rail-spacer { flex: 1; }
+    .rail svg { width: 20px; height: 20px; }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top bar: identity + primary nav (Jakob: campaign hub) */
+    .topbar {
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #121a2b 0%, var(--bg) 100%);
+      padding: 12px 16px 0;
+    }
+    @container main (min-width: 40rem) {
+      .topbar { padding-left: 24px; padding-right: 24px; }
+    }
+
+    .identity {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px 16px;
+      margin-bottom: 12px;
+    }
+    .identity-left { min-width: 0; flex: 1; }
+    .kicker {
+      margin: 0 0 2px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 12px;
+    }
+    .story-title {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+      font-weight: 700;
+      line-height: 1.15;
+      text-wrap: balance;
+    }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .meta-chip button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 4px;
+      border-radius: 4px;
+      min-width: 28px;
+      min-height: 28px;
+    }
+    .meta-chip button:hover { color: var(--amber); }
+    .meta-chip button:focus-visible { outline: 2px solid var(--cyan); }
+
+    .role-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--cyan-dim);
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Primary nav: 3 destinations, not 9 pills (Hick) */
+    .nav-primary {
+      display: flex;
+      align-items: stretch;
+      gap: 4px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding-bottom: 0;
+      scrollbar-width: none;
+    }
+    .nav-primary::-webkit-scrollbar { display: none; }
+    .nav-tab {
+      position: relative;
+      flex: 0 0 auto;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: var(--radius-ctl) var(--radius-ctl) 0 0;
+    }
+    .nav-tab:hover { color: var(--amber); }
+    .nav-tab[aria-current="page"] { color: var(--fg); }
+    .nav-tab[aria-current="page"]::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 0;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px 2px 0 0;
+    }
+    .nav-tab:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
+
+    .nav-more {
+      position: relative;
+      margin-left: auto;
+    }
+    .nav-more > summary {
+      list-style: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 12px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border-radius: var(--radius-ctl);
+    }
+    .nav-more > summary::-webkit-details-marker { display: none; }
+    .nav-more > summary:hover { color: var(--amber); }
+    .nav-more > summary:focus-visible { outline: 2px solid var(--cyan); }
+    .nav-more[open] > summary { color: var(--fg); }
+    .nav-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      z-index: 20;
+      min-width: 220px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    }
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 8px;
+      color: var(--fg);
+      font-weight: 500;
+    }
+    .nav-menu a:hover { background: var(--cyan-dim); color: var(--cyan); }
+
+    /* Body */
+    .body {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      overflow-x: hidden;
+      padding: 16px 12px calc(24px + var(--safe-b));
+      container-type: inline-size;
+      container-name: main;
+    }
+    @container main (min-width: 40rem) {
+      .body { padding-left: 24px; padding-right: 24px; }
+    }
+
+    .hub {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr;
+    }
+    @container main (min-width: 48rem) {
+      .hub {
+        grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+        gap: 24px 28px;
+        align-items: start;
+      }
+      .hub-hero { grid-column: 1 / -1; }
+      .hub-episodes { grid-column: 1; }
+      .hub-side { grid-column: 2; grid-row: 2 / span 2; }
+      .hub-world { grid-column: 1; }
+    }
+
+    /* Hero — story + one CTA (Von Restorff + Serial Position) */
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background:
+        radial-gradient(120% 80% at 0% 0%, rgba(6, 182, 212, 0.12), transparent 55%),
+        var(--surface);
+    }
+    @container main (min-width: 40rem) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 20px 28px;
+      }
+    }
+
+    .blurb {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .tag {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: min(100%, 240px);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: var(--radius-ctl);
+      border: 1px solid transparent;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.12s var(--ease);
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .btn-primary {
+      background: #0891B2;
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--cyan-hover); color: #0F172A; }
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+    .cta-hint {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+    @container main (max-width: 39.99rem) {
+      .cta-hint { text-align: left; }
+    }
+
+    /* Progress (Zeigarnik / Goal-Gradient) */
+    .progress {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .progress-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .progress-track {
+      flex: 1;
+      min-width: 120px;
+      height: 6px;
+      border-radius: 999px;
+      background: #0F172A;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--cyan);
+      border-radius: inherit;
+    }
+    .progress-nums {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+    }
+
+    /* Panels */
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      min-width: 0;
+    }
+    .panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 14px 16px 10px;
+    }
+    .panel-title {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+    .panel-sub {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .panel-link {
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Next episode callout (Uniform Connectedness) */
+    .next-up {
+      margin: 0 12px 12px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      background: var(--cyan-dim);
+      display: grid;
+      gap: 10px;
+    }
+    @container main (min-width: 36rem) {
+      .next-up {
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+      }
+    }
+    .ep-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--cyan);
+      min-width: 2.5rem;
+    }
+    .ep-title { margin: 0; font-weight: 700; font-size: 15px; }
+    .ep-meta { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--amber);
+    }
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .status.is-done { color: var(--ok); }
+    .status.is-live { color: var(--cyan); }
+
+    .ep-list {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 8px;
+    }
+    .ep-list li + li { border-top: 1px solid var(--border); }
+    .ep-row {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr auto;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      min-height: 52px;
+      padding: 10px 16px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      font: inherit;
+    }
+    .ep-row:hover { background: rgba(255, 255, 255, 0.03); }
+    .ep-row:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
+    .ep-row .ep-num { color: var(--muted); }
+    .ep-row .ep-title { font-size: 14px; font-weight: 600; }
+    .ep-row .status { color: var(--muted); }
+    .ep-row .status::before { opacity: 0.55; }
+
+    /* Ensemble (D&D Beyond party strip) */
+    .party {
+      list-style: none;
+      margin: 0;
+      padding: 0 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+    }
+    .member:hover { background: rgba(255, 255, 255, 0.03); border-color: var(--border); }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #334155, #1E293B);
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .member-name { margin: 0; font-weight: 700; font-size: 14px; }
+    .member-role { margin: 0; font-size: 12px; color: var(--muted); font-weight: 500; }
+    .you {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* World state */
+    .world-grid {
+      display: grid;
+      gap: 12px;
+      padding: 0 16px 16px;
+    }
+    .world-loc {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+    .clock {
+      display: grid;
+      gap: 6px;
+    }
+    .clock-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .clock-top span:last-child {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .clock-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #0F172A;
+      overflow: hidden;
+    }
+    .clock-bar > i {
+      display: block;
+      height: 100%;
+      background: var(--cyan);
+      border-radius: inherit;
+    }
+    .deadline {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+    }
+    .deadline strong { font-weight: 650; }
+    .deadline span { color: var(--muted); font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12px; }
+
+    .footnote {
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    /* Spec callout (design notes — not product UI) */
+    .spec {
+      margin: 28px auto 0;
+      max-width: 1100px;
+      padding: 16px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-card);
+      background: #0B1220;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .spec h2 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--fg);
+      font-weight: 700;
+    }
+    .spec ul { margin: 0; padding-left: 1.2rem; }
+    .spec li + li { margin-top: 4px; }
+    .spec code {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+      .btn:active { transform: none; }
+    }
+
+    /* Phone: hide desktop rail label space already icon-only */
+    @media (max-width: 639px) {
+      .rail { width: 56px; }
+      .rail-btn { width: 44px; height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    Saga Overview Hub v2 — HTML design prototype (not production React).
+    Surface: Journey (saga hub between library and live session).
+    Primary goal: host / join next session with clear story context.
+  -->
+  <div class="shell">
+    <aside class="rail" aria-label="App-Navigation">
+      <button class="rail-btn" type="button" aria-label="SagaTree Start" title="Start">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </button>
+      <button class="rail-btn" type="button" aria-current="page" aria-label="Bibliothek" title="Bibliothek">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button class="rail-btn" type="button" aria-label="Inventar" title="Inventar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn" type="button" aria-label="Abmelden" title="Abmelden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      </button>
+      <button class="rail-btn" type="button" aria-label="Einstellungen" title="Einstellungen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="identity">
+          <div class="identity-left">
+            <p class="kicker">Saga</p>
+            <div class="title-row">
+              <h1 class="story-title">Das Flüstern unter Dornhain</h1>
+              <span class="meta-chip" title="Öffentliche ID (kein Recht)">
+                <span translate="no">SA-E979J</span>
+                <button type="button" aria-label="ID kopieren" title="Kopieren">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16V4a2 2 0 0 1 2-2h12"/></svg>
+                </button>
+              </span>
+            </div>
+          </div>
+          <span class="role-pill" title="Rolle aus Membership">Du bist Spielleitung</span>
+        </div>
+
+        <nav class="nav-primary" aria-label="Saga-Bereiche">
+          <button type="button" class="nav-tab" aria-current="page">Übersicht</button>
+          <button type="button" class="nav-tab">Sessions</button>
+          <button type="button" class="nav-tab">Spieler</button>
+          <details class="nav-more">
+            <summary>Bibliothek</summary>
+            <div class="nav-menu" role="menu">
+              <a href="#world" role="menuitem">Welt</a>
+              <a href="#npc" role="menuitem">NSCs / Kreaturen</a>
+              <a href="#items" role="menuitem">Gegenstände</a>
+              <a href="#quests" role="menuitem">Quests</a>
+              <a href="#lore" role="menuitem">Lore / Verlauf</a>
+            </div>
+          </details>
+          <button type="button" class="nav-tab" aria-label="Saga-Einstellungen">Einstellungen</button>
+        </nav>
+      </header>
+
+      <div class="body" data-slot="adaptive-page-body">
+        <div class="hub">
+          <!-- HERO -->
+          <section class="hero hub-hero" aria-labelledby="hero-title">
+            <div>
+              <h2 id="hero-title" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Geschichte</h2>
+              <p class="blurb">
+                Fantasy-Mystery-Sandbox für einen Abend (60–90&nbsp;Min). Die Gruppe folgt Gerüchten unter Dornhain, bevor die Stadt erwacht.
+              </p>
+              <div class="tags" aria-label="Meta">
+                <span class="tag">Fassung 1.0</span>
+                <span class="tag">Fantasy · Mystery</span>
+                <span class="tag">60–90 Min</span>
+              </div>
+              <div class="progress" aria-label="Episodenfortschritt">
+                <span class="progress-label">Gruppenfortschritt</span>
+                <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0" aria-label="0 von 18 Episoden">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="progress-nums">0 / 18</span>
+              </div>
+            </div>
+            <div class="cta-block">
+              <button type="button" class="btn btn-primary">Session hosten</button>
+              <p class="cta-hint">Startet Episode&nbsp;#1 · Wartend</p>
+              <button type="button" class="btn btn-ghost">Spieler einladen</button>
+            </div>
+          </section>
+
+          <!-- EPISODES -->
+          <section class="panel hub-episodes" aria-labelledby="ep-title">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title" id="ep-title">Nächste Episode</h2>
+                <p class="panel-sub">Danach die letzten Abende</p>
+              </div>
+              <a class="panel-link" href="#sessions">Alle Sessions</a>
+            </div>
+
+            <div class="next-up">
+              <span class="ep-num">#1</span>
+              <div>
+                <p class="ep-title">Das Flüstern unter Dornhain E001</p>
+                <p class="ep-meta"><span class="status">Wartend</span> · Noch kein Recap</p>
+              </div>
+              <button type="button" class="btn btn-primary">Öffnen</button>
+            </div>
+
+            <ul class="ep-list">
+              <li>
+                <button type="button" class="ep-row">
+                  <span class="ep-num">#2</span>
+                  <span>
+                    <span class="ep-title">Das Flüstern unter Dornhain E002</span>
+                    <span class="ep-meta" style="display:block"><span class="status">Wartend</span></span>
+                  </span>
+                  <span aria-hidden="true" style="color:var(--muted)">›</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="ep-row" disabled style="opacity:0.55;cursor:not-allowed">
+                  <span class="ep-num">…</span>
+                  <span>
+                    <span class="ep-title">Weitere Episoden erscheinen nach dem Host</span>
+                    <span class="ep-meta" style="display:block;color:var(--muted)">Geplant: bis #18</span>
+                  </span>
+                  <span></span>
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SIDE: Party + invite (Roll20 / DDB) -->
+          <aside class="hub-side" aria-label="Gruppe">
+            <section class="panel" aria-labelledby="party-title">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title" id="party-title">Ensemble</h2>
+                  <p class="panel-sub">3 aktiv</p>
+                </div>
+                <a class="panel-link" href="#invite">Einladen</a>
+              </div>
+              <ul class="party">
+                <li class="member">
+                  <div class="avatar" aria-hidden="true">SL</div>
+                  <div>
+                    <p class="member-name">Ben</p>
+                    <p class="member-role">Spielleitung</p>
+                  </div>
+                  <span class="you">du</span>
+                </li>
+                <li class="member">
+                  <div class="avatar" aria-hidden="true">M</div>
+                  <div>
+                    <p class="member-name">Mira Dornfeld</p>
+                    <p class="member-role">Spieler · Scout</p>
+                  </div>
+                </li>
+                <li class="member">
+                  <div class="avatar" aria-hidden="true">T</div>
+                  <div>
+                    <p class="member-name">Torven Grau</p>
+                    <p class="member-role">Spieler · Adept</p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </aside>
+
+          <!-- WORLD -->
+          <section class="panel hub-world" aria-labelledby="world-title" id="world">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title" id="world-title">Weltzustand</h2>
+                <p class="panel-sub">Öffentlich sichtbar für die Gruppe</p>
+              </div>
+              <a class="panel-link" href="#map">Karte</a>
+            </div>
+            <div class="world-grid">
+              <p class="world-loc">Ihr seid hier: Unterstadt · Kellergewölbe</p>
+              <div class="clock">
+                <div class="clock-top"><span>Gerüchte in der Taverne</span><span>1 / 4</span></div>
+                <div class="clock-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="4" aria-label="Gerüchte in der Taverne">
+                  <i style="width:25%"></i>
+                </div>
+              </div>
+              <div class="deadline">
+                <strong>Nachtwache wechselt</strong>
+                <span>fällig Tag 2</span>
+              </div>
+              <p class="footnote">Keine Spoiler: nur audience-sichere Uhren, Fristen und Folgen.</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="spec" aria-label="Entwurfsnotizen">
+          <h2>Entwurf vs. Ist-Zustand</h2>
+          <ul>
+            <li><strong>H1 = Geschichtentitel</strong>, nicht <code>SA-E979J</code> (ID nur als Meta-Chip + Copy).</li>
+            <li><strong>RLS-Satz entfernt</strong> aus der Oberfläche (Tesler) — Rechte bleiben Membership, UI spricht Rollen.</li>
+            <li><strong>9 Pill-Tabs → 3 Primär + Bibliothek-Menü</strong> (Hick / Foundry-Sidebar-Muster).</li>
+            <li><strong>2-Spalten-Hub</strong> Desktop: Story/Episoden links, Ensemble rechts (Roll20 Details + DDB Party).</li>
+            <li><strong>Ein Primary-CTA</strong> im Hero; Episode #1 als „Next up“ verbunden (Proximity / Connectedness).</li>
+            <li>Container-Queries (<code>@container main</code>) für AU-CONTENT-WIDTH, nicht nur Viewport.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
