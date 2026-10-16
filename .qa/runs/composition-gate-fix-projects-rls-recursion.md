@@ -1,6 +1,6 @@
 # Composition Gate — fix-projects-rls-recursion
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: a5cdd4277a4d9fffc80816ea5ee377cdc7d2fcf4
 - Date: 2026-10-16
 - Verdict: CLEAR
 

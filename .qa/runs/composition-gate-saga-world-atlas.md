@@ -1,6 +1,6 @@
 # Composition Gate — saga-world-atlas
 
-- HEAD_SHA: WORKTREE (atlas map-only + Dornhain 090)
+- HEAD_SHA: a5cdd4277a4d9fffc80816ea5ee377cdc7d2fcf4
 - Date: 2026-10-16
 - Verdict: CLEAR
 
