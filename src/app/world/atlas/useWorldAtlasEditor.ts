@@ -46,7 +46,9 @@ export function useWorldAtlasEditor({
       setSummaries(list);
       setActiveMapId((prev) => {
         if (prev && list.some((m) => m.id === prev)) return prev;
-        return list[0]?.id ?? null;
+        // Prefer legacy tile root so existing Dornhain/terrain is visible first.
+        const legacy = list.find((m) => m.kind === 'legacy_tiles');
+        return legacy?.id ?? list[0]?.id ?? null;
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Atlas konnte nicht geladen werden.');

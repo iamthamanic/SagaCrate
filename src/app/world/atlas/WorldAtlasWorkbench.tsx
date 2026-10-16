@@ -183,13 +183,24 @@ export function WorldAtlasWorkbench({
               </div>
             </div>
           ) : editor.map ? (
-            <WorldAtlasLeafletMap
-              key={`${editor.map.id}:${editor.map.revision}`}
-              bounds={editor.map.bounds}
-              layers={editor.map.layers}
-              canEdit={canEdit}
-              onLayersChange={canEdit ? editor.setDirtyLayers : undefined}
-            />
+            <div className="relative h-full min-h-[24rem]">
+              <WorldAtlasLeafletMap
+                key={`${editor.map.id}:${editor.map.revision}`}
+                bounds={editor.map.bounds}
+                layers={editor.map.layers}
+                canEdit={canEdit}
+                onLayersChange={canEdit ? editor.setDirtyLayers : undefined}
+              />
+              {(editor.dirtyLayers ?? editor.map.layers).features.length === 0 ? (
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-3 z-[1000] mx-auto max-w-md rounded-lg border border-border bg-card/95 px-3 py-2 text-center text-sm text-muted-foreground shadow"
+                  data-world-atlas-empty-hint
+                >
+                  Noch keine Regionen/Orte. Links die Werkzeuge nutzen: Polygon oder Marker
+                  zeichnen, dann Speichern.
+                </div>
+              ) : null}
+            </div>
           ) : (
             <div className="flex h-full min-h-[24rem] items-center justify-center text-sm text-muted-foreground">
               Keine Karte ausgewählt.

@@ -54,6 +54,9 @@ function AtlasMapController({
   useEffect(() => {
     map.setMaxBounds(leafletBounds.pad(0.2));
     map.fitBounds(leafletBounds, { animate: false });
+    // Flex layouts often mount Leaflet at 0×0 — force a redraw once size is known.
+    const t = window.setTimeout(() => map.invalidateSize(), 50);
+    return () => window.clearTimeout(t);
   }, [map, leafletBounds]);
 
   useEffect(() => {
@@ -61,19 +64,55 @@ function AtlasMapController({
       map.removeLayer(geoRef.current);
       geoRef.current = null;
     }
+
+    // Visible ground plane so CRS.Simple is never a blank navy void.
+    const ground = L.rectangle(leafletBounds, {
+      color: '#334155',
+      weight: 1,
+      fillColor: '#1E293B',
+      fillOpacity: 1,
+      interactive: false,
+    });
+    const gridGroup = L.layerGroup([ground]);
+    const stepX = Math.max(50, (bounds.maxX - bounds.minX) / 10);
+    const stepY = Math.max(50, (bounds.maxY - bounds.minY) / 10);
+    for (let x = bounds.minX; x <= bounds.maxX; x += stepX) {
+      gridGroup.addLayer(
+        L.polyline(
+          [
+            [bounds.minY, x],
+            [bounds.maxY, x],
+          ],
+          { color: '#334155', weight: 1, opacity: 0.6, interactive: false },
+        ),
+      );
+    }
+    for (let y = bounds.minY; y <= bounds.maxY; y += stepY) {
+      gridGroup.addLayer(
+        L.polyline(
+          [
+            [y, bounds.minX],
+            [y, bounds.maxX],
+          ],
+          { color: '#334155', weight: 1, opacity: 0.6, interactive: false },
+        ),
+      );
+    }
+    gridGroup.addTo(map);
+
     const layer = L.geoJSON(layers as GeoJSON.FeatureCollection, {
       style: {
         color: '#06B6D4',
         weight: 2,
-        fillColor: '#0891B2',
-        fillOpacity: 0.25,
+        fillColor: '#06B6D4',
+        fillOpacity: 0.35,
       },
       pointToLayer: (_feature, latlng) =>
         L.circleMarker(latlng, {
-          radius: 7,
+          radius: 8,
           color: '#F59E0B',
           fillColor: '#E8A641',
-          fillOpacity: 0.9,
+          fillOpacity: 0.95,
           weight: 2,
         }),
     });
@@ -101,12 +140,13 @@ function AtlasMapController({
       map.off('pm:remove');
       map.off('pm:edit');
       map.off('pm:dragend');
+      map.removeLayer(gridGroup);
       if (geoRef.current) {
         map.removeLayer(geoRef.current);
         geoRef.current = null;
       }
     };
-  }, [map, layers]);
+  }, [map, layers, leafletBounds, bounds]);
 
   useEffect(() => {
     if (!canEdit) {
