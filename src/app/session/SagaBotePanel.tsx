@@ -23,7 +23,7 @@ export function SagaBotePanel({ lines }: SagaBotePanelProps) {
           Der Bote
         </h2>
         <p className="text-xs text-muted-foreground">
-          Neuigkeiten seit der letzten Session — ohne Geheimnisse der Spielleitung
+          Neuigkeiten seit der letzten Session — ohne Geheimnisse des Gamemasters
         </p>
       </div>
       <ul className="space-y-2" data-saga-bote-list>

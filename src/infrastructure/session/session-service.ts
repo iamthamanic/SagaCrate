@@ -316,7 +316,7 @@ class SessionService {
     if (error) {
       throw new Error(
         error.message.includes('row-level security')
-          ? 'Nur die Spielleitung kann Sessions löschen.'
+          ? 'Nur der Gamemaster kann Sessions löschen.'
           : `Session konnte nicht gelöscht werden: ${error.message}`,
       );
     }

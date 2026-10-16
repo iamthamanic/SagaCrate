@@ -31,7 +31,11 @@ const migration = read(migrationPath);
 requireMatch(migration, /openDeadlines/i, 'openDeadlines in overview');
 requireMatch(migration, /v_open_deadlines/i, 'v_open_deadlines');
 requireMatch(migration, /deadlines/i, 'deadlines projection');
-requireMatch(migration, /sagadrive_project_shared_adventure/i, 'shared adventure filter');
+requireMatch(
+  migration,
+  /sagatree_project_shared_adventure|sagadrive_project_shared_adventure/i,
+  'shared adventure filter',
+);
 
 const domain = read('src/domains/session/contracts/bote-lines.ts');
 requireMatch(domain, /export function buildBoteLines/i, 'buildBoteLines');

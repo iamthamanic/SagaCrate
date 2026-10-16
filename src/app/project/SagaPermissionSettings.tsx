@@ -2,7 +2,7 @@
  * SagaPermissionSettings — Settings → Rechte: bundle assignment (#617).
  * Location: src/app/project/SagaPermissionSettings.tsx
  *
- * GM with saga.members.set_bundle assigns Spielleitung / Spieler bundles.
+ * GM with saga.members.set_bundle assigns Gamemaster / Spieler bundles.
  */
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -115,7 +115,7 @@ export function SagaPermissionSettings({ sagaPublicId }: SagaPermissionSettingsP
         <h2 className="text-lg font-semibold text-foreground">Rechte</h2>
         <p className="text-sm text-muted-foreground">
           Bundles steuern, was Mitglieder in dieser Saga sehen und ändern dürfen. Geheimnisse und
-          Bundle-Vergabe bleiben der Spielleitung vorbehalten.
+          Bundle-Vergabe bleiben dem Gamemaster vorbehalten.
         </p>
       </div>
 
@@ -179,7 +179,7 @@ export function SagaPermissionSettings({ sagaPublicId }: SagaPermissionSettingsP
                     <SelectValue placeholder="Bundle wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bundle.saga.gm">Spielleitung</SelectItem>
+                    <SelectItem value="bundle.saga.gm">Gamemaster</SelectItem>
                     <SelectItem value="bundle.saga.player">Spieler</SelectItem>
                   </SelectContent>
                 </Select>
@@ -191,7 +191,7 @@ export function SagaPermissionSettings({ sagaPublicId }: SagaPermissionSettingsP
 
       {!canSetBundle ? (
         <p className="text-xs text-muted-foreground">
-          Bundle-Vergabe ist der Spielleitung vorbehalten.
+          Bundle-Vergabe ist dem Gamemaster vorbehalten.
         </p>
       ) : (
         <Button

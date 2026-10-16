@@ -31,16 +31,19 @@ export function sagatreeNativePregenPortraitUrl(pregenId: string): string | null
   return SAGATREE_NATIVE_PREGEN_PORTRAIT_URLS[key];
 }
 
+/** Resolve native pregen id from character display name (e.g. Liora Mondschein → pregen.mystic). */
+export function sagatreeNativePregenIdByName(displayName: string): SagatreeNativePregenId | null {
+  const id = PREGEN_ID_BY_DISPLAY_NAME[displayName.trim().toLowerCase()];
+  return id ?? null;
+}
+
 /** Resolve portrait path from character display name (library/session fallback). */
 export function sagatreeNativePregenPortraitUrlByName(displayName: string): string | null {
-  const id = PREGEN_ID_BY_DISPLAY_NAME[displayName.trim().toLowerCase()];
+  const id = sagatreeNativePregenIdByName(displayName);
   return id ? SAGATREE_NATIVE_PREGEN_PORTRAIT_URLS[id] : null;
 }
 
 /** True when the display name matches a seeded Dornhain pregen. */
 export function isSagatreeNativePregenName(displayName: string): boolean {
-  return Object.prototype.hasOwnProperty.call(
-    PREGEN_ID_BY_DISPLAY_NAME,
-    displayName.trim().toLowerCase(),
-  );
+  return sagatreeNativePregenIdByName(displayName) != null;
 }

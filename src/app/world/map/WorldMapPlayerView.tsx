@@ -27,6 +27,8 @@ type Props = {
   /** When true, GM can drop/drag the party marker (optimistic local + confirm callback). */
   canMoveParty?: boolean;
   onPartyLocationChange?: (locationRef: string) => void | Promise<void>;
+  /** Hub atlas: map only — pins/locations live in the Orte drawer. */
+  hideSidebar?: boolean;
 };
 
 export function WorldMapPlayerView({
@@ -34,6 +36,7 @@ export function WorldMapPlayerView({
   partyLocationRef = null,
   canMoveParty = false,
   onPartyLocationChange,
+  hideSidebar = false,
 }: Props) {
   const [data, setData] = useState<WorldMapData>(() => emptyWorldMapData(DEFAULT_MAP_SIZE));
   const [error, setError] = useState<string | null>(null);
@@ -77,8 +80,9 @@ export function WorldMapPlayerView({
 
   return (
     <div
-      className="flex flex-col gap-3 sm:flex-row"
+      className={hideSidebar ? 'flex min-w-0 flex-col gap-2' : 'flex flex-col gap-3 sm:flex-row'}
       data-world-map-player-view
+      data-world-map-player-compact={hideSidebar ? 'true' : undefined}
       data-au-surface="world-map-player"
     >
       <div className="min-w-0 flex-1 space-y-2">
@@ -90,13 +94,15 @@ export function WorldMapPlayerView({
             {error}
           </p>
         ) : null}
-        <p className="text-sm text-foreground" data-world-map-party-label>
-          {displayLabel
-            ? `Ihr seid hier: ${displayLabel}`
-            : partyPos
-              ? `Ihr seid hier: Karte (${partyPos.x}, ${partyPos.y})`
-              : 'Noch keine Gruppenposition'}
-        </p>
+        {hideSidebar ? null : (
+          <p className="text-sm text-foreground" data-world-map-party-label>
+            {displayLabel
+              ? `Ihr seid hier: ${displayLabel}`
+              : partyPos
+                ? `Ihr seid hier: Karte (${partyPos.x}, ${partyPos.y})`
+                : 'Noch keine Gruppenposition'}
+          </p>
+        )}
         {canMoveParty ? (
           <div className="flex flex-wrap gap-2">
             <Button
@@ -110,28 +116,32 @@ export function WorldMapPlayerView({
             </Button>
           </div>
         ) : null}
-        <WorldMapCanvas
-          data={data}
-          zoom={1}
-          tool={canMoveParty && placing ? 'party' : 'pan'}
-          partyPosition={partyPos}
-          onPaint={() => undefined}
-          onPinPlace={() => undefined}
-          onPartyPlace={(x, y) => {
-            if (!canMoveParty || !placing) return;
-            setLocalParty({ x, y });
-            const ref = formatPartyMapLocation(x, y);
-            lastDrop.current = ref;
-            void Promise.resolve(onPartyLocationChange?.(ref));
-          }}
-        />
+        <div className="min-w-0 overflow-x-auto">
+          <WorldMapCanvas
+            data={data}
+            zoom={1}
+            tool={canMoveParty && placing ? 'party' : 'pan'}
+            partyPosition={partyPos}
+            onPaint={() => undefined}
+            onPinPlace={() => undefined}
+            onPartyPlace={(x, y) => {
+              if (!canMoveParty || !placing) return;
+              setLocalParty({ x, y });
+              const ref = formatPartyMapLocation(x, y);
+              lastDrop.current = ref;
+              void Promise.resolve(onPartyLocationChange?.(ref));
+            }}
+          />
+        </div>
       </div>
-      <WorldMapSidebar
-        data={data}
-        readOnly
-        onSelectPin={() => undefined}
-        onRemovePin={() => undefined}
-      />
+      {hideSidebar ? null : (
+        <WorldMapSidebar
+          data={data}
+          readOnly
+          onSelectPin={() => undefined}
+          onRemovePin={() => undefined}
+        />
+      )}
     </div>
   );
 }

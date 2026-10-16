@@ -195,7 +195,7 @@ export function SagaVisualStyleSettings({
 
       {!isGm ? (
         <p className="text-sm text-muted-foreground" data-saga-visual-style-readonly>
-          Nur die Spielleitung kann diese Einstellungen ändern.
+          Nur der Gamemaster kann diese Einstellungen ändern.
         </p>
       ) : null}
 

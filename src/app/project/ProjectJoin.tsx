@@ -113,7 +113,7 @@ export function ProjectJoin({ onBack, onNavigate }: ProjectJoinProps) {
         <Card data-saga-join-panel>
           <CardHeader>
             <CardTitle>Mit Code beitreten</CardTitle>
-            <CardDescription>Gib den 6-stelligen Code ein, den dir die Spielleitung geteilt hat.</CardDescription>
+            <CardDescription>Gib den 6-stelligen Code ein, den dir der Gamemaster geteilt hat.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">

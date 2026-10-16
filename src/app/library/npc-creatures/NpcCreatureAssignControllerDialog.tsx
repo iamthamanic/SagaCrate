@@ -121,7 +121,7 @@ export function NpcCreatureAssignControllerDialog({
       });
       toast.success(
         controllerUserId === UNASSIGNED_VALUE
-          ? 'Kontrolle bei der Spielleitung'
+          ? 'Kontrolle beim Gamemaster'
           : 'Spieler zugewiesen',
       );
       onOpenChange(false);
@@ -149,7 +149,7 @@ export function NpcCreatureAssignControllerDialog({
 
         {gmProjects.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Keine aktive Kampagne, in der du Spielleitung bist.
+            Keine aktive Kampagne, in der du Gamemaster bist.
           </p>
         ) : (
           <div className="space-y-4">
@@ -186,7 +186,7 @@ export function NpcCreatureAssignControllerDialog({
                     <SelectValue placeholder="Kontrolle wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={UNASSIGNED_VALUE}>Spielleitung (nicht zugewiesen)</SelectItem>
+                    <SelectItem value={UNASSIGNED_VALUE}>Gamemaster (nicht zugewiesen)</SelectItem>
                     {members.map((member) => (
                       <SelectItem key={member.user_id} value={member.user_id}>
                         {member.role === 'gm'

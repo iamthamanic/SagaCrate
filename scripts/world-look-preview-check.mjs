@@ -57,7 +57,13 @@ section('2 · World panel contract');
   check(/setLookEditorReturnPath/.test(ui), 'return context before edit');
   check(!/CharacterLookInspector|LightingLookInspector|type=["']range["']/.test(ui), 'no Look Inspector');
   check(/WorldLookPreviewPanel/.test(screen), 'mounted on SagaResourceScreen');
-  check(/section === 'world'/.test(screen), 'world section branch');
+  check(
+    /section === 'world'/.test(screen)
+      || /WORLD_CONTENT\.has\(section\)/.test(screen)
+      || /SagaWorldShell/.test(screen)
+      || /sub === 'places'/.test(screen),
+    'world section branch',
+  );
 }
 
 section('3 · return path helper smoke');

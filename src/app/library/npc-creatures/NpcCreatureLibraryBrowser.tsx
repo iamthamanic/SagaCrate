@@ -248,7 +248,7 @@ export function NpcCreatureLibraryBrowser({
 
   const handleAssignController = (definition: NpcCreatureDefinition) => {
     if (gmProjects.length === 0) {
-      toast.error('Spielerzuweisung braucht eine aktive Kampagne als Spielleitung.');
+      toast.error('Spielerzuweisung braucht eine aktive Kampagne als Gamemaster.');
       return;
     }
     setAssignDefinition(definition);
@@ -257,7 +257,7 @@ export function NpcCreatureLibraryBrowser({
 
   const handleSpawnInstance = (definition: NpcCreatureDefinition) => {
     if (gmProjects.length === 0) {
-      toast.error('Zum Abenteuer hinzufügen braucht eine aktive Kampagne als Spielleitung.');
+      toast.error('Zum Abenteuer hinzufügen braucht eine aktive Kampagne als Gamemaster.');
       return;
     }
     setSpawnDefinition(definition);

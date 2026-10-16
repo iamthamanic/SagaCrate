@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { extname } from 'node:path';
+import { existsSync } from 'node:fs';
+import { extname, join } from 'node:path';
 import process from 'node:process';
 
 const root = process.cwd();
@@ -106,5 +107,6 @@ export function collectChangedTypeScriptFiles() {
     // ignore
   }
 
-  return uniquePaths(paths);
+  // Drop paths removed in the worktree but still present in the commit range.
+  return uniquePaths(paths).filter((path) => existsSync(join(root, path)));
 }

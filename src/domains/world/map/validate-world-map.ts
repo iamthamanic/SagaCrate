@@ -101,7 +101,7 @@ export function parseWorldMapData(raw: unknown): WorldMapData {
         id,
         x,
         y,
-        title: asString(item.title, 'Pin'),
+        title: asString(item.title || item.label, 'Pin'),
         imagePath,
         discovered: item.discovered !== false,
       });
@@ -148,9 +148,10 @@ export function setTileAt(
   if (x < 0 || y < 0 || x >= data.size || y >= data.size) return data;
   const key = tileKey(x, y);
   const tiles = { ...data.tiles };
-  if (!tile || tile.type === 'empty') {
+  if (!tile) {
     delete tiles[key];
   } else {
+    // Keep `empty` as an explicit tile so eraser holes stay dark (missing = grass).
     tiles[key] = tile;
   }
   return { ...data, tiles };

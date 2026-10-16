@@ -81,7 +81,7 @@ mustInclude(
 
 mustInclude(
   'src/app/project/SagaPermissionSettings.tsx',
-  ['data-saga-rechte', 'setMemberBundle', 'bundle.saga.gm', 'Spielleitung'],
+  ['data-saga-rechte', 'setMemberBundle', 'bundle.saga.gm', 'Gamemaster'],
   'Settings Rechte UI',
 );
 

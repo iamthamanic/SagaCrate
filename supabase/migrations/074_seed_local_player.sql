@@ -4,7 +4,8 @@
 -- same library visibility, native assets for every account. Saga-scoped roles
 -- are defined later inside each saga — not at the auth-user level.
 --
--- Shortcut in the app: username `player` / password `1234` → this email.
+-- Shortcut in the app: username `player1` / password `1234` → this email
+-- (legacy shortcut `player` still accepted in the client).
 -- Fixed UUID stays in sync with src/lib/localPlayer.ts LOCAL_PLAYER_USER_ID.
 -- Canonical email: player@sagatree.local (must match LOCAL_PLAYER_EMAIL).
 -- Legacy player@sagadrive.local is still recognized on re-apply / pre-080 volumes.
@@ -34,7 +35,7 @@ begin
       encrypted_password = crypt(v_password, gen_salt('bf', 10)),
       email_confirmed_at = coalesce(email_confirmed_at, now()),
       raw_app_meta_data  = '{"provider":"email","providers":["email"]}'::jsonb,
-      raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player","display_name":"Player"}'::jsonb,
+      raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player1","display_name":"Player1"}'::jsonb,
       email_change       = '',
       updated_at         = now()
     where id = v_seed_id;
@@ -59,7 +60,7 @@ begin
       encrypted_password = crypt(v_password, gen_salt('bf', 10)),
       email_confirmed_at = coalesce(email_confirmed_at, now()),
       raw_app_meta_data  = '{"provider":"email","providers":["email"]}'::jsonb,
-      raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player","display_name":"Player"}'::jsonb,
+      raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || '{"username":"player1","display_name":"Player1"}'::jsonb,
       email_change       = '',
       updated_at         = now()
     where id = v_existing;
@@ -81,7 +82,7 @@ begin
       crypt(v_password, gen_salt('bf', 10)),
       now(), now(),
       '{"provider":"email","providers":["email"]}'::jsonb,
-      '{"username":"player","display_name":"Player"}'::jsonb,
+      '{"username":"player1","display_name":"Player1"}'::jsonb,
       now(), now(),
       '', '', '', '',
       0, false

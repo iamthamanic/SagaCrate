@@ -121,7 +121,7 @@ export function useWorldMapEditor(input: { worldProfileId: string | null }) {
     if (tool === 'pan' || tool === 'pin' || tool === 'party') return;
     const next =
       tool === 'eraser'
-        ? setTileAt(data, x, y, null)
+        ? setTileAt(data, x, y, { type: 'empty', countryId: null })
         : setTileAt(data, x, y, { type: brushType, countryId: null });
     applyData(next, true);
   };

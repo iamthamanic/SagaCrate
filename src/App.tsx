@@ -173,7 +173,7 @@ function AppShell() {
         return (
           <LazyView>
             <Library
-              key={pathname.startsWith('/library') ? pathname : search || 'library'}
+              pathname={pathname}
               onNavigate={handleNavigate}
               onNavigateToItem={navigateToItem}
               onNavigateToLookCreate={navigateToLookCreate}

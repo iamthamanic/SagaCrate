@@ -27,12 +27,15 @@ import { SagaWorldSubNav } from './SagaWorldSubNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
-import { SagaWorldCatalogPanel } from './SagaWorldCatalogPanel';
+import { SagaWorldAtlasPanel } from './SagaWorldAtlasPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { toast } from 'sonner';
 import { sessionService } from '../../infrastructure/session/session-service';
 import { useSagaOverview } from './hooks/useSagaOverview';
-import { SagaOverviewHero } from './overview/SagaOverviewHero';
+import { useSagaEnsembleProfiles } from './hooks/useSagaEnsembleProfiles';
+import { gmDefaultCharacterPortraitUrl } from '../../domains/character/use-cases/sagatree-native-gm-presence';
+import { sagatreeNativeSagaCoverUrlFromDisplayName } from '../../domains/saga/use-cases/sagatree-native-saga-covers';
+import { SagaHubMetaBar } from './overview/SagaHubMetaBar';
 import { SagaEpisodeList } from './overview/SagaEpisodeList';
 import { SagaEnsembleStrip } from './overview/SagaEnsembleStrip';
 
@@ -165,6 +168,7 @@ export function SagaResourceScreen({
         <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 md:p-6" data-saga-section="settings">
           {header}
           <SagaVisualStyleSettings sagaPublicId={id} onNavigate={onNavigate} />
+          <WorldLookPreviewPanel sagaPublicId={id} onNavigate={onNavigate} />
           <SagaPermissionSettings sagaPublicId={id} />
           <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
             Zurück
@@ -246,10 +250,7 @@ function SagaWorldShell({
         />
 
         {sub === 'places' ? (
-          <>
-            <SagaWorldCatalogPanel sagaPublicId={sagaPublicId} />
-            <WorldLookPreviewPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
-          </>
+          <SagaWorldAtlasPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
         ) : (
           <SagaWorkspaceCatalogSection
             sagaPublicId={sagaPublicId}
@@ -281,6 +282,7 @@ function SagaOverviewSection({
   onNavigateHome: () => void;
 }) {
   const { model, isLoading, error, refresh } = useSagaOverview({ sagaPublicId });
+  const ensembleMembers = useSagaEnsembleProfiles(model?.ensemble ?? []);
   const showCharacterCatalog = section === 'characters';
   const pageTitle =
     section === 'characters'
@@ -348,43 +350,35 @@ function SagaOverviewSection({
         data-au-content-width="saga-overview"
       >
         <div className="space-y-3">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="min-w-0 space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Saga
-              </p>
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                {isLoading && !model ? (
-                  <Skeleton className="h-8 w-64" />
-                ) : (
-                  <h1
-                    id="saga-overview-title"
-                    className="text-balance text-2xl font-bold text-foreground md:text-3xl"
-                  >
-                    {pageTitle}
-                  </h1>
-                )}
-                <span
-                  className="rounded-md border border-border bg-card px-2.5 py-0.5 font-mono text-xs text-muted-foreground"
-                  translate="no"
-                >
-                  {sagaPublicId}
-                </span>
-              </div>
+          {isLoading && !model ? (
+            <div className="space-y-2" data-saga-overview-loading-meta aria-busy="true">
+              <Skeleton className="h-16 w-full" />
             </div>
-            {model ? (
-              <span
-                className="inline-flex min-h-8 items-center rounded-full bg-cyan-500/15 px-2.5 text-[13px] font-semibold text-cyan-600 dark:text-cyan-400"
-                data-saga-hub-role
-              >
-                {model.isGm || model.selfRole === 'gamemaster'
+          ) : model ? (
+            <SagaHubMetaBar
+              sagaTitle={
+                showCharacterCatalog ? pageTitle : model.title.trim() || pageTitle
+              }
+              sagaPublicId={sagaPublicId}
+              coverUrl={sagatreeNativeSagaCoverUrlFromDisplayName(model.title)}
+              roleLabel={
+                model.isGm || model.selfRole === 'gamemaster'
                   ? 'Gamemaster'
                   : model.selfRole === 'viewer'
                     ? 'Beobachter'
-                    : 'Spieler'}
-              </span>
-            ) : null}
-          </div>
+                    : 'Spieler'
+              }
+              onLeave={onNavigateHome}
+            />
+          ) : (
+            <SagaHubMetaBar
+              sagaTitle={pageTitle}
+              sagaPublicId={sagaPublicId}
+              coverUrl={null}
+              roleLabel="—"
+              onLeave={onNavigateHome}
+            />
+          )}
           <SagaWorkspaceNav
             sagaPublicId={sagaPublicId}
             active={section}
@@ -415,8 +409,7 @@ function SagaOverviewSection({
 
         {!error && isLoading && !model ? (
           <div className="space-y-4" data-saga-overview-loading aria-busy="true">
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-11 w-44" />
+            <Skeleton className="h-[min(70vh,28rem)] w-full" />
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="size-4 animate-spin" aria-hidden />
               Übersicht wird geladen…
@@ -425,40 +418,37 @@ function SagaOverviewSection({
         ) : null}
 
         {!error && model && !showCharacterCatalog ? (
-          <>
-            <SagaOverviewHero
-              model={model}
-              primaryAction={resolveSagaPrimaryAction(model, model.selfRole)}
-              onPrimary={runPrimary}
-            />
-            <div className="mt-3 min-w-0 space-y-3">
+          <div
+            className="mt-1 flex min-h-0 w-full min-w-0 flex-col gap-3"
+            data-saga-hub-overview-panels
+          >
+            <div
+              className="flex min-h-0 min-w-0 flex-col"
+              data-saga-hub-sessions-panel
+            >
               <SagaEpisodeList
                 episodes={model.episodes}
                 sagaTitle={model.title}
                 onOpenEpisode={openEpisode}
                 canDeleteEpisodes={model.isGm || model.selfRole === 'gamemaster'}
                 onDeleteEpisode={deleteEpisode}
+                primaryAction={resolveSagaPrimaryAction(model, model.selfRole)}
+                onPrimary={runPrimary}
               />
-              {section === 'sessions' ? (
-                <Button
-                  type="button"
-                  className="min-h-11 self-start"
-                  onClick={runPrimary}
-                  data-saga-sessions-join
-                >
-                  Session starten / beitreten
-                </Button>
-              ) : null}
             </div>
-            <div className="mt-3 min-w-0 max-w-md" data-saga-hub-ensemble>
+            <div
+              className="flex max-h-[min(70vh,28rem)] min-h-0 min-w-0 flex-col"
+              data-saga-hub-ensemble
+            >
               <SagaEnsembleStrip
-                ensemble={model.ensemble}
+                ensemble={ensembleMembers}
+                gmWorldPortraitUrl={gmDefaultCharacterPortraitUrl()}
                 onManageCharacters={() =>
                   onNavigate(pathForSagaSection(sagaPublicId, 'characters'))
                 }
               />
             </div>
-          </>
+          </div>
         ) : null}
 
         {showCharacterCatalog ? (
@@ -470,10 +460,6 @@ function SagaOverviewSection({
             />
           </div>
         ) : null}
-
-        <Button type="button" variant="ghost" className="min-h-11 self-start" onClick={onNavigateHome}>
-          Zurück
-        </Button>
       </div>
     </AdaptivePage>
   );

@@ -59,6 +59,10 @@ export function SagaWorkspaceNav({
               value={tab.id}
               className="min-h-11 min-w-0 max-w-full gap-1.5 px-2 text-xs sm:text-sm"
               data-saga-nav={tab.id}
+              onClick={() => {
+                // Click fallback — Radix activates primarily on mousedown.
+                onNavigate(pathForSagaSection(sagaPublicId, pathSectionForTop(tab.id)));
+              }}
             >
               <Icon className="size-4 shrink-0" aria-hidden />
               <span className="truncate">{tab.label}</span>

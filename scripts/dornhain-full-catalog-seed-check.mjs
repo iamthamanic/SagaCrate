@@ -58,14 +58,14 @@ mustInclude(
 );
 
 mustInclude(
-  'src/app/project/SagaWorldCatalogPanel.tsx',
-  ['data-saga-world-catalog', 'listBindings', 'map', 'location', 'lore'],
-  'Welt catalog UI',
+  'src/app/project/SagaWorldAtlasPanel.tsx',
+  ['data-saga-world-atlas', 'listBindings', 'location', 'lore', 'data-saga-world-atlas-drawer'],
+  'Welt atlas + Orte drawer',
 );
 
 mustInclude(
   'src/app/project/SagaResourceScreen.tsx',
-  ['SagaWorldCatalogPanel'],
+  ['SagaWorldAtlasPanel'],
   'world section wiring',
 );
 

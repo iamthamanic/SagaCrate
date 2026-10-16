@@ -87,7 +87,7 @@ export function planNpcControllerAssignment(
     return {
       ok: false,
       code: 'not_gm',
-      message: 'Nur die Spielleitung darf die Kontrolle zuweisen.',
+      message: 'Nur der Gamemaster darf die Kontrolle zuweisen.',
     };
   }
 

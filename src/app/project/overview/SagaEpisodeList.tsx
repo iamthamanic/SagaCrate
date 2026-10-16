@@ -1,221 +1,249 @@
 /**
- * SagaEpisodeList — Sessions as Library EntityBrowser (Liste / Grid / Karussell).
- * Same card chrome as Bibliothek → Abenteuer / Charaktere.
+ * SagaEpisodeList — Sessions table for saga hub overview (#saga-workspace-ia).
+ * Columns: name, date, duration, open. Optional GM delete. Full-text filter in header.
  * Location: src/app/project/overview/SagaEpisodeList.tsx
  */
-import { useMemo } from 'react';
-import { BookOpen, Trash2 } from 'lucide-react';
-import type { SagaEpisodeVm } from '../../../domains/project/contracts/saga-overview';
-import { sagatreeNativeSagaCoverUrlByTitle } from '../../../domains/saga/use-cases/sagatree-native-saga-covers';
-import { sessionStatusLabelDe } from '../../../domains/session/contracts/session-prepare-recap';
-import {
-  EntityBrowser,
-  EntityBrowserCard,
-  EntityBrowserCornerMenuPortal,
-  EntityBrowserCornerMenuTrigger,
-  useLibraryCornerMenu,
-  type EntityBrowserChip,
-  type EntityBrowserCornerMenuItem,
-  type EntityBrowserRenderContext,
-} from '../../library';
+import { useMemo, useState } from 'react';
+import { Search, Trash2 } from 'lucide-react';
+import type {
+  SagaEpisodeVm,
+  SagaPrimaryAction,
+} from '../../../domains/project/contracts/saga-overview';
 import { Button } from '../../../shared/ui/button';
+import { Input } from '../../../shared/ui/input';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../../../shared/ui/table';
+import { cn } from '../../../shared/ui/utils';
+
+/** Visible rows before the session table scrolls (header stays in view). */
+const SESSION_ROWS_BEFORE_SCROLL = 3;
+/** ~header (2.5rem) + 3× row with min-h-11 actions (~3.25rem). */
+const SESSION_SCROLL_MAX_CLASS = 'max-h-[12.25rem]';
 
 export type SagaEpisodeListProps = {
   episodes: readonly SagaEpisodeVm[];
   sagaTitle: string;
   onOpenEpisode: (episode: SagaEpisodeVm) => void;
-  /** GM-only: show Session löschen in the ⋮ menu. */
+  /** GM-only: show Session löschen. */
   canDeleteEpisodes?: boolean;
   onDeleteEpisode?: (episode: SagaEpisodeVm) => void | Promise<void>;
+  primaryAction?: SagaPrimaryAction;
+  onPrimary?: () => void;
 };
 
-const VIEW_MODE_KEY = 'sagatree_saga_hub_episodes_view_mode';
+function episodeTitle(episode: SagaEpisodeVm): string {
+  return episode.name?.trim() || `Session ${episode.sessionNumber}`;
+}
 
-type EpisodeBrowserItem = SagaEpisodeVm & { id: string };
+function formatSessionDate(iso: string | null): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 
-function statusChip(status: string): EntityBrowserChip {
-  const label = sessionStatusLabelDe(status);
-  if (status === 'active' || status === 'live') {
-    return { label, tone: 'success' };
-  }
-  if (status === 'completed' || status === 'ended') {
-    return { label, tone: 'muted' };
-  }
-  return { label, tone: 'default' };
+function formatSessionDuration(startedAt: string | null, endedAt: string | null): string {
+  if (!startedAt) return '—';
+  const start = new Date(startedAt);
+  if (Number.isNaN(start.getTime())) return '—';
+  const end = endedAt ? new Date(endedAt) : null;
+  const endMs = end && !Number.isNaN(end.getTime()) ? end.getTime() : Date.now();
+  const minutes = Math.max(0, Math.round((endMs - start.getTime()) / 60_000));
+  if (minutes < 60) return `${minutes} Min`;
+  const hours = Math.floor(minutes / 60);
+  const rem = minutes % 60;
+  return rem === 0 ? `${hours} Std` : `${hours} Std ${rem} Min`;
+}
+
+function episodeSearchHaystack(episode: SagaEpisodeVm): string {
+  const title = episodeTitle(episode);
+  const dateIso = episode.startedAt ?? episode.endedAt;
+  return [
+    title,
+    episode.sessionPublicId,
+    `E${String(episode.sessionNumber).padStart(3, '0')}`,
+    String(episode.sessionNumber),
+    episode.status,
+    formatSessionDate(dateIso),
+    formatSessionDuration(episode.startedAt, episode.endedAt),
+    episode.recapSnippet ?? '',
+  ]
+    .join(' ')
+    .toLowerCase();
 }
 
 export function SagaEpisodeList({
   episodes,
-  sagaTitle,
   onOpenEpisode,
   canDeleteEpisodes = false,
   onDeleteEpisode,
+  primaryAction,
+  onPrimary,
 }: SagaEpisodeListProps) {
+  const [searchQuery, setSearchQuery] = useState('');
   const completed = episodes.filter((e) => e.status === 'completed').length;
-  const coverUrl = sagatreeNativeSagaCoverUrlByTitle(sagaTitle) ?? undefined;
-  const corner = useLibraryCornerMenu();
+  const primaryWait = primaryAction?.kind === 'wait';
 
-  const items = useMemo<EpisodeBrowserItem[]>(
-    () =>
-      episodes.map((ep) => ({
-        ...ep,
-        id: ep.sessionId,
-      })),
-    [episodes],
-  );
+  const filtered = useMemo(() => {
+    const needle = searchQuery.trim().toLowerCase();
+    if (!needle) return episodes;
+    return episodes.filter((episode) => episodeSearchHaystack(episode).includes(needle));
+  }, [episodes, searchQuery]);
 
-  const openMenuEpisode = useMemo(() => {
-    if (!corner.anchor) return null;
-    return items.find((ep) => ep.sessionPublicId === corner.anchor?.menuKey) ?? null;
-  }, [corner.anchor, items]);
-
-  const emptyState = (
-    <p className="px-1 py-6 text-sm text-muted-foreground" data-saga-overview-episodes-empty>
-      Noch keine Sessions in dieser Saga. Starte die erste über „Session hosten“.
-    </p>
-  );
-
-  const renderItem = (episode: EpisodeBrowserItem, context: EntityBrowserRenderContext) => {
-    const title = episode.name?.trim() || `Session ${episode.sessionNumber}`;
-    const menuKey = episode.sessionPublicId;
-    const chips: EntityBrowserChip[] = [
-      { label: `#${episode.sessionNumber}`, tone: 'muted' },
-      statusChip(episode.status),
-    ];
-    const stopBubble = (event: { stopPropagation: () => void }) => {
-      event.stopPropagation();
-    };
-
-    return (
-      <EntityBrowserCard
-        title={title}
-        meta={
-          episode.recapSnippet?.trim() ||
-          `${sagaTitle} · Episode ${episode.sessionNumber}`
-        }
-        imageUrl={coverUrl}
-        imageFallback={title}
-        imageAlt={`Session ${title}`}
-        imageAspect="landscape"
-        imageObjectFit="cover"
-        imageObjectPosition="center bottom"
-        metaChips={chips}
-        variant={context.variant}
-        isCenter={context.isCenter}
-        onOpen={
-          context.variant === 'list' ||
-          context.variant === 'grid' ||
-          context.isCenter
-            ? () => onOpenEpisode(episode)
-            : undefined
-        }
-        cornerAction={
-          <EntityBrowserCornerMenuTrigger
-            compact={context.variant === 'list'}
-            busy={corner.isBusy(menuKey)}
-            label={`Aktionen für ${title}`}
-            menuKey={menuKey}
-            open={corner.isOpen(menuKey)}
-            onToggle={(rect, triggerEl) => corner.toggle(menuKey, rect, triggerEl)}
-            dataAttr="saga-hub-episode-menu"
-          />
-        }
-        actions={
-          <Button
-            type="button"
-            variant="default"
-            size="sm"
-            className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
-            onClick={(event) => {
-              stopBubble(event);
-              onOpenEpisode(episode);
-            }}
-            data-saga-overview-episode={episode.sessionPublicId}
-          >
-            <BookOpen className="mr-1 size-3 shrink-0" aria-hidden />
-            <span className="truncate text-xs">Öffnen</span>
-          </Button>
-        }
-      />
-    );
-  };
-
-  const menuItems: EntityBrowserCornerMenuItem[] = openMenuEpisode
-    ? [
-        {
-          id: 'open',
-          label: 'Session öffnen',
-          icon: <BookOpen className="size-4" aria-hidden />,
-          onSelect: () => {
-            onOpenEpisode(openMenuEpisode);
-            corner.close();
-          },
-        },
-        ...(canDeleteEpisodes && onDeleteEpisode
-          ? [
-              {
-                id: 'delete',
-                label: 'Session löschen',
-                icon: <Trash2 className="size-4" aria-hidden />,
-                destructive: true,
-                separatorBefore: true,
-                onSelect: () => {
-                  const target = openMenuEpisode;
-                  corner.close();
-                  void onDeleteEpisode(target);
-                },
-              } satisfies EntityBrowserCornerMenuItem,
-            ]
-          : []),
-      ]
-    : [];
+  const scrollSessions = filtered.length >= SESSION_ROWS_BEFORE_SCROLL;
 
   return (
     <section
-      className="@container w-full min-w-0 space-y-3"
+      className="@container flex min-h-0 min-w-0 flex-col rounded-xl border border-border bg-card"
       data-saga-overview-episodes
+      data-saga-overview-episodes-scroll={scrollSessions ? '1' : '0'}
       aria-labelledby="saga-overview-episodes-title"
     >
-      <div className="space-y-0.5">
-        <h3
-          id="saga-overview-episodes-title"
-          className="text-[1.05rem] font-bold text-foreground"
-        >
-          Sessions
-        </h3>
-        <p className="text-[13px] text-muted-foreground">
-          {episodes.length === 0
-            ? 'Noch keine Sessions in dieser Saga.'
-            : `${completed} von ${episodes.length} abgeschlossen`}
-        </p>
+      <div className="flex shrink-0 flex-col gap-2.5 px-4 pb-2.5 pt-3.5">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div className="min-w-0 space-y-0.5">
+            <h3
+              id="saga-overview-episodes-title"
+              className="text-[1.05rem] font-bold text-foreground"
+            >
+              Sessions
+            </h3>
+            <p className="text-[13px] text-muted-foreground">
+              {episodes.length === 0
+                ? 'Noch keine Sessions in dieser Saga.'
+                : searchQuery.trim()
+                  ? `${filtered.length} von ${episodes.length} · ${completed} abgeschlossen`
+                  : `${completed} von ${episodes.length} abgeschlossen`}
+            </p>
+          </div>
+          {primaryAction && onPrimary ? (
+            <Button
+              type="button"
+              className="h-11 min-h-11 shrink-0 px-3 text-xs font-semibold sm:text-sm"
+              disabled={primaryWait}
+              onClick={onPrimary}
+              data-saga-overview-primary={primaryAction.kind}
+            >
+              {primaryAction.labelDe}
+            </Button>
+          ) : null}
+        </div>
+        <div className="relative min-w-0">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
+          <Input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Sessions durchsuchen…"
+            className="pl-10"
+            aria-label="Sessions durchsuchen"
+            data-saga-hub-sessions-search
+          />
+        </div>
       </div>
 
-      <EntityBrowser
-        storageKey={VIEW_MODE_KEY}
-        items={items}
-        getId={(item) => item.id}
-        renderItem={renderItem}
-        onOpenItem={(item) => onOpenEpisode(item)}
-        emptyState={emptyState}
-        toolbarLeft={
-          <span>
-            {episodes.length === 1
-              ? '1 Session'
-              : `${episodes.length} Sessions`}
-          </span>
-        }
-      />
-
-      {corner.anchor && openMenuEpisode ? (
-        <EntityBrowserCornerMenuPortal
-          anchor={corner.anchor}
-          busy={corner.isBusy(openMenuEpisode.sessionPublicId)}
-          dataAttr="saga-hub-episode-menu"
-          contentDataAttr="saga-hub-episode-menu-content"
-          onClose={corner.close}
-          items={menuItems}
-        />
-      ) : null}
+      <div
+        className={cn(
+          'min-h-0 overscroll-contain px-3 pb-3',
+          scrollSessions && `${SESSION_SCROLL_MAX_CLASS} overflow-y-auto`,
+        )}
+      >
+        <Table data-saga-overview-episodes-table>
+          <TableHeader className={scrollSessions ? 'sticky top-0 z-10 bg-card' : undefined}>
+            <TableRow>
+              <TableHead>Sessionname</TableHead>
+              <TableHead>Datum</TableHead>
+              <TableHead>Dauer</TableHead>
+              <TableHead className="text-right">Aktion</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {episodes.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="py-6 text-muted-foreground whitespace-normal"
+                  data-saga-overview-episodes-empty
+                >
+                  Noch keine Sessions in dieser Saga. Starte die erste über „Session hosten“.
+                </TableCell>
+              </TableRow>
+            ) : filtered.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="py-6 text-muted-foreground whitespace-normal"
+                  data-saga-overview-episodes-search-empty
+                >
+                  Keine Treffer für „{searchQuery.trim()}“.
+                </TableCell>
+              </TableRow>
+            ) : (
+              filtered.map((episode) => {
+                const title = episodeTitle(episode);
+                const dateIso = episode.startedAt ?? episode.endedAt;
+                return (
+                  <TableRow
+                    key={episode.sessionId}
+                    data-saga-overview-episode-row={episode.sessionPublicId}
+                  >
+                    <TableCell className="max-w-[12rem] truncate font-medium text-foreground">
+                      {title}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatSessionDate(dateIso)}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatSessionDuration(episode.startedAt, episode.endedAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="inline-flex items-center justify-end gap-1">
+                        <Button
+                          type="button"
+                          size="sm"
+                          className="min-h-11 px-3"
+                          onClick={() => onOpenEpisode(episode)}
+                          data-saga-overview-episode={episode.sessionPublicId}
+                        >
+                          Öffnen
+                        </Button>
+                        {canDeleteEpisodes && onDeleteEpisode ? (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-11 shrink-0 text-muted-foreground hover:text-destructive"
+                            aria-label={`${title} löschen`}
+                            onClick={() => {
+                              void onDeleteEpisode(episode);
+                            }}
+                            data-saga-overview-episode-delete={episode.sessionPublicId}
+                          >
+                            <Trash2 className="size-4" aria-hidden />
+                          </Button>
+                        ) : null}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </section>
   );
 }

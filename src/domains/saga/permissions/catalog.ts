@@ -178,13 +178,13 @@ export function keysForBundle(bundleId: SagaBundleId): readonly SagaPermissionKe
 }
 
 export function bundleLabelDe(bundleId: SagaBundleId): string {
-  return bundleId === 'bundle.saga.gm' ? 'Spielleitung' : 'Spieler';
+  return bundleId === 'bundle.saga.gm' ? 'Gamemaster' : 'Spieler';
 }
 
 export function revealLabelDe(reveal: SagaRevealStatus): string {
   switch (reveal) {
     case 'gm_only':
-      return 'Nur Spielleitung';
+      return 'Nur Gamemaster';
     case 'party':
       return 'Party';
     case 'unlisted':

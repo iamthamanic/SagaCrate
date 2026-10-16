@@ -125,7 +125,7 @@ ON CONFLICT (key) DO UPDATE SET
   description = EXCLUDED.description;
 
 INSERT INTO public.saga_permission_bundles (id, label, description) VALUES
-  ('bundle.saga.gm', 'Spielleitung', 'Vollzugriff inkl. Geheimnisse und Bundle-Vergabe'),
+  ('bundle.saga.gm', 'Gamemaster', 'Vollzugriff inkl. Geheimnisse und Bundle-Vergabe'),
   ('bundle.saga.player', 'Spieler', 'Party-Sicht ohne Geheimnisse und ohne Governance')
 ON CONFLICT (id) DO UPDATE SET
   label = EXCLUDED.label,
