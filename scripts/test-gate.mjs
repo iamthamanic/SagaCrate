@@ -1905,7 +1905,8 @@ function scanAddedLinesForSecrets() {
 }
 
 function reportDependencyAudit() {
-  const result = spawnSync('npm', ['audit', '--omit=dev', '--json'], {
+  // #671 — blocking gate (same bar as verify.yml): fail on high/critical.
+  const result = spawnSync('npm', ['audit', '--audit-level=high', '--json'], {
     cwd: root,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -1913,25 +1914,33 @@ function reportDependencyAudit() {
 
   const raw = result.stdout || result.stderr;
   if (!raw) {
-    console.warn('Dependency audit unavailable; continuing because npmAudit is informational.');
-    return;
+    console.error('Dependency audit unavailable — cannot verify supply-chain gate.');
+    process.exit(1);
   }
 
   try {
     const report = JSON.parse(raw);
     const vulnerabilities = report?.metadata?.vulnerabilities;
     if (!vulnerabilities || typeof vulnerabilities !== 'object') {
-      console.warn('Dependency audit returned no vulnerability summary.');
-      return;
+      console.error('Dependency audit returned no vulnerability summary.');
+      process.exit(1);
     }
 
+    const critical = Number(vulnerabilities.critical ?? 0);
+    const high = Number(vulnerabilities.high ?? 0);
     const summary = ['critical', 'high', 'moderate', 'low']
       .map((level) => `${level}=${Number(vulnerabilities[level] ?? 0)}`)
       .join(', ');
 
-    console.log(`Dependency audit (informational): ${summary}.`);
+    if (critical > 0 || high > 0 || result.status !== 0) {
+      console.error(`Dependency audit failed (high+ must be 0): ${summary}.`);
+      process.exit(1);
+    }
+
+    console.log(`Dependency audit (blocking high+): ${summary}.`);
   } catch {
-    console.warn('Dependency audit output could not be parsed; continuing as informational.');
+    console.error('Dependency audit output could not be parsed.');
+    process.exit(1);
   }
 }
 

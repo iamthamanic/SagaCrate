@@ -16,8 +16,8 @@ testGate:
   always:
     - typedStrict
     - rgSecretsDiff
-  optional:
     - npmAudit
+  optional:
     - e2e
   never:
     - aiReview

@@ -44,6 +44,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # #671 — fail CI on high/critical advisories (full tree after lockfile hygiene)
+      - name: npm audit (high+)
+        run: npm audit --audit-level=high
+
       - name: Run Test Gate
         run: npm run test-gate
 
