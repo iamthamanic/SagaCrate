@@ -1,6 +1,6 @@
 # Composition Gate — saga-world-atlas
 
-- HEAD_SHA: WORKTREE (Welt default = Unified Atlas; Orte tab removed)
+- HEAD_SHA: a4709ed5a847083de0bf9b5fab424d194fdba142
 - Date: 2026-10-17
 - Verdict: CLEAR
 
