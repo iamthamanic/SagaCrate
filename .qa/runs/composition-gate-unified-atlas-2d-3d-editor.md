@@ -1,6 +1,6 @@
 # Composition Gate — unified-atlas-2d-3d-editor
 
-- HEAD_SHA: 063deee72cee7c6449b8fc4c46a10cb8a22c8292
+- HEAD_SHA: 8b47fd4722e4794ec3d36eba96041cf1c2bd350f
 - BASE_SHA: 8485f6d7f2d98af0a817b2f112281531197f3966
 - Date (UTC): 2026-10-17T11:16:00Z
 - Verdict: CLEAR
