@@ -360,6 +360,14 @@ function checkWorldMapPartyPosition() {
   });
 }
 
+function checkWorldAtlasEditor() {
+  console.log('World atlas editor (#702): dual nav, Leaflet/Geoman workbench, migration...');
+  execFileSync(process.execPath, ['scripts/world-atlas-editor-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaPromoteToWorld() {
   console.log('Saga promote to world/saga (#582): RPCs, ledger, recap UI...');
   execFileSync(process.execPath, ['scripts/saga-promote-to-world-check.mjs'], {
@@ -2261,6 +2269,7 @@ checkSagaEditorV1();
 checkSagaEditorV2();
 checkWorldMapScriptonyPort();
 checkWorldMapPartyPosition();
+checkWorldAtlasEditor();
 checkSagaPromoteToWorld();
 checkSagaTreeBrandPhaseA();
 checkSagaTreeBrandPhaseB();

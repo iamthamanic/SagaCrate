@@ -738,19 +738,37 @@ export function Library({
           />
         }
         actions={
-          <Button
-            variant="default"
-            size="sm"
-            className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
-            onClick={(event) => {
-              stopMenuBubble(event);
-              openEditWorld(world);
-            }}
-            data-library-world-open={menuKey}
-          >
-            <Edit className="mr-1 h-3 w-3 shrink-0" />
-            <span className="truncate text-xs">Bearbeiten</span>
-          </Button>
+          <div className="flex w-full min-w-0 flex-col gap-1.5">
+            <Button
+              variant="default"
+              size="sm"
+              className="min-h-11 w-full min-w-0 bg-cyan-600 text-white hover:bg-cyan-500"
+              onClick={(event) => {
+                stopMenuBubble(event);
+                if (world.publicId) {
+                  onNavigate(`/library/worlds/${encodeURIComponent(world.publicId)}/map`);
+                }
+              }}
+              disabled={!world.publicId}
+              data-library-world-map={menuKey}
+            >
+              <Globe2 className="mr-1 h-3 w-3 shrink-0" aria-hidden />
+              <span className="truncate text-xs">Karte</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-11 w-full min-w-0"
+              onClick={(event) => {
+                stopMenuBubble(event);
+                openEditWorld(world);
+              }}
+              data-library-world-open={menuKey}
+            >
+              <Edit className="mr-1 h-3 w-3 shrink-0" />
+              <span className="truncate text-xs">Bearbeiten</span>
+            </Button>
+          </div>
         }
       />
     );

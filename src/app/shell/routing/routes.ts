@@ -28,6 +28,7 @@ export type ShellViewId =
   | 'look-edit'
   | 'npc-creature-create'
   | 'npc-creature-edit'
+  | 'world-atlas'
   | 'saga-list'
   | 'saga-new'
   | 'saga-section'
@@ -42,6 +43,7 @@ export type SagaSectionId =
   | 'overview'
   | 'characters'
   | 'world'
+  | 'map'
   | 'npc-creatures'
   | 'items'
   | 'quests'
@@ -73,6 +75,7 @@ export type ResolvedRoute =
         | 'look-edit'
         | 'npc-creature-create'
         | 'npc-creature-edit'
+        | 'world-atlas'
         | 'saga-list'
         | 'saga-new'
         | 'saga-section'
@@ -90,6 +93,7 @@ export type ResolvedRoute =
   | { kind: 'look-edit'; lookId: string }
   | { kind: 'npc-creature-create' }
   | { kind: 'npc-creature-edit'; definitionId: string }
+  | { kind: 'world-atlas'; worldPublicId: string }
   | { kind: 'saga-list' }
   | { kind: 'saga-new' }
   | { kind: 'saga-section'; sagaPublicId: string; section: SagaSectionId }
@@ -124,6 +128,7 @@ const VIEW_PATHS: Record<
     | 'look-edit'
     | 'npc-creature-create'
     | 'npc-creature-edit'
+    | 'world-atlas'
     | 'saga-list'
     | 'saga-new'
     | 'saga-section'
@@ -170,6 +175,7 @@ const SAGA_SECTIONS = new Set<SagaSectionId>([
   'overview',
   'characters',
   'world',
+  'map',
   'npc-creatures',
   'items',
   'quests',
@@ -415,7 +421,15 @@ export function pathForSagaSection(
 ): string {
   const id = sagaPublicId.trim().toUpperCase();
   if (section === 'overview') return `/sagas/${encodeURIComponent(id)}/overview`;
+  // Hard AC #702: Saga → Welt → Karte deep link
+  if (section === 'map') return `/sagas/${encodeURIComponent(id)}/world/map`;
   return `/sagas/${encodeURIComponent(id)}/${section}`;
+}
+
+/** Library → Welten → Karte (#702). */
+export function pathForWorldAtlas(worldPublicId: string): string {
+  const id = encodeURIComponent(worldPublicId.trim().toUpperCase());
+  return `/library/worlds/${id}/map`;
 }
 
 export function pathForSessionPhase(
@@ -477,6 +491,13 @@ function resolveSagaRoutes(path: string): ResolvedRoute | null {
     return { kind: 'saga-section', sagaPublicId, section: 'overview' };
   }
 
+  const sagaWorldMap = path.match(/^\/sagas\/([^/]+)\/world\/map$/);
+  if (sagaWorldMap) {
+    const sagaPublicId = requireSagaPublicId(sagaWorldMap[1] ?? '');
+    if (!sagaPublicId) return { kind: 'not-found', attemptedPath: path };
+    return { kind: 'saga-section', sagaPublicId, section: 'map' };
+  }
+
   const sagaSection = path.match(/^\/sagas\/([^/]+)\/([^/]+)$/);
   if (sagaSection) {
     const sagaPublicId = requireSagaPublicId(sagaSection[1] ?? '');
@@ -484,6 +505,9 @@ function resolveSagaRoutes(path: string): ResolvedRoute | null {
     if (!sagaPublicId) return { kind: 'not-found', attemptedPath: path };
     if (sectionRaw === 'sessions') {
       return { kind: 'saga-section', sagaPublicId, section: 'sessions' };
+    }
+    if (sectionRaw === 'map') {
+      return { kind: 'saga-section', sagaPublicId, section: 'map' };
     }
     if (SAGA_SECTIONS.has(sectionRaw as SagaSectionId)) {
       return {
@@ -674,6 +698,16 @@ export function resolvePathname(pathname: string): ResolvedRoute {
     return { kind: 'npc-creature-edit', definitionId };
   }
 
+  const libraryWorldMap = path.match(/^\/library\/worlds\/([^/]+)\/map$/);
+  if (libraryWorldMap) {
+    const worldPublicId = decodeSegment(libraryWorldMap[1] ?? '').trim().toUpperCase();
+    const parsed = parsePublicResourceId(worldPublicId);
+    if (!parsed || parsed.kind !== 'world') {
+      return { kind: 'not-found', attemptedPath: path };
+    }
+    return { kind: 'world-atlas', worldPublicId: parsed.value };
+  }
+
   const libraryTabMatch = path.match(/^\/library\/([^/]+)$/);
   if (libraryTabMatch) {
     if (parseLibraryTabParam(libraryTabMatch[1] ?? '')) {
@@ -722,6 +756,8 @@ export function routeToShellView(route: ResolvedRoute): ShellViewId {
       return 'npc-creature-create';
     case 'npc-creature-edit':
       return 'npc-creature-edit';
+    case 'world-atlas':
+      return 'world-atlas';
     case 'saga-list':
       return 'saga-list';
     case 'saga-new':
@@ -752,6 +788,7 @@ export function knownViewIds(): string[] {
     'look-edit',
     'npc-creature-create',
     'npc-creature-edit',
+    'world-atlas',
     'saga-list',
     'saga-new',
     'saga-section',

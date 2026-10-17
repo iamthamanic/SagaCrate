@@ -6,3 +6,4 @@ export { WorldProfileEditorDialog, useWorldProfiles } from './profile-editor';
 export { WorldItemCatalogSection } from './item-catalog';
 export { WorldNpcCreatureCatalogSection } from './npc-creature-catalog';
 export { WorldMapEditorScreen, WorldMapPlayerView, useWorldMapEditor } from './map';
+export { WorldAtlasScreen, WorldAtlasWorkbench, useWorldAtlasEditor } from './atlas';

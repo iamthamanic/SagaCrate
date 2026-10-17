@@ -28,6 +28,7 @@ import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
 import { SagaWorldAtlasPanel } from './SagaWorldAtlasPanel';
+import { SagaWorldMapPanel } from './SagaWorldMapPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { toast } from 'sonner';
 import { sessionService } from '../../infrastructure/session/session-service';
@@ -52,6 +53,7 @@ const SECTION_LABELS: Record<SagaSectionId, string> = {
   characters: 'Spieler-Charaktere',
   world: 'Welt',
   'npc-creatures': 'NSCs / Kreaturen',
+  map: 'Karte',
   items: 'Gegenstände',
   quests: 'Quests',
   lore: 'Lore / Verlauf',
@@ -61,6 +63,7 @@ const SECTION_LABELS: Record<SagaSectionId, string> = {
 
 const WORLD_CONTENT = new Set<SagaSectionId>([
   'world',
+  'map',
   'npc-creatures',
   'items',
   'quests',
@@ -249,7 +252,9 @@ function SagaWorldShell({
           onNavigate={onNavigate}
         />
 
-        {sub === 'places' ? (
+        {sub === 'map' ? (
+          <SagaWorldMapPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
+        ) : sub === 'places' ? (
           <SagaWorldAtlasPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
         ) : (
           <SagaWorkspaceCatalogSection

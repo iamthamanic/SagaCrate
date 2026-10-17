@@ -17,7 +17,8 @@ const WORLD_TABS: readonly {
   label: string;
   icon: typeof Map;
 }[] = [
-  { id: 'places', label: 'Orte / Karten', icon: Map },
+  { id: 'map', label: 'Karte', icon: Map },
+  { id: 'places', label: 'Orte', icon: Map },
   { id: 'npc-creatures', label: 'NSCs / Kreaturen', icon: Users },
   { id: 'items', label: 'Gegenstände', icon: Package },
   { id: 'quests', label: 'Quests', icon: ScrollText },
@@ -47,7 +48,7 @@ export function SagaWorldSubNav({
       className="@container w-full min-w-0"
       data-saga-world-subnav
     >
-      <TabsList className="grid h-auto w-full max-w-full min-w-0 grid-cols-2 gap-1 @[36rem]:grid-cols-3 @[60rem]:grid-cols-5">
+      <TabsList className="grid h-auto w-full max-w-full min-w-0 grid-cols-2 gap-1 @[36rem]:grid-cols-3 @[60rem]:grid-cols-6">
         {WORLD_TABS.map((tab) => {
           const Icon = tab.icon;
           return (

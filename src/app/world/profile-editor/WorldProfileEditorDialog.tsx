@@ -201,9 +201,34 @@ export function WorldProfileEditorDialog({
                 onCatalogChanged={() => setNpcCatalogRevision((token) => token + 1)}
               />
               <div
-                className="border-t border-border pt-5"
+                className="space-y-3 border-t border-border pt-5"
                 data-world-map-module-section
               >
+                <p className="text-sm text-muted-foreground">
+                  Vollständiger Atlas (Leaflet / Hierarchie) unter Bibliothek → Welten → Karte.
+                  Hier bleibt der Legacy-Kachel-Editor für bestehende Karten.
+                </p>
+                {world.publicId ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="min-h-11"
+                    onClick={() => {
+                      onOpenChange(false);
+                      if (typeof window !== 'undefined') {
+                        window.history.pushState(
+                          null,
+                          '',
+                          `/library/worlds/${encodeURIComponent(world.publicId)}/map`,
+                        );
+                        window.dispatchEvent(new PopStateEvent('popstate'));
+                      }
+                    }}
+                    data-world-atlas-open-full
+                  >
+                    Atlas öffnen
+                  </Button>
+                ) : null}
                 <WorldMapEditorScreen worldProfileId={world.id} />
               </div>
             </>

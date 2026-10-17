@@ -73,6 +73,20 @@ class WorldProfileService {
     return this.mapToViewModel(data as WorldProfileDto);
   }
 
+  /** Resolve by public id (WO-…); RLS decides readability (no client-elevated filter). */
+  async getByPublicId(worldPublicId: string): Promise<WorldProfileVm | null> {
+    const publicId = worldPublicId.trim().toUpperCase();
+    if (!publicId) return null;
+    const { data, error } = await supabase
+      .from(this.tableName)
+      .select(WORLD_SELECT)
+      .eq('public_id', publicId)
+      .maybeSingle();
+    if (error) throw new Error(`Welt konnte nicht geladen werden: ${error.message}`);
+    if (!data) return null;
+    return this.mapToViewModel(data as WorldProfileDto);
+  }
+
   async createWorldProfile(ownerUserId: string, payload: CreateWorldProfileDto): Promise<WorldProfileVm> {
     if (!ownerUserId) throw new Error('User not authenticated');
     const insertPayload = {

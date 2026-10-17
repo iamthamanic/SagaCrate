@@ -64,8 +64,15 @@ Bibliothek tabs use the same History API slash router (not `?tab=`):
 /library/npc-creatures           → NPCs & Kreaturen
 /library/sagas                   → Sagas
 /library/worlds                  → Welten
+/library/worlds/:worldPublicId/map → Weltatlas (Workstation, #702)
 /library/items                   → Items
 /library/looks                   → Looks
+```
+
+Saga Welt → Karte:
+
+```text
+/sagas/:sagaPublicId/world/map   → shared WorldAtlasWorkbench (#702)
 ```
 
 Legacy bookmarks `/library?tab=adventures` (etc.) still resolve once, then normalize onto the slash path.

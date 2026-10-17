@@ -17,6 +17,7 @@ import { NpcCreatureCreateScreen, NpcCreatureEditorScreen } from './app/npc-crea
 import { SagaResourceScreen } from './app/project';
 import { SagaEditorScreen } from './app/saga';
 import { SessionResourceScreen } from './app/session';
+import { WorldAtlasScreen } from './app/world';
 import {
   assertPlayerNotRoutedToGamemaster,
   resolveCanonicalLiveEntry,
@@ -97,9 +98,11 @@ function AppShell() {
     navigateToLookEdit,
     navigateToNpcCreatureCreate,
     navigateToNpcCreatureEdit,
+    navigateToWorldAtlas,
     navigateToSagaDefinitionEdit,
     navigateToSessionLive,
     navigateToSessionPhase,
+    worldPublicId,
   } = useAppLocation();
 
   const handleNavigate = (view: string) => {
@@ -124,6 +127,7 @@ function AppShell() {
     || currentView === 'look-edit'
     || currentView === 'npc-creature-create'
     || currentView === 'npc-creature-edit'
+    || currentView === 'world-atlas'
     || currentView === 'saga-list'
     || currentView === 'saga-new'
     || currentView === 'saga-section'
@@ -349,6 +353,14 @@ function AppShell() {
             key={npcCreatureDefinitionId ?? 'missing'}
             definitionId={npcCreatureDefinitionId ?? ''}
             onBack={() => handleNavigate('library')}
+          />
+        );
+      case 'world-atlas':
+        return (
+          <WorldAtlasScreen
+            key={worldPublicId ?? 'missing'}
+            worldPublicId={worldPublicId ?? ''}
+            onBack={() => handleNavigate('/library/worlds')}
           />
         );
       case 'saga-list':
