@@ -35,8 +35,16 @@ mustInclude(
 
 mustInclude(
   'src/app/world/atlas/unified/UnifiedAtlasEditor.tsx',
-  ['data-unified-atlas-viewport', 'data-unified-atlas-demo-badge', 'Pinsel', 'Stempel'],
-  'unified canvas editor',
+  [
+    'data-unified-atlas-viewport',
+    'data-unified-atlas-demo-badge',
+    'Pinsel',
+    'Stempel',
+    'absolute inset-0',
+    'max-h-[70dvh]',
+    'items-start',
+  ],
+  'unified canvas editor (height contained)',
 );
 
 mustInclude(

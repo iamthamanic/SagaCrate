@@ -61,7 +61,8 @@ section('2 · World panel contract');
     /section === 'world'/.test(screen)
       || /WORLD_CONTENT\.has\(section\)/.test(screen)
       || /SagaWorldShell/.test(screen)
-      || /sub === 'places'/.test(screen),
+      || /sub === 'map'/.test(screen)
+      || /SagaWorldMapPanel/.test(screen),
     'world section branch',
   );
 }

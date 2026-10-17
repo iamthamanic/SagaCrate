@@ -13,7 +13,7 @@ Saga Hub remaps top nav to Übersicht / Welt / Einstellungen; sessions enter via
 
 1. Route/section ids → `resolveSagaWorkspaceTop` / `resolveSagaWorldSub` / `resolveHubSessionEntryPhase` (domain mapping only).
 2. Overview UI → `useSagaOverview` → `get_saga_overview` (existing RPC; body re-asserted in `091`/`093`).
-3. Welt places → `SagaWorldAtlasPanel` → map service + optional bindings drawer (see atlas proof).
+3. Welt / Karte → `SagaWorldMapPanel` → Unified Atlas + Orte/Lore Sheet (see atlas proof).
 4. Library Sagas list → `projects` RLS via DEFINER helpers (`092`).
 
 No new outbox, bulk side-effects, or dual-write fields.

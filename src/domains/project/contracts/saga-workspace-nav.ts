@@ -8,7 +8,6 @@
 export type SagaWorkspaceTopId = 'overview' | 'world' | 'settings';
 
 export type SagaWorldSubId =
-  | 'places'
   | 'map'
   | 'npc-creatures'
   | 'items'
@@ -43,10 +42,13 @@ export function resolveSagaWorkspaceTop(section: SagaNavSectionId): SagaWorkspac
   return 'overview';
 }
 
+/**
+ * Welt default (`/world`) is the Unified Atlas. `/world/map` is the same surface
+ * (deep-link alias). Former `places` / Orte tab removed — locations live in a Sheet.
+ */
 export function resolveSagaWorldSub(section: SagaNavSectionId): SagaWorldSubId | null {
   switch (section) {
     case 'world':
-      return 'places';
     case 'map':
       return 'map';
     case 'npc-creatures':
@@ -69,9 +71,8 @@ export function pathSectionForTop(top: SagaWorkspaceTopId): SagaNavSectionId {
   return 'overview';
 }
 
-/** Section path for a Welt subtab. */
+/** Section path for a Welt subtab. Map stays on `/world` (not a second Orte tab). */
 export function pathSectionForWorldSub(sub: SagaWorldSubId): SagaNavSectionId {
-  if (sub === 'places') return 'world';
-  if (sub === 'map') return 'map';
+  if (sub === 'map') return 'world';
   return sub;
 }

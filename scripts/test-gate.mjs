@@ -368,6 +368,14 @@ function checkWorldAtlasEditor() {
   });
 }
 
+function checkAuthLocalAdminLoginSmoke() {
+  console.log('Auth Local Admin login smoke: GoTrue admin/1234 JWT when stack is up...');
+  execFileSync(process.execPath, ['scripts/auth-local-admin-login-smoke.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkSagaPromoteToWorld() {
   console.log('Saga promote to world/saga (#582): RPCs, ledger, recap UI...');
   execFileSync(process.execPath, ['scripts/saga-promote-to-world-check.mjs'], {
@@ -2270,6 +2278,7 @@ checkSagaEditorV2();
 checkWorldMapScriptonyPort();
 checkWorldMapPartyPosition();
 checkWorldAtlasEditor();
+checkAuthLocalAdminLoginSmoke();
 checkSagaPromoteToWorld();
 checkSagaTreeBrandPhaseA();
 checkSagaTreeBrandPhaseB();

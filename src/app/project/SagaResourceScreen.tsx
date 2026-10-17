@@ -27,7 +27,6 @@ import { SagaWorldSubNav } from './SagaWorldSubNav';
 import { SagaVisualStyleSettings } from './SagaVisualStyleSettings';
 import { SagaPermissionSettings } from './SagaPermissionSettings';
 import { WorldLookPreviewPanel } from './WorldLookPreviewPanel';
-import { SagaWorldAtlasPanel } from './SagaWorldAtlasPanel';
 import { SagaWorldMapPanel } from './SagaWorldMapPanel';
 import { SagaWorkspaceCatalogSection } from './SagaWorkspaceCatalogSection';
 import { toast } from 'sonner';
@@ -220,7 +219,7 @@ export function SagaResourceScreen({
 }
 
 /**
- * Welt shell — subtabs + places catalog or scoped catalog sections.
+ * Welt shell — Unified Atlas under Welt/Karte; other subs are catalogs.
  */
 function SagaWorldShell({
   sagaPublicId,
@@ -235,7 +234,7 @@ function SagaWorldShell({
   onNavigate: (view: string) => void;
   onNavigateHome: () => void;
 }) {
-  const sub = resolveSagaWorldSub(section) ?? 'places';
+  const sub = resolveSagaWorldSub(section) ?? 'map';
 
   return (
     <AdaptivePage data-au-surface="saga-section" className="h-full w-full">
@@ -254,8 +253,6 @@ function SagaWorldShell({
 
         {sub === 'map' ? (
           <SagaWorldMapPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
-        ) : sub === 'places' ? (
-          <SagaWorldAtlasPanel sagaPublicId={sagaPublicId} onNavigate={onNavigate} />
         ) : (
           <SagaWorkspaceCatalogSection
             sagaPublicId={sagaPublicId}
