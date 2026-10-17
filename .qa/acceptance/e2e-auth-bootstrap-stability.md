@@ -20,10 +20,10 @@ Local Admin login must not hang Browser E2E when remote GoTrue is slow/unreachab
 - [x] GoTrue abort → fallback
 - [x] GoTrue hang > 1500ms → fallback before 15s E2E asserts
 - [x] Bootstrap with stored Local Admin + slow auth → no hang
-- [x] Timeout → late GoTrue success does not uncontrolled overwrite fallback
+- [x] Timeout → late GoTrue success upgrades intentional Local Admin fallback to JWT (no login bounce; API usable)
 - [x] Timeout → logout → late success does not resurrect Admin / persist admin session
 - [x] Timeout → different user → late admin does not replace newer user
-- [x] Overlapping Local Admin attempts: newest wins
+- [x] Overlapping Local Admin attempts: newest wins; superseded JWT may upgrade live Local Admin fallback
 
 ## Regression
 - [x] No Face Anchor / #423 / Agent Review changes
@@ -37,4 +37,4 @@ Local Admin login must not hang Browser E2E when remote GoTrue is slow/unreachab
 ## Composition Gate
 - Verdict: SKIPPED
 - Proof: `.qa/runs/composition-gate-e2e-auth-bootstrap-stability.md`
-- Reason: in-process attempt generation + selective stale session scrub; no producer→consumer fan-out
+- Reason: in-process attempt generation + fallback JWT upgrade + selective stale session scrub; no producer→consumer fan-out

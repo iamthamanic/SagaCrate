@@ -300,7 +300,8 @@ SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 
 ## Recent changes
 
-- **2026-10-17** — Weltatlas: Unified Canvas (Multi-Scale-Zoom, Pinsel/Stempel, Demo Eldoria); Speichern in `generator_meta.unifiedCanvas` (`#702` / PR branch)
+- **2026-10-17** — Local Admin: Timeout-Fallback übernimmt späten GoTrue-JWT (PostgREST/RLS); Logout bleibt anti-Resurrection
+- **2026-10-17** — Weltatlas: Unified Canvas (Multi-Scale-Zoom, Pinsel/Stempel, Demo Eldoria); Speichern in `generator_meta.unifiedCanvas` (`#702`)
 - **2026-10-15** — Session-Lobby: Cover-Meta + Meet-Device-Bar; Account-Avatar in Shell/Lobby; Settings-Routen `/settings/*`; Avatar-Upload mit Auto-Downscale
 - **2026-10-14** — Bibliothek: ⋮-Menüs (Copy Public-ID / Duplizieren), Liste·Grid·Karussell für alle Tabs, WO-/LK-Public-IDs, SagaTree-Native-Badge
 - **2026-10-13** — Bibliothek: Slash-Routen (`/library/player-characters`, `/library/sagas`, …); Karussell-Karten breiter + portrait-/cover-sichere Bildframes
@@ -309,9 +310,6 @@ SagaTree/                 # Repo (historisch auch sagatree/ lokal)
 - **2026-10-10** — Adaptive Content-Width: Journey/Session Join folgt Main-Pane (`AdaptiveJourneyColumn`, AU-CONTENT-WIDTH)
 - **2026-10-10** — Character-Editor: Human-Vorlage lädt Preview-LOD (~10 MB); Speichern bleibt face3
 - **2026-10-07** — Starttemplates: Icons + Playstyle-Tooltips; Editor-Hinweise bei offenen Lücken
-- **2026-09-30** — Bibliothek Abenteuer: GM kann Leiten und Teilnehmen von derselben Karte
-- **2026-09-25** — LiveAct Face Setup: Auto Mapping, Kopfachsen, Kalibrierung, Motion-Test
-- **2026-09-21** — LiveAct Face Asset Contract / Validator / Capabilities
 
 ---
 
