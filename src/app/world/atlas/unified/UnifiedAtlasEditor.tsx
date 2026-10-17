@@ -270,7 +270,10 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
     const ro = new ResizeObserver(() => {
       const r = el.getBoundingClientRect();
       const width = Math.max(220, r.width);
-      const height = Math.max(220, r.height);
+      // Cap to viewport — hub scroll shells have content-sized flex ancestors;
+      // never let RO copy an unbounded stage height into the bitmap.
+      const maxH = Math.max(220, Math.floor(window.innerHeight * 0.7));
+      const height = Math.max(220, Math.min(r.height, maxH));
       setViewport({ width, height });
       const fit = atlasFitCamera(WORLD_RECT, { width, height }, 48);
       const prevFit = fitRef.current;
@@ -298,8 +301,8 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
     const { width, height } = viewport;
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    // CSS size comes from absolute inset-0 on the capped stage — do not set
+    // pixel style height (that fed the RO → layout feedback loop).
 
     const cam = camRef.current;
     const scale = cam.pixelsPerUnit;
@@ -692,9 +695,9 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
         </div>
       ) : null}
 
-      <div className="grid min-h-0 flex-1 gap-2 @[48rem]:grid-cols-[12rem_minmax(0,1fr)_14rem]">
+      <div className="grid min-h-0 flex-1 items-start gap-2 @[48rem]:grid-cols-[12rem_minmax(0,1fr)_14rem]">
         <aside
-          className="hidden min-h-0 space-y-3 overflow-auto rounded-lg border border-border p-2 @[48rem]:block"
+          className="hidden max-h-[min(70dvh,36rem)] min-h-0 space-y-3 overflow-auto rounded-lg border border-border p-2 @[48rem]:block"
           data-unified-chrome
         >
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -734,7 +737,7 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
           </Button>
         </aside>
 
-        <section className="flex min-h-0 min-w-0 flex-col">
+        <section className="flex min-h-0 min-w-0 w-full flex-col">
           <div className="flex items-center justify-between gap-2 border-b border-border pb-2 text-sm">
             <div className="truncate text-muted-foreground">
               Eldoria › <strong className="text-foreground">{crumb}</strong>
@@ -745,7 +748,7 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
           </div>
           <div
             ref={stageRef}
-            className="relative min-h-[20rem] flex-1 touch-none overflow-hidden rounded-lg border border-border bg-[#10212a]"
+            className="relative h-[min(70dvh,36rem)] max-h-[70dvh] min-h-[20rem] w-full touch-none overflow-hidden rounded-lg border border-border bg-[#10212a]"
             data-unified-atlas-viewport
             data-tool={tool}
             onPointerDown={onPointerDown}
@@ -767,7 +770,11 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
               goToRect(dest);
             }}
           >
-            <canvas ref={canvasRef} className="block h-full w-full" aria-label="Interaktive Weltkarte" />
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 size-full"
+              aria-label="Interaktive Weltkarte"
+            />
             <div
               className="absolute left-1/2 top-3 z-[2] flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 gap-1 overflow-auto rounded-lg border border-border bg-card/95 p-1 shadow"
               data-unified-chrome
@@ -853,7 +860,10 @@ export function UnifiedAtlasEditor({ doc, canEdit, onDocChange }: UnifiedAtlasEd
           </div>
         </section>
 
-        <aside className="min-h-0 space-y-3 overflow-auto rounded-lg border border-border p-3" data-unified-chrome>
+        <aside
+          className="max-h-[min(70dvh,36rem)] min-h-0 space-y-3 overflow-auto rounded-lg border border-border p-3"
+          data-unified-chrome
+        >
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Kartenwerkzeuge
           </p>

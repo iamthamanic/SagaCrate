@@ -182,7 +182,7 @@ export function SagaWorldMapPanel({ sagaPublicId, onNavigate }: SagaWorldMapPane
         </Button>
       </div>
 
-      <div className="min-h-[28rem] w-full min-w-0" data-saga-world-atlas-canvas>
+      <div className="min-h-0 w-full min-w-0" data-saga-world-atlas-canvas>
         <WorldAtlasWorkbench
           worldProfileId={worldProfileId}
           canEdit={canEdit}
