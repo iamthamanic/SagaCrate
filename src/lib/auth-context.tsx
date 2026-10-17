@@ -2,10 +2,11 @@
  * AuthProvider — Supabase session + Local Admin shortcut with attempt generations.
  * Location: src/lib/auth-context.tsx
  *
- * Local Admin GoTrue login is bounded by AUTH_SESSION_TIMEOUT_MS. Timed-out /
- * superseded attempts must not authenticate later via onAuthStateChange or a
- * persisted session. signInWithPassword has no AbortSignal — stale results are
- * invalidated by generation + selective admin-session cleanup.
+ * Local Admin GoTrue login is bounded by AUTH_SESSION_TIMEOUT_MS. Timed-out
+ * attempts fall back to offline UI, but a late GoTrue success for the same live
+ * Local Admin intent upgrades to a real JWT (needed for PostgREST/RLS). After
+ * logout or a newer non-admin user, late admin JWTs are still discarded.
+ * signInWithPassword has no AbortSignal — stale results use generation + scrub.
  */
 
 import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
@@ -172,18 +173,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  /**
+   * Promote offline Local Admin UI to a real GoTrue JWT when the user still wants
+   * Local Admin. Returns true when the JWT was adopted (do not discard).
+   */
+  const tryUpgradeLocalAdminFallback = (generation: number, next: User): boolean => {
+    if (!isLiveGeneration(generation)) return false;
+    if (!isLocalAdminSession()) return false;
+    if (!isSeededLocalAdminUser(next)) return false;
+    const current = userRef.current;
+    if (current && !isLocalAdminFallbackUser(current) && !isSeededLocalAdminUser(current)) {
+      return false;
+    }
+    fallbackGenerationsRef.current.delete(generation);
+    applyUser(next, generation);
+    provisionDornhainDefaultForSession();
+    return true;
+  };
+
   const watchStaleLocalAdminPasswordLogin = (
     generation: number,
     loginPromise: PromiseLike<AuthTokenResponsePassword>,
   ) => {
     void Promise.resolve(loginPromise)
       .then(async (result) => {
+        if (result.error || !result.data?.user) return;
+        const next = result.data.user;
+        // Live + still on intentional Local Admin fallback → keep JWT for API/RLS.
+        if (tryUpgradeLocalAdminFallback(generation, next)) return;
         const liveSuccess =
           isLiveGeneration(generation) && !fallbackGenerationsRef.current.has(generation);
         if (liveSuccess) return;
-        if (result.error || !result.data?.user) return;
-        // GoTrue has no AbortSignal — the client may persist the session when the
-        // promise settles, possibly after an earlier SIGNED_IN scrub. Scrub twice.
+        // Newer Local Admin generation may adopt this JWT via SIGNED_IN — do not scrub it.
+        if (isLocalAdminSession() && isSeededLocalAdminUser(next)) return;
+        // Logged out / other user — scrub persisted admin JWT (anti-resurrection).
         await discardStaleLocalAdminSession();
         await new Promise((resolve) => setTimeout(resolve, 50));
         await discardStaleLocalAdminSession();
@@ -280,7 +303,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         expectingGoTrueLocalAdminRef.current === generation;
 
       if (event === 'SIGNED_IN' && session?.user && isSeededLocalAdminUser(session.user)) {
-        // Stale Local Admin GoTrue must not resurrect / overwrite newer auth state.
+        // Intentional offline Local Admin UI → upgrade to real JWT (fixes API 401).
+        if (onFallback && tryUpgradeLocalAdminFallback(generation, session.user)) {
+          return;
+        }
+        // Stale Local Admin GoTrue must not resurrect after logout or overwrite others.
         if (onFallback) {
           void discardStaleLocalAdminSession();
           return;

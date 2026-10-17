@@ -1,5 +1,5 @@
 {
-  "hasAuthToken": false,
-  "email": null,
+  "hasAuthToken": true,
+  "email": "admin@sagatree.local",
   "localFlag": "true"
 }

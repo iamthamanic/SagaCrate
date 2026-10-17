@@ -3,8 +3,8 @@
  * Location: e2e/auth-local-admin-timeout.spec.ts
  *
  * Proves Local Admin shortcut bounds GoTrue with AUTH_SESSION_TIMEOUT_MS, falls
- * back without hanging, and rejects late GoTrue success after timeout/logout/
- * newer attempts (no privilege resurrection).
+ * back without hanging, upgrades intentional fallback to a late JWT, and rejects
+ * late GoTrue success after logout / newer non-admin users (no resurrection).
  */
 import { test, expect, type Page, type Route } from '@playwright/test';
 import fs from 'node:fs';
@@ -195,13 +195,15 @@ test('3 timeout → late success must not uncontrolled overwrite fallback', asyn
   hold.release();
   await page.waitForTimeout(2_500);
   await expect(dashboardReadyLocator(page)).toBeVisible();
-  // Fallback stays authenticated; late JWT may be scrubbed — must not bounce to login.
+  // Intentional fallback may upgrade to late JWT — must not bounce to login.
   await expect(page.getByRole('tab', { name: 'Login' })).toHaveCount(0);
   const report = {
     hasAuthToken: await hasSupabaseAuthToken(page),
     email: await readStoredAuthEmail(page),
     localFlag: await page.evaluate((k) => localStorage.getItem(k), LOCAL_ADMIN_STORAGE_KEY),
   };
+  // Prefer JWT upgrade so PostgREST/RLS work; flag stays for Local Admin intent.
+  expect(report.localFlag).toBeTruthy();
   fs.writeFileSync(path.join(EVIDENCE, 'case-3-late-success.json'), `${JSON.stringify(report, null, 2)}\n`);
   await page.screenshot({ path: path.join(EVIDENCE, 'case-3.png'), fullPage: true });
 });
