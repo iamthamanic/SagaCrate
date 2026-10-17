@@ -69,6 +69,6 @@ Roadmap: design `donalu-world-workspace` Stufe A–C.
 
 ## Composition Gate
 
-- HEAD_SHA: `8485f6d7f2d98af0a817b2f112281531197f3966` (uncommitted implement on top)
+- HEAD_SHA: `c6341e9c230f2ba9d9d86038d469751645a39ecb`
 - Verdict: CLEAR
 - Proof: `.qa/runs/composition-gate-donalu-world-workspace.md`

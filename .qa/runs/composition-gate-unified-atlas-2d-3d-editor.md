@@ -1,7 +1,7 @@
 # Composition Gate — unified-atlas-2d-3d-editor
 
-- **HEAD_SHA:** pending-commit (WORKTREE with Donalu + hybrid atlas implement)
-- **Date (UTC):** 2026-10-17
+- **HEAD_SHA:** `c6341e9c230f2ba9d9d86038d469751645a39ecb`
+- **Date (UTC):** 2026-10-17T11:10:00Z
 - **Verdict:** CLEAR
 
 ## Scope verified
