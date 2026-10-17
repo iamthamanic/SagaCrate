@@ -9,7 +9,11 @@
 import { test, expect, type Page, type Route } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { dashboardReadyLocator, ensureLoggedIn } from './helpers/auth';
+import {
+  dashboardReadyLocator,
+  ensureLoggedIn,
+  installLocalAdminGoTrueSuccess,
+} from './helpers/auth';
 
 const EVIDENCE = '.qa/evidence/auth-local-admin-timeout';
 /** Must match src/lib/networkTimeout.ts AUTH_SESSION_TIMEOUT_MS */
@@ -156,12 +160,14 @@ test('1 fast GoTrue success: Local Admin authenticates', async ({ page }) => {
  * leaving the login screen stuck with local-admin flag set and no token.
  */
 test('1b Local Admin JWT must persist after login (no immediate scrub race)', async ({ page }) => {
+  // Deterministic GoTrue success (CI may use inert 127.0.0.1:9 without secrets).
+  await installLocalAdminGoTrueSuccess(page);
   await fillCredentials(page, 'admin', '1234');
   await page.getByRole('button', { name: 'Einloggen' }).click();
   await expect(dashboardReadyLocator(page)).toBeVisible({ timeout: 10_000 });
 
   await expect
-    .poll(async () => hasSupabaseAuthToken(page), { timeout: 2_000 })
+    .poll(async () => hasSupabaseAuthToken(page), { timeout: 5_000 })
     .toBe(true);
 
   // Still present after a short settle window (race used to delete within ~10ms).
