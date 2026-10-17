@@ -1,20 +1,37 @@
 # Composition Gate — unified-atlas-2d-3d-editor
 
-- **HEAD_SHA:** `76c3a389a6f632de5c146ed5a006331ffcc45f10`
-- **Date (UTC):** 2026-10-17T11:10:00Z
-- **Verdict:** CLEAR
+- HEAD_SHA: 063deee72cee7c6449b8fc4c46a10cb8a22c8292
+- BASE_SHA: 8485f6d7f2d98af0a817b2f112281531197f3966
+- Date (UTC): 2026-10-17T11:16:00Z
+- Verdict: CLEAR
 
-## Scope verified
+## Event
 
-| Item | Evidence |
-|------|----------|
-| Hybrid 2D/3D | `AtlasSpatialViewport` + `applyMapEdit`; Draufsicht/3D toggle |
-| Shared doc | `UnifiedCanvasDoc` + `generator_meta.unifiedCanvas` |
-| Dungeon Forge | Domain generator + MIT attribution; confirm + `manualDirty` |
-| Focus mode | `data-atlas-focus-toggle` / Fokusmodus |
-| IV placeholder | `data-atlas-missing-detail` + places panel CTA |
-| Checks | `world-atlas-editor-check`, `unified-atlas-dungeon-check`, `npm run test-gate` PASS |
+Hybrid Unified Atlas: Canvas2D Draufsicht + Three.js 3D share `UnifiedCanvasDoc`.
+Dungeon Forge MIT extract with confirm + `manualDirty` reforge guard. Fokusmodus.
+Shipped with Donalu places on the same PR tip.
 
-## Notes
+## Hop chain
 
-Shipped together with `donalu-world-workspace` (Places + JWT gate). Demo Eldoria LOD marked non-canonical.
+1. Editor loads map → `extractUnifiedCanvasFromGeneratorMeta`.
+2. User edits 2D or 3D → `applyMapEdit` / `onDocChange`.
+3. Save → `mergeUnifiedCanvasIntoGeneratorMeta` (+ dungeon meta).
+4. Reload → same IDs/geometry.
+5. Player get_map → layers secret-strip + generatorMeta engine-only.
+
+## Simulations
+
+### N-actors
+- One GM editor session; second tab would hit revision conflict on save.
+
+### Invalid/missing
+- Missing detail place → IV placeholder CTA (no invented lore geometry).
+- Reforge after confirm → explicit browser confirm.
+
+### Two consumers / crash
+- Draufsicht and 3D are two consumers of one doc; crash before save loses dirty buffer only.
+
+## Flags
+
+- Full product E2E 3D save/reload still manual.
+- Demo rect LOD not replaced by full DB nested zoom.

@@ -1,27 +1,42 @@
 # Composition Gate — donalu-world-workspace
 
-- **HEAD_SHA:** `76c3a389a6f632de5c146ed5a006331ffcc45f10`
-- **Date (UTC):** 2026-10-17T11:10:00Z
-- **Verdict:** CLEAR
+- HEAD_SHA: 063deee72cee7c6449b8fc4c46a10cb8a22c8292
+- BASE_SHA: 8485f6d7f2d98af0a817b2f112281531197f3966
+- Date (UTC): 2026-10-17T11:16:00Z
+- Verdict: CLEAR
 
-## Scope verified
+## Event
 
-| Package | Evidence |
-|---------|----------|
-| P0 JWT gate | `donalu-p0-auth-gate-check` OK; place/atlas/profile adapters assert JWT; no service_role |
-| P1 Donalu rename | DB: `WO-9FFK6.name = Donalu` |
-| P2 places schema | Migration `095` + `096`; 6 places; map links; saga `world_place_id` ×5 |
-| P3 Places UX | `WorldPlacesPanel` in workbench; IV placeholder + Detailkarte anlegen; `sagaPublicId` from Saga map |
-| P4 saga overlay | Catalog shows `worldPlaceId`; bindings linked via seed_key |
-| P5 dungeon | `buildDungeonGeneratorMeta` + `manualDirty` + UI reforge confirm; meta merges on save |
-| P6 player projection | `list_world_places(..., p_player_view, p_saga_public_id)` party filter |
-| Checks | `donalu-world-places-check`, `world-atlas-editor-check`, `unified-atlas-dungeon-check`, `npm run typecheck` OK |
+PR #706 ships Donalu Places (migrations 095–097), JWT-gated adapters, Orte-Panel,
+hybrid atlas 2D/3D, dungeon confirm/`manualDirty`, and player-safe place/map-link
+projection with generatorMeta redaction.
 
-## Child maps (WO-9FFK6)
+## Hop chain
 
-- Weltkarte (Unified) / Dornhain (Stadt) / Taverne Innenraum / Krypta Dungeon (+ legacy tiles)
+1. World owner / GM edits places + maps via authenticated RPCs (`assertSupabaseJwtSession`).
+2. Persist: `world_places` / `world_place_map_links` / `world_atlas_maps.generator_meta`.
+3. Saga overlay: `saga_asset_bindings.world_place_id` + party reveal filter.
+4. Player consumers: `list_world_places` / `list_world_place_map_links` / `get_world_atlas_map` party-only + meta redaction.
+5. Atlas UI: shared `UnifiedCanvasDoc` via Canvas2D + Three `applyMapEdit`.
 
-## Notes
+## Simulations
 
-- Demo Eldoria LOD labels marked non-canonical in UI (`Demo-*`).
-- Apply `096_donalu_place_map_link_rpc.sql` on environments that already have `095`.
+### N-actors
+- GM + world editor: full place catalog + map links.
+- Saga player (non-editor): only `reveal=party` places/links; empty without saga id.
+- Second player: same party projection; no gm_only crypt/bandit links.
+
+### Invalid/missing
+- Missing JWT → RPC `not authenticated`.
+- Player view without resolvable saga → empty places/links (fail closed).
+- Upsert link with cross-world place/map → rejected.
+
+### Two consumers / crash
+- Library atlas + Saga map workbench share `WorldAtlasWorkbench`; save conflict uses `expectedRevision`.
+- 2D and 3D viewports edit one doc; crash mid-edit leaves last saved revision recoverable.
+
+## Flags
+
+- Demo Eldoria LOD remains non-canonical (`Demo-*` labels).
+- Nested DB map LOD still partly discrete map list + demo rects.
+- Medium security gaps from prior fail-open player list closed in `097`.
