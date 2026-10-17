@@ -149,6 +149,12 @@ test('1 fast GoTrue success: Local Admin authenticates', async ({ page }) => {
   await expect(dashboardReadyLocator(page)).toBeVisible();
   const localFlag = await page.evaluate((k) => localStorage.getItem(k), LOCAL_ADMIN_STORAGE_KEY);
   expect(localFlag).toBe('true');
+  // Hardening: fast GoTrue success must keep JWT (anti-discard race).
+  await expect
+    .poll(async () => hasSupabaseAuthToken(page), { timeout: 5_000 })
+    .toBe(true);
+  const email = await readStoredAuthEmail(page);
+  expect(email).toBe('admin@sagatree.local');
   await page.screenshot({ path: path.join(EVIDENCE, 'case-1-dashboard.png'), fullPage: true });
 });
 

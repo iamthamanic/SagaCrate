@@ -307,6 +307,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (onFallback && tryUpgradeLocalAdminFallback(generation, session.user)) {
           return;
         }
+        // Live Local Admin sign-in: GoTrue often emits SIGNED_IN before applyUser.
+        // Never scrub that JWT while Local Admin intent is set (anti-resurrection
+        // only applies after logout cleared the flag, or a non-admin user is current).
+        if (isLocalAdminSession() && (!current || isLocalAdminFallbackUser(current) || isSeededLocalAdminUser(current))) {
+          if (expectingGoTrue || onFallback || current === null) {
+            fallbackGenerationsRef.current.delete(generation);
+            applyUser(session.user, generation);
+            provisionDornhainDefaultForSession();
+          }
+          return;
+        }
         // Stale Local Admin GoTrue must not resurrect after logout or overwrite others.
         if (onFallback) {
           void discardStaleLocalAdminSession();
@@ -384,11 +395,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (expectingGoTrueLocalAdminRef.current === generation) {
               expectingGoTrueLocalAdminRef.current = null;
             }
-            await discardStaleLocalAdminSession();
+            // Keep JWT if Local Admin intent still active (listener may adopt it).
+            if (!isLocalAdminSession()) {
+              await discardStaleLocalAdminSession();
+            }
             return;
           }
-          expectingGoTrueLocalAdminRef.current = null;
           applyUser(data.user, generation);
+          if (expectingGoTrueLocalAdminRef.current === generation) {
+            expectingGoTrueLocalAdminRef.current = null;
+          }
           provisionDornhainDefaultForSession();
           return;
         }

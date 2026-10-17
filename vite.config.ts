@@ -81,6 +81,8 @@
       },
     },
     server: {
+      // Listen on IPv4+IPv6 so agents/tools using 127.0.0.1:3004 work (not only ::1).
+      host: true,
       port: 3004,
       open: true,
     },
