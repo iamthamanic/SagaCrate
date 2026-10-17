@@ -1,6 +1,6 @@
 # Composition Gate — local-admin-login-race
 
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: 6c4678fdc7a248b626796ea444724e60bb8b4e37
 - Date: 2026-10-17
 - Verdict: SKIPPED
 
