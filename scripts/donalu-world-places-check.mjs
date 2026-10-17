@@ -51,6 +51,12 @@ mustInclude(
 );
 
 mustInclude(
+  'supabase/migrations/097_donalu_player_place_projection.sql',
+  ['v_party_only', 'list_world_place_map_links', 'p_player_view', "'engine'"],
+  '097 player projection',
+);
+
+mustInclude(
   'src/domains/world/places/world-place.types.ts',
   ['WORLD_PLACE_KINDS', 'WorldPlaceVm', 'WorldPlaceMapLinkVm'],
   'places domain types',

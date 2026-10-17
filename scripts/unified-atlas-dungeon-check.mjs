@@ -33,13 +33,15 @@ mustInclude('third_party/dungeon-forge/LICENSE', ['MIT License', 'Majid Manzarpo
 const outDir = join(root, '.qa/tmp');
 mkdirSync(outDir, { recursive: true });
 const bundle = join(outDir, 'dungeon-gen-bundle.mjs');
-const esbuild = join(root, 'node_modules/esbuild/bin/esbuild');
+// Prefer npm bin shim (works on Linux CI); bin/esbuild is a native ELF and must not be run via node.
+const esbuildBin = join(root, 'node_modules', '.bin', 'esbuild');
+const esbuildNative = join(root, 'node_modules', 'esbuild', 'bin', 'esbuild');
+const esbuild = existsSync(esbuildBin) ? esbuildBin : esbuildNative;
 if (!existsSync(esbuild)) throw new Error('esbuild missing');
 
 const build = spawnSync(
-  process.execPath,
+  esbuild,
   [
-    esbuild,
     'src/domains/world/atlas/dungeon-generator.ts',
     '--bundle',
     '--platform=node',

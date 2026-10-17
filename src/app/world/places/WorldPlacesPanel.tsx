@@ -61,12 +61,10 @@ export function WorldPlacesPanel({
     setLoading(true);
     setError(null);
     try {
+      const listOpts = { playerView, sagaPublicId };
       const [nextPlaces, nextLinks] = await Promise.all([
-        worldPlaceService.listPlaces(id, {
-          playerView,
-          sagaPublicId,
-        }),
-        worldPlaceService.listMapLinks(id),
+        worldPlaceService.listPlaces(id, listOpts),
+        worldPlaceService.listMapLinks(id, listOpts),
       ]);
       setPlaces(nextPlaces);
       setLinks(nextLinks);

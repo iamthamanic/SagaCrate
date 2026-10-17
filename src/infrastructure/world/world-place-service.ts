@@ -47,12 +47,17 @@ class WorldPlaceService {
     return parseWorldPlaceList(data);
   }
 
-  async listMapLinks(worldProfileId: string): Promise<WorldPlaceMapLinkVm[]> {
+  async listMapLinks(
+    worldProfileId: string,
+    options: ListWorldPlacesOptions = {},
+  ): Promise<WorldPlaceMapLinkVm[]> {
     await assertSupabaseJwtSession();
     const id = worldProfileId.trim();
     if (!id) throw new Error('Weltprofil fehlt');
     const { data, error } = await supabase.rpc('list_world_place_map_links', {
       p_world_profile_id: id,
+      p_player_view: options.playerView === true,
+      p_saga_public_id: options.sagaPublicId?.trim() || null,
     });
     if (error) throw new Error(`Kartenverknüpfungen fehlgeschlagen: ${error.message}`);
     return parseWorldPlaceMapLinkList(data);
