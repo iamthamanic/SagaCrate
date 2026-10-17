@@ -115,6 +115,8 @@ migrations=(
   092_fix_projects_rls_recursion.sql
   093_fix_saga_overview_shared_adventure.sql
   094_world_atlas.sql
+  095_donalu_world_places.sql
+  096_donalu_place_map_link_rpc.sql
 )
 
 only="${1:-}"
