@@ -14,7 +14,7 @@ Flatten the Saga workspace from nine equal top tabs to three: Übersicht (play h
 - [ ] Top nav shows exactly three primary destinations: Übersicht, Welt, Einstellungen (Library-style TabsList/TabsTrigger with icons)
 - [ ] Übersicht shows story hero, primary session CTA, episode list, ensemble, world-state summary
 - [ ] `/sagas/:id/sessions` and `/sagas/:id/characters` land on Übersicht shell (nav highlights Übersicht); characters catalog remains reachable from overview when on characters URL
-- [ ] Welt shows subtabs: Orte/Karten, NSCs / Kreaturen, Gegenstände, Quests, Lore / Verlauf
+- [ ] Welt shows subtabs: Karte (default Unified Atlas), NSCs / Kreaturen, Gegenstände, Quests, Lore / Verlauf; Orte via Sheet on the map
 - [ ] `/sagas/:id/npc-creatures|items|quests|lore` open Welt shell with the matching subtab active; top nav highlights Welt
 - [ ] Einstellungen unchanged (visual style + Rechte)
 - [ ] AU-CONTENT-WIDTH: layout uses AdaptivePage + container-aware tab grid; no forced full-viewport-only columns
