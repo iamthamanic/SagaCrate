@@ -62,12 +62,16 @@ export function SagaWorldMapPanel({ sagaPublicId, onNavigate }: SagaWorldMapPane
   }
 
   return (
-    <div className="min-h-[28rem] w-full min-w-0" data-saga-world-map>
+    <div
+      className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col"
+      data-saga-world-map
+    >
       <WorldAtlasWorkbench
         worldProfileId={worldProfileId}
         canEdit={canEdit}
         playerView={!canEdit}
-        title="Welt → Karte"
+        sagaPublicId={sagaPublicId}
+        title="Weltkarte"
       />
     </div>
   );
