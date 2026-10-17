@@ -5,11 +5,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   DEFAULT_ATLAS_BOUNDS,
+  DORNHAIN_WORLD_LAYER_TITLE,
+  buildDornhainUnifiedGeneratorMeta,
   emptyUnifiedCanvasDoc,
   extractDungeonMetaFromGeneratorMeta,
   extractUnifiedCanvasFromGeneratorMeta,
   mergeDungeonMetaIntoGeneratorMeta,
   mergeUnifiedCanvasIntoGeneratorMeta,
+  normalizeDornhainWorldLayerTitle,
+  shouldUpgradeDornhainUnifiedToWorld,
   type DungeonGeneratorMeta,
   type UnifiedCanvasDoc,
   type WorldAtlasFeatureCollection,
@@ -77,21 +81,29 @@ export function useWorldAtlasEditor({
         : await worldAtlasService.listMaps(id);
 
       // Ensure a non-legacy world root so Unified Canvas is the default path.
+      // Dornhain geometry comes from DB seed (098); here only a blank non-demo canvas.
       if (canEdit && !list.some((m) => m.kind === 'world')) {
         await worldAtlasService.upsertMap({
           worldProfileId: id,
           mapId: null,
           parentMapId: null,
           kind: 'world',
-          title: 'Weltkarte (Unified)',
+          title: DORNHAIN_WORLD_LAYER_TITLE,
           bounds: DEFAULT_ATLAS_BOUNDS,
           layers: { type: 'FeatureCollection', features: [] },
-          generatorMeta: { engine: 'unified_canvas' },
+          generatorMeta: {
+            engine: 'unified_canvas',
+            unifiedCanvas: emptyUnifiedCanvasDoc(false),
+          },
         });
         list = await worldAtlasService.listMaps(id);
       }
 
-      setSummaries(list);
+      setSummaries(
+        list.map((m) =>
+          m.kind === 'world' ? { ...m, title: normalizeDornhainWorldLayerTitle(m.title) } : m,
+        ),
+      );
       setActiveMapId((prev) => pickDefaultMapId(list, prev));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Atlas konnte nicht geladen werden.');
@@ -122,11 +134,32 @@ export function useWorldAtlasEditor({
       .getMap(id, playerView)
       .then((vm) => {
         if (cancelled) return;
-        setMap(vm);
-        setDirtyLayers(null);
         const parsed = extractUnifiedCanvasFromGeneratorMeta(vm.generatorMeta);
-        setCanvasDoc(parsed ?? emptyUnifiedCanvasDoc(true));
-        setDirtyCanvas(false);
+        const upgrade = shouldUpgradeDornhainUnifiedToWorld(vm.generatorMeta, parsed);
+        const nextTitle = normalizeDornhainWorldLayerTitle(vm.title);
+        const titleChanged = nextTitle !== vm.title;
+        if (upgrade) {
+          const worldMeta = buildDornhainUnifiedGeneratorMeta();
+          const worldDoc =
+            extractUnifiedCanvasFromGeneratorMeta(worldMeta) ?? emptyUnifiedCanvasDoc(false);
+          setMap({ ...vm, title: nextTitle, generatorMeta: { ...vm.generatorMeta, ...worldMeta } });
+          setCanvasDoc(worldDoc);
+          setDirtyCanvas(true);
+        } else if (titleChanged) {
+          setMap({ ...vm, title: nextTitle });
+          setCanvasDoc(parsed ?? emptyUnifiedCanvasDoc(true));
+          setDirtyCanvas(true);
+        } else {
+          setMap(vm);
+          setCanvasDoc(parsed ?? emptyUnifiedCanvasDoc(true));
+          setDirtyCanvas(false);
+        }
+        if (upgrade || titleChanged) {
+          setSummaries((prev) =>
+            prev.map((s) => (s.id === vm.id ? { ...s, title: nextTitle } : s)),
+          );
+        }
+        setDirtyLayers(null);
         setDungeonMeta(extractDungeonMetaFromGeneratorMeta(vm.generatorMeta));
       })
       .catch((err: unknown) => {

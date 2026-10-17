@@ -36,13 +36,12 @@ mustInclude(
 mustInclude(
   'src/app/world/atlas/unified/UnifiedAtlasEditor.tsx',
   [
-    'data-unified-atlas-viewport',
     'data-unified-atlas-demo-badge',
     'Pinsel',
     'Stempel',
-    'Draufsicht',
-    '3D-Ansicht',
-    'AtlasSpatialViewport',
+    'Weltkarte',
+    'AtlasNative3dEditor',
+    'data-atlas-proto-exact',
     'data-atlas-dungeon-forge',
     'data-atlas-missing-detail',
   ],
@@ -50,15 +49,21 @@ mustInclude(
 );
 
 mustInclude(
-  'src/app/world/atlas/WorldAtlasWorkbench.tsx',
-  ['data-atlas-focus-toggle', 'Fokusmodus', 'Gespeicherte Karten'],
-  'atlas focus mode',
+  'src/app/world/atlas/unified/AtlasNative3dEditor.tsx',
+  ['data-atlas-native-3d', 'mountAtlasPrototype', 'atlas-sagatree-skin.css'],
+  'native 3d atlas mount',
 );
 
 mustInclude(
   'src/app/world/atlas/unified/AtlasSpatialViewport.tsx',
   ['data-atlas-spatial-viewport', 'applyMapEdit', 'three'],
-  'spatial 3d viewport',
+  'spatial 3d viewport module',
+);
+
+mustInclude(
+  'src/app/world/atlas/WorldAtlasWorkbench.tsx',
+  ['Gespeicherte Karten', 'data-world-atlas-workbench'],
+  'atlas workbench chrome',
 );
 
 mustInclude(

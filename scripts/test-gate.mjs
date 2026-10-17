@@ -192,6 +192,14 @@ function checkLocalAuthEmailSagatree() {
   });
 }
 
+function checkLocalAdminAuthPolicy() {
+  console.log('Local Admin JWT policy: adopt while wanted / discard after logout...');
+  execFileSync(process.execPath, ['scripts/local-admin-auth-policy.self-test.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+}
+
 function checkDonaluP0AuthGate() {
   console.log('Donalu P0 auth gate: world/atlas JWT assert (no anon RLS)...');
   execFileSync(process.execPath, ['scripts/donalu-p0-auth-gate-check.mjs'], {
@@ -384,6 +392,31 @@ function checkWorldAtlasEditor() {
   });
   console.log('Unified atlas dungeon generator (Dungeon Forge MIT extract)...');
   execFileSync(process.execPath, ['scripts/unified-atlas-dungeon-check.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+  console.log('Atlas settlement presets: Großstadt/Stadt/Dorf seedKeys...');
+  execFileSync(process.execPath, ['scripts/atlas-settlement-presets.self-test.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+  console.log('Atlas place nav LOD anchors...');
+  execFileSync(process.execPath, ['scripts/atlas-place-nav.self-test.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+  console.log('Dornhain unified world map (ocean blank v3)...');
+  execFileSync(process.execPath, ['scripts/dornhain-unified-world-map.self-test.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+  console.log('Atlas prototype LOD layers (HTML v3 port)...');
+  execFileSync(process.execPath, ['scripts/atlas-prototype-lod.self-test.mjs'], {
+    cwd: root,
+    stdio: 'inherit',
+  });
+  console.log('Atlas prototype 3D exact embed...');
+  execFileSync(process.execPath, ['scripts/atlas-prototype-3d-embed.self-test.mjs'], {
     cwd: root,
     stdio: 'inherit',
   });
@@ -2269,6 +2302,7 @@ checkPlayerTestMultiuserE2eSecurity();
 checkPlayerTestInstrumentationRunbook();
 checkProjectMembershipSecurity();
 checkLocalAuthEmailSagatree();
+checkLocalAdminAuthPolicy();
 checkDonaluP0AuthGate();
 checkDonaluWorldPlaces();
 checkSagaStateColumnPrivileges();

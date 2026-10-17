@@ -20,13 +20,15 @@ One atlas workstation with a shared editable document. Canvas2D Draufsicht + Thr
 - [x] Fokusmodus hides meta chrome; stage uses large min-height.
 - [x] Missing interior detail shows IV placeholder (no invented lore).
 - [ ] Full product E2E save/reload with 3D move (manual/browser against self-host).
-- [ ] Nested DB map LOD wired to zoom (still demo rects + discrete map list).
+- [x] Nested DB map LOD from `world_places` + map-link anchors (`buildAtlasPlaceNav` / `resolveAtlasLodFromPlaces`); demo Eldoria rects only when no DB places.
+- [x] Place authoring: Pin click + Gebiet-Rahmen (marquee) — not camera center only.
+- [x] Planet Globus mode: stronger tilt + horizon disc when level is WELT (`data-atlas-globe-mode`); edit stays on Weltkarte.
 
 ## Regression
 
 - [x] Dual Library/Saga workbench preserved.
 - [x] `unifiedCanvas` format v1 + optional `z`/`height`.
-- [x] `world-atlas-editor-check` + `unified-atlas-dungeon-check`.
+- [x] `world-atlas-editor-check` + `unified-atlas-dungeon-check` + `atlas-place-nav.self-test`.
 - [ ] Full `npm run test-gate` before merge.
 
 ## Security

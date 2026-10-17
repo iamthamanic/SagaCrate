@@ -140,9 +140,7 @@ async function installLateAdminSuccessHold(page: Page): Promise<{ release: () =>
   };
 }
 
-test.beforeAll(() => {
-  fs.mkdirSync(EVIDENCE, { recursive: true });
-});
+fs.mkdirSync(EVIDENCE, { recursive: true });
 
 test('1 fast GoTrue success: Local Admin authenticates', async ({ page }) => {
   await ensureLoggedIn(page, { readyTimeoutMs: 10_000 });
@@ -150,6 +148,40 @@ test('1 fast GoTrue success: Local Admin authenticates', async ({ page }) => {
   const localFlag = await page.evaluate((k) => localStorage.getItem(k), LOCAL_ADMIN_STORAGE_KEY);
   expect(localFlag).toBe('true');
   await page.screenshot({ path: path.join(EVIDENCE, 'case-1-dashboard.png'), fullPage: true });
+});
+
+/**
+ * Regression: anti-resurrection used to scrub the JWT immediately after
+ * signInWithPassword when generation refs were cleared (HMR / Strict remount),
+ * leaving the login screen stuck with local-admin flag set and no token.
+ */
+test('1b Local Admin JWT must persist after login (no immediate scrub race)', async ({ page }) => {
+  await fillCredentials(page, 'admin', '1234');
+  await page.getByRole('button', { name: 'Einloggen' }).click();
+  await expect(dashboardReadyLocator(page)).toBeVisible({ timeout: 10_000 });
+
+  await expect
+    .poll(async () => hasSupabaseAuthToken(page), { timeout: 2_000 })
+    .toBe(true);
+
+  // Still present after a short settle window (race used to delete within ~10ms).
+  await page.waitForTimeout(250);
+  expect(await hasSupabaseAuthToken(page)).toBe(true);
+  expect(await page.evaluate((k) => localStorage.getItem(k), LOCAL_ADMIN_STORAGE_KEY)).toBe(
+    'true',
+  );
+  await expect(dashboardReadyLocator(page)).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Login' })).toHaveCount(0);
+
+  const report = {
+    hasAuthToken: await hasSupabaseAuthToken(page),
+    email: await readStoredAuthEmail(page),
+    localFlag: await page.evaluate((k) => localStorage.getItem(k), LOCAL_ADMIN_STORAGE_KEY),
+  };
+  fs.writeFileSync(
+    path.join(EVIDENCE, 'case-1b-jwt-persist.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+  );
 });
 
 test('2 timeout fallback: GoTrue hang → Local Admin fallback', async ({ page }) => {

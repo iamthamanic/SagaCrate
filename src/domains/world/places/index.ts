@@ -26,3 +26,24 @@ export {
   pickPrimaryMapIdForPlace,
   placeHasDetailMap,
 } from './parse-world-place';
+
+export {
+  BASIC_BUILDING_SEED_KEY,
+  BASIC_BUILDING_STAMP_SIZE,
+  SETTLEMENT_PRESETS,
+  placeKindForAuthor,
+  seedKeyForAuthor,
+  settlementPresetById,
+  stampSizeForAuthor,
+  type AtlasPlaceAuthorKind,
+  type SettlementPreset,
+  type SettlementPresetId,
+} from './settlement-presets';
+
+export {
+  anchorPointFromLink,
+  buildAtlasPlaceNav,
+  resolveAtlasLodFromPlaces,
+  type AtlasLodStage,
+  type AtlasPlaceNavItem,
+} from './atlas-place-nav';

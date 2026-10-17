@@ -17,6 +17,8 @@ export type AtlasSpatialViewportProps = {
   readonly selectedId: string | null;
   readonly onSelect: (id: string | null) => void;
   readonly onDocChange: (next: UnifiedCanvasDoc) => void;
+  /** Planet-level: stronger tilt + horizon disc (viewer, not a second doc). */
+  readonly globeMode?: boolean;
   readonly className?: string;
 };
 
@@ -48,6 +50,7 @@ export function AtlasSpatialViewport({
   selectedId,
   onSelect,
   onDocChange,
+  globeMode = false,
   className,
 }: AtlasSpatialViewportProps) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -58,6 +61,7 @@ export function AtlasSpatialViewport({
   const onDocChangeRef = useRef(onDocChange);
   const onSelectRef = useRef(onSelect);
   const canEditRef = useRef(canEdit);
+  const globeRef = useRef(globeMode);
 
   docRef.current = doc;
   selectedRef.current = selectedId;
@@ -65,6 +69,7 @@ export function AtlasSpatialViewport({
   onDocChangeRef.current = onDocChange;
   onSelectRef.current = onSelect;
   canEditRef.current = canEdit;
+  globeRef.current = globeMode;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -88,6 +93,8 @@ export function AtlasSpatialViewport({
     const sun = new THREE.DirectionalLight(0xfff1d6, 1.05);
     sun.position.set(80, 120, 40);
     scene.add(sun);
+    const hemi = new THREE.HemisphereLight(0x6ec8ff, 0x1a2a1a, 0.35);
+    scene.add(hemi);
 
     const engine: Engine = {
       renderer,
@@ -118,6 +125,37 @@ export function AtlasSpatialViewport({
     const rebuild = () => {
       clearRoot();
       const d = docRef.current;
+      const globe = globeRef.current;
+      if (globe) {
+        const disc = new THREE.Mesh(
+          new THREE.CircleGeometry(920, 64),
+          new THREE.MeshStandardMaterial({
+            color: 0x1a3a4a,
+            roughness: 0.92,
+            metalness: 0.05,
+            side: THREE.DoubleSide,
+          }),
+        );
+        disc.rotation.x = -Math.PI / 2;
+        disc.position.y = -0.4;
+        disc.userData = { kind: 'globe-disc' };
+        root.add(disc);
+        const rim = new THREE.Mesh(
+          new THREE.TorusGeometry(900, 18, 8, 64),
+          new THREE.MeshStandardMaterial({
+            color: 0x3a7a9a,
+            emissive: 0x0a2030,
+            roughness: 0.7,
+          }),
+        );
+        rim.rotation.x = Math.PI / 2;
+        rim.position.y = -0.2;
+        rim.userData = { kind: 'globe-rim' };
+        root.add(rim);
+        renderer.setClearColor(0x071018, 1);
+      } else {
+        renderer.setClearColor(0x0b1220, 1);
+      }
       for (const r of d.rooms) {
         const geo = new THREE.BoxGeometry(Math.max(0.05, r.w), 0.12, Math.max(0.05, r.h));
         const mat = new THREE.MeshStandardMaterial({
@@ -159,10 +197,21 @@ export function AtlasSpatialViewport({
       if (width <= 0 || height <= 0) return;
       renderer.setSize(width, height, false);
       const cam = cam2dRef.current;
+      const globe = globeRef.current;
       const span = Math.max(8, (Math.max(width, height) / Math.max(1, cam.pixelsPerUnit)) * 0.55);
       engine.camera.aspect = width / Math.max(1, height);
-      engine.camera.position.set(cam.center.x + span * 0.55, span * 0.85, cam.center.y + span * 0.7);
-      engine.camera.lookAt(cam.center.x, 0, cam.center.y);
+      engine.camera.fov = globe ? 42 : 48;
+      if (globe) {
+        engine.camera.position.set(
+          cam.center.x + span * 0.95,
+          span * 1.35,
+          cam.center.y + span * 1.15,
+        );
+        engine.camera.lookAt(cam.center.x, span * 0.08, cam.center.y);
+      } else {
+        engine.camera.position.set(cam.center.x + span * 0.55, span * 0.85, cam.center.y + span * 0.7);
+        engine.camera.lookAt(cam.center.x, 0, cam.center.y);
+      }
       engine.camera.updateProjectionMatrix();
       rebuild();
       renderer.render(scene, engine.camera);
@@ -246,8 +295,9 @@ export function AtlasSpatialViewport({
       ref={hostRef}
       className={className}
       data-atlas-spatial-viewport
+      data-atlas-globe-mode={globeMode ? 'true' : undefined}
       role="img"
-      aria-label="Räumliche 3D-Kartenansicht"
+      aria-label={globeMode ? 'Planet-Globus-Ansicht' : 'Räumliche 3D-Kartenansicht'}
     />
   );
 }
