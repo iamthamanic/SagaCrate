@@ -9,7 +9,15 @@
  * signInWithPassword has no AbortSignal — stale results use generation + scrub.
  */
 
-import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { supabase } from './supabase';
 import {
   isLocalAdminEnabled,
@@ -454,7 +462,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const ensureJwtSession = async (): Promise<boolean> => {
+  const ensureJwtSession = useCallback(async (): Promise<boolean> => {
     const existing = await supabase.auth.getSession();
     if (existing.data.session?.access_token && existing.data.session.user) {
       if (isLiveGeneration(authGenerationRef.current)) {
@@ -482,7 +490,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setHasJwtSession(true);
     provisionDornhainDefaultForSession();
     return true;
-  };
+  }, []);
 
   const signUp = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
