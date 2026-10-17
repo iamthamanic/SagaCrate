@@ -39,6 +39,9 @@ projection with generatorMeta redaction.
 
 - Migration `101`: direct `world_places` / `world_place_map_links` SELECT is editor-only;
   non-editors use `list_*` SECURITY DEFINER RPCs (party projection). Closes PostgREST bypass of `gm_only`.
+- Migration `102`: `get_world_atlas_map` forces `v_party_only` redaction for non-editors;
+  `world_atlas_maps` SELECT editor-only (RPC path for players).
+- Residual Low: `list_world_atlas_maps` may still expose GM-prep map titles to non-editors.
 - Demo Eldoria LOD remains non-canonical (`Demo-*` labels).
 - Nested DB map LOD still partly discrete map list + demo rects.
 - Medium security gaps from prior fail-open player list closed in `097`.

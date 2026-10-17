@@ -57,6 +57,27 @@ mustInclude(
 );
 
 mustInclude(
+  'supabase/migrations/101_world_places_select_editor_only.sql',
+  [
+    'world_places_select',
+    'world_place_map_links_select',
+    'current_user_can_edit_world_profile',
+  ],
+  '101 editor-only place SELECT',
+);
+
+mustInclude(
+  'supabase/migrations/102_world_atlas_player_redaction_force.sql',
+  [
+    'world_atlas_maps_select',
+    'v_party_only',
+    'get_world_atlas_map',
+    'current_user_can_edit_world_profile',
+  ],
+  '102 forced atlas redaction',
+);
+
+mustInclude(
   'src/domains/world/places/world-place.types.ts',
   ['WORLD_PLACE_KINDS', 'WorldPlaceVm', 'WorldPlaceMapLinkVm'],
   'places domain types',
