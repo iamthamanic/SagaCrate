@@ -1,8 +1,8 @@
 # Composition Gate — donalu-world-workspace
 
-- HEAD_SHA: 8b47fd4722e4794ec3d36eba96041cf1c2bd350f
+- HEAD_SHA: adf268dc906ac7f61d3a24b0303fe0bb9ca5d7f7
 - BASE_SHA: 8485f6d7f2d98af0a817b2f112281531197f3966
-- Date (UTC): 2026-10-17T11:16:00Z
+- Date (UTC): 2026-10-17T23:00:56Z
 - Verdict: CLEAR
 
 ## Event
@@ -37,6 +37,8 @@ projection with generatorMeta redaction.
 
 ## Flags
 
+- Migration `101`: direct `world_places` / `world_place_map_links` SELECT is editor-only;
+  non-editors use `list_*` SECURITY DEFINER RPCs (party projection). Closes PostgREST bypass of `gm_only`.
 - Demo Eldoria LOD remains non-canonical (`Demo-*` labels).
 - Nested DB map LOD still partly discrete map list + demo rects.
 - Medium security gaps from prior fail-open player list closed in `097`.

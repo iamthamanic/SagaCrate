@@ -1,9 +1,9 @@
 # Composition Gate: Unified Atlas pin / LOD / globe
 
-- HEAD_SHA: f6f6436efbb8af49dfae2e6eeb5821efda62f19f
+- HEAD_SHA: adf268dc906ac7f61d3a24b0303fe0bb9ca5d7f7
 - CONTENT_SHA: 5f138c0dcb27e2af6b75f6154e001a624afca72e
 - BASE_SHA: 60841eaa8a702edc4472962acf1e98705a8deefb
-- Date (UTC): 2026-10-17T22:57:47Z
+- Date (UTC): 2026-10-17T23:00:56Z
 - Verdict: CLEAR
 
 
